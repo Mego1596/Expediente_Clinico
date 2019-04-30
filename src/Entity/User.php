@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -24,16 +25,23 @@ class User implements UserInterface
      */
     private $email;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Rol", inversedBy="usuario")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $rol;
+
+    public function __construct()
+    {
+        $this->rol = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -67,19 +75,12 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-        $roles[] = 'ROLE_ADMIN';
 
-        return array_unique($roles);
+        return ['ROLE_USER'];
     }
 
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
-
-        return $this;
     }
 
     /**
@@ -112,5 +113,17 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getRol(): ?Rol
+    {
+        return $this->rol;
+    }
+
+    public function setRol(?Rol $rol): self
+    {
+        $this->rol = $rol;
+
+        return $this;
     }
 }
