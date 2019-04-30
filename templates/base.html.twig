@@ -1,491 +1,407 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <!-- Required Meta Tags -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Page Title -->
-    <title>Medino</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>{% block title %}{% endblock %}</title>
+  <!-- Custom fonts for this template -->
+  <link href="{{asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <!-- Favicon -->
-    <link rel="shortcut icon" href="{{asset('images/logo/favicon.png')}}" type="image/x-icon">
-
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="{{asset('css/animate-3.7.0.css')}}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{asset('css/owl-carousel.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/jquery.datetimepicker.min.css')}}">
-    <link rel="stylesheet" href="{{asset('css/style.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
+  <!-- Custom styles for this template -->
+  <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+  <!-- Custom styles for this page -->
+  <link href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style type="text/css">
+  .sidebar-brand{
+    background-color: #212529;
+  }
+  .navbar{
+    background-color: #212529;
+  }
+  .sidebar-divider{
+    background-color: white;
+    width: 100%;
+  }
+  @media screen and (max-width: 767px) {
+    li.paginate_button.previous {
+        display: inline;
+    }
+ 
+    li.paginate_button.next {
+        display: inline;
+    }
+ 
+    li.paginate_button {
+        display: none;
+    }
+  }
+  </style>
 </head>
-<body>
-    <!-- Preloader Starts -->
-    <div class="preloader">
-        <div class="spinner"></div>
+
+<body id="page-top">
+
+  <!-- Page Wrapper -->
+  <div id="wrapper">
+
+    <!-- Sidebar -->
+    <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+      <!-- Sidebar - Brand -->
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <div class="sidebar-brand-icon rotate-n-15">
+        </div>
+        <div class="sidebar-brand-text mx-3">Clinica</div>
+      </a>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider my-0">
+
+      <!-- Nav Item - Dashboard -->
+      <li class="nav-item">
+        <a class="nav-link" href="index.html">
+          <i class="fa fa-home"></i>
+          <span>Inicio</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Clinica
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-cog"></i>
+          <span>Components</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Components:</h6>
+            <a class="collapse-item" href="buttons.html">Buttons</a>
+            <a class="collapse-item" href="cards.html">Cards</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Utilities Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
+          <i class="fas fa-fw fa-wrench"></i>
+          <span>Utilities</span>
+        </a>
+        <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Custom Utilities:</h6>
+            <a class="collapse-item" href="utilities-color.html">Colors</a>
+            <a class="collapse-item" href="utilities-border.html">Borders</a>
+            <a class="collapse-item" href="utilities-animation.html">Animations</a>
+            <a class="collapse-item" href="utilities-other.html">Other</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider">
+
+      <!-- Heading -->
+      <div class="sidebar-heading">
+        Paciente
+      </div>
+
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
+          <i class="fas fa-fw fa-folder"></i>
+          <span>Pages</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Login Screens:</h6>
+            <a class="collapse-item" href="login.html">Login</a>
+            <a class="collapse-item" href="register.html">Register</a>
+            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+            <div class="collapse-divider"></div>
+            <h6 class="collapse-header">Other Pages:</h6>
+            <a class="collapse-item" href="404.html">404 Page</a>
+            <a class="collapse-item" href="blank.html">Blank Page</a>
+          </div>
+        </div>
+      </li>
+
+      <!-- Nav Item - Charts -->
+      <li class="nav-item">
+        <a class="nav-link" href="charts.html">
+          <i class="fas fa-fw fa-chart-area"></i>
+          <span>Charts</span></a>
+      </li>
+
+      <!-- Nav Item - Tables -->
+      <li class="nav-item active">
+        <a class="nav-link" href="tables.html">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Tables</span></a>
+      </li>
+
+      <!-- Divider -->
+      <hr class="sidebar-divider d-none d-md-block">
+
+      <!-- Sidebar Toggler (Sidebar) -->
+      <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+      </div>
+
+    </ul>
+    <!-- End of Sidebar -->
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+      <!-- Main Content -->
+      <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light topbar mb-4 static-top shadow">
+
+          <!-- Sidebar Toggle (Topbar) -->
+          <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
+
+            <!-- Nav Item - Alerts -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-bell"></i>
+                <!-- Counter - Alerts -->
+                <span class="badge badge-danger badge-counter">3+</span>
+              </a>
+              <!-- Dropdown - Alerts -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header">
+                  Alerts Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-primary">
+                      <i class="fa fa-file-text text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 12, 2019</div>
+                    <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fa fa-money text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 7, 2019</div>
+                    $290.29 has been deposited into your account!
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-warning">
+                      <i class="fa fa-exclamation-triangle text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="small text-gray-500">December 2, 2019</div>
+                    Spending Alert: We've noticed unusually high spending for your account.
+                  </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+              </div>
+            </li>
+
+            <!-- Nav Item - Messages -->
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-envelope"></i>
+                <!-- Counter - Messages -->
+                <span class="badge badge-danger badge-counter">7</span>
+              </a>
+              <!-- Dropdown - Messages -->
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="messagesDropdown">
+                <h6 class="dropdown-header">
+                  Message Center
+                </h6>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="dropdown-list-image mr-3">
+                    <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
+                    <div class="status-indicator bg-success"></div>
+                  </div>
+                  <div class="font-weight-bold">
+                    <div class="text-truncate">Hi there! I am wondering if you can help me with a problem I've been having.</div>
+                    <div class="small text-gray-500">Emily Fowler · 58m</div>
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="dropdown-list-image mr-3">
+                    <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60" alt="">
+                    <div class="status-indicator"></div>
+                  </div>
+                  <div>
+                    <div class="text-truncate">I have the photos that you ordered last month, how would you like them sent to you?</div>
+                    <div class="small text-gray-500">Jae Chun · 1d</div>
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="dropdown-list-image mr-3">
+                    <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60" alt="">
+                    <div class="status-indicator bg-warning"></div>
+                  </div>
+                  <div>
+                    <div class="text-truncate">Last month's report looks great, I am very happy with the progress so far, keep up the good work!</div>
+                    <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                  </div>
+                </a>
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="dropdown-list-image mr-3">
+                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
+                    <div class="status-indicator bg-success"></div>
+                  </div>
+                  <div>
+                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone told me that people say this to all dogs, even if they aren't good...</div>
+                    <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                  </div>
+                </a>
+                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+              </div>
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+            <!-- Nav Item - User Information -->
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                    {% if is_granted('ROLE_USER') %}
+                      {{ app.user.email}}
+                    {% endif %}
+                </span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="#">
+                  <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Profile
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Settings
+                </a>
+                <a class="dropdown-item" href="#">
+                  <i class="fa fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Activity Log
+                </a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
+
+          </ul>
+
+        </nav>
+        <!-- End of Topbar -->
+
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+          <div class="row">
+            <a class="btn btn-outline-success" style="color: black">Boton Success</a>
+            <a class="btn btn-outline-warning" style="color: black">Boton Warning</a>
+            <a class="btn btn-outline-info" style="color: black">Boton Information</a>
+            <a class="btn btn-outline-danger" style="color: black">Boton Danger</a>
+            <a class="btn btn-outline-primary" style="color: black">Boton Primary</a>
+          </div>
+          <div class="row">
+          <br/>
+          </div>
+          <div class="row">
+            <a class="btn btn-success" style="color: black">Boton Success</a>
+            <a class="btn btn-warning" style="color: black">Boton Warning</a>
+            <a class="btn btn-info" style="color: black">Boton Information</a>
+            <a class="btn btn-danger" style="color: black">Boton Danger</a>
+            <a class="btn btn-primary" style="color: black">Boton Primary</a>
+          </div>
+          {% block body %}{% endblock %}
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+      <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2019</span>
+          </div>
+        </div>
+      </footer>
+      <!-- End of Footer -->
+
     </div>
-    <!-- Preloader End -->
+    <!-- End of Content Wrapper -->
 
-    <!-- Header Area Starts -->
-    <header class="header-area">
-        <div class="header-top">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9 d-md-flex">
-                        <h6 class="mr-3"><span class="mr-2"><i class="fa fa-mobile"></i></span> call us now! +1 305 708 2563</h6>
-                        <h6 class="mr-3"><span class="mr-2"><i class="fa fa-envelope-o"></i></span> medical@example.com</h6>
-                        <h6><span class="mr-2"><i class="fa fa-map-marker"></i></span> Find our Location</h6>
-                    </div>
-                    <div class="col-lg-3">
-                        <div class="social-links">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="header" id="home">
-            <div class="container">
-                <div class="row align-items-center justify-content-between d-flex">
-                <div id="logo">
-                    <a href="/home"><img src="{{asset('images/logo/logo.png')}}" alt="" title="" /></a>
-                </div>
-                <nav id="nav-menu-container">
-                    <ul class="nav-menu">
-                        <li class="menu-active"><a href="index.html">Home</a></li>
-                        <li><a href="departments.html">departments</a></li>
-                        <li><a href="doctors.html">doctors</a></li>
-                        <li class="menu-has-children"><a href="">Pages</a>
-                            <ul>
-                                <li><a href="about.html">about us</a></li>
-                                <li><a href="elements.html">elements</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-has-children"><a href="">blog</a>
-                            <ul>
-                                <li><a href="blog-home.html">blog home</a></li>
-                                <li><a href="blog-details.html">blog details</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="contact.html">Contact</a></li>			          				          
-                    </ul>
-                </nav><!-- #nav-menu-container -->		    		
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- Header Area End -->
+  </div>
+  <!-- End of Page Wrapper -->
 
-    <!-- Banner Area Starts -->
-    <section class="banner-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5">
-                    <h4>Caring for better life</h4>
-                    <h1>Leading the way in medical excellence</h1>
-                    <p>Earth greater grass for good. Place for divide evening yielding them that. Creeping beginning over gathered brought.</p>
-                    <a href="" class="template-btn mt-3">take appointment</a>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Banner Area End -->
+  <!-- Scroll to Top Button-->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fa fa-angle-up"></i>
+  </a>
 
-    <!-- Feature Area Starts -->
-    <section class="feature-area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-feature text-center item-padding">
-                        <img src="{{asset('images/feature1.png')}}" alt="">
-                        <h3>advance technology</h3>
-                        <p class="pt-3">Creeping for female light years that lesser can't evening heaven isn't bearing tree appear</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-feature text-center item-padding mt-4 mt-md-0">
-                        <img src="{{asset('images/feature2.png')}}" alt="">
-                        <h3>comfortable place</h3>
-                        <p class="pt-3">Creeping for female light years that lesser can't evening heaven isn't bearing tree appear</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-feature text-center item-padding mt-4 mt-lg-0">
-                        <img src="{{asset('images/feature3.png')}}" alt="">
-                        <h3>quality equipment</h3>
-                        <p class="pt-3">Creeping for female light years that lesser can't evening heaven isn't bearing tree appear</p>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6">
-                    <div class="single-feature text-center item-padding mt-4 mt-lg-0">
-                        <img src="{{asset('images/feature4.png')}}" alt="">
-                        <h3>friendly staff</h3>
-                        <p class="pt-3">Creeping for female light years that lesser can't evening heaven isn't bearing tree appear</p>
-                    </div>
-                </div>
-            </div>
+  <!-- Logout Modal-->
+  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
         </div>
-    </section>
-    <!-- Feature Area End -->
-
-    <!-- Welcome Area Starts -->
-    <section class="welcome-area section-padding3">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-5 align-self-center">
-                    <div class="welcome-img">
-                        <img src="{{asset('images/welcome.png')}}" alt="">
-                    </div>
-                </div>
-                <div class="col-lg-7">
-                    <div class="welcome-text mt-5 mt-lg-0">
-                        <h2>Welcome to our clinic</h2>
-                        <p class="pt-3">Subdue whales void god which living don't midst lesser yielding over lights whose. Cattle greater brought sixth fly den dry good tree isn't seed stars were.</p>
-                        <p>Subdue whales void god which living don't midst lesser yielding over lights whose. Cattle greater brought sixth fly den dry good tree isn't seed stars were the boring.</p>
-                        <a href="#" class="template-btn mt-3">learn more</a>
-                    </div>
-                </div>
-            </div>
+        <div class="modal-body">Seleccione "Cerrar Sesion" si realmente esta listo para finalizar la sesion actual.</div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancelar</button>
+            <a class="btn btn-outline-danger" href="/logout">Cerrar Sesion</a>
         </div>
-    </section>
-    <!-- Welcome Area End -->
+      </div>
+    </div>
+  </div>
 
-    <!-- Department Area Starts -->
-    <section class="department-area section-padding4">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-top text-center">
-                        <h2>Popular department</h2>
-                        <p>Green above he cattle god saw day multiply under fill in the cattle fowl a all, living, tree word link available in the service for subdue fruit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="department-slider owl-carousel">
-                        <div class="single-slide">
-                            <div class="slide-img">
-                                <img src="{{asset('images/department1.jpg')}}" alt="" class="img-fluid">
-                                <div class="hover-state">
-                                    <a href="#"><i class="fa fa-stethoscope"></i></a>
-                                </div>
-                            </div>
-                            <div class="single-department item-padding text-center">
-                                <h3>cardiac clinic</h3>
-                                <p>Hath creeping subdue he fish gred face whose spirit that seasons today multiply female midst upon</p>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="slide-img">
-                                <img src="{{asset('images/department2.jpg')}}" alt="" class="img-fluid">
-                                <div class="hover-state">
-                                    <a href="departments.html"><i class="fa fa-stethoscope"></i></a>
-                                </div>
-                            </div>
-                            <div class="single-department item-padding text-center">
-                                <h3>plastic surgery</h3>
-                                <p>Hath creeping subdue he fish gred face whose spirit that seasons today multiply female midst upon</p>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="slide-img">
-                                <img src="{{asset('images/department3.jpg')}}" alt="" class="img-fluid">
-                                <div class="hover-state">
-                                    <a href="departments.html"><i class="fa fa-stethoscope"></i></a>
-                                </div>
-                            </div>
-                            <div class="single-department item-padding text-center">
-                                <h3>dental clinic</h3>
-                                <p>Hath creeping subdue he fish gred face whose spirit that seasons today multiply female midst upon</p>
-                            </div>
-                        </div>
-                        <div class="single-slide">
-                            <div class="slide-img">
-                                <img src="{{asset('images/department1.jpg')}}" alt="" class="img-fluid">
-                                <div class="hover-state">
-                                    <a href="departments.html"><i class="fa fa-stethoscope"></i></a>
-                                </div>
-                            </div>
-                            <div class="single-department item-padding text-center">
-                                <h3>cardiac clinic</h3>
-                                <p>Hath creeping subdue he fish gred face whose spirit that seasons today multiply female midst upon</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Department Area Starts -->
+  <!-- Bootstrap core JavaScript-->
+  <script src="{{asset('vendor/jquery/jquery.min.js')}}"></script>
+  <script src="{{asset('vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 
-    <!-- Patient Area Starts -->
-    <section class="patient-area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-top text-center">
-                        <h2>Patient are saying</h2>
-                        <p>Green above he cattle god saw day multiply under fill in the cattle fowl a all, living, tree word link available in the service for subdue fruit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-5">
-                    <div class="single-patient mb-4">
-                        <img src="{{asset('images/patient1.png')}}" alt="">
-                        <h3>daren jhonson</h3>
-                        <h5>hp specialist</h5>
-                        <p class="pt-3">Elementum libero hac leo integer. Risus hac road parturient feugiat. Litora cursus hendrerit bib elit Tempus inceptos posuere metus.</p>
-                    </div>
-                    <div class="single-patient">
-                        <img src="{{asset('images/patient2.png')}}" alt="">
-                        <h3>black heiden</h3>
-                        <h5>hp specialist</h5>
-                        <p class="pt-3">Elementum libero hac leo integer. Risus hac road parturient feugiat. Litora cursus hendrerit bib elit Tempus inceptos posuere metus.</p>
-                    </div>
-                </div>
-                <div class="col-lg-5 offset-lg-1 align-self-center">
-                    <div class="appointment-form text-center mt-5 mt-lg-0">
-                        <h3 class="mb-5">appointment now</h3>
-                        <form action="#">
-                            <div class="form-group">
-                                <input type="text" placeholder="Your Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Name'" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="email" placeholder="Your Email" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your Email'" required> 
-                            </div>
-                            <div class="form-group">
-                                <input type="text" id="datepicker" placeholder="Date" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Date'" required>
-                            </div>
-                            <div class="form-group">
-                                <textarea name="message" cols="20" rows="7"  placeholder="Message" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Message'" required></textarea>
-                            </div>
-                            <a href="#" class="template-btn">appointment now</a>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Patient Area Starts -->
+  <!-- Core plugin JavaScript-->
+  <script src="{{asset('vendor/jquery-easing/jquery.easing.min.js')}}"></script>
 
-    <!-- Specialist Area Starts -->
-    <section class="specialist-area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-top text-center">
-                        <h2>Our specialish</h2>
-                        <p>Green above he cattle god saw day multiply under fill in the cattle fowl a all, living, tree word link available in the service for subdue fruit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-doctor mb-4 mb-lg-0">
-                        <div class="doctor-img">
-                            <img src="{{asset('images/doctor1.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="content-area">
-                            <div class="doctor-name text-center">
-                                <h3>ethel davis</h3>
-                                <h6>sr. faculty data science</h6>
-                            </div>
-                            <div class="doctor-text text-center">
-                                <p>If you are looking at blank cassettes on the web, you may be very confused at the.</p>
-                                <ul class="doctor-icon">
-                                    <li><a href="#"><i class="fa fa-facebook"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-pinterest"></i><a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-doctor mb-4 mb-lg-0">
-                        <div class="doctor-img">
-                            <img src="{{asset('images/doctor2.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="content-area">
-                            <div class="doctor-name text-center">
-                                <h3>dand mories</h3>
-                                <h6>sr. faculty plastic surgery</h6>
-                            </div>
-                            <div class="doctor-text text-center">
-                                <p>If you are looking at blank cassettes on the web, you may be very confused at the.</p>
-                                <ul class="doctor-icon">
-                                    <li><a href="#"><i class="fa fa-facebook"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-pinterest"></i><a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-doctor mb-4 mb-sm-0">
-                        <div class="doctor-img">
-                            <img src="{{asset('images/doctor3.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="content-area">
-                            <div class="doctor-name text-center">
-                                <h3>align board</h3>
-                                <h6>sr. faculty data science</h6>
-                            </div>
-                            <div class="doctor-text text-center">
-                                <p>If you are looking at blank cassettes on the web, you may be very confused at the.</p>
-                                <ul class="doctor-icon">
-                                    <li><a href="#"><i class="fa fa-facebook"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-pinterest"></i><a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="single-doctor">
-                        <div class="doctor-img">
-                            <img src="{{asset('images/doctor4.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="content-area">
-                            <div class="doctor-name text-center">
-                                <h3>jeson limit</h3>
-                                <h6>sr. faculty plastic surgery</h6>
-                            </div>
-                            <div class="doctor-text text-center">
-                                <p>If you are looking at blank cassettes on the web, you may be very confused at the.</p>
-                                <ul class="doctor-icon">
-                                    <li><a href="#"><i class="fa fa-facebook"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-twitter"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-linkedin"></i><a></li>
-                                    <li><a href="#"><i class="fa fa-pinterest"></i><a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Specialist Area Starts -->
-    <!-- Hotline Area Starts -->
-    <section class="hotline-area text-center section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h2>Emergency hotline</h2>
-                    <span>(+01) – 256 567 550</span>
-                    <p class="pt-3">We provide 24/7 customer support. Please feel free to contact us <br>for emergency case.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- Hotline Area End -->
+  <!-- Custom scripts for all pages-->
+  <script src="{{asset('js/sb-admin-2.min.js')}}"></script>
 
-    <!-- News Area Starts -->
-    <section class="news-area section-padding">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 offset-lg-3">
-                    <div class="section-top text-center">
-                        <h2>Recent medical news</h2>
-                        <p>Green above he cattle god saw day multiply under fill in the cattle fowl a all, living, tree word link available in the service for subdue fruit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-news">
-                        <div class="news-img">
-                            <img src="{{asset('images/news1.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="news-text">
-                            <div class="news-date">
-                                22 July 2018
-                            </div>
-                            <h3><a href="blog-details.html">chip to model coeliac disease</a></h3>
-                            <p>Elementum libero hac leo integer. Risus hac part duriw feugiat litora cursus hendrerit bibendum per person on elit.Tempus inceptos posuere me.</p>
-                            <a href="blog-details.html" class="news-btn">read more <i class="fa fa-long-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-news mt-5 mt-md-0">
-                        <div class="news-img">
-                            <img src="{{asset('images/news2.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="news-text">
-                            <div class="news-date">
-                                22 Oct 2018
-                            </div>
-                            <h3><a href="blog-details.html">Galectins An Ancient FaSi Future</a></h3>
-                            <p>Elementum libero hac leo integer. Risus hac part duriw feugiat litora cursus hendrerit bibendum per person on elit.Tempus inceptos posuere me.</p>
-                            <a href="blog-details.html" class="news-btn">read more <i class="fa fa-long-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <div class="single-news mt-5 mt-lg-0">
-                        <div class="news-img">
-                            <img src="{{asset('images/news3.jpg')}}" alt="" class="img-fluid">
-                        </div>
-                        <div class="news-text">
-                            <div class="news-date">
-                                22 Sep 2018
-                            </div>
-                            <h3><a href="blog-details.html">Getting the Most Out of the CLARI</a></h3>
-                            <p>Elementum libero hac leo integer. Risus hac part duriw feugiat litora cursus hendrerit bibendum per person on elit.Tempus inceptos posuere me.</p>
-                            <a href="blog-details.html" class="news-btn">read more <i class="fa fa-long-arrow-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- News Area Starts -->
-    
-    <!-- Footer Area Starts -->
-    <footer class="footer-area">
-        <div class="footer-copyright">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <span>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                            Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                            <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Area End -->
-
-
-    <!-- Javascript -->
-    <script src="{{asset('js/vendor/jquery-2.2.4.min.js')}}"></script>
-	<script src="{{asset('js/vendor/bootstrap-4.1.3.min.js')}}"></script>
-    <script src="{{asset('js/vendor/wow.min.js')}}"></script>
-    <script src="{{asset('js/vendor/owl-carousel.min.js')}}"></script>
-    <script src="{{asset('js/vendor/jquery.datetimepicker.full.min.js')}}"></script>
-    <script src="{{asset('js/vendor/jquery.nice-select.min.js')}}"></script>
-    <script src="{{asset('js/vendor/superfish.min.js')}}"></script>
-    <script src="{{asset('js/main.js')}}"></script>
-
+  <!-- Page level plugins -->
+  <script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+  <!-- Page level custom scripts -->
+  {% block javascripts %}{% endblock %}
 </body>
+
 </html>
