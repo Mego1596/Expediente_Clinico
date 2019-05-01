@@ -289,8 +289,10 @@
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                    {% if is_granted('ROLE_USER') %}
-                      {{ app.user.email}}
+                    {% if is_granted('ROLE_PERMISSION_USER') %}
+                      {{ app.user.Nombres}} {{ app.user.Apellidos}}
+                    {% else %}
+                     Usuario Anonimo
                     {% endif %}
                 </span>
               </a>
@@ -309,10 +311,15 @@
                   Activity Log
                 </a>
                 <div class="dropdown-divider"></div>
-                {% if is_granted('ROLE_USER') %}
+                {% if is_granted('ROLE_PERMISSION_USER') %}
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
                     Cerrar Sesion
+                  </a>
+                {% else %}
+                  <a class="dropdown-item" href="/login">
+                    <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Iniciar Sesion
                   </a>
                 {% endif %}
               </div>

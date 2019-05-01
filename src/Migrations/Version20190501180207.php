@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190501165447 extends AbstractMigration
+final class Version20190501180207 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -22,7 +22,6 @@ final class Version20190501165447 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, rol_id INT DEFAULT NULL, hospital_id INT NOT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, nombres VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX IDX_8D93D6494BAB96C (rol_id), INDEX IDX_8D93D64963DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE anexo (id INT AUTO_INCREMENT NOT NULL, examen_solicitado_id INT NOT NULL, nombre_archivo LONGTEXT NOT NULL, ruta LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_CD7EAF2C43CA3347 (examen_solicitado_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE camilla (id INT AUTO_INCREMENT NOT NULL, habitacion_id INT DEFAULT NULL, numero_camilla INT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_712619ADB009290D (habitacion_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE cita (id INT AUTO_INCREMENT NOT NULL, usuario_id INT NOT NULL, expediente_id INT NOT NULL, fecha_reservacion DATETIME NOT NULL, consulta_por LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_3E379A62DB38439E (usuario_id), INDEX IDX_3E379A624BF37E4E (expediente_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
@@ -55,9 +54,8 @@ final class Version20190501165447 extends AbstractMigration
         $this->addSql('CREATE TABLE sala (id INT AUTO_INCREMENT NOT NULL, id_hospital_id INT NOT NULL, nombre_sala LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_E226041C1E2F769E (id_hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE signo_vital (id INT AUTO_INCREMENT NOT NULL, cita_id INT NOT NULL, peso DOUBLE PRECISION NOT NULL, temperatura DOUBLE PRECISION NOT NULL, estatura DOUBLE PRECISION NOT NULL, presion_arterial DOUBLE PRECISION NOT NULL, ritmo_cardiaco DOUBLE PRECISION NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_75668911E011DDF (cita_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tipo_habitacion (id INT AUTO_INCREMENT NOT NULL, tipo_habitacion LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, rol_id INT DEFAULT NULL, hospital_id INT NOT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, nombres VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX IDX_8D93D6494BAB96C (rol_id), INDEX IDX_8D93D64963DBB69 (hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE usuario_especialidad (id INT AUTO_INCREMENT NOT NULL, especialidad_id INT NOT NULL, usuario_id INT NOT NULL, INDEX IDX_A688E12C16A490EC (especialidad_id), INDEX IDX_A688E12CDB38439E (usuario_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6494BAB96C FOREIGN KEY (rol_id) REFERENCES rol (id)');
-        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64963DBB69 FOREIGN KEY (hospital_id) REFERENCES clinica (id)');
         $this->addSql('ALTER TABLE anexo ADD CONSTRAINT FK_CD7EAF2C43CA3347 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
         $this->addSql('ALTER TABLE camilla ADD CONSTRAINT FK_712619ADB009290D FOREIGN KEY (habitacion_id) REFERENCES habitacion (id)');
         $this->addSql('ALTER TABLE cita ADD CONSTRAINT FK_3E379A62DB38439E FOREIGN KEY (usuario_id) REFERENCES user (id)');
@@ -89,6 +87,8 @@ final class Version20190501165447 extends AbstractMigration
         $this->addSql('ALTER TABLE plan_tratamiento ADD CONSTRAINT FK_951D78177A94BA1A FOREIGN KEY (diagnostico_id) REFERENCES diagnostico (id)');
         $this->addSql('ALTER TABLE sala ADD CONSTRAINT FK_E226041C1E2F769E FOREIGN KEY (id_hospital_id) REFERENCES clinica (id)');
         $this->addSql('ALTER TABLE signo_vital ADD CONSTRAINT FK_75668911E011DDF FOREIGN KEY (cita_id) REFERENCES cita (id)');
+        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D6494BAB96C FOREIGN KEY (rol_id) REFERENCES rol (id)');
+        $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_8D93D64963DBB69 FOREIGN KEY (hospital_id) REFERENCES clinica (id)');
         $this->addSql('ALTER TABLE usuario_especialidad ADD CONSTRAINT FK_A688E12C16A490EC FOREIGN KEY (especialidad_id) REFERENCES especialidad (id)');
         $this->addSql('ALTER TABLE usuario_especialidad ADD CONSTRAINT FK_A688E12CDB38439E FOREIGN KEY (usuario_id) REFERENCES user (id)');
     }
@@ -98,16 +98,13 @@ final class Version20190501165447 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE cita DROP FOREIGN KEY FK_3E379A62DB38439E');
-        $this->addSql('ALTER TABLE expediente DROP FOREIGN KEY FK_D59CA413DB38439E');
-        $this->addSql('ALTER TABLE usuario_especialidad DROP FOREIGN KEY FK_A688E12CDB38439E');
         $this->addSql('ALTER TABLE ingresado DROP FOREIGN KEY FK_6682CB4BFEEC2797');
         $this->addSql('ALTER TABLE cita_examen DROP FOREIGN KEY FK_B5EEB821E011DDF');
         $this->addSql('ALTER TABLE historia_medica DROP FOREIGN KEY FK_328E741C1E011DDF');
         $this->addSql('ALTER TABLE signo_vital DROP FOREIGN KEY FK_75668911E011DDF');
         $this->addSql('ALTER TABLE examen_solicitado DROP FOREIGN KEY FK_779218FBB5A95C01');
-        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D64963DBB69');
         $this->addSql('ALTER TABLE sala DROP FOREIGN KEY FK_E226041C1E2F769E');
+        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D64963DBB69');
         $this->addSql('ALTER TABLE historia_medica DROP FOREIGN KEY FK_328E741C7A94BA1A');
         $this->addSql('ALTER TABLE plan_tratamiento DROP FOREIGN KEY FK_951D78177A94BA1A');
         $this->addSql('ALTER TABLE usuario_especialidad DROP FOREIGN KEY FK_A688E12C16A490EC');
@@ -129,11 +126,13 @@ final class Version20190501165447 extends AbstractMigration
         $this->addSql('ALTER TABLE historial_familiar DROP FOREIGN KEY FK_523A50F910C20D71');
         $this->addSql('ALTER TABLE expediente DROP FOREIGN KEY FK_D59CA413BCE7B795');
         $this->addSql('ALTER TABLE camilla DROP FOREIGN KEY FK_712619ADB009290D');
-        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D6494BAB96C');
         $this->addSql('ALTER TABLE permisos_por_rol DROP FOREIGN KEY FK_43E7CADA4BAB96C');
+        $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_8D93D6494BAB96C');
         $this->addSql('ALTER TABLE habitacion DROP FOREIGN KEY FK_F45995BAC51CDF3F');
         $this->addSql('ALTER TABLE habitacion DROP FOREIGN KEY FK_F45995BAB0BA7A53');
-        $this->addSql('DROP TABLE user');
+        $this->addSql('ALTER TABLE cita DROP FOREIGN KEY FK_3E379A62DB38439E');
+        $this->addSql('ALTER TABLE expediente DROP FOREIGN KEY FK_D59CA413DB38439E');
+        $this->addSql('ALTER TABLE usuario_especialidad DROP FOREIGN KEY FK_A688E12CDB38439E');
         $this->addSql('DROP TABLE anexo');
         $this->addSql('DROP TABLE camilla');
         $this->addSql('DROP TABLE cita');
@@ -166,6 +165,7 @@ final class Version20190501165447 extends AbstractMigration
         $this->addSql('DROP TABLE sala');
         $this->addSql('DROP TABLE signo_vital');
         $this->addSql('DROP TABLE tipo_habitacion');
+        $this->addSql('DROP TABLE user');
         $this->addSql('DROP TABLE usuario_especialidad');
     }
 }
