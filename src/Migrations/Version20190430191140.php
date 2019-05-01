@@ -22,8 +22,9 @@ final class Version20190430191140 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('CREATE TABLE permisos_por_rol (id INT AUTO_INCREMENT NOT NULL, rol_id INT NOT NULL, permiso VARCHAR(255) NOT NULL, nombre_tabla VARCHAR(255) NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_43E7CADA4BAB96C (rol_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE permisos_por_rol ADD CONSTRAINT FK_43E7CADA4BAB96C FOREIGN KEY (rol_id) REFERENCES rol (id)');
+        $this->addSql('CREATE TABLE permisos_por_rol (idPermisos_Por_Rol INT AUTO_INCREMENT NOT NULL, rol_id INT NOT NULL, permiso VARCHAR(255) NOT NULL, nombre_tabla VARCHAR(255) NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_43E7CADA4BAB96C (rol_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        
+        $this->addSql('ALTER TABLE permisos_por_rol ADD CONSTRAINT FK_43E7CADA4BAB96C FOREIGN KEY (rol_id) REFERENCES rol (idRol)');
     }
 
     public function down(Schema $schema) : void

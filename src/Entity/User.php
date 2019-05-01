@@ -38,6 +38,50 @@ class User implements UserInterface
      */
     private $rol;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Clinica", inversedBy="usuario")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $hospital;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UsuarioEspecialidad", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $usuarioEspecialidades;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Expediente", mappedBy="usuario", cascade={"persist", "remove"})
+     */
+    private $expediente;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Cita", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $citas;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Nombres;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $Apellidos;
+
+
+    public function getHospital(): ?Clinica
+    {
+        return $this->hospital;
+    }
+
+    public function setHospital(?Clinica $hospital): self
+    {
+        $this->hospital = $hospital;
+
+        return $this;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -118,6 +162,30 @@ class User implements UserInterface
     public function setRol(?Rol $rol): self
     {
         $this->rol = $rol;
+
+        return $this;
+    }
+
+    public function getNombres(): ?string
+    {
+        return $this->Nombres;
+    }
+
+    public function setNombres(string $Nombres): self
+    {
+        $this->Nombres = $Nombres;
+
+        return $this;
+    }
+
+    public function getApellidos(): ?string
+    {
+        return $this->Apellidos;
+    }
+
+    public function setApellidos(string $Apellidos): self
+    {
+        $this->Apellidos = $Apellidos;
 
         return $this;
     }

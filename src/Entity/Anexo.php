@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PermisosPorRolRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AnexoRepository")
  */
-class PermisosPorRol
+class Anexo
 {
     /**
      * @ORM\Id()
@@ -17,20 +17,20 @@ class PermisosPorRol
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Rol", inversedBy="permisosPorRoles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="anexos")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $rol;
+    private $examen_solicitado;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
-    private $permiso;
+    private $nombreArchivo;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
-    private $nombre_tabla;
+    private $ruta;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -47,38 +47,38 @@ class PermisosPorRol
         return $this->id;
     }
 
-    public function getRol(): ?Rol
+    public function getExamenSolicitado(): ?ExamenSolicitado
     {
-        return $this->rol;
+        return $this->examen_solicitado;
     }
 
-    public function setRol(?Rol $rol): self
+    public function setExamenSolicitado(?ExamenSolicitado $examen_solicitado): self
     {
-        $this->rol = $rol;
+        $this->examen_solicitado = $examen_solicitado;
 
         return $this;
     }
 
-    public function getPermiso(): ?string
+    public function getNombreArchivo(): ?string
     {
-        return $this->permiso;
+        return $this->nombreArchivo;
     }
 
-    public function setPermiso(string $permiso): self
+    public function setNombreArchivo(string $nombreArchivo): self
     {
-        $this->permiso = $permiso;
+        $this->nombreArchivo = $nombreArchivo;
 
         return $this;
     }
 
-    public function getNombreTabla(): ?string
+    public function getRuta(): ?string
     {
-        return $this->nombre_tabla;
+        return $this->ruta;
     }
 
-    public function setNombreTabla(string $nombre_tabla): self
+    public function setRuta(string $ruta): self
     {
-        $this->nombre_tabla = $nombre_tabla;
+        $this->ruta = $ruta;
 
         return $this;
     }

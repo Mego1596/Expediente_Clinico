@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PermisosPorRolRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\HistorialPropioRepository")
  */
-class PermisosPorRol
+class HistorialPropio
 {
     /**
      * @ORM\Id()
@@ -17,20 +17,15 @@ class PermisosPorRol
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Rol", inversedBy="permisosPorRoles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Expediente", inversedBy="historialPropios")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $rol;
+    private $expediente;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
-    private $permiso;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nombre_tabla;
+    private $descripcion;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -47,38 +42,26 @@ class PermisosPorRol
         return $this->id;
     }
 
-    public function getRol(): ?Rol
+    public function getExpediente(): ?Expediente
     {
-        return $this->rol;
+        return $this->expediente;
     }
 
-    public function setRol(?Rol $rol): self
+    public function setExpediente(?Expediente $expediente): self
     {
-        $this->rol = $rol;
+        $this->expediente = $expediente;
 
         return $this;
     }
 
-    public function getPermiso(): ?string
+    public function getDescripcion(): ?string
     {
-        return $this->permiso;
+        return $this->descripcion;
     }
 
-    public function setPermiso(string $permiso): self
+    public function setDescripcion(string $descripcion): self
     {
-        $this->permiso = $permiso;
-
-        return $this;
-    }
-
-    public function getNombreTabla(): ?string
-    {
-        return $this->nombre_tabla;
-    }
-
-    public function setNombreTabla(string $nombre_tabla): self
-    {
-        $this->nombre_tabla = $nombre_tabla;
+        $this->descripcion = $descripcion;
 
         return $this;
     }
