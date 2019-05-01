@@ -33,8 +33,8 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Rol", inversedBy="usuario")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Rol")
+     * @ORM\JoinColumn(name="rol_id", referencedColumnName="id")
      */
     private $rol;
 
@@ -113,9 +113,13 @@ class User implements UserInterface
      * @see UserInterface
      */
     public function getRoles(): array
-    {
-
-        return ['ROLE_USER'];
+    {   $permisos= array();
+        $array = $this->getRol()->getPermisosPorRoles()->toArray();
+        foreach ($array as $value) {
+            $permisos[] = $value->getPermiso();
+        }
+        return $permisos;
+        
     }
 
     public function setRoles(array $roles): self
@@ -186,6 +190,86 @@ class User implements UserInterface
     public function setApellidos(string $Apellidos): self
     {
         $this->Apellidos = $Apellidos;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection|UsuarioEspecialidad[]
+     */
+    public function getUsuarioEspecialidades(): Collection
+    {
+        return $this->usuarioEspecialidades;
+    }
+
+    public function addUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
+    {
+        if (!$this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
+            $this->usuarioEspecialidades[] = $usuarioEspecialidade;
+            $usuarioEspecialidade->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
+    {
+        if ($this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
+            $this->usuarioEspecialidades->removeElement($usuarioEspecialidade);
+            // set the owning side to null (unless already changed)
+            if ($usuarioEspecialidade->getUsuario() === $this) {
+                $usuarioEspecialidade->setUsuario(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getExpediente(): ?Expediente
+    {
+        return $this->expediente;
+    }
+
+    public function setExpediente(Expediente $expediente): self
+    {
+        $this->expediente = $expediente;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $expediente->getUsuario()) {
+            $expediente->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Cita[]
+     */
+    public function getCitas(): Collection
+    {
+        return $this->citas;
+    }
+
+    public function addCita(Cita $cita): self
+    {
+        if (!$this->citas->contains($cita)) {
+            $this->citas[] = $cita;
+            $cita->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCita(Cita $cita): self
+    {
+        if ($this->citas->contains($cita)) {
+            $this->citas->removeElement($cita);
+            // set the owning side to null (unless already changed)
+            if ($cita->getUsuario() === $this) {
+                $cita->setUsuario(null);
+            }
+        }
 
         return $this;
     }

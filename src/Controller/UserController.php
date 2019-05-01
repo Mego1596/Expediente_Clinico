@@ -24,7 +24,7 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-WHERE u.hospital_id = c.id AND u.rol_id = r.id;;';
+WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
         $result = $statement->fetchAll();
