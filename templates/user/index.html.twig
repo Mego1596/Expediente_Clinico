@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria -----------
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                        <a href="{{ path('user_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-user-plus"></i> Registrar Usuario</a>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Nombre</th>
+                                            <th id="relevante" class="all">Email</th>
+                                            <th id="relevante" class="all">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for user in users %}
+                                        <tr>
+                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.email }}</td>
+                                            <td>
+                                                <a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-info">show</a>
+                                                <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">edit</a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}

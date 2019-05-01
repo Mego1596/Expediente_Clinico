@@ -38,11 +38,6 @@ class User implements UserInterface
      */
     private $rol;
 
-    public function __construct()
-    {
-        $this->rol = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
