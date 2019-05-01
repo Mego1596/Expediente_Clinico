@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Entity\Rol;
+use App\Entity\Clinica;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,8 +21,16 @@ class UserController extends AbstractController
      */
     public function index(UserRepository $userRepository): Response
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
+WHERE u.hospital_id = c.id AND u.rol_id = r.id;;';
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
+
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController','users' => $userRepository->findAll(),
+            'controller_name' => 'UserController','users' => $result,
         ]);
     }
 
@@ -33,12 +42,17 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getEntityManager();
         $user = new User();
         $roles = $this->getDoctrine()->getRepository(Rol::class)->findAll();
+        $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
         $submittedToken = $request->request->get('token');
         if($this->isCsrfTokenValid('create-item', $submittedToken)){
             $user->setEmail($request->request->get('email'));
             $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
-            $rol = $this->getDoctrine()->getRepository(Rol::class)->find(1);
+            $rol = $this->getDoctrine()->getRepository(Rol::class)->find($request->request->get('role'));
+            $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica'));
+            $user->setNombres($request->request->get('nombres'));
+            $user->setApellidos($request->request->get('apellidos'));
             $user->setRol($rol);
+            $user->setHospital($clinica);
             $em->persist($user);
             $em->flush();
         }
@@ -57,7 +71,7 @@ class UserController extends AbstractController
             'user' => $user,
             'form' => $form->createView(),
         ]);*/
-        return $this->render('user/new.html.twig', ['controller_name' => 'UserController','roles' => $roles]);
+        return $this->render('user/new.html.twig', ['controller_name' => 'UserController','roles' => $roles,'clinicas' => $clinicas]);
     }
 
     /**

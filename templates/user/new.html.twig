@@ -16,29 +16,38 @@
             <div class="card-body" style="width: 100%">
                 <form method="POST" action="{{path('user_new')}}">
                  {# the argument of csrf_token() is an arbitrary string used to generate the token #}
-    			  <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+    			        <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
                   <div class="row" style="text-align: center">
                     <div class="col-md-4">
                       <label style="align-content: center;">Nombres:</label>
-                      <input id="primer_nombre" name="primer_nombre"  type="text" class="form-control" placeholder="Primer Nombre" >
+                      <input id="nombres" name="nombres"  type="text" class="form-control" placeholder="Primer Nombre" >
                     </div>
                     <div class="col-md-4">
                     <label style="align-content: center;">Apellidos:</label>
-                      <input id="primer_apellido" name="primer_apellido" type="text" class="form-control" placeholder="Primer Apellido" >
+                      <input id="apellidos" name="apellidos" type="text" class="form-control" placeholder="Primer Apellido" >
+                    </div>
+                    <div class="col-md-4">
+                    <label style="align-content: center;">E-Mail:</label>
+                      <input id="email" name="email" type="email" class="form-control" placeholder="E-Mail" required>
                     </div>
                   </div>
 
                   <div class="row" style="text-align: center;">
                     <div class="col-md-4">
-                    <label style="align-content: center;">E-Mail:</label>
-                      <input id="email" name="email" type="email" class="form-control" placeholder="E-Mail" required>
+                      <label style="align-content: center;">Clinica:</label>
+                      <select class="form-control" id="clinica" name="clinica" required>
+                          <option value="">Seleccionar Clinica</option>
+                          {% for clinica in clinicas %}
+                          	<option value="{{clinica.id}}"> {{clinica.nombreClinica}}</option>
+                          {% endfor %}
+                      </select>
                     </div>
                     <div class="col-md-4">
                       <label style="align-content: center;">Rol:</label>
                       <select class="form-control" id="role" name="role" required>
                           <option value="">Seleccionar Rol</option>
                           {% for rol in roles %}
-                          	<option value"{{rol.id}}"> {{rol.nombreRol}}</option>
+                            <option value="{{rol.id}}"> {{rol.nombreRol}}</option>
                           {% endfor %}
                       </select>
                     </div>

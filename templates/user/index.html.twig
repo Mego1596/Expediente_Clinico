@@ -24,16 +24,21 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Nombre</th>
+                                            <th id="relevante" class="all">Nombre Completo</th>
                                             <th id="relevante" class="all">Email</th>
-                                            <th id="relevante" class="all">Actions</th>
+                                            <th id="relevante" class="all">Clininca</th>
+                                            <th id="relevante" class="all">Rol</th>
+                                            <th  class="all">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {% for user in users %}
                                         <tr>
-                                            <td>{{ user.id }}</td>
+                                            <td>{{ user.Nombres }} {{ user.Apellidos }}</td>
                                             <td>{{ user.email }}</td>
+                                            <td>{{ user.clinica}}</td>
+                                            <td>{{ user.rol}}</td>
+
                                             <td>
                                                 <a href="{{ path('user_show', {'id': user.id}) }}" class="btn btn-info">show</a>
                                                 <a href="{{ path('user_edit', {'id': user.id}) }}" class="btn btn-success">edit</a>
