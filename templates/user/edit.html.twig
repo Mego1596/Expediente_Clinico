@@ -3,9 +3,55 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">Registrar Usuario</h5>
+      <div class="card-body">
+        {{ form_start(form, {'action': path('user_edit', {'id': user.id})}) }}
 
-    <a href="{{ path('user_index') }}">back to list</a>
-
-    {{ include('user/_delete_form.html.twig') }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
+          <div class="row" style="text-align: center">
+            <div class="col-md-4">
+              {{ form_label(form.nombres) }}
+              {{ form_widget(form.nombres) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.apellidos) }}
+              {{ form_widget(form.apellidos) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.email) }}
+              {{ form_widget(form.email) }}
+            </div>
+          </div>
+          <div class="row" style="text-align: center;">
+            <div class="col-md-4">
+              {{ form_label(form.clinica) }}
+              {{ form_widget(form.clinica) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.rol) }}
+              {{ form_widget(form.rol) }}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-4"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              <div class="col-md-3" style="text-align: left;">
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+<a href="{{ path('user_index') }}">back to list</a>
 {% endblock %}

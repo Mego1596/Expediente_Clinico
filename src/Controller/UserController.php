@@ -160,18 +160,99 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        /*
+        $clinicasObject = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+        foreach ($clinicasObject as $clin) {
+            $clinicas[$clin->getId()]=$clin->getNombreClinica();
+        }
+        $rolObject = $this->getDoctrine()->getRepository(Rol::class)->findAll();
+        foreach ($rolObject as $rol) {
+            $roles[$rol->getId()]=$rol->getNombreRol();
+        }
+        $form = $this->createFormBuilder($user)
+        ->add('nombres', TextType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control'
+                )
+            )
+        )
+        ->add('apellidos', TextType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control'
+                )
+            )
+        )
+        ->add('email', EmailType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control',
+                )
+            )
+        )
+        ->add('clinica', EntityType::class, array(
+            // looks for choices from this entity
+            'class' => Clinica::class,
+            'placeholder' => 'Seleccione una clinica',
+            // uses the User.username property as the visible option string
+            'choice_label' => 'nombreClinica',
+
+            // used to render a select box, check boxes or radios
+            // 'multiple' => true,
+            // 'expanded' => true,
+            'attr' => array(
+                'class' => 'form-control'
+                )
+            )
+        )
+        ->add('rol', EntityType::class, array(
+            // looks for choices from this entity
+            'class' => Rol::class,
+            'placeholder' => 'Seleccione un rol',
+            // uses the User.username property as the visible option string
+            'choice_label' => 'nombreRol',
+
+            // used to render a select box, check boxes or radios
+            // 'multiple' => true,
+            // 'expanded' => true,
+            'attr' => array(
+                'class' => 'form-control'
+                )
+            )
+        )
+        ->add('guardar', SubmitType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'btn btn-outline-success',
+                )
+            )
+        )
+        ->getForm();
+
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getEntityManager();
+            $user->setEmail($form["email"]->getData());
+            $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+            $user->setNombres($form["nombres"]->getData());
+            $user->setApellidos($form["apellidos"]->getData());
+            $user->setRol($form["rol"]->getData());
+            $user->setClinica($form["clinica"]->getData());
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('user_index', [
-                'id' => $user->getId(),
-            ]);
+
+            return $this->redirectToRoute('user_index');
         }
-        */
+
         return $this->render('user/edit.html.twig', [
             'user' => $user,
+            'form' => $form->createView(),
         ]);
     }
 
