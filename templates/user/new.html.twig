@@ -3,71 +3,55 @@
 {% block title %}New User{% endblock %}
 
 {% block body %}
-    <div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12" style="color: black">
-                        Registrar Usuario   
-                    </div>
-                </div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">Registrar Usuario</h5>
+      <div class="card-body">
+        {{ form_start(form) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row" style="text-align: center">
+            <div class="col-md-4">
+              {{ form_label(form.nombres) }}
+              {{ form_widget(form.nombres) }}
             </div>
-            <div class="card-body" style="width: 100%">
-                <form method="POST" action="{{path('user_new')}}">
-                 {# the argument of csrf_token() is an arbitrary string used to generate the token #}
-    			        <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
-                  <div class="row" style="text-align: center">
-                    <div class="col-md-4">
-                      <label style="align-content: center;">Nombres:</label>
-                      <input id="nombres" name="nombres"  type="text" class="form-control" placeholder="Primer Nombre" >
-                    </div>
-                    <div class="col-md-4">
-                    <label style="align-content: center;">Apellidos:</label>
-                      <input id="apellidos" name="apellidos" type="text" class="form-control" placeholder="Primer Apellido" >
-                    </div>
-                    <div class="col-md-4">
-                    <label style="align-content: center;">E-Mail:</label>
-                      <input id="email" name="email" type="email" class="form-control" placeholder="E-Mail" required>
-                    </div>
-                  </div>
-
-                  <div class="row" style="text-align: center;">
-                    <div class="col-md-4">
-                      <label style="align-content: center;">Clinica:</label>
-                      <select class="form-control" id="clinica" name="clinica" required>
-                          <option value="">Seleccionar Clinica</option>
-                          {% for clinica in clinicas %}
-                          	<option value="{{clinica.id}}"> {{clinica.nombreClinica}}</option>
-                          {% endfor %}
-                      </select>
-                    </div>
-                    <div class="col-md-4">
-                      <label style="align-content: center;">Rol:</label>
-                      <select class="form-control" id="role" name="role" required>
-                          <option value="">Seleccionar Rol</option>
-                          {% for rol in roles %}
-                            <option value="{{rol.id}}"> {{rol.nombreRol}}</option>
-                          {% endfor %}
-                      </select>
-                    </div>
-                  </div>
-                  <div class="container" style="margin-top: 1%">
-                      <div class="row" style="text-align: center;">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-3">
-                            <button type="submit" class="btn btn-outline-success">Guardar</button>
-                        </div>
-                        <div class="col-md-3" style="text-align: left;">
-                            <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
-                        </div>
-                        <div class="col-md-3"></div>
-                      </div>
-                  </div>
-                </form>
+            <div class="col-md-4">
+              {{ form_label(form.apellidos) }}
+              {{ form_widget(form.apellidos) }}
             </div>
-        </div>
+            <div class="col-md-4">
+              {{ form_label(form.email) }}
+              {{ form_widget(form.email) }}
+            </div>
+          </div>
+          <div class="row" style="text-align: center;">
+            <div class="col-md-4">
+              {{ form_label(form.clinica) }}
+              {{ form_widget(form.clinica) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.rol) }}
+              {{ form_widget(form.rol) }}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              <div class="col-md-3" style="text-align: left;">
+                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
     </div>
+  </div>
 </div>
-    <a href="{{ path('user_index') }}" class ="btn btn-secondary">back to list</a>
+<a href="{{ path('user_index') }}" class ="btn btn-secondary">back to list</a>
 {% endblock %}

@@ -3,13 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Rol;
 use App\Entity\Clinica;
+use App\Entity\Rol;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @Route("/user")
@@ -24,13 +30,13 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getManager();
 
         $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
+            WHERE u.clinica_id = c.id AND u.rol_id = r.id;';
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
         $result = $statement->fetchAll();
 
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController','users' => $result,
+            'controller_name' => 'UserController','users' => $result
         ]);
     }
 
@@ -39,30 +45,96 @@ WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
      */
     public function new(Request $request): Response
     {
-        $em = $this->getDoctrine()->getEntityManager();
-        $user = new User();
-        $roles = $this->getDoctrine()->getRepository(Rol::class)->findAll();
-        $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
-        $submittedToken = $request->request->get('token');
-        if($this->isCsrfTokenValid('create-item', $submittedToken)){
-            $user->setEmail($request->request->get('email'));
-            $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
-            $rol = $this->getDoctrine()->getRepository(Rol::class)->find($request->request->get('role'));
-            $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica'));
-            $user->setNombres($request->request->get('nombres'));
-            $user->setApellidos($request->request->get('apellidos'));
-            $user->setRol($rol);
-            $user->setHospital($clinica);
-            $em->persist($user);
-            $em->flush();
+        $clinicasObject = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+        foreach ($clinicasObject as $clin) {
+            $clinicas[$clin->getId()]=$clin->getNombreClinica();
         }
-        /*$form = $this->createForm(UserType::class, $user);
+        $rolObject = $this->getDoctrine()->getRepository(Rol::class)->findAll();
+        foreach ($rolObject as $rol) {
+            $roles[$rol->getId()]=$rol->getNombreRol();
+        }
+
+        $user = new User();
+        $form = $this->createFormBuilder($user)
+        ->add('nombres', TextType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control'
+                )
+            )
+        )
+        ->add('apellidos', TextType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control'
+                )
+            )
+        )
+        ->add('email', EmailType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'form-control',
+                )
+            )
+        )
+        ->add('clinica', EntityType::class, array(
+            // looks for choices from this entity
+            'class' => Clinica::class,
+            'placeholder' => 'Seleccione una clinica',
+            // uses the User.username property as the visible option string
+            'choice_label' => 'nombreClinica',
+
+            // used to render a select box, check boxes or radios
+            // 'multiple' => true,
+            // 'expanded' => true,
+            'attr' => array(
+                'class' => 'form-control'
+                )
+            )
+        )
+        ->add('rol', EntityType::class, array(
+            // looks for choices from this entity
+            'class' => Rol::class,
+            'placeholder' => 'Seleccione un rol',
+            // uses the User.username property as the visible option string
+            'choice_label' => 'nombreRol',
+
+            // used to render a select box, check boxes or radios
+            // 'multiple' => true,
+            // 'expanded' => true,
+            'attr' => array(
+                'class' => 'form-control'
+                )
+            )
+        )
+        ->add('guardar', SubmitType::class, 
+            array(
+                'attr' => 
+                array(
+                    'class' => 'btn btn-outline-success',
+                )
+            )
+        )
+        ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager = $this->getDoctrine()->getEntityManager();
+            $user->setEmail($form["email"]->getData());
+            $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+            //$rol = $this->getDoctrine()->getRepository(Rol::class)->find($form["rol"]->getData());
+            //$clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($form["clinica"]->getData());
+            $user->setNombres($form["nombres"]->getData());
+            $user->setApellidos($form["apellidos"]->getData());
+            $user->setRol($form["rol"]->getData());
+            $user->setClinica($form["clinica"]->getData());
             $entityManager->persist($user);
             $entityManager->flush();
+
 
             return $this->redirectToRoute('user_index');
         }
@@ -70,8 +142,7 @@ WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
-        ]);*/
-        return $this->render('user/new.html.twig', ['controller_name' => 'UserController','roles' => $roles,'clinicas' => $clinicas]);
+        ]);
     }
 
     /**
@@ -89,8 +160,7 @@ WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
      */
     public function edit(Request $request, User $user): Response
     {
-        /*$form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        /*
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
@@ -99,13 +169,10 @@ WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
                 'id' => $user->getId(),
             ]);
         }
-
+        */
         return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'form' => $form->createView(),
-        ]);*/
-        return $this->render('user/edit.html.twig', ['controller_name' => 'UserController','user'=>$user]);
-
+        ]);
     }
 
     /**
@@ -122,3 +189,6 @@ WHERE u.hospital_id = c.id AND u.rol_id = r.id;';
         return $this->redirectToRoute('user_index');
     }
 }
+
+
+

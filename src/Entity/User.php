@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class User implements UserInterface,\Serializable
 {
     /**
      * @ORM\Id()
@@ -40,9 +40,9 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clinica", inversedBy="usuario")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(name="clinica_id", referencedColumnName="id",nullable=false)
      */
-    private $hospital;
+    private $clinica;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\UsuarioEspecialidad", mappedBy="usuario", orphanRemoval=true)
@@ -70,14 +70,14 @@ class User implements UserInterface
     private $Apellidos;
 
 
-    public function getHospital(): ?Clinica
+    public function getClinica():?Clinica
     {
-        return $this->hospital;
+        return $this->clinica;
     }
 
-    public function setHospital(?Clinica $hospital): self
+    public function setClinica(?Clinica $clinica): self
     {
-        $this->hospital = $hospital;
+        $this->clinica = $clinica;
 
         return $this;
     }
@@ -272,5 +272,29 @@ class User implements UserInterface
         }
 
         return $this;
+    }
+
+     /** @see \Serializable::serialize() */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt,
+        ));
+    }
+
+    /** @see \Serializable::unserialize() */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
+            // see section on salt below
+            // $this->salt
+        ) = unserialize($serialized);
     }
 }
