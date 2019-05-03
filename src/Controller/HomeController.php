@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Security;
 class HomeController extends AbstractController
 {
     /**
@@ -21,11 +21,17 @@ class HomeController extends AbstractController
     /**
      * @Route("/home", name="home")
      */
-    public function home()
-    {
-        return $this->render('home/index.html.twig', [
+    public function home(Security $AuthUser)
+    {   
+        if($AuthUser->isGranted('ROLE_PERMISSION_ADMIN_USER')){
+            return $this->render('home/Adminindex.html.twig', [
             'controller_name' => 'HomeController',
         ]);
+        }else{
+            return $this->render('home/index.html.twig', [
+            'controller_name' => 'HomeController',
+        ]);
+        }
     }
 
     

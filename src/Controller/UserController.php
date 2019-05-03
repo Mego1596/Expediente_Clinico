@@ -23,25 +23,25 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 class UserController extends AbstractController
 {
     /**
-     * @Route("/", name="user_index", methods={"GET"})
+     * @Route("/", name="doctor_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function indexUserDoctor(UserRepository $userRepository): Response
     {
         $em = $this->getDoctrine()->getManager();
 
         $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-            WHERE u.clinica_id = c.id AND u.rol_id = r.id;';
+            WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol = "ROLE_DOCTOR";';
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
         $result = $statement->fetchAll();
 
-        return $this->render('user/index.html.twig', [
+        return $this->render('user/Doctor/index.html.twig', [
             'controller_name' => 'UserController','users' => $result
         ]);
     }
 
     /**
-     * @Route("/new", name="user_new", methods={"GET","POST"})
+     * @Route("/new", name="doctor_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
@@ -134,12 +134,10 @@ class UserController extends AbstractController
             $user->setClinica($form["clinica"]->getData());
             $entityManager->persist($user);
             $entityManager->flush();
-
-
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('doctor_index');
         }
 
-        return $this->render('user/new.html.twig', [
+        return $this->render('user/Doctor/new.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -247,7 +245,7 @@ class UserController extends AbstractController
             $entityManager->flush();
 
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('doctor_index');
         }
 
         return $this->render('user/edit.html.twig', [
