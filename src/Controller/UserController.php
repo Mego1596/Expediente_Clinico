@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\Clinica;
 use App\Entity\Rol;
+use App\Entity\Especialidad;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,82 +57,30 @@ class UserController extends AbstractController
 
         $user = new User();
         $form = $this->createFormBuilder($user)
-        ->add('nombres', TextType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control'
-                )
-            )
-        )
-        ->add('apellidos', TextType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control'
-                )
-            )
-        )
-        ->add('email', EmailType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control',
-                )
-            )
-        )
-        ->add('clinica', EntityType::class, array(
-            // looks for choices from this entity
-            'class' => Clinica::class,
-            'placeholder' => 'Seleccione una clinica',
-            // uses the User.username property as the visible option string
-            'choice_label' => 'nombreClinica',
-
-            // used to render a select box, check boxes or radios
-            // 'multiple' => true,
-            // 'expanded' => true,
-            'attr' => array(
-                'class' => 'form-control'
-                )
-            )
-        )
-        ->add('rol', EntityType::class, array(
-            // looks for choices from this entity
-            'class' => Rol::class,
-            'placeholder' => 'Seleccione un rol',
-            // uses the User.username property as the visible option string
-            'choice_label' => 'nombreRol',
-
-            // used to render a select box, check boxes or radios
-            // 'multiple' => true,
-            // 'expanded' => true,
-            'attr' => array(
-                'class' => 'form-control'
-                )
-            )
-        )
-        ->add('guardar', SubmitType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'btn btn-outline-success',
-                )
-            )
-        )
+        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
+            'attr' => array('class' => 'form-control')))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $rol = new Rol();
+            $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
             $entityManager = $this->getDoctrine()->getEntityManager();
             $user->setEmail($form["email"]->getData());
             $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
-            //$rol = $this->getDoctrine()->getRepository(Rol::class)->find($form["rol"]->getData());
-            //$clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($form["clinica"]->getData());
             $user->setNombres($form["nombres"]->getData());
             $user->setApellidos($form["apellidos"]->getData());
-            $user->setRol($form["rol"]->getData());
+            $user->setRol($rol);
             $user->setClinica($form["clinica"]->getData());
+            foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
+                $user->addUsuarioEspecialidades($especialidad);    
+            }
             $entityManager->persist($user);
             $entityManager->flush();
             return $this->redirectToRoute('doctor_index');
@@ -148,107 +97,48 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
+        return $this->render('user/Doctor/show.html.twig', [
             'user' => $user,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @Route("/{id}/edit", name="doctor_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, User $user): Response
     {
-        $clinicasObject = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
-        foreach ($clinicasObject as $clin) {
-            $clinicas[$clin->getId()]=$clin->getNombreClinica();
-        }
-        $rolObject = $this->getDoctrine()->getRepository(Rol::class)->findAll();
-        foreach ($rolObject as $rol) {
-            $roles[$rol->getId()]=$rol->getNombreRol();
-        }
         $form = $this->createFormBuilder($user)
-        ->add('nombres', TextType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control'
-                )
-            )
-        )
-        ->add('apellidos', TextType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control'
-                )
-            )
-        )
-        ->add('email', EmailType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'form-control',
-                )
-            )
-        )
-        ->add('clinica', EntityType::class, array(
-            // looks for choices from this entity
-            'class' => Clinica::class,
-            'placeholder' => 'Seleccione una clinica',
-            // uses the User.username property as the visible option string
-            'choice_label' => 'nombreClinica',
-
-            // used to render a select box, check boxes or radios
-            // 'multiple' => true,
-            // 'expanded' => true,
-            'attr' => array(
-                'class' => 'form-control'
-                )
-            )
-        )
-        ->add('rol', EntityType::class, array(
-            // looks for choices from this entity
-            'class' => Rol::class,
-            'placeholder' => 'Seleccione un rol',
-            // uses the User.username property as the visible option string
-            'choice_label' => 'nombreRol',
-
-            // used to render a select box, check boxes or radios
-            // 'multiple' => true,
-            // 'expanded' => true,
-            'attr' => array(
-                'class' => 'form-control'
-                )
-            )
-        )
-        ->add('guardar', SubmitType::class, 
-            array(
-                'attr' => 
-                array(
-                    'class' => 'btn btn-outline-success',
-                )
-            )
-        )
+        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
+            'attr' => array('class' => 'form-control')))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $rol = new Rol();
+            $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
             $entityManager = $this->getDoctrine()->getEntityManager();
             $user->setEmail($form["email"]->getData());
             $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
             $user->setNombres($form["nombres"]->getData());
             $user->setApellidos($form["apellidos"]->getData());
-            $user->setRol($form["rol"]->getData());
+            $user->setRol($rol);
             $user->setClinica($form["clinica"]->getData());
+
+            foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
+                $user->addUsuarioEspecialidades($especialidad);    
+            }
             $entityManager->persist($user);
             $entityManager->flush();
-
-
             return $this->redirectToRoute('doctor_index');
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('user/Doctor/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -265,7 +155,7 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('user_index');
+        return $this->redirectToRoute('doctor_index');
     }
 }
 

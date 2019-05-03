@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -45,11 +46,6 @@ class User implements UserInterface,\Serializable
     private $clinica;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UsuarioEspecialidad", mappedBy="usuario", orphanRemoval=true)
-     */
-    private $usuarioEspecialidades;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\Expediente", mappedBy="usuario", cascade={"persist", "remove"})
      */
     private $expediente;
@@ -68,6 +64,16 @@ class User implements UserInterface,\Serializable
      * @ORM\Column(type="string", length=255)
      */
     private $Apellidos;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Especialidad", inversedBy="users")
+     */
+    private $usuario_especialidades;
+
+    public function __construct()
+    {
+        $this->usuario_especialidades = new ArrayCollection();
+    }
 
 
     public function getClinica():?Clinica
@@ -195,37 +201,6 @@ class User implements UserInterface,\Serializable
     }
 
 
-    /**
-     * @return Collection|UsuarioEspecialidad[]
-     */
-    public function getUsuarioEspecialidades(): Collection
-    {
-        return $this->usuarioEspecialidades;
-    }
-
-    public function addUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
-    {
-        if (!$this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
-            $this->usuarioEspecialidades[] = $usuarioEspecialidade;
-            $usuarioEspecialidade->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
-    {
-        if ($this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
-            $this->usuarioEspecialidades->removeElement($usuarioEspecialidade);
-            // set the owning side to null (unless already changed)
-            if ($usuarioEspecialidade->getUsuario() === $this) {
-                $usuarioEspecialidade->setUsuario(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getExpediente(): ?Expediente
     {
         return $this->expediente;
@@ -296,5 +271,31 @@ class User implements UserInterface,\Serializable
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);
+    }
+
+    /**
+     * @return Collection|Especialidad[]
+     */
+    public function getUsuarioEspecialidades(): Collection
+    {
+        return $this->usuario_especialidades;
+    }
+
+    public function addUsuarioEspecialidades(Especialidad $usuarioEspecialidades): self
+    {
+        if (!$this->usuario_especialidades->contains($usuarioEspecialidades)) {
+            $this->usuario_especialidades[] = $usuarioEspecialidades;
+        }
+
+        return $this;
+    }
+
+    public function removeUsuarioEspecialidades(Especialidad $usuarioEspecialidades): self
+    {
+        if ($this->usuario_especialidades->contains($usuarioEspecialidades)) {
+            $this->usuario_especialidades->removeElement($usuarioEspecialidades);
+        }
+
+        return $this;
     }
 }

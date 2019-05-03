@@ -34,13 +34,15 @@ class Especialidad
     private $actualizado_en;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\UsuarioEspecialidad", mappedBy="especialidad", orphanRemoval=true)
+     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="usuario_especialidades")
      */
-    private $usuarioEspecialidades;
+    private $users;
+
+
 
     public function __construct()
     {
-        $this->usuarioEspecialidades = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -85,31 +87,28 @@ class Especialidad
     }
 
     /**
-     * @return Collection|UsuarioEspecialidad[]
+     * @return Collection|User[]
      */
-    public function getUsuarioEspecialidades(): Collection
+    public function getUsers(): Collection
     {
-        return $this->usuarioEspecialidades;
+        return $this->users;
     }
 
-    public function addUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
+    public function addUser(User $user): self
     {
-        if (!$this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
-            $this->usuarioEspecialidades[] = $usuarioEspecialidade;
-            $usuarioEspecialidade->setEspecialidad($this);
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+            $user->addUsuarioEspecialidade($this);
         }
 
         return $this;
     }
 
-    public function removeUsuarioEspecialidade(UsuarioEspecialidad $usuarioEspecialidade): self
+    public function removeUser(User $user): self
     {
-        if ($this->usuarioEspecialidades->contains($usuarioEspecialidade)) {
-            $this->usuarioEspecialidades->removeElement($usuarioEspecialidade);
-            // set the owning side to null (unless already changed)
-            if ($usuarioEspecialidade->getEspecialidad() === $this) {
-                $usuarioEspecialidade->setEspecialidad(null);
-            }
+        if ($this->users->contains($user)) {
+            $this->users->removeElement($user);
+            $user->removeUsuarioEspecialidade($this);
         }
 
         return $this;
