@@ -116,7 +116,7 @@ class User implements UserInterface,\Serializable
     {   $permisos= array();
         $array = $this->getRol()->getPermisosPorRoles()->toArray();
         foreach ($array as $value) {
-            $permisos[] = $value->getPermiso();
+            $permisos[] = $value->getPermiso().$value->getNombreTabla();
         }
         return $permisos;
         
