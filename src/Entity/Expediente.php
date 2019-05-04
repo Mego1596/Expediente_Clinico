@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -23,6 +24,21 @@ class Expediente
      * @ORM\JoinColumn(nullable=false)
      */
     private $usuario;
+
+    /**
+     * @Assert\NotBlank
+     */
+    public $nombres;
+
+    /**
+     * @Assert\NotBlank
+     */
+    public $apellidos;
+
+    /**
+     * @Assert\NotBlank
+     */
+    public $email;
 
     /**
      * @ORM\Column(type="text")

@@ -1,8 +1,12 @@
 INSERT INTO `clinica`(`id`, `nombre_clinica`, `direccion`, `telefono`, `email`) VALUES (1,'CLINICA 1','San Salvador','2257-7777','jorgita@gmail.com');
 INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (1,'ROLE_ADMIN','Rol de Administrador');
 INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (2,'ROLE_DOCTOR','Rol de Doctor');
+INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (3,'ROLE_ARCHIVISTA','Rol de Archivista');
+INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (4,'ROLE_PACIENTE','Rol de Paciente');
 INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (1,1,1,'usuario1@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 1','Usuario 1');
 INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (2,2,1,'usuario2@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 2','Usuario 2');
+INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (3,3,1,'usuario3@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 3','Usuario 3');
+INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (4,4,1,'usuario4@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 4','Usuario 4');
 
 
 /*PERMISOS TABLA ANEXO*/
@@ -231,7 +235,13 @@ INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'R
 
 /*PERMISOS TABLA USER*/
 INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (2,'ROLE_PERMISSION_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (3,'ROLE_PERMISSION_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (4,'ROLE_PERMISSION_','USER');
 INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_ADMIN_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (2,'ROLE_PERMISSION_DOCTOR_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (3,'ROLE_PERMISSION_ARCHIVISTA_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (4,'ROLE_PERMISSION_PACIENTE_','USER');
 INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','USER');
 INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','USER');
 INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','USER');
@@ -251,3 +261,6 @@ INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Neurocirugia');
 INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Psiquiatria');
 INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Pediatria');
 INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Cardiologia');
+
+INSERT INTO `genero`(`descripcion`) VALUES ('MASCULINO');
+INSERT INTO `genero`(`descripcion`) VALUES ('FEMENINO');

@@ -43,7 +43,7 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="doctor_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function newUserDoctor(Request $request): Response
     {
         $clinicasObject = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
         foreach ($clinicasObject as $clin) {
@@ -104,7 +104,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}/edit", name="doctor_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, User $user): Response
+    public function editUserDoctor(Request $request, User $user): Response
     {
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))

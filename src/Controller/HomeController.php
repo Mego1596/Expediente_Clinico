@@ -23,15 +23,9 @@ class HomeController extends AbstractController
      */
     public function home(Security $AuthUser)
     {   
-        if($AuthUser->isGranted('ROLE_PERMISSION_ADMIN_USER')){
-            return $this->render('home/Adminindex.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('home/index.html.twig', [
+        'controller_name' => 'HomeController',
         ]);
-        }else{
-            return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
-        ]);
-        }
     }
 
     

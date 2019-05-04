@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rol index{% endblock %}
+
+{% block body %}
+    <h1>Rol index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NombreRol</th>
+                <th>Descripcion</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for rol in rols %}
+            <tr>
+                <td>{{ rol.id }}</td>
+                <td>{{ rol.nombreRol }}</td>
+                <td>{{ rol.descripcion }}</td>
+                <td>{{ rol.creadoEn ? rol.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ rol.actualizadoEn ? rol.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('rol_show', {'id': rol.id}) }}">show</a>
+                    <a href="{{ path('rol_edit', {'id': rol.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('rol_new') }}">Create new</a>
+{% endblock %}
