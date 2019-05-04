@@ -34,8 +34,8 @@ class User implements UserInterface,\Serializable
     private $password;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Rol")
-     * @ORM\JoinColumn(name="rol_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Rol",inversedBy="usuario")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $rol;
 
