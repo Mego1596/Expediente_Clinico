@@ -120,10 +120,11 @@ class User implements UserInterface,\Serializable
      */
     public function getRoles(): array
     {   $permisos= array();
-        $array = $this->getRol()->getPermisosPorRoles()->toArray();
+        $array = $this->getRol()->getPermisos()->toArray();
         foreach ($array as $value) {
             $permisos[] = $value->getPermiso().$value->getNombreTabla();
         }
+        $permisos[] = "ROLE_PERMISSION_USER";
         return $permisos;
         
     }

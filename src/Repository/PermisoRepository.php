@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\PermisosPorRol;
+use App\Entity\Permiso;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method PermisosPorRol|null find($id, $lockMode = null, $lockVersion = null)
- * @method PermisosPorRol|null findOneBy(array $criteria, array $orderBy = null)
- * @method PermisosPorRol[]    findAll()
- * @method PermisosPorRol[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Permiso|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Permiso|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Permiso[]    findAll()
+ * @method Permiso[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PermisosPorRolRepository extends ServiceEntityRepository
+class PermisoRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, PermisosPorRol::class);
+        parent::__construct($registry, Permiso::class);
     }
 
     // /**
-    //  * @return PermisosPorRol[] Returns an array of PermisosPorRol objects
+    //  * @return Permiso[] Returns an array of Permiso objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PermisosPorRolRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?PermisosPorRol
+    public function findOneBySomeField($value): ?Permiso
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

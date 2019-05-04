@@ -44,14 +44,16 @@ class Rol
     private $usuario;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PermisosPorRol", mappedBy="rol")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Permiso", mappedBy="roles")
      */
-    private $permisosPorRoles;
+    private $permisos;
+
 
     public function __construct()
     {
         $this->usuario = new ArrayCollection();
-        $this->permisosPorRoles = new ArrayCollection();
+        $this->permisos = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -144,33 +146,31 @@ class Rol
     }
 
     /**
-     * @return Collection|PermisosPorRol[]
+     * @return Collection|Permiso[]
      */
-    public function getPermisosPorRoles(): Collection
+    public function getPermisos(): Collection
     {
-        return $this->permisosPorRoles;
+        return $this->permisos;
     }
 
-    public function addPermisosPorRol(PermisosPorRol $permisosPorRol): self
+    public function addPermiso(Permiso $permiso): self
     {
-        if (!$this->permisosPorRoles->contains($permisosPorRol)) {
-            $this->permisosPorRoles[] = $permisosPorRol;
-            $permisosPorRol->setRol($this);
+        if (!$this->permisos->contains($permiso)) {
+            $this->permisos[] = $permiso;
+            $permiso->addRole($this);
         }
 
         return $this;
     }
 
-    public function removePermisosPorRol(PermisosPorRol $permisosPorRol): self
+    public function removePermiso(Permiso $permiso): self
     {
-        if ($this->permisosPorRoles->contains($permisosPorRol)) {
-            $this->permisosPorRoles->removeElement($permisosPorRol);
-            // set the owning side to null (unless already changed)
-            if ($permisosPorRol->getRol() === $this) {
-                $permisosPorRol->setRol(null);
-            }
+        if ($this->permisos->contains($permiso)) {
+            $this->permisos->removeElement($permiso);
+            $permiso->removeRole($this);
         }
 
         return $this;
     }
+
 }

@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PermisosPorRolRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PermisoRepository")
  */
-class PermisosPorRol
+class Permiso
 {
     /**
      * @ORM\Id()
@@ -17,12 +19,6 @@ class PermisosPorRol
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Rol", inversedBy="permisosPorRoles")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $rol;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $permiso;
@@ -30,7 +26,17 @@ class PermisosPorRol
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $descripcion;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $nombre_tabla;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Rol", inversedBy="permisos")
+     */
+    private $roles;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -42,21 +48,14 @@ class PermisosPorRol
      */
     private $actualizado_en;
 
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getRol(): ?Rol
-    {
-        return $this->rol;
-    }
-
-    public function setRol(?Rol $rol): self
-    {
-        $this->rol = $rol;
-
-        return $this;
     }
 
     public function getPermiso(): ?string
@@ -71,6 +70,18 @@ class PermisosPorRol
         return $this;
     }
 
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(string $descripcion): self
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
     public function getNombreTabla(): ?string
     {
         return $this->nombre_tabla;
@@ -79,6 +90,32 @@ class PermisosPorRol
     public function setNombreTabla(string $nombre_tabla): self
     {
         $this->nombre_tabla = $nombre_tabla;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rol[]
+     */
+    public function getRoles(): Collection
+    {
+        return $this->roles;
+    }
+
+    public function addRole(Rol $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRole(Rol $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+        }
 
         return $this;
     }

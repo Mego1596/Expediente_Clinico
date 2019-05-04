@@ -148,17 +148,39 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}/edit", name="expediente_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Expediente $expediente): Response
-    {
-        $form = $this->createForm(ExpedienteType::class, $expediente);
+    public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
+    {   
+        $expediente->nombres = $expediente->getUsuario()->getNombres();
+        $expediente->email = $expediente->getUsuario()->getEmail();
+        $form = $this->createFormBuilder($expediente)
+        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
+        ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('apellidoCasada',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('expediente_index', [
-                'id' => $expediente->getId(),
-            ]);
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $expediente->getUsuario();
+            $user->setNombres($form["nombres"]->getData());
+            $user->setApellidos($form["apellidos"]->getData());
+            $user->setEmail($form["email"]->getData());
+            $entityManager->persist($user);
+            $expediente->setGenero($form["genero"]->getData());
+            $expediente->setDireccion($form["direccion"]->getData());
+            $expediente->setTelefono($form["telefono"]->getData());
+            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+            $entityManager->persist($expediente);
+            $entityManager->flush();
+            return $this->redirectToRoute('expediente_index');
         }
 
         return $this->render('expediente/edit.html.twig', [

@@ -3,13 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Rol;
-use App\Form\RolType;
+use App\Entity\Permiso;
 use App\Repository\RolRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Doctrine\ORM\EntityRepository;
 /**
  * @Route("/rol")
  */
@@ -31,11 +37,34 @@ class RolController extends AbstractController
     public function new(Request $request): Response
     {
         $rol = new Rol();
-        $form = $this->createForm(RolType::class, $rol);
+        $form = $this->createFormBuilder($rol)
+        ->add('nombreRol', TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('descripcion', TextType::class,array('attr' => array('class' => 'form-control')))
+        ->add('permisos', EntityType::class, array('class' => Permiso::class,'placeholder' => 'Seleccione los permisos',
+            'choice_label' => 
+                function (Permiso $permiso) {
+                return $permiso->getDescripcion() . ' ' . strtolower($permiso->getNombreTabla());
+                },
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('u')
+                    ->orderBy('u.nombre_tabla', 'ASC');
+            },
+            'group_by' => 'nombre_tabla',
+            'by_reference' => false,
+            'multiple' => true,'expanded' => true,
+            'attr' => array('class' => 'form-control')))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $rol->setNombreRol($form["nombreRol"]->getData());
+            $rol->setDescripcion($form["descripcion"]->getData());
+            foreach ($form["permisos"]->getData() as $permiso) {
+                $rol->addPermiso($permiso);    
+            }
             $entityManager->persist($rol);
             $entityManager->flush();
 
@@ -63,15 +92,37 @@ class RolController extends AbstractController
      */
     public function edit(Request $request, Rol $rol): Response
     {
-        $form = $this->createForm(RolType::class, $rol);
+
+        $form = $this->createFormBuilder($rol)
+        ->add('descripcion', TextType::class,array('attr' => array('class' => 'form-control')))
+        ->add('permisos', EntityType::class, array('class' => Permiso::class,'placeholder' => 'Seleccione los permisos',
+            'choice_label' => 
+                function (Permiso $permiso) {
+                return $permiso->getDescripcion() . ' ' . strtolower($permiso->getNombreTabla());
+                },
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('u')
+                    ->orderBy('u.nombre_tabla', 'ASC');
+            },
+            'group_by' => 'nombre_tabla',
+            'by_reference' => false,
+            'multiple' => true,'expanded' => true,
+            'attr' => array('class' => 'form-control')))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $entityManager = $this->getDoctrine()->getManager();
+            $rol->setDescripcion($form["descripcion"]->getData());
+            foreach ($form["permisos"]->getData() as $permiso) {
+                $rol->addPermiso($permiso);    
+            }
+            $entityManager->persist($rol);
+            $entityManager->flush();
 
-            return $this->redirectToRoute('rol_index', [
-                'id' => $rol->getId(),
-            ]);
+            return $this->redirectToRoute('rol_index');
         }
 
         return $this->render('rol/edit.html.twig', [

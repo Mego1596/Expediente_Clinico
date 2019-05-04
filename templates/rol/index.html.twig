@@ -3,39 +3,99 @@
 {% block title %}Rol index{% endblock %}
 
 {% block body %}
-    <h1>Rol index</h1>
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria -----------
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                        <a href="{{ path('rol_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list"></i> Registrar Rol</a>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Nombre Rol</th>
+                                            <th id="relevante" class="all">Descripcion</th>
+                                            <th  class="all">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rol in rols %}
+                                        <tr>
+                                            <td>{{ rol.nombreRol }}</td>
+                                            <td>{{ rol.descripcion }}</td>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>NombreRol</th>
-                <th>Descripcion</th>
-                <th>Creado_en</th>
-                <th>Actualizado_en</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for rol in rols %}
-            <tr>
-                <td>{{ rol.id }}</td>
-                <td>{{ rol.nombreRol }}</td>
-                <td>{{ rol.descripcion }}</td>
-                <td>{{ rol.creadoEn ? rol.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ rol.actualizadoEn ? rol.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('rol_show', {'id': rol.id}) }}">show</a>
-                    <a href="{{ path('rol_edit', {'id': rol.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                            <td>
+                                                <a href="{{ path('rol_show', {'id': rol.id}) }}" class="btn btn-info">show</a>
+                                                <a href="{{ path('rol_edit', {'id': rol.id}) }}" class="btn btn-success">edit</a>
+                                                {% if (rol.nombreRol == 'ROLE_ADMIN' or rol.nombreRol == 'ROLE_DOCTOR')%}
+                                                {% else %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ rol.id}}">
+                                                        Eliminar
+                                                    </button>
+                                                {% endif %}
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal{{ rol.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        Esta seguro que desea eliminar el usuario?
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                        <form method="post" action="{{ path('rol_delete', {'id': rol.id}) }}">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ rol.id) }}">
+                                                            <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                        </form>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <a href="{{ path('rol_new') }}">Create new</a>
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 {% endblock %}
