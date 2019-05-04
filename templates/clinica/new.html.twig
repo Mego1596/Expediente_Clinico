@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Clinica{% endblock %}
+
+{% block body %}
+    {{ include('clinica/_form.html.twig') }}
+
+    <a href="{{ path('clinica_index') }}">back to list</a>
+{% endblock %}

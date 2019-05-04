@@ -54,7 +54,7 @@ class Clinica
     private $salas;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="hospital", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="clinica", orphanRemoval=true)
      */
     private $usuario;
 
