@@ -19,51 +19,53 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
+use Doctrine\ORM\EntityRepository;
 /**
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/doctor", name="doctor_index", methods={"GET"})
+     * @Route("/", name="user_index", methods={"GET"})
      * @Security2("has_role('ROLE_PERMISSION_INDEX_USER')")
      */
-    public function indexUserDoctor(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, Security $AuthUser): Response
     {
         $em = $this->getDoctrine()->getManager();
-
-        $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-            WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol = "ROLE_DOCTOR";';
+        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
+            $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
+                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol <> "ROLE_PACIENTE;"';
+        }else{
+            $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
+                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol <> "ROLE_SA" AND r.nombre_rol <> "ROLE_PACIENTE";';
+        }
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
         $result = $statement->fetchAll();
 
-        return $this->render('user/Doctor/index.html.twig', [
+        return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController','users' => $result
         ]);
     }
 
     /**
-     * @Route("/doctor/new", name="doctor_new", methods={"GET","POST"})
+     * @Route("/new", name="user_new", methods={"GET","POST"})
      * @Security2("has_role('ROLE_PERMISSION_NEW_USER')")
      */
-    public function newUserDoctor(Request $request): Response
+    public function new(Request $request): Response
     {
-        $clinicasObject = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
-        foreach ($clinicasObject as $clin) {
-            $clinicas[$clin->getId()]=$clin->getNombreClinica();
-        }
-        $rolObject = $this->getDoctrine()->getRepository(Rol::class)->findAll();
-        foreach ($rolObject as $rol) {
-            $roles[$rol->getId()]=$rol->getNombreRol();
-        }
-
         $user = new User();
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
+        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
+            'query_builder' => function (EntityRepository $er) {
+                return $er->createQueryBuilder('u')
+                    ->andWhere('u.nombreRol != :val')
+                    ->setParameter('val', "ROLE_PACIENTE");
+            },'attr' => array('class' => 'form-control')))
         ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
             'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
@@ -72,14 +74,12 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $rol = new Rol();
-            $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
             $entityManager = $this->getDoctrine()->getEntityManager();
             $user->setEmail($form["email"]->getData());
             $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
             $user->setNombres($form["nombres"]->getData());
             $user->setApellidos($form["apellidos"]->getData());
-            $user->setRol($rol);
+             $user->setRol($form["rol"]->getData());
             $user->setClinica($form["clinica"]->getData());
             foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
                 $user->addUsuarioEspecialidades($especialidad);    
@@ -89,7 +89,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('doctor_index');
         }
 
-        return $this->render('user/Doctor/new.html.twig', [
+        return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -101,22 +101,24 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
-        return $this->render('user/Doctor/show.html.twig', [
+        return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
     }
 
     /**
-     * @Route("/doctor/{id}/edit", name="doctor_edit", methods={"GET","POST"})
+     * @Route("/doctor/{id}/edit", name="user_edit", methods={"GET","POST"})
      * @Security2("has_role('ROLE_PERMISSION_EDIT_USER')")
      */
-    public function editUserDoctor(Request $request, User $user): Response
+    public function edit(Request $request, User $user): Response
     {
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
+        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
+            'attr' => array('class' => 'form-control')))
         ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
             'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
@@ -143,7 +145,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('doctor_index');
         }
 
-        return $this->render('user/Doctor/edit.html.twig', [
+        return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form->createView(),
         ]);
@@ -161,7 +163,7 @@ class UserController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('doctor_index');
+        return $this->redirectToRoute('user_index');
     }
 }
 

@@ -3,51 +3,53 @@
 {% block title %}Edit Rol{% endblock %}
 
 {% block body %}
-<div class="row">
-  <div class="col-md-12">
-    <div class="card">
-      <h5 class="card-header">Registrar Usuario</h5>
-      <div class="card-body">
-        {{ form_start(form) }}
-          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
-          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
-          <div class="row" style="text-align: center">
-            <div class="col-md-12">
-              {{ form_label(form.descripcion) }}
-              {{ form_widget(form.descripcion) }}
+{% if rol.nombreRol != 'ROLE_SA' %}
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <h5 class="card-header">Registrar Usuario</h5>
+        <div class="card-body">
+          {{ form_start(form) }}
+            {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+            <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+            <div class="row" style="text-align: center">
+              <div class="col-md-12">
+                {{ form_label(form.descripcion) }}
+                {{ form_widget(form.descripcion) }}
+              </div>
             </div>
-          </div>
-          <div class="row" style="text-align: center;">
-            <div class="col-md-12">
-              {{ form_label(form.permisos) }}
-              <div id="permisos">
-              {% for field in form.permisos %}
-                 <div align="left" style="display: inline-block; width: 100%;">
-                   {{ form_widget(field) }}
-                   {{ form_label(field) }}
-                 </div>
-              {% endfor %}
-            </div>
-            </div>
-          </div>
-          <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">
-              <div class="col-md-3"></div>
-              <div class="col-md-3">
-                {{ form_label(form.guardar) }}
-                {{ form_widget(form.guardar) }}
+              <div class="col-md-12">
+                {{ form_label(form.permisos) }}
+                <div id="permisos">
+                {% for field in form.permisos %}
+                   <div align="left" style="display: inline-block; width: 100%;">
+                     {{ form_widget(field) }}
+                     {{ form_label(field) }}
+                   </div>
+                {% endfor %}
               </div>
-              <div class="col-md-3" style="text-align: left;">
-                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
               </div>
-              <div class="col-md-3"></div>
             </div>
-          </div>
-        {{ form_end(form) }}
+            <div class="container" style="margin-top: 1%">
+              <div class="row" style="text-align: center;">
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                  {{ form_label(form.guardar) }}
+                  {{ form_widget(form.guardar) }}
+                </div>
+                <div class="col-md-3" style="text-align: left;">
+                  <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+                </div>
+                <div class="col-md-3"></div>
+              </div>
+            </div>
+          {{ form_end(form) }}
+        </div>
       </div>
     </div>
   </div>
-</div>
+{% endif %}
     <a href="{{ path('rol_index') }}">back to list</a>
 
     {{ include('rol/_delete_form.html.twig') }}

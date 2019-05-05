@@ -29,8 +29,14 @@ class RolController extends AbstractController
      */
     public function index(RolRepository $rolRepository): Response
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $RAW_QUERY = "SELECT id, nombre_rol as nombreRol, descripcion FROM rol WHERE nombre_rol <> 'ROLE_SA'";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
         return $this->render('rol/index.html.twig', [
-            'rols' => $rolRepository->findAll(),
+            'rols' => $result,
         ]);
     }
 

@@ -35,6 +35,19 @@
               {{ form_label(form.rol) }}
               {{ form_widget(form.rol) }}
             </div>
+            <div class="col-md-12" style="color:white">.</div>
+            <div class="col-md-12">
+              {{ form_label(form.usuario_especialidades) }}
+              <br>
+              <div id="especialidades">
+              {% for field in form.usuario_especialidades %}
+                <br/>
+                 <div class="container" align="left" style="display: inline-block; width: 180px;">
+                   {{ form_widget(field) }}
+                   {{ form_label(field) }}
+                 </div>
+              {% endfor %}
+            </div>
           </div>
           <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">
