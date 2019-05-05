@@ -41,7 +41,7 @@ class User implements UserInterface,\Serializable
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Clinica", inversedBy="usuario")
-     * @ORM\JoinColumn(name="clinica_id", referencedColumnName="id",nullable=false)
+     * @ORM\JoinColumn(name="clinica_id", referencedColumnName="id",nullable=true)
      */
     private $clinica;
 
