@@ -1,0 +1,253 @@
+INSERT INTO `clinica`(`id`, `nombre_clinica`, `direccion`, `telefono`, `email`) VALUES (1,'CLINICA 1','San Salvador','2257-7777','jorgita@gmail.com');
+INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (1,'ROLE_ADMIN','Rol de Administrador');
+INSERT INTO `rol` (`id`,`nombre_rol`,`descripcion`) VALUES (2,'ROLE_USER','Rol de Administrador');
+INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (1,1,1,'usuario1@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 1','Usuario 1');
+INSERT INTO `user` (`id`,`rol_id`,`clinica_id`,`email`,`password`, `nombres`, `apellidos`) VALUES (2,2,1,'usuario2@usuario.com','$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai','Usuario 2','Usuario 2');
+
+
+/*PERMISOS TABLA ANEXO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','ANEXO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','ANEXO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','ANEXO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','ANEXO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','ANEXO');
+
+/*PERMISOS TABLA CAMILLA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','CAMILLA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','CAMILLA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','CAMILLA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','CAMILLA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','CAMILLA');
+
+/*PERMISOS TABLA CITA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','CITA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','CITA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','CITA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','CITA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','CITA');
+
+/*PERMISOS TABLA CITA_EXAMEN*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','CITA_EXAMEN');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','CITA_EXAMEN');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','CITA_EXAMEN');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','CITA_EXAMEN');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','CITA_EXAMEN');
+
+/*PERMISOS TABLA CLINICA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','CLINICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','CLINICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','CLINICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','CLINICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','CLINICA');
+
+/*PERMISOS TABLA DIAGNOSTICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','DIAGNOSTICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','DIAGNOSTICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','DIAGNOSTICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','DIAGNOSTICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','DIAGNOSTICO');
+
+/*PERMISOS TABLA ESPECIALIDAD*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','ESPECIALIDAD');
+
+/*PERMISOS TABLA EXAMEN_HECES_MACROSCOPICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_HECES_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_HECES_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_HECES_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_HECES_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_HECES_MACROSCOPICO');
+
+/*PERMISOS TABLA EXAMEN_HECES_MICROSCOPICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_HECES_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_HECES_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_HECES_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_HECES_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_HECES_MICROSCOPICO');
+
+/*PERMISOS TABLA EXAMEN_HECES_QUIMICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_HECES_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_HECES_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_HECES_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_HECES_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_HECES_QUIMICO');
+
+/*PERMISOS TABLA EXAMEN_HEMATOLOGICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_HEMATOLOGICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_HEMATOLOGICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_HEMATOLOGICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_HEMATOLOGICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_HEMATOLOGICO');
+
+/*PERMISOS TABLA EXAMEN_ORINA_CRISTALURIA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_ORINA_CRISTALURIA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_ORINA_CRISTALURIA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_ORINA_CRISTALURIA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_ORINA_CRISTALURIA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_ORINA_CRISTALURIA');
+
+/*PERMISOS TABLA EXAMEN_ORINA_MACROSCOPICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_ORINA_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_ORINA_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_ORINA_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_ORINA_MACROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_ORINA_MACROSCOPICO');
+
+/*PERMISOS TABLA EXAMEN_ORINA_MICROSCOPICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_ORINA_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_ORINA_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_ORINA_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_ORINA_MICROSCOPICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_ORINA_MICROSCOPICO');
+
+/*PERMISOS TABLA EXAMEN_ORINA_QUIMICO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_ORINA_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_ORINA_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_ORINA_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_ORINA_QUIMICO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_ORINA_QUIMICO');
+
+/*PERMISOS TABLA EXAMEN_QUIMICA_SANGUINEA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_QUIMICA_SANGUINEA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_QUIMICA_SANGUINEA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_QUIMICA_SANGUINEA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_QUIMICA_SANGUINEA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_QUIMICA_SANGUINEA');
+
+/*PERMISOS TABLA EXAMEN_SOLICITADO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXAMEN_SOLICITADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXAMEN_SOLICITADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXAMEN_SOLICITADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXAMEN_SOLICITADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXAMEN_SOLICITADO');
+
+/*PERMISOS TABLA EXPEDIENTE*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','EXPEDIENTE');
+
+/*PERMISOS TABLA FAMILIAR*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','FAMILIAR');
+
+/*PERMISOS TABLA FAMILIARES_EXPEDIENTE*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','FAMILIARES_EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','FAMILIARES_EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','FAMILIARES_EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','FAMILIARES_EXPEDIENTE');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','FAMILIARES_EXPEDIENTE');
+
+/*PERMISOS TABLA GENERO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','GENERO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','GENERO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','GENERO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','GENERO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','GENERO');
+
+/*PERMISOS TABLA HABITACION*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','HABITACION');
+
+/*PERMISOS TABLA HISTORIAL_FAMILIAR*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','HISTORIAL_FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','HISTORIAL_FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','HISTORIAL_FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','HISTORIAL_FAMILIAR');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','HISTORIAL_FAMILIAR');
+
+/*PERMISOS TABLA HISTORIAL_PROPIO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','HISTORIAL_PROPIO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','HISTORIAL_PROPIO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','HISTORIAL_PROPIO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','HISTORIAL_PROPIO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','HISTORIAL_PROPIO');
+
+/*PERMISOS TABLA HISTORIA_MEDICA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','HISTORIA_MEDICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','HISTORIA_MEDICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','HISTORIA_MEDICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','HISTORIA_MEDICA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','HISTORIA_MEDICA');
+
+/*PERMISOS TABLA INGRESADO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','INGRESADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','INGRESADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','INGRESADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','INGRESADO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','INGRESADO');
+
+/*PERMISOS TABLA PERMISOS_POR_ROL*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','PERMISOS_POR_ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','PERMISOS_POR_ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','PERMISOS_POR_ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','PERMISOS_POR_ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','PERMISOS_POR_ROL');
+
+/*PERMISOS TABLA PLAN_TRATAMIENTO*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','PLAN_TRATAMIENTO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','PLAN_TRATAMIENTO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','PLAN_TRATAMIENTO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','PLAN_TRATAMIENTO');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','PLAN_TRATAMIENTO');
+
+/*PERMISOS TABLA ROL*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','ROL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','ROL');
+
+/*PERMISOS TABLA SALA*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','SALA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','SALA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','SALA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','SALA');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','SALA');
+
+/*PERMISOS TABLA SIGNO_VITAL*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','SIGNO_VITAL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','SIGNO_VITAL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','SIGNO_VITAL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','SIGNO_VITAL');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','SIGNO_VITAL');
+
+/*PERMISOS TABLA TIPO_HABITACION*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','TIPO_HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','TIPO_HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','TIPO_HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','TIPO_HABITACION');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','TIPO_HABITACION');
+
+/*PERMISOS TABLA USER*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_ADMIN_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','USER');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','USER');
+
+/*PERMISOS TABLA USUARIO_ESPECIALIDAD*/
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_INDEX_','USUARIO_ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_NEW_','USUARIO_ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_SHOW_','USUARIO_ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_EDIT_','USUARIO_ESPECIALIDAD');
+INSERT INTO `permisos_por_rol`(`rol_id`, `permiso`, `nombre_tabla`) VALUES (1,'ROLE_PERMISSION_DELETE_','USUARIO_ESPECIALIDAD');
+
+
+INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Ortopedia');
+INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Neurocirugia');
+INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Psiquiatria');
+INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Pediatria');
+INSERT INTO `especialidad`(`nombre_especialidad`) VALUES ('Cardiologia');
