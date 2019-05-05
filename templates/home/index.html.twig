@@ -3,14 +3,20 @@
 {% block title %}Bienvenido{% endblock %}
 
 {% block body %}
-
+{% if is_granted('ROLE_PERMISSION_INDEX_USER')%}
 <a href="{{path('user_index')}}">Lista de Doctores</a>
+{% endif %}
 <br/>
+{% if is_granted('ROLE_PERMISSION_INDEX_CLINICA')%}
 <a href="{{path('clinica_index')}}">Lista de Clinicas</a>
+{% endif %}
 <br/>
+{% if is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')%}
 <a href="{{path('expediente_index')}}">Lista de Pacientes</a>
+{% endif %}
 <br/>
+{% if is_granted('ROLE_PERMISSION_INDEX_ROL')%}
 <a href="{{path('rol_index')}}">Lista de Roles</a>
-
+{% endif %}
 
 {% endblock %}

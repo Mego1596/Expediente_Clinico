@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
@@ -59,6 +60,7 @@ class UserController extends AbstractController
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
             'query_builder' => function (EntityRepository $er) {
@@ -131,7 +133,7 @@ class UserController extends AbstractController
             $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
             $entityManager = $this->getDoctrine()->getEntityManager();
             $user->setEmail($form["email"]->getData());
-            $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+            $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
             $user->setNombres($form["nombres"]->getData());
             $user->setApellidos($form["apellidos"]->getData());
             $user->setRol($rol);

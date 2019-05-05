@@ -54,7 +54,7 @@
     <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
       <!-- Sidebar - Brand -->
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/home">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{path('home')}}">
         <div class="sidebar-brand-icon rotate-n-15">
         </div>
         <div class="sidebar-brand-text mx-3">Clinica</div>
@@ -65,7 +65,7 @@
 
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
-        <a class="nav-link" href="/home">
+        <a class="nav-link" href="{{path('home')}}">
           <i class="fa fa-home"></i>
           <span>Inicio</span></a>
       </li>
@@ -114,11 +114,11 @@
                 <a class="dropdown-item" href="#">
                   <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Settings
-                </a>
-                <a class="dropdown-item" href="#">
-                  <i class="fa fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Activity Log
                 </a>-->
+                <a class="dropdown-item" href="#">
+                  <i class="fa fa-lock fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Cambiar Contraseña
+                </a>
                 <div class="dropdown-divider"></div>
                 {% if is_granted('ROLE_PERMISSION_USER') %}
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
