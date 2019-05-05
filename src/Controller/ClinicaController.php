@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 use App\Entity\Clinica;
 use App\Form\ClinicaType;
 use App\Repository\ClinicaRepository;
@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Security\Core\Security;
 /**
  * @Route("/clinica")
  */
@@ -17,6 +17,7 @@ class ClinicaController extends AbstractController
 {
     /**
      * @Route("/", name="clinica_index", methods={"GET"})
+     * @Security2("has_role('ROLE_PERMISSION_INDEX_CLINICA')")
      */
     public function index(ClinicaRepository $clinicaRepository): Response
     {
@@ -27,6 +28,7 @@ class ClinicaController extends AbstractController
 
     /**
      * @Route("/new", name="clinica_new", methods={"GET","POST"})
+     * @Security2("has_role('ROLE_PERMISSION_NEW_CLINICA')")
      */
     public function new(Request $request): Response
     {
@@ -50,6 +52,7 @@ class ClinicaController extends AbstractController
 
     /**
      * @Route("/{id}", name="clinica_show", methods={"GET"})
+     * @Security2("has_role('ROLE_PERMISSION_SHOW_CLINICA')")
      */
     public function show(Clinica $clinica): Response
     {
@@ -60,6 +63,7 @@ class ClinicaController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="clinica_edit", methods={"GET","POST"})
+     * @Security2("has_role('ROLE_PERMISSION_EDIT_CLINICA')")
      */
     public function edit(Request $request, Clinica $clinica): Response
     {
@@ -82,6 +86,7 @@ class ClinicaController extends AbstractController
 
     /**
      * @Route("/{id}", name="clinica_delete", methods={"DELETE"})
+     * @Security2("has_role('ROLE_PERMISSION_DELETE_CLINICA')")
      */
     public function delete(Request $request, Clinica $clinica): Response
     {

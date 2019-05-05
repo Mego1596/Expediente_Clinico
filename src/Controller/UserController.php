@@ -17,13 +17,16 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Security\Core\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 /**
  * @Route("/user")
  */
 class UserController extends AbstractController
 {
     /**
-     * @Route("/", name="doctor_index", methods={"GET"})
+     * @Route("/doctor", name="doctor_index", methods={"GET"})
+     * @Security2("has_role('ROLE_PERMISSION_INDEX_USER')")
      */
     public function indexUserDoctor(UserRepository $userRepository): Response
     {
@@ -41,7 +44,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="doctor_new", methods={"GET","POST"})
+     * @Route("/doctor/new", name="doctor_new", methods={"GET","POST"})
+     * @Security2("has_role('ROLE_PERMISSION_NEW_USER')")
      */
     public function newUserDoctor(Request $request): Response
     {
@@ -93,6 +97,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="user_show", methods={"GET"})
+     * @Security2("has_role('ROLE_PERMISSION_SHOW_USER')")
      */
     public function show(User $user): Response
     {
@@ -102,7 +107,8 @@ class UserController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="doctor_edit", methods={"GET","POST"})
+     * @Route("/doctor/{id}/edit", name="doctor_edit", methods={"GET","POST"})
+     * @Security2("has_role('ROLE_PERMISSION_EDIT_USER')")
      */
     public function editUserDoctor(Request $request, User $user): Response
     {
@@ -145,6 +151,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
+     * @Security2("has_role('ROLE_PERMISSION_DELETE_USER')",statusCode=404, message="")
      */
     public function delete(Request $request, User $user): Response
     {
