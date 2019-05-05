@@ -60,7 +60,7 @@ class UserController extends AbstractController
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
-        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
+        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('u')
                     ->andWhere('u.nombreRol != :val')
