@@ -27,6 +27,15 @@ class HomeController extends AbstractController
         'controller_name' => 'HomeController',
         ]);
     }
+    /**
+     * @Route("/cambioContrasena", name="app_cambio")
+     */
+    public function cambio_contrasena(Security $AuthUser)
+    {   
+        return $this->render('user/passwordUpdate.html.twig', [
+        'controller_name' => 'HomeController',
+        ]);
+    }
 
     
 }
