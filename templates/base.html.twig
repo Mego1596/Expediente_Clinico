@@ -317,7 +317,7 @@
                     Cerrar Sesion
                   </a>
                 {% else %}
-                  <a class="dropdown-item" href="/login">
+                  <a class="dropdown-item" href="{{path('login')}}">
                     <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
                     Iniciar Sesion
                   </a>
@@ -374,7 +374,7 @@
         <div class="modal-body">Seleccione "Cerrar Sesion" si realmente esta listo para finalizar la sesion actual.</div>
         <div class="modal-footer">
             <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancelar</button>
-            <a class="btn btn-outline-danger" href="/logout">Cerrar Sesion</a>
+            <a class="btn btn-outline-danger" href="{{path('app_logout')}}">Cerrar Sesion</a>
         </div>
       </div>
     </div>

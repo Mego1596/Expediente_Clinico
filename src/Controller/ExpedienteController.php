@@ -35,12 +35,9 @@ class ExpedienteController extends AbstractController
     {
 
         $em = $this->getDoctrine()->getManager();
-        if($AuthUser->isGranted('ROLE_PERMISSION_ADMIN_USER')){
+        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
             $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id FROM `user` as u,expediente as e WHERE u.id = e.usuario_id;';
 
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $result = $statement->fetchAll();
         }else{
              $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id FROM `user` as u,expediente as e WHERE u.id = e.usuario_id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
         }
@@ -61,6 +58,7 @@ class ExpedienteController extends AbstractController
     public function new(Request $request, Security $AuthUser): Response
     {
         $expediente = new Expediente();
+        
         $form = $this->createFormBuilder($expediente)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
