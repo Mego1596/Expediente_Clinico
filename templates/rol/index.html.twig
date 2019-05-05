@@ -35,8 +35,8 @@
                                             <td>{{ rol.nombreRol }}</td>
                                             <td>{{ rol.descripcion }}</td>
                                             <td>
-                                                <a href="{{ path('rol_show', {'id': rol.id}) }}" class="btn btn-info">show</a>
-                                                <a href="{{ path('rol_edit', {'id': rol.id}) }}" class="btn btn-success">edit</a>
+                                                <a href="{{ path('rol_show', {'id': rol.id}) }}" class="btn btn-info">Mostrar</a>
+                                                <a href="{{ path('rol_edit', {'id': rol.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% if (rol.nombreRol == 'ROLE_DOCTOR')%}
                                                 {% else %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ rol.id}}">

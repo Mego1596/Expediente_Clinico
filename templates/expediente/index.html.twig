@@ -35,8 +35,8 @@
                                             <td>{{paciente.nombre_completo}}</td>
                                             <td>{{paciente.expediente}}</td>
                                             <td>
-                                                <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">show</a>
-                                                <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">edit</a>
+                                                <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
+                                                <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">Modificar</a>
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
                                                   Eliminar
                                                 </button>
