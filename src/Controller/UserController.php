@@ -86,7 +86,7 @@ class UserController extends AbstractController
             }
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('doctor_index');
+            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/new.html.twig', [
@@ -142,7 +142,7 @@ class UserController extends AbstractController
             }
             $entityManager->persist($user);
             $entityManager->flush();
-            return $this->redirectToRoute('doctor_index');
+            return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/edit.html.twig', [
