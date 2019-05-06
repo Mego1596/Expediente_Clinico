@@ -320,4 +320,10 @@ class User implements UserInterface,\Serializable
 
         return $this;
     }
+
+    public function removeEspecialidades(): self
+    {
+        $this->usuario_especialidades->clear();
+        return $this;
+    }
 }

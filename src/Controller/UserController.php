@@ -135,60 +135,65 @@ class UserController extends AbstractController
 
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        /////////////////////////////// ZONA DE PROCESAMIENTO /////////////////////////////////////
+        if ($form->isSubmitted() && $form->isValid()) 
+        {
+            $agregar_especialidades = true;
+            $exito = true;
+            $pwd = $user->getPassword();
 
             if (empty($form['nuevo_password']->getData()) && empty($form['repetir_nuevo_password']->getData()))
-            {
-                $rol = new Rol();
-                $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
-                $entityManager = $this->getDoctrine()->getEntityManager();
-                $user->setEmail($form["email"]->getData());
-
-                $user->setNombres($form["nombres"]->getData());
-                $user->setApellidos($form["apellidos"]->getData());
-                $user->setRol($rol);
-                $user->setClinica($form["clinica"]->getData());
-
-                foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
-                    $user->addUsuarioEspecialidades($especialidad);    
-                }
-                $entityManager->persist($user);
-                $entityManager->flush();
-
-                $this->addFlash('success', 'Medico modificado con exito');
-                return $this->redirectToRoute('user_index');
+            {   
             }
             else
             {
                 if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
                 {
-                    $rol = new Rol();
-                    $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
-                    $entityManager = $this->getDoctrine()->getEntityManager();
-                    $user->setEmail($form["email"]->getData());
-
-                    $user->setNombres($form["nombres"]->getData());
-                    $user->setApellidos($form["apellidos"]->getData());
-                    $user->setRol($rol);
-                    $user->setClinica($form["clinica"]->getData());
-
-                    $user->setPassword(password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]));
-
-                    foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
-                        $user->addUsuarioEspecialidades($especialidad);    
-                    }
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Medico modificado con exito');
-                    return $this->redirectToRoute('user_index');
+                    $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
                 }
                 else
                 {
                     $this->addFlash('fail', 'Contraseñas deben coincidir');
+                    $exito = false;
                 }
             }
-            
+
+            if ($exito)
+            {
+                $entityManager = $this->getDoctrine()->getEntityManager();
+                $rol = new Rol();
+                $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneById($form['rol']->getData());
+
+                // Caso en que el ROL era antes de doctor y ahora sera otro rol
+                if ($rol->getId() != 2)
+                {
+                    $agregar_especialidades = false;
+                }
+                
+                $user->setPassword($pwd);
+                $user->setEmail($form["email"]->getData());
+                $user->setNombres($form["nombres"]->getData());
+                $user->setApellidos($form["apellidos"]->getData());
+                $user->setRol($rol);
+                $user->setClinica($form["clinica"]->getData());
+
+                if ($agregar_especialidades)
+                {
+                    foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
+                        $user->addUsuarioEspecialidades($especialidad);    
+                    }
+                }
+                else
+                {
+                    $user->removeEspecialidades();
+                }
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Usuario modificado con exito');
+                return $this->redirectToRoute('user_index');
+            }            
         }
 
         return $this->render('user/edit.html.twig', [
