@@ -40,35 +40,43 @@
                                             <td>{{ clinica.email}}</td>
 
                                             <td>
-                                                <a href="{{ path('clinica_show', {'id': clinica.id}) }}" class="btn btn-info">Mostrar</a>
-                                                <a href="{{ path('clinica_edit', {'id': clinica.id}) }}" class="btn btn-success">Modificar</a>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ clinica.id}}">
-                                                  Eliminar
-                                                </button>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal{{ clinica.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                      <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                          <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                        Esta seguro que desea eliminar la clinica?
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                        <form method="post" action="{{ path('clinica_delete', {'id': clinica.id}) }}">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clinica.id) }}">
-                                                            <button type="submit" class="btn btn-outline-danger">Si</button>
-                                                        </form>
-                                                      </div>
+                                                {% if user.tieneRol('ROLE_PERMISSION_SHOW_CLINICA') %}
+                                                    <a href="{{ path('clinica_show', {'id': clinica.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
+
+                                                {% if user.tieneRol('ROLE_PERMISSION_EDIT_CLINICA') %}
+                                                    <a href="{{ path('clinica_edit', {'id': clinica.id}) }}" class="btn btn-success">Modificar</a>
+                                                {% endif %}
+
+                                                {% if user.tieneRol('ROLE_PERMISSION_DELETE_CLINICA') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ clinica.id}}">
+                                                    Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ clinica.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Esta seguro que desea eliminar la clinica?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('clinica_delete', {'id': clinica.id}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ clinica.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                        </div>
+                                                        </div>
                                                     </div>
-                                                  </div>
-                                                </div>
+                                                    </div>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}

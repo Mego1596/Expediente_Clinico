@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * @Route("/clinica")
  */
@@ -21,8 +24,11 @@ class ClinicaController extends AbstractController
      */
     public function index(ClinicaRepository $clinicaRepository): Response
     {
+        $user = $this->getUser();
+
         return $this->render('clinica/index.html.twig', [
             'clinicas' => $clinicaRepository->findAll(),
+            'user' => $user
         ]);
     }
 
