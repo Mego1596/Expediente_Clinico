@@ -78,6 +78,7 @@ class RolController extends AbstractController
             $entityManager->persist($rol);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Rol creado con exito');
             return $this->redirectToRoute('rol_index');
         }
 
@@ -134,6 +135,7 @@ class RolController extends AbstractController
             $entityManager->persist($rol);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Rol modificado con exito');
             return $this->redirectToRoute('rol_index');
         }
 
@@ -155,6 +157,7 @@ class RolController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success', 'Rol eliminado con exito');
         return $this->redirectToRoute('rol_index');
     }
 }
