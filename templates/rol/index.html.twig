@@ -15,7 +15,9 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
+                    {% if is_granted('ROLE_PERMISSION_NEW_ROL') %}
                         <a href="{{ path('rol_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list"></i> Registrar Rol</a>
+                    {% endif %}
                     </div>
                     <br/>
                     <br/>
@@ -35,8 +37,15 @@
                                             <td>{{ rol.nombreRol }}</td>
                                             <td>{{ rol.descripcion }}</td>
                                             <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_ROL') %}
                                                 <a href="{{ path('rol_show', {'id': rol.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_ROL') %}
                                                 <a href="{{ path('rol_edit', {'id': rol.id}) }}" class="btn btn-success">Modificar</a>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_ROL') %}
                                                 {% if (rol.nombreRol == 'ROLE_DOCTOR')%}
                                                 {% else %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ rol.id}}">
@@ -67,6 +76,7 @@
                                                     </div>
                                                   </div>
                                                 </div>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
