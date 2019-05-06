@@ -41,7 +41,7 @@
                                                 
                                                 {% if is_granted('ROLE_PERMISSION_EDIT_GENERO') %}
                                                 <a href="{{ path('genero_edit', {'id': genero.id}) }}" class="btn btn-success">Modificar</a>
-                                                {% ednif %}
+                                                {% endif %}
                                                 
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_GENERO') %}
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ genero.id}}">
