@@ -34,7 +34,8 @@ class EspecialidadController extends AbstractController
      * @Security2("has_role('ROLE_PERMISSION_NEW_ESPECIALIDAD')")
      */
     public function new(Request $request): Response
-    {
+    {   
+        $editar = false;
         $especialidad = new Especialidad();
         $form = $this->createForm(EspecialidadType::class, $especialidad);
         $form->handleRequest($request);
@@ -50,6 +51,7 @@ class EspecialidadController extends AbstractController
 
         return $this->render('especialidad/new.html.twig', [
             'especialidad' => $especialidad,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }
@@ -75,6 +77,7 @@ class EspecialidadController extends AbstractController
      */
     public function edit(Request $request, Especialidad $especialidad): Response
     {
+        $editar=true;
         $form = $this->createForm(EspecialidadType::class, $especialidad);
         $form->handleRequest($request);
 
@@ -89,6 +92,7 @@ class EspecialidadController extends AbstractController
 
         return $this->render('especialidad/edit.html.twig', [
             'especialidad' => $especialidad,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }

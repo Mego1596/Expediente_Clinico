@@ -38,6 +38,7 @@ class ClinicaController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $editar = false;
         $clinica = new Clinica();
         $form = $this->createForm(ClinicaType::class, $clinica);
         $form->handleRequest($request);
@@ -53,6 +54,7 @@ class ClinicaController extends AbstractController
 
         return $this->render('clinica/new.html.twig', [
             'clinica' => $clinica,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }
@@ -74,6 +76,7 @@ class ClinicaController extends AbstractController
      */
     public function edit(Request $request, Clinica $clinica): Response
     {
+        $editar = true;
         $form = $this->createForm(ClinicaType::class, $clinica);
         $form->handleRequest($request);
 
@@ -88,6 +91,7 @@ class ClinicaController extends AbstractController
 
         return $this->render('clinica/edit.html.twig', [
             'clinica' => $clinica,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }

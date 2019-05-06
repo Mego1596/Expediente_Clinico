@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Clinica{% endblock %}
+{% block title %}Nueva Clinica{% endblock %}
 
 {% block body %}
     {{ include('clinica/_form.html.twig') }}
-    <a href="{{ path('clinica_index') }}">back to list</a>
+    <a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
 {% endblock %}

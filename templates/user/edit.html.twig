@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Editar Usuario{% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header">Registrar Usuario</h5>
+      <h5 class="card-header">Modificar Usuario</h5>
       <div class="card-body">
         {{ form_start(form, {'action': path('user_edit', {'id': user.id})}) }}
 
@@ -76,8 +76,8 @@
       </div>
     </div>
   </div>
+  <a class="btn btn-secondary btn-inline" href="{{ path('user_index') }}">Atras</a>
 </div>
-<a href="{{ path('user_index') }}">back to list</a>
 {% endblock %}
 
 {% block javascripts %}

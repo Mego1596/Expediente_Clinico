@@ -1,16 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Clinica{% endblock %}
+{% block title %}Detalles de la Clinica{% endblock %}
 
 {% block body %}
-    <h1>Clinica</h1>
+    <h1>Detalles de la Clinica</h1>
 
     <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ clinica.id }}</td>
-            </tr>
             <tr>
                 <th>NombreClinica</th>
                 <td>{{ clinica.nombreClinica }}</td>
@@ -27,17 +23,10 @@
                 <th>Email</th>
                 <td>{{ clinica.email }}</td>
             </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ clinica.creadoEn ? clinica.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ clinica.actualizadoEn ? clinica.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
         </tbody>
     </table>
 
-    <a class="btn btn-secondary" href="{{ path('clinica_index') }}">back to list</a>
+    <a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
+    <a class="btn btn-primary" href="{{ path('clinica_edit', {'id': clinica.id}) }}">Editar</a>
 
 {% endblock %}

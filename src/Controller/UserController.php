@@ -58,6 +58,7 @@ class UserController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        
         $user = new User();
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
@@ -119,7 +120,6 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-
         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))

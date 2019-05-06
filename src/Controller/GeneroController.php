@@ -35,6 +35,7 @@ class GeneroController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        $editar =false;
         $genero = new Genero();
         $form = $this->createForm(GeneroType::class, $genero);
         $form->handleRequest($request);
@@ -50,6 +51,7 @@ class GeneroController extends AbstractController
 
         return $this->render('genero/new.html.twig', [
             'genero' => $genero,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }
@@ -75,6 +77,7 @@ class GeneroController extends AbstractController
      */
     public function edit(Request $request, Genero $genero): Response
     {
+        $editar=true;
         $form = $this->createForm(GeneroType::class, $genero);
         $form->handleRequest($request);
 
@@ -89,6 +92,7 @@ class GeneroController extends AbstractController
 
         return $this->render('genero/edit.html.twig', [
             'genero' => $genero,
+            'editar' => $editar,
             'form' => $form->createView(),
         ]);
     }
