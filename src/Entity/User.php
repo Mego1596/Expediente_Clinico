@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -64,6 +65,16 @@ class User implements UserInterface,\Serializable
      * @ORM\Column(type="string", length=255)
      */
     private $Apellidos;
+
+    /**
+     * @Assert\Blank
+     */
+    private $nuevo_password;
+
+    /**
+     * @Assert\Blank
+     */
+    private $repetir_nuevo_password;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Especialidad", inversedBy="users")
@@ -280,6 +291,16 @@ class User implements UserInterface,\Serializable
     public function getUsuarioEspecialidades(): Collection
     {
         return $this->usuario_especialidades;
+    }
+
+    public function getNuevoPassword(): ?string
+    {
+        return $this->nuevo_password;
+    }
+
+    public function getRepetirNuevoPassword(): ?string
+    {
+        return $this->repetir_nuevo_password;
     }
 
     public function addUsuarioEspecialidades(Especialidad $usuarioEspecialidades): self

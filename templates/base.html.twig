@@ -141,6 +141,16 @@
 
         <!-- Begin Page Content -->
         <div class="container-fluid">
+          {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+          {% endfor %}
+          {% for message in app.flashes('fail') %}
+            <div class="alert alert-danger">
+                {{ message }}
+            </div>
+          {% endfor %}
 
           {% block body %}{% endblock %}
         </div>

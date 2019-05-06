@@ -21,6 +21,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 use Doctrine\ORM\EntityRepository;
+
+use Symfony\Component\HttpFoundation\Session\Session;
+
 /**
  * @Route("/user")
  */
@@ -114,6 +117,8 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
+
+        //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
@@ -121,6 +126,8 @@ class UserController extends AbstractController
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
             'attr' => array('class' => 'form-control')))
+        ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+        ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
         ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
             'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
@@ -129,22 +136,59 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $rol = new Rol();
-            $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
-            $entityManager = $this->getDoctrine()->getEntityManager();
-            $user->setEmail($form["email"]->getData());
-            $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-            $user->setNombres($form["nombres"]->getData());
-            $user->setApellidos($form["apellidos"]->getData());
-            $user->setRol($rol);
-            $user->setClinica($form["clinica"]->getData());
 
-            foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
-                $user->addUsuarioEspecialidades($especialidad);    
+            if (empty($form['nuevo_password']->getData()) && empty($form['repetir_nuevo_password']->getData()))
+            {
+                $rol = new Rol();
+                $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
+                $entityManager = $this->getDoctrine()->getEntityManager();
+                $user->setEmail($form["email"]->getData());
+
+                $user->setNombres($form["nombres"]->getData());
+                $user->setApellidos($form["apellidos"]->getData());
+                $user->setRol($rol);
+                $user->setClinica($form["clinica"]->getData());
+
+                foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
+                    $user->addUsuarioEspecialidades($especialidad);    
+                }
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                $this->addFlash('success', 'Medico modificado con exito');
+                return $this->redirectToRoute('user_index');
             }
-            $entityManager->persist($user);
-            $entityManager->flush();
-            return $this->redirectToRoute('user_index');
+            else
+            {
+                if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                {
+                    $rol = new Rol();
+                    $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_DOCTOR');
+                    $entityManager = $this->getDoctrine()->getEntityManager();
+                    $user->setEmail($form["email"]->getData());
+
+                    $user->setNombres($form["nombres"]->getData());
+                    $user->setApellidos($form["apellidos"]->getData());
+                    $user->setRol($rol);
+                    $user->setClinica($form["clinica"]->getData());
+
+                    $user->setPassword(password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]));
+
+                    foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
+                        $user->addUsuarioEspecialidades($especialidad);    
+                    }
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $this->addFlash('success', 'Medico modificado con exito');
+                    return $this->redirectToRoute('user_index');
+                }
+                else
+                {
+                    $this->addFlash('fail', 'Contraseñas deben coincidir');
+                }
+            }
+            
         }
 
         return $this->render('user/edit.html.twig', [
