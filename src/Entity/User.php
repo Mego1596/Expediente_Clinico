@@ -326,4 +326,9 @@ class User implements UserInterface,\Serializable
         $this->usuario_especialidades->clear();
         return $this;
     }
+
+    public function tieneRol(string $rol): bool
+    {
+        return in_array($rol, $this->getRoles());
+    }
 }
