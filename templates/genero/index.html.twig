@@ -15,7 +15,9 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
+                    {% if is_granted('ROLE_PERMISSION_NEW_GENERO') %}
                         <a href="{{ path('genero_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar Genero</a>
+                    {% endif %}
                     </div>
                     <br/>
                     <br/>
@@ -33,8 +35,15 @@
                                         <tr>
                                             <td>{{ genero.descripcion }}</td>
                                             <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_GENERO') %}
                                                 <a href="{{ path('genero_show', {'id': genero.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
+                                                
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_GENERO') %}
                                                 <a href="{{ path('genero_edit', {'id': genero.id}) }}" class="btn btn-success">Modificar</a>
+                                                {% ednif %}
+                                                
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_GENERO') %}
                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ genero.id}}">
                                                   Eliminar
                                                 </button>
@@ -62,6 +71,7 @@
                                                     </div>
                                                   </div>
                                                 </div>
+                                                {% endif %}
                                             </td>
                                         </tr>
                                     {% endfor %}
