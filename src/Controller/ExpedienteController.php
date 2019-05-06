@@ -200,6 +200,11 @@ class ExpedienteController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('expediente_index');
         }
+        else
+        {
+            
+        }
+        dump($form);
 
         return $this->render('expediente/new.html.twig', [
             'expediente' => $expediente,

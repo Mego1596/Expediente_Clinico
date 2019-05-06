@@ -124,7 +124,7 @@ class UserController extends AbstractController
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
-        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
             'attr' => array('class' => 'form-control')))
