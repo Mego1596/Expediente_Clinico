@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Rol{% endblock %}
+{% block title %}Nuevo Rol{% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header">Registrar Usuario</h5>
+      <h5 class="card-header">Registrar Rol</h5>
       <div class="card-body">
         {{ form_start(form) }}
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
@@ -52,5 +52,5 @@
     </div>
   </div>
 </div>
-    <a href="{{ path('rol_index') }}">back to list</a>
+    <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
 {% endblock %}

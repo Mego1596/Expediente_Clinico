@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New User{% endblock %}
+{% block title %}Nuevo Usuario{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -71,8 +71,8 @@
       </div>
     </div>
   </div>
+  <a class="btn btn-secondary btn-inline" href="{{ path('user_index') }}">Atras</a>
 </div>
-<a href="{{ path('user_index') }}" class ="btn btn-secondary">back to list</a>
 {% endblock %}
 
 {% block javascripts %}

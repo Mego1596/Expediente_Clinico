@@ -1,13 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Rol{% endblock %}
+{% block title %}Editar Rol{% endblock %}
 
 {% block body %}
 {% if rol.nombreRol != 'ROLE_SA' %}
   <div class="row">
     <div class="col-md-12">
       <div class="card">
-        <h5 class="card-header">Registrar Usuario</h5>
+        <h5 class="card-header">Modificar Rol</h5>
         <div class="card-body">
           {{ form_start(form) }}
             {# the argument of csrf_token() is an arbitrary string used to generate the token #}
@@ -50,7 +50,5 @@
     </div>
   </div>
 {% endif %}
-    <a href="{{ path('rol_index') }}">back to list</a>
-
-    {{ include('rol/_delete_form.html.twig') }}
+    <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
 {% endblock %}
