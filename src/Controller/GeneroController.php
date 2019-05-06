@@ -44,6 +44,7 @@ class GeneroController extends AbstractController
             $entityManager->persist($genero);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Genero agregado con exito');
             return $this->redirectToRoute('genero_index');
         }
 
@@ -80,6 +81,7 @@ class GeneroController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Genero modificado con exito');
             return $this->redirectToRoute('genero_index', [
                 'id' => $genero->getId(),
             ]);
@@ -103,6 +105,7 @@ class GeneroController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success', 'Genero eliminado con exito');
         return $this->redirectToRoute('genero_index');
     }
 }

@@ -16,6 +16,13 @@ INSERT INTO `genero` (`id`, `descripcion`, `creado_en`, `actualizado_en`) VALUES
 
 
 INSERT INTO `permiso` (`id`, `permiso`, `descripcion`, `nombre_tabla`, `creado_en`, `actualizado_en`) VALUES
+(101, 'ROLE_PERMISSION_INDEX_', 'Permiso de Entrada', 'GENERO', NULL, NULL),
+(102, 'ROLE_PERMISSION_NEW_', 'Permiso de Creacion', 'GENERO', NULL, NULL),
+(103, 'ROLE_PERMISSION_SHOW_', 'Permiso de Ver ', 'GENERO', NULL, NULL),
+(104, 'ROLE_PERMISSION_EDIT_', 'Permiso de Editar ', 'GENERO', NULL, NULL),
+(105, 'ROLE_PERMISSION_DELETE_', 'Permiso de Eliminar', 'GENERO', NULL, NULL),
+
+
 (21, 'ROLE_PERMISSION_INDEX_', 'Permiso de Entrada', 'CLINICA', NULL, NULL),
 (22, 'ROLE_PERMISSION_NEW_', 'Permiso de Creacion', 'CLINICA', NULL, NULL),
 (23, 'ROLE_PERMISSION_SHOW_', 'Permiso de Ver ', 'CLINICA', NULL, NULL),
@@ -76,6 +83,13 @@ INSERT INTO `user_especialidad` (`user_id`, `especialidad_id`) VALUES
 (2, 5);
 
 INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
+(1, 101),
+(1, 102),
+(1, 103),
+(1, 104),
+(1, 105),
+
+
 (1, 21),
 (1, 22),
 (1, 23),
