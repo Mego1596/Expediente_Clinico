@@ -6,63 +6,65 @@
 <div class="container" width="100%" style="margin-left: 10%">
 	<div class="row">
 		<div class="col-md-1"></div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_USER')%}
+		{% if is_granted('ROLE_PERMISSION_INDEX_USER')%}
+			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('user_index')}}"><i class="fa fa-group" style="margin-left:10%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
 					<a href="{{path('user_index')}}">Lista de Usuarios</a>
 				</div>
-			{% endif %}
-		</div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_CLINICA')%}
+			</div>
+		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_CLINICA')%}
+			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('clinica_index')}}"><i class="fa fa-hospital" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
 					<a href="{{path('clinica_index')}}">Lista de Clinicas</a>
 				</div>
-			{% endif %}
-		</div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')%}
-			<div style="border:1px solid;" align="center">
-				<a href="{{path('expediente_index')}}"><i class="fas fa-user-injured" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
-				<br/>
-				<a href="{{path('expediente_index')}}">Lista de Pacientes</a>
 			</div>
-			{% endif %}
-		</div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_ROL')%}
+		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')%}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('expediente_index')}}"><i class="fas fa-user-injured" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('expediente_index')}}">Lista de Pacientes</a>
+				</div>
+			</div>
+		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_ROL')%}
+			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('rol_index')}}"><i class="fas fa-user-tag" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
 					<a href="{{path('rol_index')}}">Lista de Roles</a>
 				</div>
-			{% endif %}
-		</div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')%}
+			</div>
+		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')%}
+			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('especialidad_index')}}"><i class="fa fa-folder-open-o" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
 					<a href="{{path('especialidad_index')}}">Lista de Especialidad</a>
 				</div>
-			{% endif %}
-		</div>
+			</div>
+		{% endif %}
+		
 		<div class="col-md-1"></div>
 		<div class="col-md-12"><br/></div>
 		<div class="col-md-1"></div>
-		<div class="col-md-2">
-			{% if is_granted('ROLE_PERMISSION_INDEX_GENERO')%}
+		{% if is_granted('ROLE_PERMISSION_INDEX_GENERO')%}
+			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('genero_index')}}"><i class="fa fa-list" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
 					<a href="{{path('genero_index')}}">Lista de Genero</a>
 				</div>
-			{% endif %}
-		</div>
+			</div>
+		{% endif %}
+		
 	</div>
 </div>
 	
