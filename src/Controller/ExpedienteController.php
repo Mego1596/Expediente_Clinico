@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
@@ -76,19 +77,29 @@ class ExpedienteController extends AbstractController
             ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
             ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+            ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
             ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $valido = true;
+
+            $usuario = $this->getDoctrine()->getRepository(Clinica::class)->findBy(['email' => $form["email"]->getData()]);
+            if (count($usuario) > 0)
+            {
+                $valido = false;
+                $this->addFlash('fail', 'Usuario con este email ya existe');
+            }
+
             $entityManager = $this->getDoctrine()->getManager();
-            if(is_null($AuthUser->getUser()->getClinica())){
+            if(is_null($AuthUser->getUser()->getClinica()) && $valido){
                 $user = new User();
                 $user->setNombres($form["nombres"]->getData());
                 $user->setApellidos($form["apellidos"]->getData());
                 $user->setEmail($form["email"]->getData());
                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
                 $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+                $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
                 $entityManager->persist($user);
                 $expediente->setUsuario($user);
                 $expediente->setGenero($form["genero"]->getData());
@@ -133,14 +144,14 @@ class ExpedienteController extends AbstractController
                 }
 
 
-            }else{
+            }elseif($valido){
                 $user = new User();
                 $user->setNombres($form["nombres"]->getData());
                 $user->setApellidos($form["apellidos"]->getData());
                 $user->setEmail($form["email"]->getData());
                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                 $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+                $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
                 $entityManager->persist($user);
                 $expediente->setUsuario($user);
                 $expediente->setGenero($form["genero"]->getData());

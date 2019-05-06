@@ -50,7 +50,11 @@
               {{ form_label(form.genero) }}
               {{ form_widget(form.genero) }}
             </div>
-            <div class="col-md-12" style="color:white">
+            <div class="col-md-4">
+              {{ form_label(form.password) }}
+              {{ form_widget(form.password) }}
+            </div>
+            <div class="col-md-8" style="color:white">
             {% if pertenece == null %}
             <label style="align-content: center;">Clinica:</label>
               <select class="form-control" id="clinica" name="clinica" required>

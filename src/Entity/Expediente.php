@@ -106,6 +106,22 @@ class Expediente
      */
     private $citas;
 
+
+    /**
+     * @Assert\Blank
+     */
+    private $password;
+
+    /**
+     * @Assert\Blank
+     */
+    private $nuevo_password;
+
+    /**
+     * @Assert\Blank
+     */
+    private $repetir_nuevo_password;
+
     public function __construct()
     {
         $this->familiaresExpedientes = new ArrayCollection();
@@ -361,5 +377,13 @@ class Expediente
         }
 
         return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
     }
 }
