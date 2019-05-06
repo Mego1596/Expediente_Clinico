@@ -41,6 +41,7 @@ class ClinicaController extends AbstractController
             $entityManager->persist($clinica);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Clinica creada con exito');
             return $this->redirectToRoute('clinica_index');
         }
 
@@ -73,6 +74,7 @@ class ClinicaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
+            $this->addFlash('success', 'Clinica modificada con exito');
             return $this->redirectToRoute('clinica_index', [
                 'id' => $clinica->getId(),
             ]);
@@ -96,6 +98,7 @@ class ClinicaController extends AbstractController
             $entityManager->flush();
         }
 
+        $this->addFlash('success', 'Clinica eliminada con exito');
         return $this->redirectToRoute('clinica_index');
     }
 }
