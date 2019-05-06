@@ -49,18 +49,12 @@ class Clinica
     private $actualizado_en;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sala", mappedBy="idHospital", orphanRemoval=true)
-     */
-    private $salas;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="clinica", orphanRemoval=true)
      */
     private $usuario;
 
     public function __construct()
     {
-        $this->salas = new ArrayCollection();
         $this->usuario = new ArrayCollection();
     }
 
@@ -141,36 +135,6 @@ class Clinica
         return $this;
     }
 
-    /**
-     * @return Collection|Sala[]
-     */
-    public function getSalas(): Collection
-    {
-        return $this->salas;
-    }
-
-    public function addSala(Sala $sala): self
-    {
-        if (!$this->salas->contains($sala)) {
-            $this->salas[] = $sala;
-            $sala->setIdHospital($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSala(Sala $sala): self
-    {
-        if ($this->salas->contains($sala)) {
-            $this->salas->removeElement($sala);
-            // set the owning side to null (unless already changed)
-            if ($sala->getIdHospital() === $this) {
-                $sala->setIdHospital(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|User[]

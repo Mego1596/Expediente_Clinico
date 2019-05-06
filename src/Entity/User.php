@@ -47,16 +47,6 @@ class User implements UserInterface,\Serializable
     private $clinica;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Expediente", mappedBy="usuario", cascade={"persist", "remove"})
-     */
-    private $expediente;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Cita", mappedBy="usuario", orphanRemoval=true)
-     */
-    private $citas;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $Nombres;
@@ -212,54 +202,6 @@ class User implements UserInterface,\Serializable
         return $this;
     }
 
-
-    public function getExpediente(): ?Expediente
-    {
-        return $this->expediente;
-    }
-
-    public function setExpediente(Expediente $expediente): self
-    {
-        $this->expediente = $expediente;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $expediente->getUsuario()) {
-            $expediente->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Cita[]
-     */
-    public function getCitas(): Collection
-    {
-        return $this->citas;
-    }
-
-    public function addCita(Cita $cita): self
-    {
-        if (!$this->citas->contains($cita)) {
-            $this->citas[] = $cita;
-            $cita->setUsuario($this);
-        }
-
-        return $this;
-    }
-
-    public function removeCita(Cita $cita): self
-    {
-        if ($this->citas->contains($cita)) {
-            $this->citas->removeElement($cita);
-            // set the owning side to null (unless already changed)
-            if ($cita->getUsuario() === $this) {
-                $cita->setUsuario(null);
-            }
-        }
-
-        return $this;
-    }
 
      /** @see \Serializable::serialize() */
     public function serialize()
