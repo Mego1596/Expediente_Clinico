@@ -58,73 +58,133 @@ class ExpedienteController extends AbstractController
     public function new(Request $request, Security $AuthUser): Response
     {
         $expediente = new Expediente();
-        
-        $form = $this->createFormBuilder($expediente)
-        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
-        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
-        ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
-        ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('apellidoCasada',TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
-        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-        ->getForm();
+        $clinicaPerteneciente = $AuthUser->getUser()->getClinica();
 
+        if(is_null($AuthUser->getUser()->getClinica())){
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+        }else{
+            $clinicas=null;
+        }
+        $form = $this->createFormBuilder($expediente)
+            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+            ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+            ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
+            ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('apellidoCasada',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
+            ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+            ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $user = new User();
-            $user->setNombres($form["nombres"]->getData());
-            $user->setApellidos($form["apellidos"]->getData());
-            $user->setEmail($form["email"]->getData());
-            $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
-            $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-            $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
-            $entityManager->persist($user);
-            $expediente->setUsuario($user);
-            $expediente->setGenero($form["genero"]->getData());
-            $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
-            $expediente->setDireccion($form["direccion"]->getData());
-            $expediente->setTelefono($form["telefono"]->getData());
-            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+            if(is_null($AuthUser->getUser()->getClinica())){
+                $user = new User();
+                $user->setNombres($form["nombres"]->getData());
+                $user->setApellidos($form["apellidos"]->getData());
+                $user->setEmail($form["email"]->getData());
+                $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
+                $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
+                $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+                $entityManager->persist($user);
+                $expediente->setUsuario($user);
+                $expediente->setGenero($form["genero"]->getData());
+                $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
+                $expediente->setDireccion($form["direccion"]->getData());
+                $expediente->setTelefono($form["telefono"]->getData());
+                $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                $expediente->setEstadoCivil($form["estadoCivil"]->getData());
 
-            $apellidos = explode(" ",$user->getApellidos());
-            $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
-            $iniciales = $apellidos[0][0].$apellidos[1][0];
-            $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
-            IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
-            WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
-            $statement = $entityManager->getConnection()->prepare($string);
-            $statement->execute();
-            $result = $statement->fetchAll();
-            if($result != NULL){
-                foreach ($result as $value) {
-                    $correlativo = (int) substr($value["expediente"],2,4)+1;
-                    
-                    if( $correlativo <= 9 )
-                    {
-                        $calculo="000".strval($correlativo)."-";
+                $apellidos = explode(" ",$user->getApellidos());
+                $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
+                $iniciales = $apellidos[0][0].$apellidos[1][0];
+                $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
+                IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
+                WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
+                $statement = $entityManager->getConnection()->prepare($string);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                if($result != NULL){
+                    foreach ($result as $value) {
+                        $correlativo = (int) substr($value["expediente"],2,4)+1;
+                        
+                        if( $correlativo <= 9 )
+                        {
+                            $calculo="000".strval($correlativo)."-";
+                        }
+                        elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
+                        {
+                            $calculo="00".strval($correlativo)."-";
+                        }
+                        elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
+                        {
+                            $calculo="0".strval($correlativo)."-";
+                        }
+                        else{
+                            $calculo=strval($correlativo)."-";
+                        }
                     }
-                    elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
-                    {
-                        $calculo="00".strval($correlativo)."-";
-                    }
-                    elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
-                    {
-                        $calculo="0".strval($correlativo)."-";
-                    }
-                    else{
-                        $calculo=strval($correlativo)."-";
-                    }
+                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                }else{
+                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
                 }
-                $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+
+
             }else{
-                $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                $user = new User();
+                $user->setNombres($form["nombres"]->getData());
+                $user->setApellidos($form["apellidos"]->getData());
+                $user->setEmail($form["email"]->getData());
+                $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
+                $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
+                $user->setPassword(password_hash(substr(md5(microtime()),1,8),PASSWORD_DEFAULT,[15]));
+                $entityManager->persist($user);
+                $expediente->setUsuario($user);
+                $expediente->setGenero($form["genero"]->getData());
+                $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
+                $expediente->setDireccion($form["direccion"]->getData());
+                $expediente->setTelefono($form["telefono"]->getData());
+                $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+
+                $apellidos = explode(" ",$user->getApellidos());
+                $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
+                $iniciales = $apellidos[0][0].$apellidos[1][0];
+                $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
+                IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
+                WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
+                $statement = $entityManager->getConnection()->prepare($string);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                if($result != NULL){
+                    foreach ($result as $value) {
+                        $correlativo = (int) substr($value["expediente"],2,4)+1;
+                        
+                        if( $correlativo <= 9 )
+                        {
+                            $calculo="000".strval($correlativo)."-";
+                        }
+                        elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
+                        {
+                            $calculo="00".strval($correlativo)."-";
+                        }
+                        elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
+                        {
+                            $calculo="0".strval($correlativo)."-";
+                        }
+                        else{
+                            $calculo=strval($correlativo)."-";
+                        }
+                    }
+                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                }else{
+                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                }
             }
+            
             $entityManager->persist($expediente);
             $entityManager->flush();
             return $this->redirectToRoute('expediente_index');
@@ -132,7 +192,9 @@ class ExpedienteController extends AbstractController
 
         return $this->render('expediente/new.html.twig', [
             'expediente' => $expediente,
-            'form' => $form->createView(),
+            'clinicas'   => $clinicas,
+            'pertenece'       => $clinicaPerteneciente,
+            'form'       => $form->createView(),
         ]);
     }
 

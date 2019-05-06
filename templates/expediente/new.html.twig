@@ -50,7 +50,20 @@
               {{ form_label(form.genero) }}
               {{ form_widget(form.genero) }}
             </div>
+            <div class="col-md-12" style="color:white">
+            {% if pertenece == null %}
+            <label style="align-content: center;">Clinica:</label>
+              <select class="form-control" id="clinica" name="clinica" required>
+              <option value="">Seleccionar la Clinica</option>
+                  {% for clinica in clinicas %}
+                    <option value="{{clinica.id}}"> {{clinica.nombreClinica}}</option>
+                  {% endfor %}
+              </select>
+            {% endif %}
+            </div>
+            
           </div>
+
           <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">
               <div class="col-md-3"></div>
