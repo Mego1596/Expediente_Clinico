@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">Registrar Especialidad</h5>
+      <div class="card-body">
+        {{ form_start(form) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row">
+            <div class="col-md-12">
+              {{ form_label(form.nombreEspecialidad) }}
+              {{ form_widget(form.nombreEspecialidad) }}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              <div class="col-md-3" style="text-align: left;">
+                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,5 +18,9 @@
 {% if is_granted('ROLE_PERMISSION_INDEX_ROL')%}
 <a href="{{path('rol_index')}}">Lista de Roles</a>
 {% endif %}
+<br/>
+{% if is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')%}
+<a href="{{path('especialidad_index')}}">Lista de Especialidad</a>
+{% endif %}
 
 {% endblock %}

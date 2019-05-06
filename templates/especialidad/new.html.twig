@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Especialidad{% endblock %}
+
+{% block body %}
+    {{ include('especialidad/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('especialidad_index') }}">back to list</a>
+{% endblock %}
