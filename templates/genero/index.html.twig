@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lista Especialidades{% endblock %}
+{% block title %}Lista de Generos{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -15,7 +15,7 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
-                        <a href="{{ path('especialidad_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar Especialidad</a>
+                        <a href="{{ path('genero_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar Genero</a>
                     </div>
                     <br/>
                     <br/>
@@ -24,22 +24,22 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Nombre de la especialidad</th>
+                                            <th id="relevante" class="all">Nombre de la genero</th>
                                             <th  class="all">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for especialidad in especialidads %}
+                                    {% for genero in generos %}
                                         <tr>
-                                            <td>{{ especialidad.nombreEspecialidad }}</td>
+                                            <td>{{ genero.descripcion }}</td>
                                             <td>
-                                                <a href="{{ path('especialidad_show', {'id': especialidad.id}) }}" class="btn btn-info">Mostrar</a>
-                                                <a href="{{ path('especialidad_edit', {'id': especialidad.id}) }}" class="btn btn-success">Modificar</a>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ especialidad.id}}">
+                                                <a href="{{ path('genero_show', {'id': genero.id}) }}" class="btn btn-info">Mostrar</a>
+                                                <a href="{{ path('genero_edit', {'id': genero.id}) }}" class="btn btn-success">Modificar</a>
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ genero.id}}">
                                                   Eliminar
                                                 </button>
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal{{ especialidad.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="exampleModal{{ genero.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                   <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                       <div class="modal-header">
@@ -53,9 +53,9 @@
                                                       </div>
                                                       <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                        <form method="post" action="{{ path('especialidad_delete', {'id': especialidad.id}) }}">
+                                                        <form method="post" action="{{ path('genero_delete', {'id': genero.id}) }}">
                                                             <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ especialidad.id) }}">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ genero.id) }}">
                                                             <button type="submit" class="btn btn-outline-danger">Si</button>
                                                         </form>
                                                       </div>

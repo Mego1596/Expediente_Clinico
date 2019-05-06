@@ -1,0 +1,19 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">Especialidad</h5>
+      <div class="card-body">
+        {{ form_start(form) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row">
+            <div class="col-md-12">
+              {{ form_label(form.descripcion) }}
+              {{ form_widget(form.descripcion) }}
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>

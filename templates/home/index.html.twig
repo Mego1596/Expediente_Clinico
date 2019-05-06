@@ -22,5 +22,9 @@
 {% if is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')%}
 <a href="{{path('especialidad_index')}}">Lista de Especialidad</a>
 {% endif %}
+<br/>
+{% if is_granted('ROLE_PERMISSION_INDEX_GENERO')%}
+<a href="{{path('genero_index')}}">Lista de Genero</a>
+{% endif %}
 
 {% endblock %}
