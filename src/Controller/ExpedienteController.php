@@ -70,7 +70,6 @@ class ExpedienteController extends AbstractController
         }
         $form = $this->createFormBuilder($expediente)
             ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
             ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
@@ -94,57 +93,66 @@ class ExpedienteController extends AbstractController
 
             $entityManager = $this->getDoctrine()->getManager();
             if(is_null($AuthUser->getUser()->getClinica()) && $valido){
-                $user = new User();
-                $user->setNombres($form["nombres"]->getData());
-                $user->setApellidos($form["apellidos"]->getData());
-                $user->setEmail($form["email"]->getData());
-                $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
-                $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
-                $user->setIsActive(true);
-                $entityManager->persist($user);
-                $expediente->setUsuario($user);
-                $expediente->setGenero($form["genero"]->getData());
-                $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                $expediente->setDireccion($form["direccion"]->getData());
-                $expediente->setTelefono($form["telefono"]->getData());
-                $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                $expediente->setHabilitado(true);
-                $apellidos = explode(" ",$user->getApellidos());
-                $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
-                $iniciales = $apellidos[0][0].$apellidos[1][0];
-                $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
-                IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
-                WHERE u.id = exp.usuario_id AND u.clinica_id =".$request->request->get('clinica')." AND exp.numero_expediente LIKE '".$inicio."')";
-                $statement = $entityManager->getConnection()->prepare($string);
-                $statement->execute();
-                $result = $statement->fetchAll();
-                if($result != NULL){
-                    foreach ($result as $value) {
-                        $correlativo = (int) substr($value["expediente"],2,4)+1;
-                        
-                        if( $correlativo <= 9 )
-                        {
-                            $calculo="000".strval($correlativo)."-";
+                if(!empty($request->request->get('apellidos'))){
+                    $user = new User();
+                    $user->setNombres($form["nombres"]->getData());
+                    $user->setApellidos($request->request->get('apellidos'));
+                    $user->setEmail($form["email"]->getData());
+                    $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
+                    $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
+                    $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                    $user->setIsActive(true);
+                    $entityManager->persist($user);
+                    $expediente->setUsuario($user);
+                    $expediente->setGenero($form["genero"]->getData());
+                    $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
+                    $expediente->setDireccion($form["direccion"]->getData());
+                    $expediente->setTelefono($form["telefono"]->getData());
+                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                    $expediente->setHabilitado(true);   
+                    $inicio = strtoupper($request->request->get('apellidos')[0])."%".date("Y");
+                    $iniciales = strtoupper($request->request->get('apellidos')[0]);
+                    $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
+                    IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
+                    WHERE u.id = exp.usuario_id AND u.clinica_id =".$request->request->get('clinica')." AND exp.numero_expediente LIKE '".$inicio."')";
+                    $statement = $entityManager->getConnection()->prepare($string);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    if($result != NULL){
+                        foreach ($result as $value) {
+                            $correlativo = (int) substr($value["expediente"],2,4)+1;
+                            
+                            if( $correlativo <= 9 )
+                            {
+                                $calculo="000".strval($correlativo)."-";
+                            }
+                            elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
+                            {
+                                $calculo="00".strval($correlativo)."-";
+                            }
+                            elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
+                            {
+                                $calculo="0".strval($correlativo)."-";
+                            }
+                            else{
+                                $calculo=strval($correlativo)."-";
+                            }
                         }
-                        elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
-                        {
-                            $calculo="00".strval($correlativo)."-";
-                        }
-                        elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
-                        {
-                            $calculo="0".strval($correlativo)."-";
-                        }
-                        else{
-                            $calculo=strval($correlativo)."-";
-                        }
+                        $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                    }else{
+                        $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
                     }
-                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
                 }else{
-                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                    $this->addFlash('fail', 'el campo apellido no puede estar vacio');
+                    return $this->render('expediente/new.html.twig', [
+                        'expediente' => $expediente,
+                        'clinicas'   => $clinicas,
+                        'pertenece'  => $clinicaPerteneciente,
+                        'editar'     => $editar,
+                        'form'       => $form->createView(),
+                    ]);
                 }
-
 
             }elseif($valido){
                 $user = new User();
@@ -164,9 +172,8 @@ class ExpedienteController extends AbstractController
                 $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
                 $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                 $expediente->setHabilitado(true);
-                $apellidos = explode(" ",$user->getApellidos());
-                $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
-                $iniciales = $apellidos[0][0].$apellidos[1][0];
+                $inicio = strtoupper($request->request->get('apellidos')[0])."%".date("Y");
+                $iniciales = strtoupper($request->request->get('apellidos')[0]);
                 $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
                 IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
                 WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
@@ -201,6 +208,7 @@ class ExpedienteController extends AbstractController
             
             $entityManager->persist($expediente);
             $entityManager->flush();
+            $this->addFlash('success', 'Paciente añadido con exito');
             return $this->redirectToRoute('expediente_index');
         }
         else

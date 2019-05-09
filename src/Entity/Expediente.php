@@ -31,11 +31,6 @@ class Expediente
     public $nombres;
 
     /**
-     * @Assert\Blank
-     */
-    public $apellidos;
-
-    /**
      * @Assert\NotBlank
      */
     public $email;
