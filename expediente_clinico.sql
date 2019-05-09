@@ -69,7 +69,8 @@ INSERT INTO `permiso` (`id`, `permiso`, `descripcion`, `nombre_tabla`, `creado_e
 INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_en`) VALUES
 (1, 'ROLE_SA', 'Rol de Super Administrador', NULL, NULL),
 (2, 'ROLE_DOCTOR', 'Rol de Doctor', NULL, NULL),
-(3, 'ROLE_ARCHIVISTA', 'Rol de Archivista', NULL, NULL);
+(3, 'ROLE_ARCHIVISTA', 'Rol de Archivista', NULL, NULL),
+(4, 'ROLE_PACIENTE','Rol de paciente',NULL,NULL);
 
 
 INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `email`, `password`, `nombres`, `apellidos`) VALUES

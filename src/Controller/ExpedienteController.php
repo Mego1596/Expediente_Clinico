@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * @Route("/expediente")
@@ -37,10 +38,10 @@ class ExpedienteController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id FROM `user` as u,expediente as e WHERE u.id = e.usuario_id;';
+            $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c WHERE u.id = e.usuario_id AND u.clinica_id = c.id;';
 
         }else{
-             $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id FROM `user` as u,expediente as e WHERE u.id = e.usuario_id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
+             $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
         }
        
 
@@ -49,6 +50,7 @@ class ExpedienteController extends AbstractController
         $result = $statement->fetchAll();
         return $this->render('expediente/index.html.twig', [
             'pacientes' => $result,
+            'user'      => $AuthUser,
         ]);
     }
 
@@ -57,7 +59,7 @@ class ExpedienteController extends AbstractController
      * @Security2("has_role('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function new(Request $request, Security $AuthUser): Response
-    {
+    {   $editar = false;
         $expediente = new Expediente();
         $clinicaPerteneciente = $AuthUser->getUser()->getClinica();
 
@@ -77,14 +79,13 @@ class ExpedienteController extends AbstractController
             ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
             ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-            ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
             ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $valido = true;
 
-            $usuario = $this->getDoctrine()->getRepository(Clinica::class)->findBy(['email' => $form["email"]->getData()]);
+            $usuario = $this->getDoctrine()->getRepository(User::class)->findBy(['email' => $form["email"]->getData()]);
             if (count($usuario) > 0)
             {
                 $valido = false;
@@ -99,7 +100,8 @@ class ExpedienteController extends AbstractController
                 $user->setEmail($form["email"]->getData());
                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
                 $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
+                $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                $user->setIsActive(true);
                 $entityManager->persist($user);
                 $expediente->setUsuario($user);
                 $expediente->setGenero($form["genero"]->getData());
@@ -108,13 +110,13 @@ class ExpedienteController extends AbstractController
                 $expediente->setTelefono($form["telefono"]->getData());
                 $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
                 $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-
+                $expediente->setHabilitado(true);
                 $apellidos = explode(" ",$user->getApellidos());
                 $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
                 $iniciales = $apellidos[0][0].$apellidos[1][0];
                 $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
                 IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
-                WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
+                WHERE u.id = exp.usuario_id AND u.clinica_id =".$request->request->get('clinica')." AND exp.numero_expediente LIKE '".$inicio."')";
                 $statement = $entityManager->getConnection()->prepare($string);
                 $statement->execute();
                 $result = $statement->fetchAll();
@@ -151,7 +153,8 @@ class ExpedienteController extends AbstractController
                 $user->setEmail($form["email"]->getData());
                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                 $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
+                $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                $user->setIsActive(true);
                 $entityManager->persist($user);
                 $expediente->setUsuario($user);
                 $expediente->setGenero($form["genero"]->getData());
@@ -160,7 +163,7 @@ class ExpedienteController extends AbstractController
                 $expediente->setTelefono($form["telefono"]->getData());
                 $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
                 $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-
+                $expediente->setHabilitado(true);
                 $apellidos = explode(" ",$user->getApellidos());
                 $inicio = $apellidos[0][0].$apellidos[1][0]."%".date("Y");
                 $iniciales = $apellidos[0][0].$apellidos[1][0];
@@ -204,12 +207,12 @@ class ExpedienteController extends AbstractController
         {
             
         }
-        dump($form);
 
         return $this->render('expediente/new.html.twig', [
             'expediente' => $expediente,
             'clinicas'   => $clinicas,
-            'pertenece'       => $clinicaPerteneciente,
+            'pertenece'  => $clinicaPerteneciente,
+            'editar'     => $editar,
             'form'       => $form->createView(),
         ]);
     }
@@ -231,6 +234,7 @@ class ExpedienteController extends AbstractController
      */
     public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
     {   
+        $editar = true;
         $expediente->nombres = $expediente->getUsuario()->getNombres();
         $expediente->email = $expediente->getUsuario()->getEmail();
         $form = $this->createFormBuilder($expediente)
@@ -246,26 +250,52 @@ class ExpedienteController extends AbstractController
         ->getForm();
 
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $user = $expediente->getUsuario();
-            $user->setNombres($form["nombres"]->getData());
-            $user->setApellidos($form["apellidos"]->getData());
-            $user->setEmail($form["email"]->getData());
-            $entityManager->persist($user);
-            $expediente->setGenero($form["genero"]->getData());
-            $expediente->setDireccion($form["direccion"]->getData());
-            $expediente->setTelefono($form["telefono"]->getData());
-            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-            $entityManager->persist($expediente);
-            $entityManager->flush();
-            return $this->redirectToRoute('expediente_index');
+            if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
+                    if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $user = $expediente->getUsuario();
+                        $user->setNombres($form["nombres"]->getData());
+                        $user->setEmail($form["email"]->getData());
+                        $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+                        $entityManager->persist($user);
+                        $expediente->setGenero($form["genero"]->getData());
+                        $expediente->setDireccion($form["direccion"]->getData());
+                        $expediente->setTelefono($form["telefono"]->getData());
+                        $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                        $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                        $entityManager->persist($expediente);
+                        $entityManager->flush();
+                        $this->addFlash('success', 'Paciente modificado con exito');
+                        return $this->redirectToRoute('expediente_index');
+                    }else{
+                        $this->addFlash('fail', 'ambas contraseñas deben coincidir');
+                        return $this->render('expediente/edit.html.twig',[
+                        'expediente' => $expediente,
+                        'form' => $form->createView(),
+                        'editar' => $editar,
+                        ]);
+                    }
+                }else{
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $user = $expediente->getUsuario();
+                    $user->setNombres($form["nombres"]->getData());
+                    $user->setEmail($form["email"]->getData());
+                    $entityManager->persist($user);
+                    $expediente->setGenero($form["genero"]->getData());
+                    $expediente->setDireccion($form["direccion"]->getData());
+                    $expediente->setTelefono($form["telefono"]->getData());
+                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                    $entityManager->persist($expediente);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Paciente modificado con exito');
+                    return $this->redirectToRoute('expediente_index');
+                }
         }
-
         return $this->render('expediente/edit.html.twig', [
             'expediente' => $expediente,
+            'editar'     => $editar,
             'form' => $form->createView(),
         ]);
     }
@@ -278,7 +308,25 @@ class ExpedienteController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$expediente->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($expediente);
+            $expediente->setHabilitado(false);
+            $entityManager->persist($expediente);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('expediente_index');
+    }
+
+
+    /**
+     * @Route("/{id}/habilitar", name="expediente_habilitar", methods={"GET","POST"})
+     * @Security2("has_role('ROLE_PERMISSION_NEW_EXPEDIENTE')")
+     */
+    public function habilitar(Request $request, Expediente $expediente): Response
+    {
+        if ($this->isCsrfTokenValid('habilitar'.$expediente->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $expediente->setHabilitado(true);
+            $entityManager->persist($expediente);
             $entityManager->flush();
         }
 

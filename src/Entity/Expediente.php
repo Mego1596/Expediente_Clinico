@@ -31,7 +31,7 @@ class Expediente
     public $nombres;
 
     /**
-     * @Assert\NotBlank
+     * @Assert\Blank
      */
     public $apellidos;
 
@@ -106,21 +106,10 @@ class Expediente
      */
     private $citas;
 
-
     /**
-     * @Assert\Blank
+     * @ORM\Column(type="boolean")
      */
-    private $password;
-
-    /**
-     * @Assert\Blank
-     */
-    private $nuevo_password;
-
-    /**
-     * @Assert\Blank
-     */
-    private $repetir_nuevo_password;
+    private $habilitado;
 
     public function __construct()
     {
@@ -385,5 +374,17 @@ class Expediente
     public function getPassword(): string
     {
         return (string) $this->password;
+    }
+
+    public function getHabilitado(): ?bool
+    {
+        return $this->habilitado;
+    }
+
+    public function setHabilitado(bool $habilitado): self
+    {
+        $this->habilitado = $habilitado;
+
+        return $this;
     }
 }

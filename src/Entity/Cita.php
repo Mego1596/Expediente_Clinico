@@ -68,12 +68,12 @@ class Cita
         return $this->id;
     }
 
-    public function getUsuario(): ?Usuario
+    public function getUsuario(): ?User
     {
         return $this->usuario;
     }
 
-    public function setUsuario(?Usuario $usuario): self
+    public function setUsuario(?User $usuario): self
     {
         $this->usuario = $usuario;
 

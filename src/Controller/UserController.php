@@ -38,10 +38,10 @@ class UserController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
             $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol <> "ROLE_PACIENTE;"';
+                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_PACIENTE";';
         }else{
             $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol <> "ROLE_SA" AND r.nombre_rol <> "ROLE_PACIENTE";';
+                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_SA" AND r.nombre_rol != "ROLE_PACIENTE";';
         }
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();

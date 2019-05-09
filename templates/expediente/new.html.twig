@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Expediente{% endblock %}
+{% block title %}Nuevo Paciente{% endblock %}
 
 {% block body %}
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header">Registrar Usuario</h5>
+      <h5 class="card-header">Registrar Paciente</h5>
       <div class="card-body">
         {{ form_start(form) }}
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
@@ -51,8 +51,8 @@
               {{ form_widget(form.genero) }}
             </div>
             <div class="col-md-4">
-              {{ form_label(form.password) }}
-              {{ form_widget(form.password) }}
+              <label>Contraseña</label>
+              <input type="password" name="password" id="password" class="form-control">
             </div>
             <div class="col-md-8" style="color:white">
             {% if pertenece == null %}
@@ -86,5 +86,5 @@
     </div>
   </div>
 </div>	
-	<a href="{{ path('expediente_index') }}">back to list</a>
+	<a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
 {% endblock %}

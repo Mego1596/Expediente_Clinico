@@ -81,6 +81,11 @@ class User implements UserInterface,\Serializable
      */
     private $usuario_especialidades;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isActive;
+
     public function __construct()
     {
         $this->usuario_especialidades = new ArrayCollection();
@@ -330,5 +335,17 @@ class User implements UserInterface,\Serializable
     public function tieneRol(string $rol): bool
     {
         return in_array($rol, $this->getRoles());
+    }
+
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
     }
 }

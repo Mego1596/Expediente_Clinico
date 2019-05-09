@@ -26,46 +26,94 @@
                                         <tr>
                                             <th id="relevante" class="all">Nombre Completo</th>
                                             <th id="relevante" class="all">No. de Expediente</th>
-                                            <th  class="all">Actions</th>
+                                            {% if user.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                            <th id="relevante" class="all">Clinica</th>
+                                            {% endif %}
+                                            <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {% for paciente in pacientes %}
-                                        <tr>
-                                            <td>{{paciente.nombre_completo}}</td>
-                                            <td>{{paciente.expediente}}</td>
-                                            <td>
-                                                <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
-                                                <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">Modificar</a>
-                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
-                                                  Eliminar
-                                                </button>
-                                                <!-- Modal -->
-                                                <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                      <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                          <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                      </div>
-                                                      <div class="modal-body">
-                                                        Esta seguro que desea eliminar el usuario?
-                                                      </div>
-                                                      <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                        <form method="post" action="{{ path('expediente_delete', {'id': paciente.id}) }}">
-                                                            <input type="hidden" name="_method" value="DELETE">
-                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paciente.id) }}">
-                                                            <button type="submit" class="btn btn-outline-danger">Si</button>
-                                                        </form>
+                                        {% if paciente.habilitado == true %}
+                                            <tr>
+                                                <td>{{paciente.nombre_completo}}</td>
+                                                <td>{{paciente.expediente}}</td>
+                                                {% if user.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                                <td>{{paciente.nombre_clinica}}</td>
+                                                {% endif %}
+                                                <td>
+                                                    <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
+                                                    <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">Modificar</a>
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
+                                                      Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                      <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                          <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                              <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                            Esta seguro que desea eliminar el usuario?
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('expediente_delete', {'id': paciente.id}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paciente.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                          </div>
+                                                        </div>
                                                       </div>
                                                     </div>
-                                                  </div>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                                </td>
+                                            </tr>
+                                        {% else %}
+                                            <tr style="background-color: #f2dede;">
+                                                <td>{{paciente.nombre_completo}}</td>
+                                                <td>{{paciente.expediente}}</td>
+                                                {% if user.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                                <td>{{paciente.nombre_clinica}}</td>
+                                                {% endif %}
+                                                {% if user.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                                <td>
+                                                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
+                                                      Habilitar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                      <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                          <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                              <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                          </div>
+                                                          <div class="modal-body">
+                                                            Esta seguro que desea habilitar el usuario?
+                                                          </div>
+                                                          <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('expediente_habilitar', {'id': paciente.id}) }}">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('habilitar' ~ paciente.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                </td>
+                                                {% else %}
+                                                <td>Usuario Deshabilitado</td>
+                                                {% endif %}
+                                            </tr>
+                                        {% endif %}
                                     {% endfor %}
                                     </tbody>
                                 </table>
