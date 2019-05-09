@@ -5,4 +5,5 @@
 {% block body %}
     {{ include('genero/_formShow.html.twig') }}
     <a class="btn btn-secondary" href="{{ path('genero_index') }}">Atras</a>
+    <a class="btn btn-primary" href="{{ path('genero_edit', {'id': genero.id}) }}">Editar</a>
 {% endblock %}

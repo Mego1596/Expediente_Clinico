@@ -3,7 +3,7 @@
 {% block title %}Expediente{% endblock %}
 
 {% block body %}
-    <h1>Expediente</h1>
+    <h1>Detalles del Paciente</h1>
 
     <table class="table">
         <tbody>
@@ -39,4 +39,5 @@
     </table>
 
 <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+<a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id}) }}">Editar</a>
 {% endblock %}
