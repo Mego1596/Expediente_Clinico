@@ -157,7 +157,7 @@ class ExpedienteController extends AbstractController
             }elseif($valido){
                 $user = new User();
                 $user->setNombres($form["nombres"]->getData());
-                $user->setApellidos($form["apellidos"]->getData());
+                $user->setApellidos($request->request->get('apellidos'));
                 $user->setEmail($form["email"]->getData());
                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                 $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
