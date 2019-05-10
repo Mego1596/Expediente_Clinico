@@ -139,9 +139,43 @@ class ExpedienteController extends AbstractController
                                 $calculo=strval($correlativo)."-";
                             }
                         }
-                        $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                        $validador = $iniciales.$calculo.date("Y");
+                        $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
+                            AND numero_expediente='".$validador."';";
+                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $result = $statement->fetchAll();
+                        if(is_null($result)){
+                            $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                        }else{
+                            $this->addFlash('fail','Error el expediente ya existe');
+                            return $this->render('expediente/new.html.twig', [
+                                'expediente' => $expediente,
+                                'clinicas'   => $clinicas,
+                                'pertenece'  => $clinicaPerteneciente,
+                                'editar'     => $editar,
+                                'form'       => $form->createView(),
+                            ]);
+                        }
                     }else{
-                        $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                        $validador = $iniciales."0001-".date("Y");
+                        $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
+                            AND numero_expediente='".$validador."';";
+                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $result = $statement->fetchAll();
+                        if(is_null($result)){
+                            $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                        }else{
+                            $this->addFlash('fail','Error el expediente ya existe');
+                            return $this->render('expediente/new.html.twig', [
+                                'expediente' => $expediente,
+                                'clinicas'   => $clinicas,
+                                'pertenece'  => $clinicaPerteneciente,
+                                'editar'     => $editar,
+                                'form'       => $form->createView(),
+                            ]);
+                        }
                     }
                 }else{
                     $this->addFlash('fail', 'el campo apellido no puede estar vacio');
@@ -200,9 +234,42 @@ class ExpedienteController extends AbstractController
                             $calculo=strval($correlativo)."-";
                         }
                     }
-                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+
+                    $validador = $iniciales.$calculo.date("Y");
+                    $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND numero_expediente='".$validador."';";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    if(is_null($result)){
+                        $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                    }else{
+                        $this->addFlash('fail','Error el expediente ya existe');
+                        return $this->render('expediente/new.html.twig', [
+                            'expediente' => $expediente,
+                            'clinicas'   => $clinicas,
+                            'pertenece'  => $clinicaPerteneciente,
+                            'editar'     => $editar,
+                            'form'       => $form->createView(),
+                        ]);
+                    }
                 }else{
-                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                    $validador = $iniciales."0001-".date("Y");
+                    $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." AND numero_expediente='".$validador."';";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    if(is_null($result)){
+                        $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
+                    }else{
+                        $this->addFlash('fail','Error el expediente ya existe');
+                        return $this->render('expediente/new.html.twig', [
+                            'expediente' => $expediente,
+                            'clinicas'   => $clinicas,
+                            'pertenece'  => $clinicaPerteneciente,
+                            'editar'     => $editar,
+                            'form'       => $form->createView(),
+                        ]);
+                    }
                 }
             }
             
