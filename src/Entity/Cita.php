@@ -18,7 +18,7 @@ class Cita
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="citas")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $usuario;
 
@@ -62,6 +62,11 @@ class Cita
      * @ORM\OneToOne(targetEntity="App\Entity\CitaExamen", mappedBy="cita", cascade={"persist", "remove"})
      */
     private $citaExamen;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $fechaFin=null;
 
     public function getId(): ?int
     {
@@ -187,6 +192,18 @@ class Cita
         if ($this !== $citaExamen->getCita()) {
             $citaExamen->setCita($this);
         }
+
+        return $this;
+    }
+
+    public function getFechaFin(): ?\DateTimeInterface
+    {
+        return $this->fechaFin;
+    }
+
+    public function setFechaFin(?\DateTimeInterface $fechaFin): self
+    {
+        $this->fechaFin = $fechaFin;
 
         return $this;
     }

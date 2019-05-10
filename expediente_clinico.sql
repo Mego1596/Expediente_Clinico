@@ -75,13 +75,23 @@ INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_
 
 INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `email`, `password`, `nombres`, `apellidos`) VALUES
 (1, 1, NULL, 'usuario1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1'),
-(2, 2, 1, 'usuario2@usuario.com', '$2y$10$IEVczcUKB2.4viorl9DD9.mp68nWB8wKj.P4gTnptpFwFoxru3HhS', 'Usuario 3', 'Usuario 2'),
-(3, 3, 1, 'usuario3@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3');
+(2, 2, 1, 'usuario2@usuario.com', '$2y$10$IEVczcUKB2.4viorl9DD9.mp68nWB8wKj.P4gTnptpFwFoxru3HhS', 'Usuario 2', 'Usuario 2'),
+(3, 3, 1, 'usuario3@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3'),
+(4, 4, 1, 'usuario4@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 4', 'Usuario 4'),
+(5, 4, 1, 'usuario5@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5');
 
 INSERT INTO `user_especialidad` (`user_id`, `especialidad_id`) VALUES
 (2, 1),
 (2, 3),
 (2, 5);
+
+INSERT INTO `expediente`(`id`, `usuario_id`, `genero_id`, `numero_expediente`, `fecha_nacimiento`, `direccion`, `telefono`, `apellido_casada`, `estado_civil`, `habilitado`) VALUES
+(1,4,1,'U0001-2019','1996-05-01 00:00:00', 'San Salvador','2257-7777','-','Soltero', 1),
+(2,5,1,'U0002-2019','1994-09-03 00:00:00', 'San Salvador','2257-7777','-','Soltero', 1);
+
+INSERT INTO `cita`(`id`, `expediente_id`, `fecha_reservacion`, `consulta_por`, `fecha_fin`) VALUES
+(1,1,'2019-05-08 08:00:00','Motivo 1', '2019-05-08 08:30:00'),
+(2,2,'2019-05-08 08:30:00','Motivo 2', '2019-05-08 09:00:00');
 
 INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
 (1, 101),

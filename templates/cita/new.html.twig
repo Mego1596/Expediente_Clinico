@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Cita{% endblock %}
+
+{% block body %}
+    {{ include('cita/_form.html.twig') }}
+    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
+{% endblock %}

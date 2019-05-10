@@ -40,4 +40,5 @@
 
 <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
 <a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id}) }}">Editar</a>
+<a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id}) }}">Crear Cita</a>
 {% endblock %}

@@ -1,0 +1,81 @@
+{# templates/booking/calendar.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% include '@Calendar/calendar.html' %}
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.css">
+    <link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' rel='stylesheet' />
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@4.1.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@4.1.0/main.min.js"></script>
+
+    <script type="text/javascript">
+        var url = window.location+"";
+        var partes_url = url.split('/');
+        var expediente = partes_url[5];
+        document.addEventListener('DOMContentLoaded', () => {
+            var calendarEl = document.getElementById('calendar-holder');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                defaultView: 'dayGridMonth',
+                editable: false,
+                eventDurationEditable: false,
+                themeSystem: 'bootstrap',
+                locale: 'es',
+                eventLimit: true,
+                selectable: true,
+                dateClick: function(calEvent, jsEvent, view) {
+                    
+                },
+                eventSources: [
+                    {
+                        url: "{{ path('fc_load_events') }}",
+                        method: "POST",
+                        extraParams: {
+                            filters: JSON.stringify({expediente})
+                            
+                        },
+                        failure: () => {
+                            // alert("There was an error while fetching FullCalendar!");
+                        },
+                    },
+                ],
+                buttonText: {
+                    today: 'Hoy',
+                    dayGridMonth:    'Mes',
+                    timeGridWeek:    'Semana',
+                    timeGridDay:     'Dia'
+                  },
+
+                customButtons: {
+                    myCustomButton: {
+                      text: 'agendar cita',
+                      click: function() {
+                        let route = "{{ path('cita_new', {expediente: expediente.getId()})|escape('js') }}";
+                        window.location.replace(route);
+                      }
+                    }
+                  },
+                header: {
+                    left: 'prev,next today myCustomButton',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+                },
+                prev: 'fa-user',
+                plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
+                timeZone: 'America/El_Salvador',
+            });
+            calendar.render();
+
+        });
+    </script>
+{% endblock %}
