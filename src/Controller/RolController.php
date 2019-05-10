@@ -150,11 +150,16 @@ class RolController extends AbstractController
      * @Security2("has_role('ROLE_PERMISSION_DELETE_ROL')")
      */
     public function delete(Request $request, Rol $rol): Response
-    {
+    {   
         if ($this->isCsrfTokenValid('delete'.$rol->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($rol);
-            $entityManager->flush();
+            if($rol->getNombreRol() != 'ROLE_DOCTOR' && $rol->getNombreRol()!= 'ROLE_SA'){
+                $entityManager->remove($rol);
+                $entityManager->flush();
+            }else{
+                $this->addFlash('fail', 'Rol Fundamental, no puede ser eliminado');
+                return $this->redirectToRoute('rol_index');
+            }
         }
 
         $this->addFlash('success', 'Rol eliminado con exito');
