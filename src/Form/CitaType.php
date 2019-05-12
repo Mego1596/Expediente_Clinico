@@ -18,7 +18,6 @@ class CitaType extends AbstractType
         $builder
             ->add('fechaReservacion',DateTimeType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
             ->add('consultaPor',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('fechaFin',DateTimeType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
             ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ;
     }

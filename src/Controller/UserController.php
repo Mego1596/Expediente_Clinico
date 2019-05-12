@@ -72,8 +72,7 @@ class UserController extends AbstractController
                     ->andWhere('u.nombreRol != :val')
                     ->setParameter('val', "ROLE_PACIENTE");
             },'attr' => array('class' => 'form-control')))
-        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
-            'attr' => array('class' => 'form-control')))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad', 'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 
@@ -130,8 +129,7 @@ class UserController extends AbstractController
             'attr' => array('class' => 'form-control')))
         ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
         ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','multiple' => true,'expanded' => true,
-            'attr' => array('class' => 'form-control')))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad', 'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 

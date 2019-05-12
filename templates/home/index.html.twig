@@ -67,9 +67,9 @@
 		{% if user.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' %}
 			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
-					<a href="{{path('cita_calendar', {'id':user.getUser().getExpediente().getId()} )}}"><i class="fa fa-calendar" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<a href="{{path('cita_calendar', {'expediente':user.getUser().getExpediente().getId()} )}}"><i class="fa fa-calendar" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
 					<br/>
-					<a href="{{path('cita_calendar', {'id':user.getUser().getExpediente().getId()} )}}">Agendar Cita</a>
+					<a href="{{path('cita_calendar', {'expediente':user.getUser().getExpediente().getId()} )}}">Agendar Cita</a>
 				</div>
 			</div>
 		{% endif %}

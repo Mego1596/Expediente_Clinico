@@ -34,15 +34,17 @@ class Especialidad
     private $actualizado_en;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="usuario_especialidades")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="usuario_especialidades")
      */
     private $users;
+
 
 
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
+        $this->user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,7 +100,7 @@ class Especialidad
     {
         if (!$this->users->contains($user)) {
             $this->users[] = $user;
-            $user->addUsuarioEspecialidade($this);
+            $user->setUsuarioEspecialidades($this);
         }
 
         return $this;
@@ -108,9 +110,13 @@ class Especialidad
     {
         if ($this->users->contains($user)) {
             $this->users->removeElement($user);
-            $user->removeUsuarioEspecialidade($this);
+            // set the owning side to null (unless already changed)
+            if ($user->getUsuarioEspecialidades() === $this) {
+                $user->setUsuarioEspecialidades(null);
+            }
         }
 
         return $this;
     }
+
 }

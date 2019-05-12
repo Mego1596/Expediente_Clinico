@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cita;
+use App\Entity\Especialidad;
 use App\Entity\Expediente;
 use App\Form\CitaType;
 use App\Repository\CitaRepository;
@@ -43,12 +44,13 @@ class CitaController extends AbstractController
     public function new(Request $request,Expediente $expediente): Response
     {   $editar = false;
         $citum = new Cita();
+        $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
         $form = $this->createForm(CitaType::class, $citum);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
             $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
+            
             $entityManager->persist($citum);
             $entityManager->flush();
 
@@ -59,6 +61,7 @@ class CitaController extends AbstractController
             'citum' => $citum,
             'editar' => $editar,
             'expediente' => $expediente,
+            'especialidades' => $especialidades,
             'form' => $form->createView(),
         ]);
     }

@@ -77,18 +77,24 @@ class User implements UserInterface,\Serializable
     private $repetir_nuevo_password;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Especialidad", inversedBy="users")
-     */
-    private $usuario_especialidades;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $isActive;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $emergencia;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Especialidad", inversedBy="users")
+     */
+    private $usuario_especialidades;
+
+
     public function __construct()
     {
-        $this->usuario_especialidades = new ArrayCollection();
+
     }
 
 
@@ -290,13 +296,6 @@ class User implements UserInterface,\Serializable
         ) = unserialize($serialized);
     }
 
-    /**
-     * @return Collection|Especialidad[]
-     */
-    public function getUsuarioEspecialidades(): Collection
-    {
-        return $this->usuario_especialidades;
-    }
 
     public function getNuevoPassword(): ?string
     {
@@ -308,29 +307,6 @@ class User implements UserInterface,\Serializable
         return $this->repetir_nuevo_password;
     }
 
-    public function addUsuarioEspecialidades(Especialidad $usuarioEspecialidades): self
-    {
-        if (!$this->usuario_especialidades->contains($usuarioEspecialidades)) {
-            $this->usuario_especialidades[] = $usuarioEspecialidades;
-        }
-
-        return $this;
-    }
-
-    public function removeUsuarioEspecialidades(Especialidad $usuarioEspecialidades): self
-    {
-        if ($this->usuario_especialidades->contains($usuarioEspecialidades)) {
-            $this->usuario_especialidades->removeElement($usuarioEspecialidades);
-        }
-
-        return $this;
-    }
-
-    public function removeEspecialidades(): self
-    {
-        $this->usuario_especialidades->clear();
-        return $this;
-    }
 
     public function tieneRol(string $rol): bool
     {
@@ -345,6 +321,30 @@ class User implements UserInterface,\Serializable
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getEmergencia(): ?bool
+    {
+        return $this->emergencia;
+    }
+
+    public function setEmergencia(?bool $emergencia): self
+    {
+        $this->emergencia = $emergencia;
+
+        return $this;
+    }
+
+    public function getUsuarioEspecialidades(): ?Especialidad
+    {
+        return $this->usuario_especialidades;
+    }
+
+    public function setUsuarioEspecialidades(?Especialidad $usuario_especialidades): self
+    {
+        $this->usuario_especialidades = $usuario_especialidades;
 
         return $this;
     }

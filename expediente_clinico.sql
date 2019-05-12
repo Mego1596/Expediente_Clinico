@@ -73,17 +73,17 @@ INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_
 (4, 'ROLE_PACIENTE','Rol de paciente',NULL,NULL);
 
 
-INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `email`, `password`, `nombres`, `apellidos`) VALUES
-(1, 1, NULL, 'usuario1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1'),
-(2, 2, 1, 'usuario2@usuario.com', '$2y$10$IEVczcUKB2.4viorl9DD9.mp68nWB8wKj.P4gTnptpFwFoxru3HhS', 'Usuario 2', 'Usuario 2'),
-(3, 3, 1, 'usuario3@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3'),
-(4, 4, 1, 'usuario4@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 4', 'Usuario 4'),
-(5, 4, 1, 'usuario5@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5');
+INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `email`, `password`, `nombres`, `apellidos`,`emergencia`) VALUES
+(1, 1, NULL, 'usuario1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1',0),
+(2, 2, 1, 'usuario2@usuario.com', '$2y$10$IEVczcUKB2.4viorl9DD9.mp68nWB8wKj.P4gTnptpFwFoxru3HhS', 'Usuario 2', 'Usuario 2',0),
+(3, 3, 1, 'usuario3@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3',0),
+(4, 4, 1, 'usuario4@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 4', 'Usuario 4',0),
+(5, 4, 1, 'usuario5@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5',0);
 
-INSERT INTO `user_especialidad` (`user_id`, `especialidad_id`) VALUES
+/*INSERT INTO `user_especialidad` (`user_id`, `especialidad_id`) VALUES
 (2, 1),
 (2, 3),
-(2, 5);
+(2, 5);*/
 
 INSERT INTO `expediente`(`id`, `usuario_id`, `genero_id`, `numero_expediente`, `fecha_nacimiento`, `direccion`, `telefono`, `apellido_casada`, `estado_civil`, `habilitado`) VALUES
 (1,4,1,'U0001-2019','1996-05-01 00:00:00', 'San Salvador','2257-7777','-','Soltero', 1),
