@@ -15,7 +15,7 @@
           <div class="row" style="text-align:center">
             <div class="col-md-6">
               {{ form_label(form.fechaReservacion) }}
-              {{ form_widget(form.fechaReservacion) }}
+              {{ form_widget(form.fechaReservacion,{'attr': {'id': 'fechaReservacion'}}) }}
             </div>
             <div class="col-md-6">
               <label for="especialidad">Especialidades</label>
@@ -42,6 +42,36 @@
               {{ form_widget(form.consultaPor) }}
             </div>
           </div>
+          <br/>
+          {% if editar != true %}
+            <div class="row">
+              <div class="col-md-12">
+                <input id="btnReiniciar" type="button" class="form-control btn-outline-secondary" value="Descartar Cambios" style="visibility:hidden">
+              </div>
+            </div>
+          {% endif %}
+          <br/>
+          <div id="table-wrapper">
+            <div id="table-scroll">
+              <table id="reporte" style="visibility:hidden;table-layout:fixed;" border="1px solid" width="100%">
+                <thead id="theHeader" width="50^">
+                  <th>Horarios</th>
+                  <th>Disponibilidad</th>
+                </thead>
+                <tbody id="reporte-info">
+                        
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" id="hora">
+              
+            </div>
+            <div class="" id="mensaje3" style="width: 100%">
+              <p id="paragraph3"></p>
+            </div>
+          </div>
           <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">
               <div class="col-md-3"></div>
@@ -51,28 +81,17 @@
               </div>
               {% if editar == false %}
 	              <div class="col-md-3" style="text-align: left;">
-	                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+	                <button id="limpiarDatos" type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
 	              </div>
+              {% else %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info" style="visibility:hidden">Limpiar Pantalla</button>
+                </div>
               {% endif%}
               <div class="col-md-3"></div>
             </div>
           </div>
         {{ form_end(form) }}
-
-        <br/>
-        <div id="table-wrapper">
-          <div id="table-scroll">
-            <table id="reporte" style="visibility:hidden;table-layout:fixed;" border="1px solid" width="100%">
-              <thead id="theHeader" width="50^">
-                <th>Horarios</th>
-                <th>Disponibilidad</th>
-              </thead>
-              <tbody id="reporte-info">
-                      
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   </div>

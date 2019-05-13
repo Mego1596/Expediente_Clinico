@@ -93,6 +93,7 @@ class CitaController extends AbstractController
     public function edit(Request $request, Cita $citum,Expediente $expediente): Response
     {
         $editar = true;
+        $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
         $form = $this->createForm(CitaType::class, $citum);
         $form->handleRequest($request);
 
@@ -108,6 +109,7 @@ class CitaController extends AbstractController
         return $this->render('cita/edit.html.twig', [
             'citum' => $citum,
             'editar' => $editar,
+            'especialidades' => $especialidades,
             'expediente' => $expediente,
             'form' => $form->createView(),
         ]);

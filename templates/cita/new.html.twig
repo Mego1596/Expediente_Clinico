@@ -8,8 +8,7 @@
   position:relative;
 }
 #table-scroll {
-  height:250px;
-  overflow:auto;  
+  height:250px; 
   margin-top:20px;
 }
 #table-wrapper table {
@@ -26,19 +25,95 @@
   z-index:2;
   height:20px;
   width:35%;
-  border:1px solid red;
 }
 </style>
+
 {% endblock %}
 
+
+
+
 {% block body %}
+    <div class="" id="mensaje" style="width: 100%">
+      <p id="paragraph"></p>
+    </div>
+    <div class="" id="mensaje2" style="width: 100%">
+      <p id="paragraph2"></p>
+    </div>
     {{ include('cita/_form.html.twig') }}
     <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
 {% endblock %}
 
+
+
+
 {% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#btnReiniciar").click(function(){
+    $("#especialidad").val("");
+    $("#btnReiniciar").css('visibility','hidden');
+      var especialidad=$("#especialidad").val();
+      var datos="especialidad="+especialidad;
+      let route = "{{ path('ajax_cargaEspecialidad' )}}";
+      var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+      $.ajax({
+        url: route , 
+        type: "POST",
+        data: datos,
+        success: function(result){
+          if(result == ""){
+            document.getElementById('parrafoInicial').style.visibility = "hidden";
+            document.getElementById('reporte').style.visibility = "hidden";
+            $("#table-scroll").css('overflow','hidden');
+            $("#hora").empty();
+            $("#reporte-info").empty();
+          }else{
+            document.getElementById('parrafoInicial').style.visibility = "hidden";
+            document.getElementById('reporte').style.visibility = "hidden";
+            $("#table-scroll").css('overflow','hidden');
+            $("#hora").empty();
+            $("#reporte-info").empty();
+            $.each(result,function(i,value){
+              html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+            });
+          }
+          $('#user').html(html_code);
+        }
+      });
+  });
+});
+</script>
+
+
+
+
+
+
+
 <script>
 $(document).ready(function(){
+    document.getElementById('limpiarDatos').click();
+    var now = new Date();
+    var fechaMinima=now.getFullYear()
+    var mes = parseInt(now.getMonth())+1;
+    if(now.getMonth()<10){
+        fechaMinima = fechaMinima+"-0"+mes+"-";
+      if(now.getDate()<10){
+        fechaMinima = fechaMinima+"0"+now.getDate();
+      }else{
+        fechaMinima = fechaMinima+now.getDate();
+      }
+    }else{
+      fechaMinima = fechaMinima+"-"+mes+"-";
+      if(now.getDate()<10){
+        fechaMinima = fechaMinima+"0"+now.getDate();
+      }else{
+        fechaMinima = fechaMinima+now.getDate();
+      }
+    }
+    
+    $('#cita_fechaReservacion').attr('min',fechaMinima);
     let route = "{{ path('ajax_cargaGeneral' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
     $.ajax({
@@ -61,7 +136,7 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
   $( "#especialidad" ).change(function() {
-
+    $("#btnReiniciar").css('visibility','visible');
     var especialidad=$(this).val();
     var datos="especialidad="+especialidad;
     let route = "{{ path('ajax_cargaEspecialidad' )}}";
@@ -73,8 +148,16 @@ $(document).ready(function(){
       success: function(result){
         if(result == ""){
           document.getElementById('parrafoInicial').style.visibility = "hidden";
+          document.getElementById('reporte').style.visibility = "hidden";
+          $("#table-scroll").css('overflow','hidden');
+          $("#hora").empty();
+          $("#reporte-info").empty();
         }else{
           document.getElementById('parrafoInicial').style.visibility = "hidden";
+          document.getElementById('reporte').style.visibility = "hidden";
+          $("#table-scroll").css('overflow','hidden');
+          $("#hora").empty();
+          $("#reporte-info").empty();
           $.each(result,function(i,value){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
           });
@@ -88,33 +171,157 @@ $(document).ready(function(){
 <script>
 $(document).ready(function(){
   $( "#user" ).change(function() {
+    $("#btnReiniciar").css('visibility','visible');
   	var datos  = $("#cita").serialize();
   	let route = "{{ path('ajax_cupos' )}}";
-    $.ajax({
-    	url: route,
-    	type: "POST",
-    	data: datos, 
-    	success: function(data){
-    		if(data == ""){
-    			document.getElementById('reporte').style.visibility = "hidden";
-    		}else{
-    			$("#reporte-info").empty();
-    			document.getElementById('reporte').style.visibility = "visible";
-    			$.each(data,function(i,value){
-                    if(value.disponibilidad != 'No'){
-                        $("#reporte-info").append(
-                            "<tr>"+
-                                "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
-                                "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
-                            "</tr>"
-                        );
-                    }
-                });
-    		}
-      		
-    	}});
-  
+    if($(this).val() != "" ){
+      if($('#cita_fechaReservacion').val() != ""){
+        $("#mensaje").hide();
+        $("#mensaje2").hide();
+        $.ajax({
+        	url: route,
+        	type: "POST",
+        	data: datos, 
+        	success: function(data){
+        		if(data == ""){
+        			document.getElementById('reporte').style.visibility = "hidden";
+              $("#table-scroll").css('overflow','hidden');
+              $("#hora").empty();
+              $("#reporte-info").empty();
+        		}else{
+        			$("#reporte-info").empty();
+              $("#hora").empty();
+        			document.getElementById('reporte').style.visibility = "visible";
+              $("#table-scroll").css('overflow','auto');
+        			$.each(data,function(i,value){
+                if(value.disponibilidad != 'No'){
+                  $("#reporte-info").append(
+                    "<tr>"+
+                    "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                    "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                    "</tr>"
+                  );
+                }
+              });
+        		  $("#hora").append(
+              "<br/>"+
+              "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
+              "<br/>"+
+              "<input type='time' onchange='horaValida()' id='time2' placeholder='Hora' class='form-control' required='true'>"
+              );
+
+            }
+          		
+        	}});
+      }else{
+        $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
+        $("#mensaje2").attr('role','alert');
+        $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+        $("#mensaje2").show();
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        document.getElementById('reporte').style.visibility = "hidden"; 
+        $("#table-scroll").css('overflow','hidden');
+        $("#hora").empty();
+        $("#reporte-info").empty();
+      }
+    }else{
+      $("#mensaje").attr('class','alert alert-warning alert-dismissible fade show');
+      $("#mensaje").attr('role','alert');
+      $("#paragraph").html('Para desplegar la agenda de un doctor seleccione uno.');
+      $("#mensaje").show();
+      $('html, body').animate({ scrollTop: 0 }, 'fast');
+      document.getElementById('reporte').style.visibility = "hidden";  
+      $("#table-scroll").css('overflow','hidden');
+      $("#hora").empty(); 
+      $("#reporte-info").empty();
+    }
   });
 });
+</script>
+
+
+<script>
+$(document).ready(function(){
+  $('#cita_fechaReservacion').change(function() {
+    var datos  = $("#cita").serialize();
+    let route = "{{ path('ajax_cupos' )}}";
+    if($(this).val() != "" ){
+      if($('#user').val() != ""){
+        $("#mensaje").hide();
+        $("#mensaje2").hide();
+        $.ajax({
+          url: route,
+          type: "POST",
+          data: datos, 
+          success: function(data){
+            if(data == ""){
+              document.getElementById('reporte').style.visibility = "hidden";
+              $("#table-scroll").css('overflow','hidden');
+              $("#hora").empty();
+              $("#reporte-info").empty();
+            }else{
+              $("#reporte-info").empty();
+              $("#hora").empty();
+              document.getElementById('reporte').style.visibility = "visible";
+              $("#table-scroll").css('overflow','auto');
+              $.each(data,function(i,value){
+                        if(value.disponibilidad != 'No'){
+                            $("#reporte-info").append(
+                                "<tr>"+
+                                    "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                                    "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                                "</tr>"
+                            );
+                        }
+                    });
+                    $("#hora").append(
+                      "<br/>"+
+                      "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
+                      "<br/>"+
+                      "<input type='time' onchange='horaValida()' id='time2' placeholder='Hora' class='form-control' required='true'>"
+                    );
+            }
+              
+          }});
+      }else{
+        $("#mensaje").attr('class','alert alert-warning alert-dismissible fade show');
+        $("#mensaje").attr('role','alert');
+        $("#paragraph").html('Para desplegar la agenda de un doctor seleccione uno.');
+        $("#mensaje").show();
+        $('html, body').animate({ scrollTop: 0 }, 'fast');
+        document.getElementById('reporte').style.visibility = "hidden";  
+        $("#table-scroll").css('overflow','hidden'); 
+        $("#hora").empty();
+        $("#reporte-info").empty();        
+      }
+    }else{
+      $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
+      $("#mensaje2").attr('role','alert');
+      $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+      $("#mensaje2").show();
+      $('html, body').animate({ scrollTop: 0 }, 'fast');
+      document.getElementById('reporte').style.visibility = "hidden"; 
+      $("#table-scroll").css('overflow','hidden');
+      $("#hora").empty();
+      $("#reporte-info").empty();
+    }
+  });
+});
+</script>
+
+
+<script>
+function horaValida() {
+  var x = document.getElementById("time2").value;
+  var validadorHora = x[3]+x[4];
+  if(validadorHora != '00' && validadorHora !='30'){
+    $("#mensaje3").attr('class','alert alert-warning alert-dismissible fade show');
+    $("#mensaje3").attr('role','alert');
+    $("#paragraph3").html('la hora seleccionada debe ser puntual u hora y media Ejemplo: 8:00 a.m o 8:30 a.m.');
+    $("#mensaje3").show();
+  }else{
+    $("#mensaje3").hide();
+  }
+}
 </script>
 {% endblock %}

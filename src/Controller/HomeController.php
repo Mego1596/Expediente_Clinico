@@ -234,7 +234,9 @@ class HomeController extends AbstractController
                                     WHEN TIME(fecha_reservacion) BETWEEN '23:00:00' AND '23:29:00' THEN '23:00:00-23:30:00'
                                     WHEN TIME(fecha_reservacion) BETWEEN '23:30:00' AND '23:59:00' THEN '23:30:00-00:00:00'
                                 END) 
-                            as intervalo, count(*) FROM `cita` WHERE usuario_id=".$request->request->get('user')." AND fecha_reservacion BETWEEN '".$request->request->get('cita')["fechaReservacion"]." 00:00:00' AND '".$request->request->get('cita')["fechaReservacion"]." 23:59:59' GROUP BY intervalo) as r GROUP BY r.intervalo) 
+                            as intervalo, count(*) FROM `cita` WHERE usuario_id=".$request->request->get('user')
+                            ." AND fecha_reservacion BETWEEN '".$request->request->get('cita')["fechaReservacion"]." 00:00:00' AND '"
+                            .$request->request->get('cita')["fechaReservacion"]." 23:59:59' GROUP BY intervalo) as r GROUP BY r.intervalo) 
                             as r2 GROUP BY r2.intervalo;";
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
