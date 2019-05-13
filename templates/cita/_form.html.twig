@@ -9,13 +9,31 @@
         {% endif %}
       </h5>
       <div class="card-body">
-        {{ form_start(form) }}
+        {{ form_start(form,{'attr': {'id': 'cita'}}) }}
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
-          <div class="row">
-            <div class="col-md-12">
+          <div class="row" style="text-align:center">
+            <div class="col-md-6">
               {{ form_label(form.fechaReservacion) }}
               {{ form_widget(form.fechaReservacion) }}
+            </div>
+            <div class="col-md-6">
+              <label for="especialidad">Especialidades</label>
+              <select id="especialidad" name="especialidad" class="form-control">
+                <option value="">Consulta General</option>
+                {%for especialidad in especialidades%}
+                  <option value="{{especialidad.id}}">{{especialidad.nombreEspecialidad}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <label for="user">Doctores Disponibles:</label>
+              <select id="user" name="user" class="form-control">
+                <option value="">Seleccione un doctor</option>
+              </select>
+              <p><li  id="parrafoInicial" style="visibility:visible;font-size:11px;color:black">Los usuarios pre-cargados son medicos generales ya que no ha seleccionado ninguna especialidad</li></p>
             </div>
           </div>
           <div class="row">
@@ -40,6 +58,21 @@
             </div>
           </div>
         {{ form_end(form) }}
+
+        <br/>
+        <div id="table-wrapper">
+          <div id="table-scroll">
+            <table id="reporte" style="visibility:hidden;table-layout:fixed;" border="1px solid" width="100%">
+              <thead id="theHeader" width="50^">
+                <th>Horarios</th>
+                <th>Disponibilidad</th>
+              </thead>
+              <tbody id="reporte-info">
+                      
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </div>

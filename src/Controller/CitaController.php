@@ -10,6 +10,7 @@ use App\Repository\CitaRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 
@@ -23,7 +24,6 @@ class CitaController extends AbstractController
      */
     public function index(CitaRepository $citaRepository,Expediente $expediente,Security $AuthUser): Response
     {
-
         $em = $this->getDoctrine()->getManager();
         $RAW_QUERY = "SELECT id,consulta_por as consultaPor,fecha_reservacion as fechaReservacion,fecha_fin as fechaFin FROM cita WHERE expediente_id = ".$expediente->getId().";";
 

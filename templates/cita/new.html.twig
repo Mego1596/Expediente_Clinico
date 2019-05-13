@@ -2,7 +2,119 @@
 
 {% block title %}Nueva Cita{% endblock %}
 
+{% block stylesheets %}
+<style type="text/css">
+#table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:250px;
+  overflow:auto;  
+  margin-top:20px;
+}
+#table-wrapper table {
+  width:100%;
+
+}
+#table-wrapper table * {
+  text-align:center;
+  color:black;
+}
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px solid red;
+}
+</style>
+{% endblock %}
+
 {% block body %}
     {{ include('cita/_form.html.twig') }}
     <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+$(document).ready(function(){
+    let route = "{{ path('ajax_cargaGeneral' )}}";
+    var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+    $.ajax({
+      url: route , 
+      type: "POST",
+      success: function(result){
+        if(result == ""){
+
+        }else{
+          $.each(result,function(i,value){
+            html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+          });
+          
+          $('#user').html(html_code);
+        }
+      }
+    });
+});
+</script>
+<script>
+$(document).ready(function(){
+  $( "#especialidad" ).change(function() {
+
+    var especialidad=$(this).val();
+    var datos="especialidad="+especialidad;
+    let route = "{{ path('ajax_cargaEspecialidad' )}}";
+    var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+    $.ajax({
+      url: route , 
+      type: "POST",
+      data: datos,
+      success: function(result){
+        if(result == ""){
+          document.getElementById('parrafoInicial').style.visibility = "hidden";
+        }else{
+          document.getElementById('parrafoInicial').style.visibility = "hidden";
+          $.each(result,function(i,value){
+            html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+          });
+        }
+        $('#user').html(html_code);
+      }
+    });
+});
+});
+</script>
+<script>
+$(document).ready(function(){
+  $( "#user" ).change(function() {
+  	var datos  = $("#cita").serialize();
+  	let route = "{{ path('ajax_cupos' )}}";
+    $.ajax({
+    	url: route,
+    	type: "POST",
+    	data: datos, 
+    	success: function(data){
+    		if(data == ""){
+    			document.getElementById('reporte').style.visibility = "hidden";
+    		}else{
+    			$("#reporte-info").empty();
+    			document.getElementById('reporte').style.visibility = "visible";
+    			$.each(data,function(i,value){
+                    if(value.disponibilidad != 'No'){
+                        $("#reporte-info").append(
+                            "<tr>"+
+                                "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                                "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                            "</tr>"
+                        );
+                    }
+                });
+    		}
+      		
+    	}});
+  
+  });
+});
+</script>
 {% endblock %}
