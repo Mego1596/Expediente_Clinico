@@ -54,9 +54,10 @@ class CitaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $horaSeleccionada =$request->request->get('time2')[3].$request->request->get('time2')[4];
             $fecha=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
+            $fechaFin=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
             $hoy = date_create();
             $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY="SELECT * FROM `cita` WHERE usuario_id=".$request->request->get('user').";";
+            $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('user').";";
             $statement = $em->getConnection()->prepare($RAW_QUERY);
             $statement->execute();
             $result = $statement->fetchAll();
@@ -80,7 +81,7 @@ class CitaController extends AbstractController
                     'form' => $form->createView(),
                 ]);
 
-            }elseif (!is_null($request)) {
+            }elseif ($result != null) {
                 $this->addFlash('fail','Error, el doctor que ha seleccionado no tiene disponible ese horario');
                 return $this->render('cita/new.html.twig', [
                     'citum' => $citum,
@@ -93,8 +94,8 @@ class CitaController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
                 $citum->setFechaReservacion($fecha);
-                $citum->setFechaFin($fecha->modify('+30 minutes'));
-                $citum->setCosultaPor($form["consultaPor"]->getData());
+                $citum->setFechaFin($fechaFin->modify('+30 minutes'));
+                $citum->setConsultaPor($form["consultaPor"]->getData());
                 $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
                 $entityManager->persist($citum);
                 $entityManager->flush();
