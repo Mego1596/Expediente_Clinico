@@ -99,11 +99,10 @@ class CitaController extends AbstractController
                 $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
                 $entityManager->persist($citum);
                 $entityManager->flush();
-
+                $this->addFlash('success','Cita añadida con exito');
                 return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
             }
         }
-
         return $this->render('cita/new.html.twig', [
             'citum' => $citum,
             'editar' => $editar,
@@ -158,7 +157,7 @@ class CitaController extends AbstractController
                 $result = $statement->fetchAll();
                 if($fecha < $hoy){
                     $this->addFlash('fail','Error, la fecha y hora debe ser mayor o igual que la fecha y hora actual');
-                    return $this->render('cita/new.html.twig', [
+                    return $this->render('cita/edit.html.twig', [
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
@@ -169,7 +168,7 @@ class CitaController extends AbstractController
 
                 }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
                     $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
-                    return $this->render('cita/new.html.twig', [
+                    return $this->render('cita/edit.html.twig', [
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
@@ -180,7 +179,7 @@ class CitaController extends AbstractController
 
                 }elseif ($result != null) {
                     $this->addFlash('fail','Error, el doctor que ha seleccionado no tiene disponible ese horario');
-                    return $this->render('cita/new.html.twig', [
+                    return $this->render('cita/edit.html.twig', [
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
@@ -201,8 +200,13 @@ class CitaController extends AbstractController
                     return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                 }
             }else{
-                $this->getDoctrine()->getManager()->flush();
+                $entityManager = $this->getDoctrine()->getManager();
+                $fechaReservacionAuxiliar = $citum->getFechaFin();
+                $citum->setFechaReservacion($fechaReservacionAuxiliar->modify('-30 minutes')); 
+                $entityManager->persist($citum);
+                $entityManager->flush();
             }
+            $this->addFlash('success','Cita Modificada con exito');
             return $this->redirectToRoute('cita_index', [
                 'id' => $citum->getId(),
                 'expediente' => $expediente->getId(),
@@ -229,7 +233,7 @@ class CitaController extends AbstractController
             $entityManager->remove($citum);
             $entityManager->flush();
         }
-
+        $this->addFlash('success','Cita eliminada con exito');
         return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
     }
 }
