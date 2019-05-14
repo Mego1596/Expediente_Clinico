@@ -36,8 +36,21 @@
       <p id="paragraph2"></p>
     </div>
     {{ include('cita/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+    <table>
+        {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
+            <tr>
+                <td>
+                    <a class="btn btn-secondary" href="{{ path('cita_show',{'expediente':expediente.getId(), 'id':citum.getId()}) }}">Atras</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>
+                    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
 {% endblock %}
 
 {% block javascripts %}

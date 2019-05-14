@@ -125,10 +125,11 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/", name="cita_show", methods={"GET"})
      */
-    public function show(Cita $citum,Expediente $expediente): Response
+    public function show(Cita $citum,Expediente $expediente,Security $AuthUser): Response
     {
         return $this->render('cita/show.html.twig', [
-            'citum' => $citum,
+            'citum'      => $citum,
+            'user'       => $AuthUser,
             'expediente' => $expediente,
         ]);
     }
@@ -136,7 +137,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/edit", name="cita_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, Cita $citum,Expediente $expediente): Response
+    public function edit(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
     {
         $editar = true;
         $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
@@ -162,6 +163,7 @@ class CitaController extends AbstractController
                         'editar' => $editar,
                         'expediente' => $expediente,
                         'user'  => $citum->getUsuario(),
+                        'loggedUser' => $AuthUser,
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
@@ -173,6 +175,7 @@ class CitaController extends AbstractController
                         'editar' => $editar,
                         'expediente' => $expediente,
                         'user'  => $citum->getUsuario(),
+                        'loggedUser' => $AuthUser,
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
@@ -184,6 +187,7 @@ class CitaController extends AbstractController
                         'editar' => $editar,
                         'expediente' => $expediente,
                         'user'  => $citum->getUsuario(),
+                        'loggedUser' => $AuthUser,
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
@@ -217,6 +221,7 @@ class CitaController extends AbstractController
             'citum' => $citum,
             'editar' => $editar,
             'user'  => $citum->getUsuario(),
+            'loggedUser' => $AuthUser,
             'especialidades' => $especialidades,
             'expediente' => $expediente,
             'form' => $form->createView(),

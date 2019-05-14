@@ -25,10 +25,28 @@
             </tr>
         </tbody>
     </table>
-
-    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
-
-    <a href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">edit</a>
-
-    {{ include('cita/_delete_form.html.twig') }}
+    <table>
+        {% if(user.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
+            <tr>
+                <td>
+                    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
+                </td>
+                <td>
+                    {{ include('cita/_delete_form.html.twig') }}    
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td>
+                    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                </td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
+                </td>
+            </tr>
+        {% endif %}
+    </table>
 {% endblock %}
