@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cita;
+use App\Entity\User;
 use App\Entity\Especialidad;
 use App\Entity\Expediente;
 use App\Form\CitaType;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 
 /**
  * @Route("/cita")
@@ -44,20 +47,60 @@ class CitaController extends AbstractController
     public function new(Request $request,Expediente $expediente): Response
     {   $editar = false;
         $citum = new Cita();
+        date_default_timezone_set("America/El_Salvador");
         $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
         $form = $this->createForm(CitaType::class, $citum);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            dd($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
-            dd($request->request->get('cita')["fechaReservacion"]);
-            dd($request->request->get('time2')[3].$request->request->get('time2')[4]);
-            $entityManager = $this->getDoctrine()->getManager();
-            $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
-            
-            $entityManager->persist($citum);
-            $entityManager->flush();
+            $horaSeleccionada =$request->request->get('time2')[3].$request->request->get('time2')[4];
+            $fecha=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
+            $hoy = date_create();
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY="SELECT * FROM `cita` WHERE usuario_id=".$request->request->get('user').";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($fecha < $hoy){
+                $this->addFlash('fail','Error, la fecha y hora debe ser mayor o igual que la fecha y hora actual');
+                return $this->render('cita/new.html.twig', [
+                    'citum' => $citum,
+                    'editar' => $editar,
+                    'expediente' => $expediente,
+                    'especialidades' => $especialidades,
+                    'form' => $form->createView(),
+                ]);
 
-            return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+            }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
+                $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
+                return $this->render('cita/new.html.twig', [
+                    'citum' => $citum,
+                    'editar' => $editar,
+                    'expediente' => $expediente,
+                    'especialidades' => $especialidades,
+                    'form' => $form->createView(),
+                ]);
+
+            }elseif (!is_null($request)) {
+                $this->addFlash('fail','Error, el doctor que ha seleccionado no tiene disponible ese horario');
+                return $this->render('cita/new.html.twig', [
+                    'citum' => $citum,
+                    'editar' => $editar,
+                    'expediente' => $expediente,
+                    'especialidades' => $especialidades,
+                    'form' => $form->createView(),
+                ]);
+            }else{
+                $entityManager = $this->getDoctrine()->getManager();
+                $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
+                $citum->setFechaReservacion($fecha);
+                $citum->setFechaFin($fecha->modify('+30 minutes'));
+                $citum->setCosultaPor($form["consultaPor"]->getData());
+                $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
+                $entityManager->persist($citum);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+            }
         }
 
         return $this->render('cita/new.html.twig', [
