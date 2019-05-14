@@ -86,6 +86,7 @@ class UserController extends AbstractController
             $user->setApellidos($form["apellidos"]->getData());
              $user->setRol($form["rol"]->getData());
             $user->setClinica($form["clinica"]->getData());
+            $user->setIsActive(true);
             foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
                 $user->addUsuarioEspecialidades($especialidad);    
             }
@@ -175,6 +176,7 @@ class UserController extends AbstractController
                 $user->setNombres($form["nombres"]->getData());
                 $user->setApellidos($form["apellidos"]->getData());
                 $user->setRol($rol);
+                $user->setIsActive(true);
                 $user->setClinica($form["clinica"]->getData());
 
                 if ($agregar_especialidades)
