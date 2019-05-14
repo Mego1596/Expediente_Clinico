@@ -140,13 +140,13 @@ class CitaController extends AbstractController
     public function edit(Request $request, Cita $citum,Expediente $expediente): Response
     {
         $editar = true;
-        date_default_timezone_set("America/El_Salvador");
         $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
         $form = $this->createForm(CitaType::class, $citum);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($request->request->get('user') != "" && $request->request->get('especialidad') != ""){
+            if($request->request->get('user') != ""){
+                date_default_timezone_set("America/El_Salvador");
                 $horaSeleccionada =$request->request->get('time2')[3].$request->request->get('time2')[4];
                 $fecha=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
                 $fechaFin=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
@@ -162,6 +162,7 @@ class CitaController extends AbstractController
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
+                        'user'  => $citum->getUsuario(),
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
@@ -172,6 +173,7 @@ class CitaController extends AbstractController
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
+                        'user'  => $citum->getUsuario(),
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
@@ -182,6 +184,7 @@ class CitaController extends AbstractController
                         'citum' => $citum,
                         'editar' => $editar,
                         'expediente' => $expediente,
+                        'user'  => $citum->getUsuario(),
                         'especialidades' => $especialidades,
                         'form' => $form->createView(),
                     ]);
