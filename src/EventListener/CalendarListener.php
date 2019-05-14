@@ -68,7 +68,7 @@ class CalendarListener
                 $this->router->generate('cita_show', [
                     'expediente' => $cita->getExpediente()->getId(),
                     'id' => $cita->getId(),
-                ]),
+                ])
             );
             // finally, add the event to the CalendarEvent to fill the calendar
             $calendar->addEvent($citaEvent);
