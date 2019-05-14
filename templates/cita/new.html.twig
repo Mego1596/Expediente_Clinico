@@ -178,6 +178,9 @@ $(document).ready(function(){
       if($('#cita_fechaReservacion').val() != ""){
         $("#mensaje").hide();
         $("#mensaje2").hide();
+        var now = new Date();
+        var fechaIngresadaAux = new Date($("#cita_fechaReservacion").val());
+        var fecha = new Date(fechaIngresadaAux.getFullYear(),fechaIngresadaAux.getMonth(),fechaIngresadaAux.getDate()+1);
         $.ajax({
         	url: route,
         	type: "POST",
@@ -195,23 +198,34 @@ $(document).ready(function(){
               $("#table-scroll").css('overflow','auto');
         			$.each(data,function(i,value){
                 if(value.disponibilidad != 'No'){
-                  $("#reporte-info").append(
-                    "<tr>"+
-                    "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
-                    "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
-                    "</tr>"
-                  );
+                  if(now.getFullYear() == fecha.getFullYear() && now.getMonth() == fecha.getMonth() && now.getDate() == fecha.getDate() ){
+                    var fechaParcial = new Date(fechaIngresadaAux.getFullYear(),fechaIngresadaAux.getMonth(),fechaIngresadaAux.getDate()+1,parseInt(value.intervalo.substring(0,2)),parseInt(value.intervalo.substring(3,5)),0);
+                    if(now.getTime() <= fechaParcial.getTime()){
+                      $("#reporte-info").append(
+                      "<tr>"+
+                      "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                      "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "</tr>"
+                    );
+                    }
+                  }else{
+                    $("#reporte-info").append(
+                      "<tr>"+
+                      "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                      "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "</tr>"
+                    );
+                  }
                 }
               });
         		  $("#hora").append(
               "<br/>"+
               "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
               "<br/>"+
-              "<input type='time' onchange='horaValida()' id='time2' placeholder='Hora' class='form-control' required='true'>"
+              "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
               );
 
             }
-          		
         	}});
       }else{
         $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
@@ -249,6 +263,9 @@ $(document).ready(function(){
       if($('#user').val() != ""){
         $("#mensaje").hide();
         $("#mensaje2").hide();
+        var now = new Date();
+        var fechaIngresadaAux = new Date($("#cita_fechaReservacion").val());
+        var fecha = new Date(fechaIngresadaAux.getFullYear(),fechaIngresadaAux.getMonth(),fechaIngresadaAux.getDate()+1);
         $.ajax({
           url: route,
           type: "POST",
@@ -265,21 +282,33 @@ $(document).ready(function(){
               document.getElementById('reporte').style.visibility = "visible";
               $("#table-scroll").css('overflow','auto');
               $.each(data,function(i,value){
-                        if(value.disponibilidad != 'No'){
-                            $("#reporte-info").append(
-                                "<tr>"+
-                                    "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
-                                    "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
-                                "</tr>"
-                            );
-                        }
-                    });
-                    $("#hora").append(
-                      "<br/>"+
-                      "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
-                      "<br/>"+
-                      "<input type='time' onchange='horaValida()' id='time2' placeholder='Hora' class='form-control' required='true'>"
+                if(value.disponibilidad != 'No'){
+                  if(now.getFullYear() == fecha.getFullYear() && now.getMonth() == fecha.getMonth() && now.getDate() == fecha.getDate() ){
+                    var fechaParcial = new Date(fechaIngresadaAux.getFullYear(),fechaIngresadaAux.getMonth(),fechaIngresadaAux.getDate()+1,parseInt(value.intervalo.substring(0,2)),parseInt(value.intervalo.substring(3,5)),0);
+                    if(now.getTime() <= fechaParcial.getTime()){
+                      $("#reporte-info").append(
+                      "<tr>"+
+                      "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                      "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "</tr>"
                     );
+                    }
+                  }else{
+                    $("#reporte-info").append(
+                      "<tr>"+
+                      "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
+                      "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "</tr>"
+                    );
+                  }
+                }
+              });
+              $("#hora").append(
+                "<br/>"+
+                "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
+                "<br/>"+
+                "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
+              );
             }
               
           }});
@@ -319,6 +348,7 @@ function horaValida() {
     $("#mensaje3").attr('role','alert');
     $("#paragraph3").html('la hora seleccionada debe ser puntual u hora y media Ejemplo: 8:00 a.m o 8:30 a.m.');
     $("#mensaje3").show();
+    window.scrollTo(0,document.body.scrollHeight);
   }else{
     $("#mensaje3").hide();
   }

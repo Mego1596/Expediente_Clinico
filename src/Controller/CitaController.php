@@ -48,6 +48,9 @@ class CitaController extends AbstractController
         $form = $this->createForm(CitaType::class, $citum);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            dd($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
+            dd($request->request->get('cita')["fechaReservacion"]);
+            dd($request->request->get('time2')[3].$request->request->get('time2')[4]);
             $entityManager = $this->getDoctrine()->getManager();
             $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
             
