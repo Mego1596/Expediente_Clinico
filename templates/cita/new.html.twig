@@ -48,6 +48,42 @@
 
 
 {% block javascripts %}
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#limpiarDatos").click(function(){
+    $("#especialidad").val("");
+    $("#btnReiniciar").css('visibility','hidden');
+      var especialidad=$("#especialidad").val();
+      var datos="especialidad="+especialidad;
+      let route = "{{ path('ajax_cargaEspecialidad' )}}";
+      var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+      $.ajax({
+        url: route , 
+        type: "POST",
+        data: datos,
+        success: function(result){
+          if(result == ""){
+            document.getElementById('parrafoInicial').style.visibility = "hidden";
+            document.getElementById('reporte').style.visibility = "hidden";
+            $("#table-scroll").css('overflow','hidden');
+            $("#hora").empty();
+            $("#reporte-info").empty();
+          }else{
+            document.getElementById('parrafoInicial').style.visibility = "hidden";
+            document.getElementById('reporte').style.visibility = "hidden";
+            $("#table-scroll").css('overflow','hidden');
+            $("#hora").empty();
+            $("#reporte-info").empty();
+            $.each(result,function(i,value){
+              html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+            });
+          }
+          $('#user').html(html_code);
+        }
+      });
+  });
+});
+</script>
 <script>
 $(document).ready(function(){
     document.getElementById('limpiarDatos').click();
