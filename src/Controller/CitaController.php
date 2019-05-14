@@ -95,7 +95,7 @@ class CitaController extends AbstractController
                     'form' => $form->createView(),
                 ]);
             }else{
-                $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$expediente->getId().";";
+                $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND expediente_id=".$expediente->getId().";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                 $statement->execute();
                 $result2 = $statement->fetchAll();
@@ -220,16 +220,18 @@ class CitaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$expediente->getId().";";
+                    $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND expediente_id=".$expediente->getId().";";
                     $statement = $em->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
                     $result2 = $statement->fetchAll();
-                    if($result2 == null){
+                    if($result2 != null){
                         $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Porfavor elija una hora diferente.');
                         return $this->render('cita/edit.html.twig', [
                             'citum' => $citum,
                             'editar' => $editar,
                             'expediente' => $expediente,
+                            'user'  => $citum->getUsuario(),
+                            'loggedUser' => $AuthUser,
                             'especialidades' => $especialidades,
                             'form' => $form->createView(),
                         ]);
@@ -243,10 +245,10 @@ class CitaController extends AbstractController
                         $entityManager->persist($citum);
                         $entityManager->flush();
                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                            $this->addFlash('success','Cita añadida con exito');
+                            $this->addFlash('success','Cita Modificada con exito');
                             return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                         }else{
-                            $this->addFlash('success','Cita añadida con exito');
+                            $this->addFlash('success','Cita Modificada con exito');
                             return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                         }
                     }
