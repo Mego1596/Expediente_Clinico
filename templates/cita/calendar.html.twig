@@ -33,6 +33,7 @@
                 locale: 'es',
                 eventLimit: true,
                 selectable: true,
+                timeZone: 'America/El_Salvador',
                 dateClick: function(calEvent, jsEvent, view) {
                     
                 },
@@ -49,6 +50,20 @@
                         },
                     },
                 ],
+                eventTimeFormat: {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  meridiem: false,
+                  hour12: true
+                },
+                slotLabelFormat:{
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  omitZeroMinute: true,
+                  meridiem: false,
+                  hour12:true
+                },
+                columnHeaderFormat:{ weekday: 'long' },
                 buttonText: {
                     today: 'Hoy',
                     dayGridMonth:    'Mes',
@@ -78,4 +93,5 @@
 
         });
     </script>
+    <script src="{{asset('js/moment.min.js')}}"></script>
 {% endblock %}
