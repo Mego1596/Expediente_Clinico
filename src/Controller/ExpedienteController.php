@@ -89,6 +89,13 @@ class ExpedienteController extends AbstractController
             {
                 $valido = false;
                 $this->addFlash('fail', 'Usuario con este email ya existe');
+                return $this->render('expediente/new.html.twig', [
+                        'expediente' => $expediente,
+                        'clinicas'   => $clinicas,
+                        'pertenece'  => $clinicaPerteneciente,
+                        'editar'     => $editar,
+                        'form'       => $form->createView(),
+                    ]);
             }
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -142,10 +149,10 @@ class ExpedienteController extends AbstractController
                         $validador = $iniciales.$calculo.date("Y");
                         $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
                             AND numero_expediente='".$validador."';";
-                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                         $statement->execute();
                         $result = $statement->fetchAll();
-                        if(is_null($result)){
+                        if($result == null){
                             $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
                         }else{
                             $this->addFlash('fail','Error el expediente ya existe');
@@ -161,10 +168,10 @@ class ExpedienteController extends AbstractController
                         $validador = $iniciales."0001-".date("Y");
                         $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
                             AND numero_expediente='".$validador."';";
-                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                         $statement->execute();
                         $result = $statement->fetchAll();
-                        if(is_null($result)){
+                        if($result == null){
                             $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
                         }else{
                             $this->addFlash('fail','Error el expediente ya existe');
@@ -237,7 +244,7 @@ class ExpedienteController extends AbstractController
 
                     $validador = $iniciales.$calculo.date("Y");
                     $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND numero_expediente='".$validador."';";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
                     $result = $statement->fetchAll();
                     if(is_null($result)){
@@ -255,7 +262,7 @@ class ExpedienteController extends AbstractController
                 }else{
                     $validador = $iniciales."0001-".date("Y");
                     $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." AND numero_expediente='".$validador."';";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
                     $result = $statement->fetchAll();
                     if(is_null($result)){
@@ -331,6 +338,20 @@ class ExpedienteController extends AbstractController
 
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
+                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $usuario = $statement->fetchAll();
+                if (count($usuario) > 0)
+                {
+                    $this->addFlash('fail', 'Usuario con este email ya existe');
+                    return $this->render('expediente/edit.html.twig',[
+                            'expediente' => $expediente,
+                            'form' => $form->createView(),
+                            'editar' => $editar,
+                            ]);
+                }
                 if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
                         if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                             $entityManager = $this->getDoctrine()->getManager();

@@ -91,6 +91,11 @@ class User implements UserInterface,\Serializable
      */
     private $usuario_especialidades;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $planta;
+
 
     public function __construct()
     {
@@ -345,6 +350,18 @@ class User implements UserInterface,\Serializable
     public function setUsuarioEspecialidades(?Especialidad $usuario_especialidades): self
     {
         $this->usuario_especialidades = $usuario_especialidades;
+
+        return $this;
+    }
+
+    public function getPlanta(): ?bool
+    {
+        return $this->planta;
+    }
+
+    public function setPlanta(?bool $planta): self
+    {
+        $this->planta = $planta;
 
         return $this;
     }

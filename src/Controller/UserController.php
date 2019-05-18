@@ -72,7 +72,9 @@ class UserController extends AbstractController
                     ->andWhere('u.nombreRol != :val')
                     ->setParameter('val', "ROLE_PACIENTE");
             },'attr' => array('class' => 'form-control')))
-        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad', 'attr' => array('class' => 'form-control')))
+        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required' => false, 'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 
@@ -87,8 +89,19 @@ class UserController extends AbstractController
              $user->setRol($form["rol"]->getData());
             $user->setClinica($form["clinica"]->getData());
             $user->setIsActive(true);
-            foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
-                $user->addUsuarioEspecialidades($especialidad);    
+            if($form["emergencia"]->getData() != ""){
+                $user->setEmergencia($form["emergencia"]->getData());
+            }else{
+                $user->setEmergencia(false);
+            }
+            if($form["planta"]->getData() != ""){
+                $user->setPlanta($form["planta"]->getData());
+            }else{
+                $user->setPlanta(false);
+            }
+            if($form["usuario_especialidades"]->getData() != ""){
+                $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                
             }
             $entityManager->persist($user);
             $entityManager->flush();
@@ -128,9 +141,11 @@ class UserController extends AbstractController
         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
             'attr' => array('class' => 'form-control')))
+        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
         ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
         ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad', 'attr' => array('class' => 'form-control')))
+        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
 
@@ -177,17 +192,31 @@ class UserController extends AbstractController
                 $user->setApellidos($form["apellidos"]->getData());
                 $user->setRol($rol);
                 $user->setIsActive(true);
+
+
                 $user->setClinica($form["clinica"]->getData());
 
                 if ($agregar_especialidades)
                 {
-                    foreach ($form["usuario_especialidades"]->getData() as $especialidad) {
-                        $user->addUsuarioEspecialidades($especialidad);    
+                    if($form["usuario_especialidades"]->getData() != ""){
+                        $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                    }
+                    if($form["emergencia"]->getData() != ""){
+                    $user->setEmergencia($form["emergencia"]->getData());
+                    }else{
+                        $user->setEmergencia(false);
+                    }
+                    if($form["planta"]->getData() != ""){
+                        $user->setPlanta($form["planta"]->getData());
+                    }else{
+                        $user->setPlanta(false);
                     }
                 }
                 else
                 {
-                    $user->removeEspecialidades();
+                    $user->setUsuarioEspecialidades(null);
+                    $user->setEmergencia(false);
+                    $user->setPlanta(false);
                 }
 
                 $entityManager->persist($user);

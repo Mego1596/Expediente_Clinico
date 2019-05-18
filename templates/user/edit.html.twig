@@ -35,9 +35,17 @@
               {{ form_label(form.rol) }}
               {{ form_widget(form.rol) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" id="seccion_especialidad">
               {{ form_label(form.usuario_especialidades) }}
               {{ form_widget(form.usuario_especialidades) }}
+            </div>
+            <div class="col-md-4" id="seccion_emergencia">
+              {{ form_label(form.emergencia,"Doctor de emergencia") }}
+              {{ form_widget(form.emergencia) }}
+            </div>
+            <div class="col-md-4" id="seccion_planta">
+              {{ form_label(form.planta,"Doctor de planta") }}
+              {{ form_widget(form.planta) }}
             </div>
             <div class="col-md-4">
               {{ form_label(form.nuevo_password) }}

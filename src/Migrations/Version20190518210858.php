@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190512152255 extends AbstractMigration
+final class Version20190518210858 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -55,7 +55,7 @@ final class Version20190512152255 extends AbstractMigration
         $this->addSql('CREATE TABLE sala (id INT AUTO_INCREMENT NOT NULL, id_hospital_id INT NOT NULL, nombre_sala LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_E226041C1E2F769E (id_hospital_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE signo_vital (id INT AUTO_INCREMENT NOT NULL, cita_id INT NOT NULL, peso DOUBLE PRECISION NOT NULL, temperatura DOUBLE PRECISION NOT NULL, estatura DOUBLE PRECISION NOT NULL, presion_arterial DOUBLE PRECISION NOT NULL, ritmo_cardiaco DOUBLE PRECISION NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_75668911E011DDF (cita_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tipo_habitacion (id INT AUTO_INCREMENT NOT NULL, tipo_habitacion LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, rol_id INT NOT NULL, clinica_id INT DEFAULT NULL, usuario_especialidades_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, nombres VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, is_active TINYINT(1) NOT NULL, emergencia TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX IDX_8D93D6494BAB96C (rol_id), INDEX IDX_8D93D6499CD3F6D6 (clinica_id), INDEX IDX_8D93D649AF3A97F (usuario_especialidades_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, rol_id INT NOT NULL, clinica_id INT DEFAULT NULL, usuario_especialidades_id INT DEFAULT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, nombres VARCHAR(255) NOT NULL, apellidos VARCHAR(255) NOT NULL, is_active TINYINT(1) NOT NULL, emergencia TINYINT(1) DEFAULT NULL, planta TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_8D93D649E7927C74 (email), INDEX IDX_8D93D6494BAB96C (rol_id), INDEX IDX_8D93D6499CD3F6D6 (clinica_id), INDEX IDX_8D93D649AF3A97F (usuario_especialidades_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE anexo ADD CONSTRAINT FK_CD7EAF2C43CA3347 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
         $this->addSql('ALTER TABLE camilla ADD CONSTRAINT FK_712619ADB009290D FOREIGN KEY (habitacion_id) REFERENCES habitacion (id)');
         $this->addSql('ALTER TABLE cita ADD CONSTRAINT FK_3E379A62DB38439E FOREIGN KEY (usuario_id) REFERENCES user (id)');
