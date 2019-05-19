@@ -48,7 +48,9 @@ class UserController extends AbstractController
         $result = $statement->fetchAll();
 
         return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController','users' => $result
+            'controller_name' => 'UserController',
+            'users' => $result,
+            'user' => $AuthUser,
         ]);
     }
 

@@ -82,6 +82,15 @@
 				</div>
 			</div>
 		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_CLINICA')%}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('tipo_habitacion_index')}}"><i class="fa fa-list" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('tipo_habitacion_index')}}">Tipos de Habitacion</a>
+				</div>
+			</div>
+		{% endif %}
 		
 	</div>
 </div>

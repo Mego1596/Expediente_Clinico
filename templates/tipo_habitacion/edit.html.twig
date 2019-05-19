@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit TipoHabitacion{% endblock %}
+
+{% block body %}
+    {{ include('tipo_habitacion/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a class="btn btn-secondary"  href="{{ path('tipo_habitacion_index') }}">Atras</a>
+{% endblock %}

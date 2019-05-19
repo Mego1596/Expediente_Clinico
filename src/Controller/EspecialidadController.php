@@ -22,10 +22,11 @@ class EspecialidadController extends AbstractController
      * @Route("/", name="especialidad_index", methods={"GET"})
      * @Security2("has_role('ROLE_PERMISSION_INDEX_ESPECIALIDAD')")
      */
-    public function index(EspecialidadRepository $especialidadRepository): Response
+    public function index(EspecialidadRepository $especialidadRepository, Security $AuthUser): Response
     {
         return $this->render('especialidad/index.html.twig', [
             'especialidads' => $especialidadRepository->findAll(),
+            'user' => $AuthUser,
         ]);
     }
 

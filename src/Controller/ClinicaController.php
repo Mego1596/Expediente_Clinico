@@ -22,13 +22,11 @@ class ClinicaController extends AbstractController
      * @Route("/", name="clinica_index", methods={"GET"})
      * @Security2("has_role('ROLE_PERMISSION_INDEX_CLINICA')")
      */
-    public function index(ClinicaRepository $clinicaRepository): Response
+    public function index(ClinicaRepository $clinicaRepository, Security $AuthUser): Response
     {
-        $user = $this->getUser();
-
         return $this->render('clinica/index.html.twig', [
             'clinicas' => $clinicaRepository->findAll(),
-            'user' => $user
+            'user' => $AuthUser,
         ]);
     }
 

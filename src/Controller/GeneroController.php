@@ -22,10 +22,11 @@ class GeneroController extends AbstractController
      * @Route("/", name="genero_index", methods={"GET"})
      * @Security2("has_role('ROLE_PERMISSION_INDEX_GENERO')")
      */
-    public function index(GeneroRepository $generoRepository): Response
+    public function index(GeneroRepository $generoRepository, Security $AuthUser): Response
     {
         return $this->render('genero/index.html.twig', [
             'generos' => $generoRepository->findAll(),
+            'user' => $AuthUser,
         ]);
     }
 

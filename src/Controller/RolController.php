@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
+use Symfony\Component\Security\Core\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 
 /**
@@ -27,7 +28,7 @@ class RolController extends AbstractController
      * @Route("/", name="rol_index", methods={"GET"})
      * @Security2("has_role('ROLE_PERMISSION_INDEX_ROL')")
      */
-    public function index(RolRepository $rolRepository): Response
+    public function index(RolRepository $rolRepository, Security $AuthUser): Response
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -37,6 +38,7 @@ class RolController extends AbstractController
         $result = $statement->fetchAll();
         return $this->render('rol/index.html.twig', [
             'rols' => $result,
+            'user' => $AuthUser,
         ]);
     }
 

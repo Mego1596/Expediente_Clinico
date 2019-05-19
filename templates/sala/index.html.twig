@@ -9,7 +9,12 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria -----------
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -52,7 +57,7 @@
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Clinica</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
