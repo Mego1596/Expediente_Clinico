@@ -73,6 +73,15 @@
 				</div>
 			</div>
 		{% endif %}
+		{% if user.getUser().getRol().getNombreRol() != 'ROLE_SA' %}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('sala_index', {'clinica':user.getUser().getClinica().getId()} )}}"><i class="fas fa-person-booth" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('sala_index', {'clinica':user.getUser().getClinica().getId()} )}}">Salas</a>
+				</div>
+			</div>
+		{% endif %}
 		
 	</div>
 </div>

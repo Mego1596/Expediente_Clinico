@@ -28,5 +28,5 @@
 
     <a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
     <a class="btn btn-primary" href="{{ path('clinica_edit', {'id': clinica.id}) }}">Editar</a>
-
+    <a class="btn btn-success" href="{{path('sala_index', {'clinica':clinica.id} )}}">Crear Salas</a>
 {% endblock %}

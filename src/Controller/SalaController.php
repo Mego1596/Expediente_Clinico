@@ -50,7 +50,7 @@ class SalaController extends AbstractController
             $sala->setClinica($clinica);
             $entityManager->persist($sala);
             $entityManager->flush();
-
+            $this->addFlash('success','Sala añadida con exito');
             return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }
 
@@ -84,7 +84,7 @@ class SalaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('success','Sala modificada con exito');
             return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }
 
