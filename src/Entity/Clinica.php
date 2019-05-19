@@ -49,7 +49,7 @@ class Clinica
     private $actualizado_en;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Sala", mappedBy="idHospital", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Sala", mappedBy="clinica", orphanRemoval=true)
      */
     private $salas;
 

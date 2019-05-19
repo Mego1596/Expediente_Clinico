@@ -42,8 +42,17 @@ class EspecialidadController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($especialidad);
-            $entityManager->flush();
+            if($form["nombreEspecialidad"]->getData() != ""){
+                $entityManager->persist($especialidad);
+                $entityManager->flush();
+            }else{
+                $this->addFlash('fail', 'El nombre de la especialidad no puede estar vacio');
+                return $this->render('especialidad/new.html.twig', [
+                    'especialidad' => $especialidad,
+                    'editar' => $editar,
+                    'form' => $form->createView(),
+                ]);
+            }
 
             $this->addFlash('success', 'Especialidad agregada con exito');
             return $this->redirectToRoute('especialidad_index');
@@ -80,10 +89,8 @@ class EspecialidadController extends AbstractController
         $editar=true;
         $form = $this->createForm(EspecialidadType::class, $especialidad);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
             $this->addFlash('success', 'Especialidad modificada con exito');
             return $this->redirectToRoute('especialidad_index', [
                 'id' => $especialidad->getId(),

@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Sala{% endblock %}
+
+{% block body %}
+    {{ include('sala/_form.html.twig', {'button_label': 'Update'}) }}
+    <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
+{% endblock %}

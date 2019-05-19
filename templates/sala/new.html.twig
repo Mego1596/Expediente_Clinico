@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Sala{% endblock %}
+
+{% block body %}
+    {{ include('sala/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
+{% endblock %}

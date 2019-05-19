@@ -27,7 +27,7 @@ class Sala
      * @ORM\ManyToOne(targetEntity="App\Entity\Clinica", inversedBy="salas")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $idHospital;
+    private $clinica;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -43,10 +43,6 @@ class Sala
      * @ORM\OneToMany(targetEntity="App\Entity\Habitacion", mappedBy="sala")
      */
     private $habitaciones;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Habitacion", mappedBy="sala")
-     */
 
 
 
@@ -72,14 +68,14 @@ class Sala
         return $this;
     }
 
-    public function getIdHospital(): ?Clinica
+    public function getClinica(): ?Clinica
     {
-        return $this->idHospital;
+        return $this->clinica;
     }
 
-    public function setIdHospital(?Clinica $idHospital): self
+    public function setClinica(?Clinica $clinica): self
     {
-        $this->idHospital = $idHospital;
+        $this->clinica = $clinica;
 
         return $this;
     }
@@ -116,23 +112,23 @@ class Sala
         return $this->habitaciones;
     }
 
-    public function addHabitacione(Habitacion $habitacione): self
+    public function addHabitacione(Habitacion $habitacion): self
     {
-        if (!$this->habitaciones->contains($habitacione)) {
-            $this->habitaciones[] = $habitacione;
+        if (!$this->habitaciones->contains($habitacion)) {
+            $this->habitaciones[] = $habitacion;
             $habitacione->setSala($this);
         }
 
         return $this;
     }
 
-    public function removeHabitacione(Habitacion $habitacione): self
+    public function removeHabitaciones(Habitacion $habitacion): self
     {
-        if ($this->habitaciones->contains($habitacione)) {
-            $this->habitaciones->removeElement($habitacione);
+        if ($this->habitaciones->contains($habitacion)) {
+            $this->habitaciones->removeElement($habitacion);
             // set the owning side to null (unless already changed)
-            if ($habitacione->getSala() === $this) {
-                $habitacione->setSala(null);
+            if ($habitacion->getSala() === $this) {
+                $habitacion->setSala(null);
             }
         }
 
