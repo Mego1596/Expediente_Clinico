@@ -68,7 +68,7 @@ class HabitacionController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
             $inicialSala = $salaSeleccionada->getNombreSala()[0];
-            $habitacion->setNumeroHabitacion((int)$request->request->get('numeroHabitacion'));
+            $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
             $habitacion->setSala($salaSeleccionada);
             $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
             $entityManager->persist($habitacion);

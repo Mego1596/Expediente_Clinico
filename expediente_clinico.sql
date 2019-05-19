@@ -81,7 +81,13 @@ INSERT INTO `permiso` (`id`, `permiso`, `descripcion`, `nombre_tabla`, `creado_e
 (52, 'ROLE_PERMISSION_NEW_', 'Permiso de Creacion', 'HABITACION', NULL, NULL),
 (53, 'ROLE_PERMISSION_SHOW_', 'Permiso de Ver ', 'HABITACION', NULL, NULL),
 (54, 'ROLE_PERMISSION_EDIT_', 'Permiso de Editar ', 'HABITACION', NULL, NULL),
-(55, 'ROLE_PERMISSION_DELETE_', 'Permiso de Eliminar', 'HABITACION', NULL, NULL);
+(55, 'ROLE_PERMISSION_DELETE_', 'Permiso de Eliminar', 'HABITACION', NULL, NULL),
+
+(56, 'ROLE_PERMISSION_INDEX_', 'Permiso de Entrada', 'CAMILLA', NULL, NULL),
+(57, 'ROLE_PERMISSION_NEW_', 'Permiso de Creacion', 'CAMILLA', NULL, NULL),
+(58, 'ROLE_PERMISSION_SHOW_', 'Permiso de Ver ', 'CAMILLA', NULL, NULL),
+(59, 'ROLE_PERMISSION_EDIT_', 'Permiso de Editar ', 'CAMILLA', NULL, NULL),
+(60, 'ROLE_PERMISSION_DELETE_', 'Permiso de Eliminar', 'CAMILLA', NULL, NULL);
 
 INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_en`) VALUES
 (1, 'ROLE_SA', 'Rol de Super Administrador', NULL, NULL),
@@ -176,4 +182,10 @@ INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
 (1, 52),
 (1, 53),
 (1, 54),
-(1, 55);
+(1, 55),
+
+(1, 56),
+(1, 57),
+(1, 58),
+(1, 59),
+(1, 60);
