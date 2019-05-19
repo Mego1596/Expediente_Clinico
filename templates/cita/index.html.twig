@@ -21,7 +21,9 @@
                 <div class="card-body">
                     <div class="pull-right" align="center">
                         {% if user.getUser().getRol().getNombreRol() != 'ROLE_PACIENTE' %}
-                            <a class="btn btn-outline-primary" href="{{path('cita_calendar',{'expediente': expediente.getId()})}}"><i class="fa fa-calendar"> Ver Agenda</i></a>
+                            {% if is_granted('ROLE_PERMISSION_NEW_CITA') %}
+                                <a class="btn btn-outline-primary" href="{{path('cita_calendar',{'expediente': expediente.getId()})}}"><i class="fa fa-calendar"> Ver Agenda</i></a>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <br/>
@@ -45,15 +47,15 @@
                                             <td>{{ cita.fechaFin ? cita.fechaFin|date('Y-m-d H:i:s') : ''}}</td>
 
                                             <td>
-                                                {% if is_granted('ROLE_PERMISSION_SHOW_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_CITA') %}
                                                     <a href="{{ path('cita_show', {'expediente': expediente.getId(), id: cita.id}) }}" class="btn btn-info">Mostrar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_EDIT_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_CITA') %}
                                                     <a href="{{ path('cita_edit', {'expediente': expediente.getId(), id: cita.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_DELETE_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_CITA') %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ cita.id}}">
                                                     Eliminar
                                                     </button>

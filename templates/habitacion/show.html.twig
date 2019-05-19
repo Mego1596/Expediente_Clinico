@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Habitacion{% endblock %}
+
+{% block body %}
+    <h1>Habitacion</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ habitacion.id }}</td>
+            </tr>
+            <tr>
+                <th>NumeroHabitacion</th>
+                <td>{{ habitacion.numeroHabitacion }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
+
+    <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
+{% endblock %}

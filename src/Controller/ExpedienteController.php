@@ -31,7 +31,8 @@ class ExpedienteController extends AbstractController
 {
     /**
      * @Route("/", name="expediente_index", methods={"GET"})
-     * @Security2("has_role('ROLE_PERMISSION_INDEX_EXPEDIENTE')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')")
      */
     public function index(ExpedienteRepository $expedienteRepository,Security $AuthUser): Response
     {
@@ -56,7 +57,8 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/new", name="expediente_new", methods={"GET","POST"})
-     * @Security2("has_role('ROLE_PERMISSION_NEW_EXPEDIENTE')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function new(Request $request, Security $AuthUser): Response
     {   $editar = false;
@@ -301,7 +303,8 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/{id}", name="expediente_show", methods={"GET"})
-     * @Security2("has_role('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
      */
     public function show(Expediente $expediente): Response
     {   if($expediente->getHabilitado()){
@@ -316,7 +319,8 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="expediente_edit", methods={"GET","POST"})
-     * @Security2("has_role('ROLE_PERMISSION_EDIT_EXPEDIENTE')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')")
      */
     public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
     {   
@@ -407,7 +411,7 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/{id}", name="expediente_delete", methods={"DELETE"})
-     * @Security2("has_role('ROLE_PERMISSION_DELETE_EXPEDIENTE')")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE')")
      */
     public function delete(Request $request, Expediente $expediente): Response
     {
@@ -424,7 +428,8 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/{id}/habilitar", name="expediente_habilitar", methods={"GET","POST"})
-     * @Security2("has_role('ROLE_PERMISSION_NEW_EXPEDIENTE')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function habilitar(Request $request, Expediente $expediente): Response
     {

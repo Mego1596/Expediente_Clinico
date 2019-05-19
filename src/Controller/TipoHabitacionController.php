@@ -10,6 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\Session\Session;
 /**
  * @Route("/tipo/habitacion")
  */
@@ -17,6 +20,8 @@ class TipoHabitacionController extends AbstractController
 {
     /**
      * @Route("/", name="tipo_habitacion_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_TIPO_HABITACION')")
      */
     public function index(TipoHabitacionRepository $tipoHabitacionRepository,Security $AuthUser): Response
     {
@@ -28,6 +33,8 @@ class TipoHabitacionController extends AbstractController
 
     /**
      * @Route("/new", name="tipo_habitacion_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_TIPO_HABITACION')")
      */
     public function new(Request $request): Response
     {
@@ -53,6 +60,8 @@ class TipoHabitacionController extends AbstractController
 
     /**
      * @Route("/{id}", name="tipo_habitacion_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_TIPO_HABITACION')")
      */
     public function show(TipoHabitacion $tipoHabitacion): Response
     {
@@ -63,6 +72,8 @@ class TipoHabitacionController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="tipo_habitacion_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_TIPO_HABITACION')")
      */
     public function edit(Request $request, TipoHabitacion $tipoHabitacion): Response
     {
@@ -87,6 +98,8 @@ class TipoHabitacionController extends AbstractController
 
     /**
      * @Route("/{id}", name="tipo_habitacion_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_TIPO_HABITACION')")
      */
     public function delete(Request $request, TipoHabitacion $tipoHabitacion): Response
     {

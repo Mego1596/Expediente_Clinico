@@ -73,7 +73,7 @@
 				</div>
 			</div>
 		{% endif %}
-		{% if user.getUser().getRol().getNombreRol() != 'ROLE_SA' %}
+		{% if user.getUser().getRol().getNombreRol() != 'ROLE_SA' and is_granted('ROLE_PERMISSION_INDEX_SALA') %}
 			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('sala_index', {'clinica':user.getUser().getClinica().getId()} )}}"><i class="fas fa-person-booth" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
@@ -82,7 +82,16 @@
 				</div>
 			</div>
 		{% endif %}
-		{% if is_granted('ROLE_PERMISSION_INDEX_CLINICA')%}
+		{% if user.getUser().getRol().getNombreRol() != 'ROLE_SA' and is_granted('ROLE_PERMISSION_INDEX_HABITACION')  %}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('habitacion_index', {'clinica':user.getUser().getClinica().getId()} )}}"><i class="fas fa-door-open" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('habitacion_index', {'clinica':user.getUser().getClinica().getId()} )}}">Habitaciones</a>
+				</div>
+			</div>
+		{% endif %}
+		{% if is_granted('ROLE_PERMISSION_INDEX_TIPOHABITACION')%}
 			<div class="col-md-2">
 				<div style="border:1px solid;" align="center">
 					<a href="{{path('tipo_habitacion_index')}}"><i class="fa fa-list" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>

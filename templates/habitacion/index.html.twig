@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lista de Tipos de Habitacion{% endblock %}
+{% block title %}Lista de Habitaciones{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="pull-right" align="center">
                         {% if is_granted('ROLE_PERMISSION_NEW_CLINICA') %}
-                            <a href="{{ path('tipo_habitacion_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-list"></i> Registrar Tipo Habitacion</a>
+                            <a href="{{ path('habitacion_new',{'clinica': clinica.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-door-open"></i> Registrar Habitacion</a>
                         {% endif %}
                     </div>
                     <br/>
@@ -31,45 +31,45 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Tipo de Habitacion</th>
+                                            <th id="relevante" class="all">Numero de Habitacion</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for tipo_habitacion in tipo_habitaciones %}
+                                    {% for habitacion in habitaciones %}
                                         <tr>
-                                            <td>{{ tipo_habitacion.tipoHabitacion}}</td>
+                                            <td>{{ habitacion.numeroHabitacion}}</td>
                                             <td>
                                                 {% if is_granted('ROLE_PERMISSION_SHOW_CLINICA') %}
-                                                    <a href="{{ path('tipo_habitacion_show', {'id': tipo_habitacion.id}) }}" class="btn btn-info">Mostrar</a>
+                                                    <a href="{{ path('habitacion_show', {'id': habitacion.id,'clinica':clinica.id}) }}" class="btn btn-info">Mostrar</a>
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_EDIT_CLINICA') %}
-                                                    <a href="{{ path('tipo_habitacion_edit', {'id': tipo_habitacion.id}) }}" class="btn btn-success">Modificar</a>
+                                                    <a href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_CLINICA') %}
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ tipo_habitacion.id}}">
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ habitacion.id}}">
                                                     Eliminar
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal{{ tipo_habitacion.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="exampleModal{{ habitacion.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Tipo de Habitacion</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Esta seguro que desea eliminar el tipo de habitacion?
+                                                            Esta seguro que desea eliminar la habitacion?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                            <form method="post" action="{{ path('tipo_habitacion_delete', {'id': tipo_habitacion.id}) }}">
+                                                            <form method="post" action="{{ path('habitacion_delete', {'id': habitacion.id,'clinica':clinica.id}) }}">
                                                                 <input type="hidden" name="_method" value="DELETE">
-                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tipo_habitacion.id) }}">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ habitacion.id) }}">
                                                                 <button type="submit" class="btn btn-outline-danger">Si</button>
                                                             </form>
                                                         </div>

@@ -28,4 +28,5 @@
 
 <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
 <a class="btn btn-primary" href="{{ path('sala_edit', {'id':sala.id,'clinica': clinica.id}) }}">Editar</a>
+<a class="btn btn-success" href="{{path('habitacion_index', {'clinica':clinica.id} )}}">Crear Habitaciones</a>
 {% endblock %}

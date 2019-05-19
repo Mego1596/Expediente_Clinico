@@ -20,7 +20,8 @@ class GeneroController extends AbstractController
 {
     /**
      * @Route("/", name="genero_index", methods={"GET"})
-     * @Security2("has_role('ROLE_PERMISSION_INDEX_GENERO')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_GENERO')")
      */
     public function index(GeneroRepository $generoRepository, Security $AuthUser): Response
     {
@@ -32,7 +33,8 @@ class GeneroController extends AbstractController
 
     /**
      * @Route("/new", name="genero_new", methods={"GET","POST"})
-     * @Security2("has_role('ROLE_PERMISSION_NEW_GENERO')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_GENERO')")
      */
     public function new(Request $request): Response
     {
@@ -59,7 +61,8 @@ class GeneroController extends AbstractController
 
     /**
      * @Route("/{id}", name="genero_show", methods={"GET"})
-     * @Security2("has_role('ROLE_PERMISSION_SHOW_GENERO')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_GENERO')")
      */
     public function show(Genero $genero): Response
     {
@@ -74,7 +77,8 @@ class GeneroController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="genero_edit", methods={"GET","POST"})
-     * @Security2("has_role('ROLE_PERMISSION_EDIT_GENERO')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_GENERO')")
      */
     public function edit(Request $request, Genero $genero): Response
     {
@@ -100,7 +104,8 @@ class GeneroController extends AbstractController
 
     /**
      * @Route("/{id}", name="genero_delete", methods={"DELETE"})
-     * @Security2("has_role('ROLE_PERMISSION_DELETE_GENERO')")
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_GENERO')")
      */
     public function delete(Request $request, Genero $genero): Response
     {

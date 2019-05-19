@@ -34,6 +34,7 @@ class HomeController extends AbstractController
     }
     /**
      * @Route("/cambioContrasena", name="app_cambio")
+     * @Security2("is_authenticated()")
      */
     public function cambio_contrasena(Security $AuthUser)
     {   
@@ -45,6 +46,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/medicoGeneral", name="ajax_cargaGeneral", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
      */
     public function cargaGeneral(Security $AuthUser, Request $request)
     { 
@@ -59,6 +61,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/medicoEspecialidad", name="ajax_cargaEspecialidad", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
      */
     public function cargaEspecialidad(Security $AuthUser, Request $request)
     { 
@@ -78,6 +81,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/cupos", name="ajax_cupos", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
      */
     public function cupos(Security $AuthUser, Request $request)
     { 

@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar Habitacion{% endblock %}
+
+{% block body %}
+    {{ include('habitacion/_form.html.twig') }}
+
+    <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
+{% endblock %}
