@@ -18,10 +18,12 @@
         </tbody>
     </table>
 
-    <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
-
-    <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
-
+    {%if (is_granted('ROLE_PERMISSION_INDEX_HABITACION')) %}
+      <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_HABITACION')) %}
+        <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
+    {% endif %}
     {% if is_granted('ROLE_PERMISSION_INDEX_HABITACION')%}
         <a class="btn btn-success" href="{{path('camilla_index', {'habitacion':habitacion.id} )}}">Asignar Camillas</a>
     {% endif %}

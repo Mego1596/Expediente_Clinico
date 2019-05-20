@@ -31,21 +31,29 @@
                 <td>
                     <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
                 </td>
+                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
                 </td>
-                <td>
-                    {{ include('cita/_delete_form.html.twig') }}    
-                </td>
+                {% endif %}
+                {% if(is_granted('ROLE_PERMISSION_DELETE_CITA')) %}
+                    <td>
+                        {{ include('cita/_delete_form.html.twig') }}    
+                    </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
                 <td>
-                    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                    {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
+                        <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                    {% endif %}
                 </td>
+                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
                 </td>
+                {% endif %}
             </tr>
         {% endif %}
     </table>

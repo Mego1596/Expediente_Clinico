@@ -22,6 +22,10 @@
         </tbody>
     </table>
 
-    <a class="btn btn-secondary"href="{{ path('rol_index') }}">Atras</a>
-    <a class="btn btn-primary"href="{{ path('rol_edit', {'id': rol.id}) }}">Editar</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_ROL')) %}
+      <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_ROL')) %}
+        <a class="btn btn-primary"href="{{ path('rol_edit', {'id': rol.id}) }}">Editar</a>
+    {% endif %}
 {% endblock %}

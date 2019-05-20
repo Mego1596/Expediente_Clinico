@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HistorialPropio{% endblock %}
+
+{% block body %}
+    <h1>HistorialPropio</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ historial_propio.id }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ historial_propio.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ historial_propio.creadoEn ? historial_propio.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ historial_propio.actualizadoEn ? historial_propio.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
+        <a class="btn btn-secondary" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_PROPIO')) %}
+        <a class="btn btn-primary" href="{{ path('historial_propio_edit', {'id': historial_propio.id,'expediente': expediente.id}) }}">Editar</a>
+    {% endif %}
+{% endblock %}

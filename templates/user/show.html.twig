@@ -20,8 +20,10 @@
             </tr>
         </tbody>
     </table>
-
+    {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
     <a class="btn btn-secondary" href="{{ path('user_index') }}">Atras</a>
-
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_USER')) %}
     <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">Editar</a>
+    {% endif %}
 {% endblock %}

@@ -72,6 +72,8 @@
       </div>
     </div>
   </div>
-</div>	
-	<a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+</div>
+  {%if (is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')) %}
+    <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+  {% endif %}
 {% endblock %}

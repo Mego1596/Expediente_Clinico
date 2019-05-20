@@ -4,5 +4,7 @@
 
 {% block body %}
     {{ include('camilla/_form.html.twig') }}
-    <a class="btn btn-secondary  " href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+    {% if(is_granted('ROLE_PERMISSION_INDEX_CAMILLA')) %}
+    	<a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

@@ -4,6 +4,7 @@
 
 {% block body %}
     {{ include('tipo_habitacion/_form.html.twig') }}
-
-    <a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_TIPO_HABITACION')) %}
+    	<a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
+    {% endif %}
 {% endblock %}

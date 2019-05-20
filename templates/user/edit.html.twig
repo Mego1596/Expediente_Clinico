@@ -71,7 +71,9 @@
       </div>
     </div>
   </div>
+  {%if (is_granted('ROLE_PERMISSION_INDEX_USER')) %}
   <a class="btn btn-secondary btn-inline" href="{{ path('user_index') }}">Atras</a>
+  {% endif %}
 </div>
 {% endblock %}
 

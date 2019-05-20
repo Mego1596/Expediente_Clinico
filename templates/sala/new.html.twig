@@ -4,6 +4,7 @@
 
 {% block body %}
     {{ include('sala/_form.html.twig') }}
-
-    <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_SALA')) %}
+    	<a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

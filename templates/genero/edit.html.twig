@@ -4,5 +4,8 @@
 
 {% block body %}
     {{ include('genero/_form.html.twig', {'button_label': 'Update'}) }}
-    <a class="btn btn-secondary" href="{{ path('genero_index') }}">Atras</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_GENERO')) %}
+      <a class="btn btn-secondary" href="{{ path('genero_index') }}">Atras</a>
+    {% endif %}
+    
 {% endblock %}

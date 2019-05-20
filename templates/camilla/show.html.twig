@@ -25,6 +25,11 @@
             </tr>
         </tbody>
     </table>
-    <a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
-    <a class="btn btn-primary" href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}">Editar</a>
+    {% if(is_granted('ROLE_PERMISSION_INDEX_CAMILLA')) %}
+        <a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_CAMILLA')) %}
+        <a class="btn btn-primary" href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}">Editar</a>
+    {% endif %}
+    
 {% endblock %}

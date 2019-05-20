@@ -40,13 +40,17 @@
         {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
             <tr>
                 <td>
-                    <a class="btn btn-secondary" href="{{ path('cita_show',{'expediente':expediente.getId(), 'id':citum.getId()}) }}">Atras</a>
+                {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
+                  <a class="btn btn-secondary" href="{{ path('cita_show',{'expediente':expediente.getId(), 'id':citum.getId()}) }}">Atras</a>
+                {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
                 <td>
-                    <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                    {%if (is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
+                      <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>  
+                    {% endif %}
                 </td>
             </tr>
         {% endif %}

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Historial Propio{% endblock %}
+
+{% block body %}
+    {{ include('historial_propio/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
+		<a class="btn btn-secondary" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Atras</a>
+	{% endif %}
+{% endblock %}

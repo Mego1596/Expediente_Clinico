@@ -1,37 +1,21 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Nuevo Rol{% endblock %}
-
-{% block body %}
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <h5 class="card-header">Registrar Rol</h5>
+      <h5 class="card-header">
+        {% if editar == true %}
+          Modificar Historial
+        {% else %}
+          Registrar Historial
+        {% endif %}
+      </h5>
       <div class="card-body">
         {{ form_start(form) }}
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
           <div class="row" style="text-align: center">
-            <div class="col-md-6">
-              {{ form_label(form.nombreRol) }}
-              {{ form_widget(form.nombreRol) }}
-            </div>
-            <div class="col-md-6">
+            <div class="col-md-12">
               {{ form_label(form.descripcion) }}
               {{ form_widget(form.descripcion) }}
-            </div>
-          </div>
-          <div class="row" style="text-align: center;">
-            <div class="col-md-12">
-              {{ form_label(form.permisos) }}
-              <div id="permisos">
-              {% for field in form.permisos %}
-                 <div align="left" style="display: inline-block; width: 100%;">
-                   {{ form_widget(field) }}
-                   {{ form_label(field) }}
-                 </div>
-              {% endfor %}
-            </div>
             </div>
           </div>
           <div class="container" style="margin-top: 1%">
@@ -52,7 +36,3 @@
     </div>
   </div>
 </div>
-    {%if (is_granted('ROLE_PERMISSION_INDEX_ROL')) %}
-      <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
-    {% endif %}
-{% endblock %}

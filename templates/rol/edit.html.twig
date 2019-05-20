@@ -50,5 +50,7 @@
     </div>
   </div>
 {% endif %}
-    <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_ROL')) %}
+      <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
+    {% endif %}
 {% endblock %}

@@ -26,8 +26,12 @@
         </tbody>
     </table>
 
-    <a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
-    <a class="btn btn-primary" href="{{ path('clinica_edit', {'id': clinica.id}) }}">Editar</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_CLINICA')) %}
+        <a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_CLINICA')) %}
+        <a class="btn btn-primary" href="{{ path('clinica_edit', {'id': clinica.id}) }}">Editar</a>
+    {% endif %}
     {% if is_granted('ROLE_PERMISSION_INDEX_SALA')%}
         <a class="btn btn-success" href="{{path('sala_index', {'clinica':clinica.id} )}}">Crear Salas</a>
     {% endif %}

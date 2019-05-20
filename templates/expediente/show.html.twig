@@ -35,10 +35,24 @@
                 <th>EstadoCivil</th>
                 <td>{{ expediente.estadoCivil }}</td>
             </tr>
+            <tr>
+                <td>CARGAR LOS HISTORIALES CLINICOS DE LA PERSONA AQUI</td>
+                <td>CARGAR EL FAMILIAR RESPONSABLE SI LO TIENE AQUI</td>
+            </tr>
+            
         </tbody>
     </table>
 
-<a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+{%if (is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')) %}
+    <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+{% endif %}
+{% if(is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')) %}
 <a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id}) }}">Editar</a>
+{% endif %}
+{% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
 <a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id}) }}">Crear Cita</a>
+{% endif %}
+{% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
+<a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Registrar Historial</a>
+{% endif %}
 {% endblock %}

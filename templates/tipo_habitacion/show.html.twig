@@ -25,7 +25,10 @@
             </tr>
         </tbody>
     </table>
-
-    <a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
-    <a class="btn btn-primary" href="{{ path('tipo_habitacion_edit', {'id': tipo_habitacion.id}) }}">Editar</a>
+    {%if (is_granted('ROLE_PERMISSION_INDEX_TIPO_HABITACION')) %}
+        <a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_TIPO_HABITACION')) %}
+        <a class="btn btn-primary" href="{{ path('tipo_habitacion_edit', {'id': tipo_habitacion.id}) }}">Editar</a>
+    {% endif %}
 {% endblock %}
