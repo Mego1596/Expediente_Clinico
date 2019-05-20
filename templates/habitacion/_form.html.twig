@@ -13,18 +13,32 @@
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
           <div class="row" style="text-align:center">
-            <div class="col-md-12">
-              {{ form_label(form.sala) }}
-              {{ form_widget(form.sala) }}
-            </div>
+            {% if(editar != true) %}
+              <div class="col-md-12">
+                {{ form_label(form.sala) }}
+                {{ form_widget(form.sala) }}
+              </div>
+            {% else %}
+              <div class="col-md-12">
+                <label for="sala">Escoja la sala a la cual desea actualizar</label>
+                <select id="sala" name="sala" class="form-control">
+                  <option value="0">Seleccione una sala</option>
+                  {%for sala in salas%}
+                    <option value="{{sala.id}}">{{sala.nombre_sala}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            {% endif %}
             <div class="col-md-12">
               {{ form_label(form.tipoHabitacion) }}
               {{ form_widget(form.tipoHabitacion) }}
             </div>
+            {% if(editar != true) %}
             <div class="col-md-12">
               {{ form_label(form.numeroHabitacion) }}
               {{ form_widget(form.numeroHabitacion) }}
             </div>
+            {% endif %}
           </div>
           <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">

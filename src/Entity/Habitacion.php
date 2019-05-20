@@ -26,7 +26,7 @@ class Habitacion
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\TipoHabitacion", inversedBy="habitaciones")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $tipoHabitacion;
 

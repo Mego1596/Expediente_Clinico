@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Camilla{% endblock %}
+
+{% block body %}
+    <h1>Camilla</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ camilla.id }}</td>
+            </tr>
+            <tr>
+                <th>NumeroCamilla</th>
+                <td>{{ camilla.numeroCamilla }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ camilla.creadoEn ? camilla.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ camilla.actualizadoEn ? camilla.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+    <a class="btn btn-primary" href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}">Editar</a>
+{% endblock %}

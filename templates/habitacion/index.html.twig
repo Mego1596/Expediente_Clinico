@@ -20,7 +20,7 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
-                        {% if is_granted('ROLE_PERMISSION_NEW_CLINICA') %}
+                        {% if is_granted('ROLE_PERMISSION_NEW_HABITACION') %}
                             <a href="{{ path('habitacion_new',{'clinica': clinica.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-door-open"></i> Registrar Habitacion</a>
                         {% endif %}
                     </div>
@@ -32,23 +32,25 @@
                                     <thead>
                                         <tr>
                                             <th id="relevante" class="all">Numero de Habitacion</th>
+                                            <th id="relevante" class="all" >Sala</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {% for habitacion in habitaciones %}
                                         <tr>
-                                            <td>{{ habitacion.numeroHabitacion}}</td>
+                                            <td>{{ habitacion.numero_habitacion}}</td>
+                                            <td>{{ habitacion.nombre_sala }}</td>
                                             <td>
-                                                {% if is_granted('ROLE_PERMISSION_SHOW_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_HABITACION') %}
                                                     <a href="{{ path('habitacion_show', {'id': habitacion.id,'clinica':clinica.id}) }}" class="btn btn-info">Mostrar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_EDIT_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_HABITACION') %}
                                                     <a href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_DELETE_CLINICA') %}
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_HABITACION') %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ habitacion.id}}">
                                                     Eliminar
                                                     </button>
@@ -57,7 +59,7 @@
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Habitacion</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>

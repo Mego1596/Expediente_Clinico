@@ -31,4 +31,7 @@
     {% if is_granted('ROLE_PERMISSION_INDEX_SALA')%}
         <a class="btn btn-success" href="{{path('sala_index', {'clinica':clinica.id} )}}">Crear Salas</a>
     {% endif %}
+    {% if is_granted('ROLE_PERMISSION_INDEX_HABITACION')%}
+        <a class="btn btn-success" href="{{path('habitacion_index', {'clinica':clinica.id} )}}">Crear Habitaciones</a>
+    {% endif %}
 {% endblock %}

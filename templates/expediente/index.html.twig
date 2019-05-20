@@ -20,7 +20,9 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
+                    {% if is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE') %}
                         <a href="{{ path('expediente_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-user-plus"></i> Registrar Paciente</a>
+                    {% endif %}
                     </div>
                     <br/>
                     <br/>
@@ -47,35 +49,41 @@
                                                 <td>{{paciente.nombre_clinica}}</td>
                                                 {% endif %}
                                                 <td>
-                                                    <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
-                                                    <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">Modificar</a>
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
-                                                      Eliminar
-                                                    </button>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                      <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                          <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Expediente</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                              <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                          </div>
-                                                          <div class="modal-body">
-                                                            Esta seguro que desea eliminar el expediente?
-                                                          </div>
-                                                          <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                            <form method="post" action="{{ path('expediente_delete', {'id': paciente.id}) }}">
-                                                                <input type="hidden" name="_method" value="DELETE">
-                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paciente.id) }}">
-                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
-                                                            </form>
+                                                    {% if is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE') %}
+                                                        <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
+                                                    {% endif %}
+                                                    {% if is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE') %}
+                                                        <a href="{{ path('expediente_edit', {'id': paciente.id}) }}" class="btn btn-success">Modificar</a>
+                                                    {% endif %}
+                                                    {% if is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE') %}
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
+                                                            Eliminar
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Eliminar Expediente</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                Esta seguro que desea eliminar el expediente?
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                                <form method="post" action="{{ path('expediente_delete', {'id': paciente.id}) }}">
+                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ paciente.id) }}">
+                                                                    <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                                </form>
+                                                              </div>
+                                                            </div>
                                                           </div>
                                                         </div>
-                                                      </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </td>
                                             </tr>
                                         {% else %}
@@ -87,32 +95,34 @@
                                                 {% endif %}
                                                 {% if user.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
                                                 <td>
-                                                    <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
-                                                      Habilitar
-                                                    </button>
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                      <div class="modal-dialog" role="document">
-                                                        <div class="modal-content">
-                                                          <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                              <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                          </div>
-                                                          <div class="modal-body">
-                                                            Esta seguro que desea habilitar el usuario?
-                                                          </div>
-                                                          <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                            <form method="post" action="{{ path('expediente_habilitar', {'id': paciente.id}) }}">
-                                                                <input type="hidden" name="_token" value="{{ csrf_token('habilitar' ~ paciente.id) }}">
-                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
-                                                            </form>
+                                                    {% if is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE') %}
+                                                        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#exampleModal{{ paciente.id}}">
+                                                          Habilitar
+                                                        </button>
+                                                        <!-- Modal -->
+                                                        <div class="modal fade" id="exampleModal{{ paciente.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                Esta seguro que desea habilitar el paciente?
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                                <form method="post" action="{{ path('expediente_habilitar', {'id': paciente.id}) }}">
+                                                                    <input type="hidden" name="_token" value="{{ csrf_token('habilitar' ~ paciente.id) }}">
+                                                                    <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                                </form>
+                                                              </div>
+                                                            </div>
                                                           </div>
                                                         </div>
-                                                      </div>
-                                                    </div>
+                                                    {% endif %}
                                                 </td>
                                                 {% else %}
                                                 <td>Usuario Deshabilitado</td>

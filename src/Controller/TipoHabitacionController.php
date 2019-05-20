@@ -47,7 +47,7 @@ class TipoHabitacionController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($tipoHabitacion);
             $entityManager->flush();
-
+            $this->addFlash('success','Tipo de Habitacion añadido con exito');
             return $this->redirectToRoute('tipo_habitacion_index');
         }
 
@@ -83,7 +83,7 @@ class TipoHabitacionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
+            $this->addFlash('success','Tipo de Habitacion modificado con exito');
             return $this->redirectToRoute('tipo_habitacion_index', [
                 'id' => $tipoHabitacion->getId(),
             ]);
@@ -108,7 +108,7 @@ class TipoHabitacionController extends AbstractController
             $entityManager->remove($tipoHabitacion);
             $entityManager->flush();
         }
-
+        $this->addFlash('success','Tipo de Habitacion eliminado con exito');
         return $this->redirectToRoute('tipo_habitacion_index');
     }
 }

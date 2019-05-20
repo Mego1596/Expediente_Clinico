@@ -34,8 +34,15 @@ class HabitacionController extends AbstractController
      */
     public function index(HabitacionRepository $habitacionRepository,Security $AuthUser, Clinica $clinica): Response
     {
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT h.*, s.nombre_sala FROM habitacion as h, sala as s, clinica as c WHERE
+        h.sala_id = s.id AND s.clinica_id = c.id AND 
+        c.id = ".$clinica->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
         return $this->render('habitacion/index.html.twig', [
-            'habitaciones' => $habitacionRepository->findAll(),
+            'habitaciones' => $result,
             'user' => $AuthUser,
             'clinica' => $clinica,
         ]);
@@ -66,14 +73,41 @@ class HabitacionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT h.* FROM habitacion as h, sala as s, clinica as cli 
+            WHERE h.sala_id=s.id AND s.clinica_id = cli.id AND cli.id =".$clinica->getId().
+            " AND numero_habitacion = ".$form["numeroHabitacion"]->getData().
+            " AND sala_id = ".$form["sala"]->getData()->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($result == null){
+                $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
+                $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
+                $habitacion->setSala($salaSeleccionada);
+                $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
+                $entityManager->persist($habitacion);
+                $entityManager->flush();
+                $this->addFlash('success','Habitacion añadida con exito');
+                return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
+
+            }else{
+                $this->addFlash('fail', 'Error, el numero de habitacion en esta sala ya esta registrado, por favor ingrese un numero diferente de habitacion');
+                return $this->render('habitacion/new.html.twig', [
+                    'habitacion' => $habitacion,
+                    'editar'    => $editar,
+                    'clinica'   => $clinica,
+                    'form' => $form->createView(),
+                ]);
+            }
             $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
-            $inicialSala = $salaSeleccionada->getNombreSala()[0];
             $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
             $habitacion->setSala($salaSeleccionada);
             $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
             $entityManager->persist($habitacion);
             $entityManager->flush();
-
+            $this->addFlash('success','Habitacion añadida con exito');
             return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
         }
 
@@ -106,22 +140,47 @@ class HabitacionController extends AbstractController
     public function edit(Request $request, Habitacion $habitacion, Clinica $clinica): Response
     {
         $editar = true;
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT s.* FROM sala as s, clinica as cli 
+        WHERE s.clinica_id = cli.id AND cli.id =".$clinica->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $salas = $statement->fetchAll();
+
         $form = $this->createFormBuilder($habitacion)
-        ->add('sala', EntityType::class, array('class' => Sala::class,'placeholder' => 'Seleccione una sala','choice_label' => 'nombreSala',
-                'query_builder' => function (EntityRepository $er) use ($clinica) {
-                return $er->createQueryBuilder('u')
-                    ->andWhere('u.clinica = :val')
-                    ->setParameter('val', (int) $clinica->getId());
-            },'attr' => array('class' => 'form-control')))
-            ->add('tipoHabitacion', EntityType::class, array('class' => TipoHabitacion::class,'placeholder' => 'Seleccione el tipo de habitacion','choice_label' => 'tipoHabitacion','attr' => array('class' => 'form-control')))
-            ->add('numeroHabitacion', IntegerType::class, array('attr' => array('class' => 'form-control')))
-            ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-            ->getForm();
+        ->add('tipoHabitacion', EntityType::class, array('class' => TipoHabitacion::class,'placeholder' => 'Seleccione el tipo de habitacion','choice_label' => 'tipoHabitacion','attr' => array('class' => 'form-control')))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT h.* FROM habitacion as h, sala as s, clinica as cli 
+            WHERE h.sala_id=s.id AND s.clinica_id = cli.id AND cli.id =".$clinica->getId().
+            " AND sala_id = ".$request->request->get('sala').";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($result == null ){
+                if($request->request->get('sala') != 0){
+                    $habitacion->setSala($this->getDoctrine()->getRepository(Sala::class)->find($request->request->get('sala')) );
+                    $this->getDoctrine()->getManager()->flush();
+                }
+            }else{
+                if($habitacion->getId() != $result[0]['id']){
+                    $this->addFlash('fail','Error, ya existe una habitacion en la sala seleccionada');
+                    return $this->render('habitacion/edit.html.twig', [
+                        'habitacion' => $habitacion,
+                        'editar'    => $editar,
+                        'clinica'   => $clinica,
+                        'salas'     => $salas,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }
 
+            
+            $this->addFlash('success','Habitacion modificada con exito');
             return $this->redirectToRoute('habitacion_index', [
                 'clinica' => $clinica->getId(),
             ]);
@@ -131,6 +190,7 @@ class HabitacionController extends AbstractController
             'habitacion' => $habitacion,
             'editar'    => $editar,
             'clinica'   => $clinica,
+            'salas'     => $salas,
             'form' => $form->createView(),
         ]);
     }
@@ -147,7 +207,7 @@ class HabitacionController extends AbstractController
             $entityManager->remove($habitacion);
             $entityManager->flush();
         }
-
+        $this->addFlash('success','Habitacion eliminada con exito');
         return $this->redirectToRoute('habitacion_index',[
                 'clinica' => $clinica->getId(),
             ]);

@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar Camilla{% endblock %}
+
+{% block body %}
+    {{ include('camilla/_form.html.twig') }}
+    <a class="btn btn-secondary  " href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+{% endblock %}

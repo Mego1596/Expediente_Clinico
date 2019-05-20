@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">
+        {% if editar == true %}
+          Modificar Camilla
+        {% else %}
+          Registrar Camilla
+        {% endif %}
+      </h5>
+      <div class="card-body">
+        {{ form_start(form,{'attr': {'id': 'camilla'}}) }}
+          
+        <div class="row">
+	      	{% if (editar != true) %}
+	        	<div class="col-md-12">
+	              {{ form_label(form.numeroCamilla) }}
+	              {{ form_widget(form.numeroCamilla) }}
+	            </div>
+            {% else %}
+	            <div class="col-md-12">
+	              <label for="numeroCambio">Numero de Camilla por el que desea intercambiar</label>
+	              <input type="number" step="1" min="1" id="numeroCambio" name="numeroCambio" class="form-control">
+	            </div>
+            {% endif %}
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              {% if editar == false %}
+	              <div class="col-md-3" style="text-align: left;">
+	                <button id="limpiarDatos" type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+	              </div>
+              {% else %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info" style="visibility:hidden">Limpiar Pantalla</button>
+                </div>
+              {% endif%}
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>

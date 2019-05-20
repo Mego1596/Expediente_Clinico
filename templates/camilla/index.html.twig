@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lista de Salas{% endblock %}
+{% block title %}Lista de Camillas{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -20,8 +20,8 @@
                 </div>
                 <div class="card-body">
                     <div class="pull-right" align="center">
-                        {% if is_granted('ROLE_PERMISSION_NEW_SALA') %}
-                            <a href="{{ path('sala_new',{'clinica': clinica.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-person-booth"></i> Registrar Sala</a>
+                        {% if is_granted('ROLE_PERMISSION_NEW_CAMILLA') %}
+                            <a href="{{ path('camilla_new',{'habitacion': habitacion.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-bed"></i> Registrar Camilla</a>
                         {% endif %}
                     </div>
                     <br/>
@@ -31,45 +31,45 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Nombre de la Sala</th>
+                                            <th id="relevante" class="all">Numero de Camilla</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for sala in salas %}
+                                    {% for camilla in camillas %}
                                         <tr>
-                                            <td>{{ sala.nombre_sala}}</td>
+                                            <td>{{ camilla.numero_camilla}}</td>
                                             <td>
-                                                {% if is_granted('ROLE_PERMISSION_SHOW_SALA') %}
-                                                    <a href="{{ path('sala_show', {'id': sala.id,'clinica':clinica.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_CAMILLA') %}
+                                                    <a href="{{ path('camilla_show', {'id': camilla.id,'habitacion':habitacion.id}) }}" class="btn btn-info">Mostrar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_EDIT_SALA') %}
-                                                    <a href="{{ path('sala_edit', {'id': sala.id,'clinica':clinica.id}) }}" class="btn btn-success">Modificar</a>
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_CAMILLA') %}
+                                                    <a href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_DELETE_SALA') %}
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ sala.id}}">
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_CAMILLA') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ camilla.id}}">
                                                     Eliminar
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal{{ sala.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="exampleModal{{ camilla.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Sala</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Camilla</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Esta seguro que desea eliminar la sala?
+                                                            Esta seguro que desea eliminar la camilla?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                            <form method="post" action="{{ path('sala_delete', {'id': sala.id,'clinica':clinica.id}) }}">
+                                                            <form method="post" action="{{ path('camilla_delete', {'id': camilla.id,'habitacion':habitacion.id}) }}">
                                                                 <input type="hidden" name="_method" value="DELETE">
-                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sala.id) }}">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ camilla.id) }}">
                                                                 <button type="submit" class="btn btn-outline-danger">Si</button>
                                                             </form>
                                                         </div>
