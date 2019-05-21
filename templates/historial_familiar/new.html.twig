@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Historial Familiar{% endblock %}
+
+{% block body %}
+    {{ include('historial_familiar/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_FAMILIAR')) %}
+		<a class="btn btn-secondary" href="{{ path('historial_familiar_index', {'familiar': familiar.id}) }}">Atras</a>
+	{% endif %}
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Lista de Historias Personales{% endblock %}
+{% block title %}Lista de Historias del Familiar{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -21,8 +21,8 @@
                 <div class="card-body">
                     <div class="pull-right" align="center">
                         {% if user.getUser().getRol().getNombreRol() != 'ROLE_PACIENTE' %}
-                            {% if is_granted('ROLE_PERMISSION_NEW_HISTORIAL_PROPIO') %}
-                                <a class="btn btn-success" href="{{path('historial_propio_new',{'expediente': expediente.getId()})}}" style="color: black;"><i class="fas fa-notes-medical"></i> Registrar Historial</a>
+                            {% if is_granted('ROLE_PERMISSION_NEW_HISTORIAL_FAMILIAR') %}
+                                <a class="btn btn-success" href="{{path('historial_familiar_new',{'familiar': familiar.getId()})}}" style="color: black;"><i class="fas fa-notes-medical"></i> Registrar Historial</a>
                             {% endif %}
                         {% endif %}
                     </div>
@@ -38,24 +38,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for historial_propio in historial_propios %}
+                                    {% for historial_familiar in historial_familiares %}
                                         <tr>
-                                            <td>{{ historial_propio.descripcion}}</td>
+                                            <td>{{ historial_familiar.descripcion}}</td>
                                             <td>
-                                                {% if is_granted('ROLE_PERMISSION_SHOW_HISTORIAL_PROPIO') %}
-                                                    <a href="{{ path('historial_propio_show', {'expediente': expediente.getId(), id: historial_propio.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_HISTORIAL_FAMILIAR') %}
+                                                    <a href="{{ path('historial_familiar_show', {'familiar': familiar.getId(), id: historial_familiar.id}) }}" class="btn btn-info">Mostrar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_PROPIO') %}
-                                                    <a href="{{ path('historial_propio_edit', {'expediente': expediente.getId(), id: historial_propio.id}) }}" class="btn btn-success">Modificar</a>
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_FAMILIAR') %}
+                                                    <a href="{{ path('historial_familiar_edit', {'familiar': familiar.getId(), id: historial_familiar.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
 
-                                                {% if is_granted('ROLE_PERMISSION_DELETE_HISTORIAL_PROPIO') %}
-                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ historial_propio.id}}">
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_HISTORIAL_FAMILIAR') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ historial_familiar.id}}">
                                                     Eliminar
                                                     </button>
                                                     <!-- Modal -->
-                                                    <div class="modal fade" id="exampleModal{{ historial_propio.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal fade" id="exampleModal{{ historial_familiar.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
@@ -69,9 +69,9 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
-                                                            <form method="post" action="{{ path('historial_propio_delete', {'expediente': expediente.getId(), id: historial_propio.id}) }}">
+                                                            <form method="post" action="{{ path('historial_familiar_delete', {'familiar': familiar.getId(), id: historial_familiar.id}) }}">
                                                                 <input type="hidden" name="_method" value="DELETE">
-                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ historial_propio.id) }}">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ historial_familiar.id) }}">
                                                                 <button type="submit" class="btn btn-outline-danger">Si</button>
                                                             </form>
                                                         </div>

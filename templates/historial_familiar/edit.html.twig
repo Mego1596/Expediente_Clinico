@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Editar Historial{% endblock %}
+
+{% block body %}
+    {{ include('historial_propio/_form.html.twig', {'button_label': 'Update'}) }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_FAMILIAR')) %}
+		<a class="btn btn-secondary" href="{{ path('historial_familiar_index', {'familiar': familiar.id}) }}">Atras</a>
+	{% endif %}
+{% endblock %}

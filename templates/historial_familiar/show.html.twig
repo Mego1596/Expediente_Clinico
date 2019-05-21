@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalles del Historial Familiar{% endblock %}
+
+{% block body %}
+    <h1>Historial Familiar</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ historial_familiar.id }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ historial_familiar.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ historial_familiar.creadoEn ? historial_familiar.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ historial_familiar.actualizadoEn ? historial_familiar.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_FAMILIAR')) %}
+        <a class="btn btn-secondary" href="{{ path('historial_familiar_index', {'familiar': familiar.id}) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_FAMILIAR')) %}
+        <a class="btn btn-primary" href="{{ path('historial_familiar_edit', {'id': historial_familiar.id,'familiar': familiar.id}) }}">Editar</a>
+    {% endif %}
+{% endblock %}

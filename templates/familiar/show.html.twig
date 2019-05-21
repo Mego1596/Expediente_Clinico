@@ -48,4 +48,8 @@
     {% if(is_granted('ROLE_PERMISSION_EDIT_FAMILIAR')) %}
         <a class="btn btn-primary" href="{{ path('familiar_edit', {'id': familiar.id,'expediente': expediente.id}) }}">Editar</a>
     {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_FAMILIAR')) %}
+        <a class="btn btn-success" href="{{ path('historial_familiar_index', {'familiar': familiar.id}) }}">
+        Registrar Historial</a>
+    {% endif %}
 {% endblock %}
