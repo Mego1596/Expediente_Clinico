@@ -85,7 +85,7 @@ class ExpedienteController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             if($form["nombres"]->getData() != ""){
-                if($form["apellidos"]->getData() != ""){
+                if($request->request->get("apellidos") != ""){
                     if($form["email"]->getData() != ""){
                         if($form["direccion"]->getData() != ""){
                             if($form["telefono"]->getData() != ""){
