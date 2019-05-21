@@ -243,24 +243,38 @@ class UserController extends AbstractController
     {
 
         if(is_null($AuthUser->getUser()->getClinica())){
-            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+            //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
+            $form = $this->createFormBuilder($user)
+            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+            ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
+            ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
+            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
+                'attr' => array('class' => 'form-control')))
+            ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+            ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+            ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+            ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+            ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
+            ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+            ->getForm();
         }else{
-            $clinicas=null;
+            //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
+            $form = $this->createFormBuilder($user)
+            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+            ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
+            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
+                'attr' => array('class' => 'form-control')))
+            ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+            ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+            ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+            ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+            ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
+            ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+            ->getForm();
         }
-        //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
-        $form = $this->createFormBuilder($user)
-        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
-        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
-            'attr' => array('class' => 'form-control')))
-        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-        ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-        ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
-        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-        ->getForm();
+
 
         $form->handleRequest($request);
 
@@ -414,7 +428,6 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
-            'clinicas' => $clinicas,
             'userAuth' => $AuthUser,
             'form' => $form->createView(),
         ]);
