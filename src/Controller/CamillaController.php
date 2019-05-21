@@ -73,7 +73,17 @@ class CamillaController extends AbstractController
             $result = $statement->fetchAll();
 
             if($result == null){
-                $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
+                if($form["numeroCamilla"]->getData() != ""){
+                    $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
+                }else{
+                    $this->addFlash('fail','Error, el numero de camilla no puede estar vacio, por favor ingrese el numero de camilla');
+                    return $this->render('camilla/new.html.twig', [
+                        'camilla' => $camilla,
+                        'habitacion'    => $habitacion,
+                        'editar'        => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }
             }else{
                 $this->addFlash('fail','Error, esta camilla ya esta asignada por favor ingrese una nueva camilla');
                 return $this->render('camilla/new.html.twig', [

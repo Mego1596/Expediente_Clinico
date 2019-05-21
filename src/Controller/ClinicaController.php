@@ -43,10 +43,45 @@ class ClinicaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($clinica);
-            $entityManager->flush();
-
+            if($form["nombreClinica"]->getData() != ""){
+                if($form["direccion"]->getData() != ""){
+                    if($form["telefono"]->getData() != ""){
+                        if($form["email"]->getData() != ""){
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $entityManager->persist($clinica);
+                            $entityManager->flush();
+                        }else{
+                            $this->addFlash('fail', 'Error, el email no puede ir vacio');
+                            return $this->render('clinica/new.html.twig', [
+                                'clinica' => $clinica,
+                                'editar' => $editar,
+                                'form' => $form->createView(),
+                            ]);
+                        }
+                    }else{
+                        $this->addFlash('fail', 'Error, el telefono de contacto no puede ir vacio');
+                        return $this->render('clinica/new.html.twig', [
+                            'clinica' => $clinica,
+                            'editar' => $editar,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                }else{
+                    $this->addFlash('fail', 'Error, la direccion no puede ir vacia');
+                    return $this->render('clinica/new.html.twig', [
+                        'clinica' => $clinica,
+                        'editar' => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }else{
+                $this->addFlash('fail', 'Error, el nombre de la clinica no puede ir vacio');
+                return $this->render('clinica/new.html.twig', [
+                    'clinica' => $clinica,
+                    'editar' => $editar,
+                    'form' => $form->createView(),
+                ]);
+            }
             $this->addFlash('success', 'Clinica creada con exito');
             return $this->redirectToRoute('clinica_index');
         }
