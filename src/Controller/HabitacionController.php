@@ -73,27 +73,71 @@ class HabitacionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            if($form["sala"]->getData() != ""){
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT h.* FROM habitacion as h, sala as s, clinica as cli 
+                WHERE h.sala_id=s.id AND s.clinica_id = cli.id AND cli.id =".$clinica->getId().
+                " AND numero_habitacion = ".$form["numeroHabitacion"]->getData().
+                " AND sala_id = ".$form["sala"]->getData()->getId().";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                if($result == null){
+                    if($form["sala"]->getData() != ""){
+                        if($form["tipoHabitacion"]->getData() != ""){
+                            if($form["numeroHabitacion"]->getData() != ""){
+                                //INICIO DE PROCESO DE DATOS
+                                $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
+                                $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
+                                $habitacion->setSala($salaSeleccionada);
+                                $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
+                                $entityManager->persist($habitacion);
+                                $entityManager->flush();
+                                //FIN DE PROCESO DE DATOS
+                            }else{
+                                $this->addFlash('fail', 'Error, el numero de habitacion no puede estar vacio');
+                                return $this->render('habitacion/new.html.twig', [
+                                    'habitacion' => $habitacion,
+                                    'editar'    => $editar,
+                                    'clinica'   => $clinica,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
+                        }else{
+                            $this->addFlash('fail', 'Error, por favor elija un tipo de habitacion, no puede estar vacio');
+                            return $this->render('habitacion/new.html.twig', [
+                                'habitacion' => $habitacion,
+                                'editar'    => $editar,
+                                'clinica'   => $clinica,
+                                'form' => $form->createView(),
+                            ]); 
+                        }
+                    }else{
+                        $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
+                        return $this->render('habitacion/new.html.twig', [
+                            'habitacion' => $habitacion,
+                            'editar'    => $editar,
+                            'clinica'   => $clinica,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $this->addFlash('success','Habitacion añadida con exito');
+                    return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
 
-            $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY = "SELECT h.* FROM habitacion as h, sala as s, clinica as cli 
-            WHERE h.sala_id=s.id AND s.clinica_id = cli.id AND cli.id =".$clinica->getId().
-            " AND numero_habitacion = ".$form["numeroHabitacion"]->getData().
-            " AND sala_id = ".$form["sala"]->getData()->getId().";";
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $result = $statement->fetchAll();
-            if($result == null){
-                $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
-                $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
-                $habitacion->setSala($salaSeleccionada);
-                $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
-                $entityManager->persist($habitacion);
-                $entityManager->flush();
+                }else{
+                    $this->addFlash('fail', 'Error, el numero de habitacion en esta sala ya esta registrado, por favor ingrese un numero diferente de habitacion');
+                    return $this->render('habitacion/new.html.twig', [
+                        'habitacion' => $habitacion,
+                        'editar'    => $editar,
+                        'clinica'   => $clinica,
+                        'form' => $form->createView(),
+                    ]);
+                }
+                
                 $this->addFlash('success','Habitacion añadida con exito');
                 return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
-
             }else{
-                $this->addFlash('fail', 'Error, el numero de habitacion en esta sala ya esta registrado, por favor ingrese un numero diferente de habitacion');
+                $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
                 return $this->render('habitacion/new.html.twig', [
                     'habitacion' => $habitacion,
                     'editar'    => $editar,
@@ -101,14 +145,7 @@ class HabitacionController extends AbstractController
                     'form' => $form->createView(),
                 ]);
             }
-            $salaSeleccionada = $this->getDoctrine()->getRepository(Sala::class)->find($form["sala"]->getData());
-            $habitacion->setNumeroHabitacion($form['numeroHabitacion']->getData());
-            $habitacion->setSala($salaSeleccionada);
-            $habitacion->setTipoHabitacion($form["tipoHabitacion"]->getData());
-            $entityManager->persist($habitacion);
-            $entityManager->flush();
-            $this->addFlash('success','Habitacion añadida con exito');
-            return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
+            
         }
 
         return $this->render('habitacion/new.html.twig', [

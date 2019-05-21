@@ -41,7 +41,8 @@ class UserController extends AbstractController
                 WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_PACIENTE";';
         }else{
             $RAW_QUERY = 'SELECT u.id as id,u.nombres as Nombres, u.apellidos as Apellidos,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c
-                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_SA" AND r.nombre_rol != "ROLE_PACIENTE";';
+                WHERE u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_SA" AND r.nombre_rol != "ROLE_PACIENTE" AND c.id= '.$AuthUser->getUser()->getClinica()->getId().'
+                AND u.id !='.$AuthUser->getUser()->getId().';';
         }
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
@@ -50,7 +51,7 @@ class UserController extends AbstractController
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
             'users' => $result,
-            'user' => $AuthUser,
+            'userAuth' => $AuthUser,
         ]);
     }
 
@@ -59,16 +60,22 @@ class UserController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_USER')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Security $AuthUser): Response
     {
-        
+        $clinicaPerteneciente = $AuthUser->getUser()->getClinica();
+
+        if(is_null($AuthUser->getUser()->getClinica())){
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+        }else{
+            $clinicas=null;
+        }
+
         $user = new User();
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
-        ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('u')
@@ -85,36 +92,132 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getEntityManager();
-            $user->setEmail($form["email"]->getData());
-            $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-            $user->setNombres($form["nombres"]->getData());
-            $user->setApellidos($form["apellidos"]->getData());
-             $user->setRol($form["rol"]->getData());
-            $user->setClinica($form["clinica"]->getData());
-            $user->setIsActive(true);
-            if($form["emergencia"]->getData() != ""){
-                $user->setEmergencia($form["emergencia"]->getData());
+            if($form["nombres"]->getData() != ""){
+                if($form["apellidos"]->getData() != ""){
+                    if($form["email"]->getData() != ""){
+                        if($form["password"]->getData() != ""){
+                            if($form["rol"]->getData() != ""){
+                                //PROCESAMIENTO DE DATOS
+                                if(is_null($AuthUser->getUser()->getClinica())){
+                                    //SI EL USUARIO LOGGEADO ES EL ROLE_SA
+                                    //INICIO PROCESO DE DATOS
+                                    $user->setEmail($form["email"]->getData());
+                                    $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
+                                    $user->setNombres($form["nombres"]->getData());
+                                    $user->setApellidos($form["apellidos"]->getData());
+                                    $user->setRol($form["rol"]->getData());
+                                    $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
+                                    $user->setIsActive(true);
+                                    if($form["rol"]->getData()->getId() != 2){
+                                        $user->setEmergencia(0);
+                                        $user->setPlanta(0);
+                                    }else{
+                                        if($form["emergencia"]->getData() != ""){
+                                        $user->setEmergencia($form["emergencia"]->getData());
+                                        }else{
+                                            $user->setEmergencia(0);
+                                        }
+                                        if($form["planta"]->getData() != ""){
+                                            $user->setPlanta($form["planta"]->getData());
+                                        }else{
+                                            $user->setPlanta(0);
+                                        }
+                                        if($form["usuario_especialidades"]->getData() != ""){
+                                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                                            
+                                        }
+                                    }
+                                    $entityManager->persist($user);
+                                    $entityManager->flush();
+                                    //FIN PROCESO DE DATOS
+                                }else{
+                                    //SI EL USUARIO LOGGEADO TIENE CLINICA
+                                    //INICIO PROCESO DE DATOS
+                                    $user->setEmail($form["email"]->getData());
+                                    $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
+                                    $user->setNombres($form["nombres"]->getData());
+                                    $user->setApellidos($form["apellidos"]->getData());
+                                    $user->setRol($form["rol"]->getData());
+                                    $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
+                                    $user->setIsActive(true);
+                                    if($form["rol"]->getData()->getId() != 2){
+                                        $user->setEmergencia(0);
+                                        $user->setPlanta(0);
+                                    }else{
+                                        if($form["emergencia"]->getData() != ""){
+                                        $user->setEmergencia($form["emergencia"]->getData());
+                                        }else{
+                                            $user->setEmergencia(0);
+                                        }
+                                        if($form["planta"]->getData() != ""){
+                                            $user->setPlanta($form["planta"]->getData());
+                                        }else{
+                                            $user->setPlanta(0);
+                                        }
+                                        if($form["usuario_especialidades"]->getData() != ""){
+                                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                                            
+                                        }
+                                    }
+                                    $entityManager->persist($user);
+                                    $entityManager->flush();
+                                    //FIN PROCESO DE DATOS
+                                }
+                                //FIN PROCESAMIENTO DE DATOS
+                            }else{
+                                $this->addFlash('fail','Error, el rol de usuario no puede ir vacio');
+                                return $this->render('user/new.html.twig', [
+                                    'user' => $user,
+                                    'clinicas'   => $clinicas,
+                                    'pertenece'  => $clinicaPerteneciente,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
+                        }else{
+                            $this->addFlash('fail','Error, la contraseña de usuario no puede ir vacia');
+                            return $this->render('user/new.html.twig', [
+                                'user' => $user,
+                                'clinicas'   => $clinicas,
+                                'pertenece'  => $clinicaPerteneciente,
+                                'form' => $form->createView(),
+                            ]);
+                        }
+                    }else{
+                        $this->addFlash('fail','Error, el email de usuario no puede ir vacio');
+                        return $this->render('user/new.html.twig', [
+                            'user' => $user,
+                            'clinicas'   => $clinicas,
+                            'pertenece'  => $clinicaPerteneciente,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                }else{
+                    $this->addFlash('fail','Error, los apellidos de usuario no pueden ir vacios');
+                    return $this->render('user/new.html.twig', [
+                        'user' => $user,
+                        'clinicas'   => $clinicas,
+                        'pertenece'  => $clinicaPerteneciente,
+                        'form' => $form->createView(),
+                    ]);
+                }
             }else{
-                $user->setEmergencia(false);
+                $this->addFlash('fail','Error, los nombres de usuario no pueden ir vacios');
+                return $this->render('user/new.html.twig', [
+                    'user' => $user,
+                    'clinicas'   => $clinicas,
+                    'pertenece'  => $clinicaPerteneciente,
+                    'form' => $form->createView(),
+                ]);
             }
-            if($form["planta"]->getData() != ""){
-                $user->setPlanta($form["planta"]->getData());
-            }else{
-                $user->setPlanta(false);
-            }
-            if($form["usuario_especialidades"]->getData() != ""){
-                $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
-                
-            }
-            $entityManager->persist($user);
-            $entityManager->flush();
-
+            
             $this->addFlash('success', 'Usuario creado con exito');
             return $this->redirectToRoute('user_index');
         }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
+            'clinicas'   => $clinicas,
+            'pertenece'  => $clinicaPerteneciente,
             'form' => $form->createView(),
         ]);
     }
@@ -136,14 +239,19 @@ class UserController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_USER')")
      */
-    public function edit(Request $request, User $user): Response
+    public function edit(Request $request, User $user, Security $AuthUser): Response
     {
+
+        if(is_null($AuthUser->getUser()->getClinica())){
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+        }else{
+            $clinicas=null;
+        }
         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
         $form = $this->createFormBuilder($user)
         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-        ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
             'attr' => array('class' => 'form-control')))
         ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
@@ -159,81 +267,155 @@ class UserController extends AbstractController
         /////////////////////////////// ZONA DE PROCESAMIENTO /////////////////////////////////////
         if ($form->isSubmitted() && $form->isValid()) 
         {
-            $agregar_especialidades = true;
-            $exito = true;
-            $pwd = $user->getPassword();
+            if(is_null($AuthUser->getUser()->getClinica())){
+                //INICIO DE PROCESO DE DATOS
+                $agregar_especialidades = true;
+                $exito = true;
+                $pwd = $user->getPassword();
 
-            if (empty($form['nuevo_password']->getData()) && empty($form['repetir_nuevo_password']->getData()))
-            {   
-            }
-            else
-            {
-                if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
-                {
-                    $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                if (empty($form['nuevo_password']->getData()) && empty($form['repetir_nuevo_password']->getData()))
+                {   
                 }
                 else
                 {
-                    $this->addFlash('fail', 'Contraseñas deben coincidir');
-                    $exito = false;
-                }
-            }
-
-            if ($exito)
-            {
-                $entityManager = $this->getDoctrine()->getEntityManager();
-                $rol = new Rol();
-                $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneById($form['rol']->getData());
-
-                // Caso en que el ROL era antes de doctor y ahora sera otro rol
-                if ($rol->getId() != 2)
-                {
-                    $agregar_especialidades = false;
-                }
-                
-                $user->setPassword($pwd);
-                $user->setEmail($form["email"]->getData());
-                $user->setNombres($form["nombres"]->getData());
-                $user->setApellidos($form["apellidos"]->getData());
-                $user->setRol($rol);
-                $user->setIsActive(true);
-
-
-                $user->setClinica($form["clinica"]->getData());
-
-                if ($agregar_especialidades)
-                {
-                    if($form["usuario_especialidades"]->getData() != ""){
-                        $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                    {
+                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
                     }
-                    if($form["emergencia"]->getData() != ""){
-                    $user->setEmergencia($form["emergencia"]->getData());
-                    }else{
+                    else
+                    {
+                        $this->addFlash('fail', 'Contraseñas deben coincidir');
+                        $exito = false;
+                    }
+                }
+
+                if ($exito)
+                {
+                    $entityManager = $this->getDoctrine()->getEntityManager();
+                    $rol = new Rol();
+                    $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneById($form['rol']->getData());
+
+                    // Caso en que el ROL era antes de doctor y ahora sera otro rol
+                    if ($rol->getId() != 2)
+                    {
+                        $agregar_especialidades = false;
+                    }
+                    
+                    $user->setPassword($pwd);
+                    $user->setEmail($form["email"]->getData());
+                    $user->setNombres($form["nombres"]->getData());
+                    $user->setApellidos($form["apellidos"]->getData());
+                    $user->setRol($rol);
+                    $user->setIsActive(true);
+                    $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
+
+                    if ($agregar_especialidades)
+                    {
+                        if($form["usuario_especialidades"]->getData() != ""){
+                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                        }
+                        if($form["emergencia"]->getData() != ""){
+                        $user->setEmergencia($form["emergencia"]->getData());
+                        }else{
+                            $user->setEmergencia(false);
+                        }
+                        if($form["planta"]->getData() != ""){
+                            $user->setPlanta($form["planta"]->getData());
+                        }else{
+                            $user->setPlanta(false);
+                        }
+                    }
+                    else
+                    {
+                        $user->setUsuarioEspecialidades(null);
                         $user->setEmergencia(false);
-                    }
-                    if($form["planta"]->getData() != ""){
-                        $user->setPlanta($form["planta"]->getData());
-                    }else{
                         $user->setPlanta(false);
                     }
+
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    //FIN DE PROCESO DE DATOS
+                    $this->addFlash('success', 'Usuario modificado con exito');
+                    return $this->redirectToRoute('user_index');
+                }
+            }else{
+                //INICIO DE PROCESO DE DATOS
+                $agregar_especialidades = true;
+                $exito = true;
+                $pwd = $user->getPassword();
+
+                if (empty($form['nuevo_password']->getData()) && empty($form['repetir_nuevo_password']->getData()))
+                {   
                 }
                 else
                 {
-                    $user->setUsuarioEspecialidades(null);
-                    $user->setEmergencia(false);
-                    $user->setPlanta(false);
+                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                    {
+                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                    }
+                    else
+                    {
+                        $this->addFlash('fail', 'Contraseñas deben coincidir');
+                        $exito = false;
+                    }
                 }
 
-                $entityManager->persist($user);
-                $entityManager->flush();
+                if ($exito)
+                {
+                    $entityManager = $this->getDoctrine()->getEntityManager();
+                    $rol = new Rol();
+                    $rol = $this->getDoctrine()->getRepository(Rol::class)->findOneById($form['rol']->getData());
 
-                $this->addFlash('success', 'Usuario modificado con exito');
-                return $this->redirectToRoute('user_index');
-            }            
+                    // Caso en que el ROL era antes de doctor y ahora sera otro rol
+                    if ($rol->getId() != 2)
+                    {
+                        $agregar_especialidades = false;
+                    }
+                    
+                    $user->setPassword($pwd);
+                    $user->setEmail($form["email"]->getData());
+                    $user->setNombres($form["nombres"]->getData());
+                    $user->setApellidos($form["apellidos"]->getData());
+                    $user->setRol($rol);
+                    $user->setIsActive(true);
+                    $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
+
+                    if ($agregar_especialidades)
+                    {
+                        if($form["usuario_especialidades"]->getData() != ""){
+                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                        }
+                        if($form["emergencia"]->getData() != ""){
+                        $user->setEmergencia($form["emergencia"]->getData());
+                        }else{
+                            $user->setEmergencia(false);
+                        }
+                        if($form["planta"]->getData() != ""){
+                            $user->setPlanta($form["planta"]->getData());
+                        }else{
+                            $user->setPlanta(false);
+                        }
+                    }
+                    else
+                    {
+                        $user->setUsuarioEspecialidades(null);
+                        $user->setEmergencia(false);
+                        $user->setPlanta(false);
+                    }
+
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    //FIN DE PROCESO DE DATOS
+                    $this->addFlash('success', 'Usuario modificado con exito');
+                    return $this->redirectToRoute('user_index');
+                }   
+            }         
         }
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
+            'clinicas' => $clinicas,
+            'userAuth' => $AuthUser,
             'form' => $form->createView(),
         ]);
     }

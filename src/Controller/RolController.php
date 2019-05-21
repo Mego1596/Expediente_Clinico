@@ -74,14 +74,32 @@ class RolController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $rol->setNombreRol($form["nombreRol"]->getData());
-            $rol->setDescripcion($form["descripcion"]->getData());
-            foreach ($form["permisos"]->getData() as $permiso) {
-                $rol->addPermiso($permiso);    
+            if($form["nombreRol"]->getData() != ""){
+                if($form["descripcion"]->getData() != ""){
+                    //INICIO PROCESO DE DATOS
+                    $rol->setNombreRol($form["nombreRol"]->getData());
+                    $rol->setDescripcion($form["descripcion"]->getData());
+                    foreach ($form["permisos"]->getData() as $permiso) {
+                        $rol->addPermiso($permiso);    
+                    }
+                    $entityManager->persist($rol);
+                    $entityManager->flush();
+                    //FIN PROCESO DE DATOS
+                }else{
+                    $this->addFlash('fail', 'Error, la descripcion del rol no puede estar vacia');
+                    return $this->render('rol/new.html.twig', [
+                        'rol' => $rol,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }else{
+                $this->addFlash('fail', 'Error, el nombre del rol no puede estar vacio');
+                return $this->render('rol/new.html.twig', [
+                    'rol' => $rol,
+                    'form' => $form->createView(),
+                ]);
             }
-            $entityManager->persist($rol);
-            $entityManager->flush();
-
+            
             $this->addFlash('success', 'Rol creado con exito');
             return $this->redirectToRoute('rol_index');
         }

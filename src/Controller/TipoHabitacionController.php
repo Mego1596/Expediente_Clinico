@@ -45,8 +45,17 @@ class TipoHabitacionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tipoHabitacion);
-            $entityManager->flush();
+            if($form["tipoHabitacion"]->getData() != ""){
+                $entityManager->persist($tipoHabitacion);
+                $entityManager->flush();
+            }else{
+                $this->addFlash('fail','Error, el tipo de habitacion no puede estar vacio');
+                return $this->render('tipo_habitacion/new.html.twig', [
+                    'tipo_habitacion' => $tipoHabitacion,
+                    'editar' => $editar,
+                    'form' => $form->createView(),
+                ]);
+            }
             $this->addFlash('success','Tipo de Habitacion añadido con exito');
             return $this->redirectToRoute('tipo_habitacion_index');
         }

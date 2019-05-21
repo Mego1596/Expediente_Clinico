@@ -51,9 +51,20 @@ class SalaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $sala->setClinica($clinica);
-            $entityManager->persist($sala);
-            $entityManager->flush();
+            if($form["nombreSala"]->getData() != ""){
+                $sala->setClinica($clinica);
+                $entityManager->persist($sala);
+                $entityManager->flush();
+            }else{
+                $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacio');
+                return $this->render('sala/new.html.twig', [
+                    'sala' => $sala,
+                    'editar' =>$editar,
+                    'clinica'=>$clinica,
+                    'form' => $form->createView(),
+                ]);
+            }
+            
             $this->addFlash('success','Sala añadida con exito');
             return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }

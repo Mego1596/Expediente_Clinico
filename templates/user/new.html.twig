@@ -29,10 +29,17 @@
               {{ form_label(form.email) }}
               {{ form_widget(form.email) }}
             </div>
-            <div class="col-md-4">
-              {{ form_label(form.clinica) }}
-              {{ form_widget(form.clinica) }}
+            {% if pertenece == null %}
+            <div class="col-md-4" style="color:white">
+              <label style="align-content: center;">Clinica:</label>
+              <select class="form-control" id="clinica" name="clinica" required>
+              <option value="">Seleccionar la Clinica</option>
+                  {% for clinica in clinicas %}
+                    <option value="{{clinica.id}}"> {{clinica.nombreClinica}}</option>
+                  {% endfor %}
+              </select>
             </div>
+            {% endif %}
             <div class="col-md-4">
               {{ form_label(form.rol) }}
               {{ form_widget(form.rol) }}

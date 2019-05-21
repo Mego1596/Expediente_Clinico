@@ -10,8 +10,8 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
                             Bienvenido al Sistema Informatico de la Clinica Hospitalaria
-                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
-                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% if(userAuth.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{userAuth.getUser().getClinica().getNombreClinica()}}
                             {% else %}
                                 
                             {% endif %}
@@ -33,7 +33,9 @@
                                         <tr>
                                             <th id="relevante" class="all">Nombre Completo</th>
                                             <th id="relevante" class="all">Email</th>
-                                            <th id="relevante" class="all">Clininca</th>
+                                            {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                            <th id="relevante" class="all">Clinica</th>
+                                            {% endif %}
                                             <th id="relevante" class="all">Rol</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
@@ -43,7 +45,9 @@
                                         <tr>
                                             <td>{{ user.Nombres }} {{ user.Apellidos }}</td>
                                             <td>{{ user.email }}</td>
-                                            <td>{{ user.clinica}}</td>
+                                            {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                                <td>{{ user.clinica}}</td>
+                                            {% endif %}
                                             <td>{{ user.rol}}</td>
 
                                             <td>

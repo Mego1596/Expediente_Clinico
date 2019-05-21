@@ -45,8 +45,17 @@ class GeneroController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($genero);
-            $entityManager->flush();
+            if($form["descripcion"]->getData() != ""){
+                $entityManager->persist($genero);
+                $entityManager->flush();
+            }else{
+                $this->addFlash('fail', 'El nombre del genero no puede estar vacio');
+                return $this->render('genero/new.html.twig', [
+                    'especialidad' => $genero,
+                    'editar' => $editar,
+                    'form' => $form->createView(),
+                ]);
+            }
 
             $this->addFlash('success', 'Genero agregado con exito');
             return $this->redirectToRoute('genero_index');
