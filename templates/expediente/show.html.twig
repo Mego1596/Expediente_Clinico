@@ -55,4 +55,7 @@
 {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
 <a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Registrar Historial</a>
 {% endif %}
+{% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
+<a class="btn btn-success" href="{{ path('familiar_index', {'expediente': expediente.id}) }}">Registrar Familiar</a>
+{% endif %}
 {% endblock %}

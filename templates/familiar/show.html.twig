@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Detalles del Familiar{% endblock %}
+
+{% block body %}
+    <h1>Familiar</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ familiar.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombres</th>
+                <td>{{ familiar.nombres }}</td>
+            </tr>
+            <tr>
+                <th>Apellidos</th>
+                <td>{{ familiar.apellidos }}</td>
+            </tr>
+            <tr>
+                <th>FechaNacimiento</th>
+                <td>{{ familiar.fechaNacimiento ? familiar.fechaNacimiento|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ familiar.telefono }}</td>
+            </tr>
+            <tr>
+                <th>Descripcion</th>
+                <td>{{ familiar.descripcion }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ familiar.creadoEn ? familiar.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ familiar.actualizadoEn ? familiar.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
+        <a class="btn btn-secondary" href="{{ path('familiar_index', {'expediente': expediente.id}) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_FAMILIAR')) %}
+        <a class="btn btn-primary" href="{{ path('familiar_edit', {'id': familiar.id,'expediente': expediente.id}) }}">Editar</a>
+    {% endif %}
+{% endblock %}

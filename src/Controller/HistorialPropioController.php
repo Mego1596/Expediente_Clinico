@@ -20,6 +20,8 @@ class HistorialPropioController extends AbstractController
 {
     /**
      * @Route("/{expediente}", name="historial_propio_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')")
      */
     public function index(HistorialPropioRepository $historialPropioRepository, Expediente $expediente,Security $AuthUser): Response
     {
@@ -37,6 +39,8 @@ class HistorialPropioController extends AbstractController
 
     /**
      * @Route("/new/{expediente}", name="historial_propio_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIAL_PROPIO')")
      */
     public function new(Request $request, Expediente $expediente): Response
     {
@@ -75,6 +79,8 @@ class HistorialPropioController extends AbstractController
 
     /**
      * @Route("/{id}/{expediente}", name="historial_propio_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_HISTORIAL_PROPIO')")
      */
     public function show(HistorialPropio $historialPropio, Expediente $expediente): Response
     {
@@ -86,6 +92,8 @@ class HistorialPropioController extends AbstractController
 
     /**
      * @Route("/{id}/{expediente}/edit", name="historial_propio_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_PROPIO')")
      */
     public function edit(Request $request, HistorialPropio $historialPropio, Expediente $expediente): Response
     {
@@ -109,6 +117,8 @@ class HistorialPropioController extends AbstractController
 
     /**
      * @Route("/{id}/{expediente}", name="historial_propio_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_HISTORIAL_PROPIO')")
      */
     public function delete(Request $request, HistorialPropio $historialPropio, Expediente $expediente): Response
     {

@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Familiar{% endblock %}
+
+{% block body %}
+    {{ include('familiar/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
+		<a class="btn btn-secondary" href="{{ path('familiar_index', {'expediente': expediente.id}) }}">Atras</a>
+	{% endif %}
+{% endblock %}
