@@ -61,7 +61,8 @@ class ExpedienteController extends AbstractController
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function new(Request $request, Security $AuthUser): Response
-    {   $editar = false;
+    {
+        $editar = false;
         $expediente = new Expediente();
         $clinicaPerteneciente = $AuthUser->getUser()->getClinica();
 
@@ -254,7 +255,7 @@ class ExpedienteController extends AbstractController
                                                 $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                                                 $statement->execute();
                                                 $result = $statement->fetchAll();
-                                                if(is_null($result)){
+                                                if($result == null){
                                                     $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
                                                 }else{
                                                     $this->addFlash('fail','Error el expediente ya existe');
@@ -377,11 +378,28 @@ class ExpedienteController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
      */
-    public function show(Expediente $expediente): Response
-    {   if($expediente->getHabilitado()){
-        return $this->render('expediente/show.html.twig', [
-            'expediente' => $expediente,
-        ]);
+    public function show(Expediente $expediente, Security $AuthUser): Response
+    {   
+        //VALIDACION DE BLOQUEO DE RUTAS EN CASO DE INTENTAR ACCEDER A REGISTROS DE OTRAS CLINICAS SI NO ES ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+                if($expediente->getHabilitado()){
+                    return $this->render('expediente/show.html.twig', [
+                        'expediente' => $expediente,
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
+            }else{
+                $this->addFlash('fail', 'Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }
+        }
+        if($expediente->getHabilitado()){
+            return $this->render('expediente/show.html.twig', [
+                'expediente' => $expediente,
+            ]);
         }else{
             $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
@@ -395,6 +413,96 @@ class ExpedienteController extends AbstractController
      */
     public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
     {   
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+                if($expediente->getHabilitado()){
+                    $editar = true;
+                    $expediente->nombres = $expediente->getUsuario()->getNombres();
+                    $expediente->email = $expediente->getUsuario()->getEmail();
+                    $form = $this->createFormBuilder($expediente)
+                    ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
+                    ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('apellidoCasada',TextType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
+                    ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
+                    ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+                    ->getForm();
+
+                    $form->handleRequest($request);
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
+                        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $usuario = $statement->fetchAll();
+                        if (count($usuario) > 0)
+                        {
+                            $this->addFlash('fail', 'Usuario con este email ya existe');
+                            return $this->render('expediente/edit.html.twig',[
+                                    'expediente' => $expediente,
+                                    'form' => $form->createView(),
+                                    'editar' => $editar,
+                                    ]);
+                        }
+                        if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
+                                if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
+                                    $entityManager = $this->getDoctrine()->getManager();
+                                    $user = $expediente->getUsuario();
+                                    $user->setNombres($form["nombres"]->getData());
+                                    $user->setEmail($form["email"]->getData());
+                                    $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+                                    $entityManager->persist($user);
+                                    $expediente->setGenero($form["genero"]->getData());
+                                    $expediente->setDireccion($form["direccion"]->getData());
+                                    $expediente->setTelefono($form["telefono"]->getData());
+                                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                                    $entityManager->persist($expediente);
+                                    $entityManager->flush();
+                                    $this->addFlash('success', 'Paciente modificado con exito');
+                                    return $this->redirectToRoute('expediente_index');
+                                }else{
+                                    $this->addFlash('fail', 'ambas contraseñas deben coincidir');
+                                    return $this->render('expediente/edit.html.twig',[
+                                    'expediente' => $expediente,
+                                    'form' => $form->createView(),
+                                    'editar' => $editar,
+                                    ]);
+                                }
+                            }else{
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $user = $expediente->getUsuario();
+                                $user->setNombres($form["nombres"]->getData());
+                                $user->setEmail($form["email"]->getData());
+                                $entityManager->persist($user);
+                                $expediente->setGenero($form["genero"]->getData());
+                                $expediente->setDireccion($form["direccion"]->getData());
+                                $expediente->setTelefono($form["telefono"]->getData());
+                                $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                                $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                                $entityManager->persist($expediente);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Paciente modificado con exito');
+                                return $this->redirectToRoute('expediente_index');
+                            }
+                    }
+                    return $this->render('expediente/edit.html.twig', [
+                        'expediente' => $expediente,
+                        'editar'     => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
+            }else{
+                $this->addFlash('fail', 'Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }
+        }
         if($expediente->getHabilitado()){
             $editar = true;
             $expediente->nombres = $expediente->getUsuario()->getNombres();
@@ -484,8 +592,23 @@ class ExpedienteController extends AbstractController
      * @Route("/{id}", name="expediente_delete", methods={"DELETE"})
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE')")
      */
-    public function delete(Request $request, Expediente $expediente): Response
+    public function delete(Request $request, Expediente $expediente, Security $AuthUser): Response
     {
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+                if ($this->isCsrfTokenValid('delete'.$expediente->getId(), $request->request->get('_token'))) {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $expediente->setHabilitado(false);
+                    $entityManager->persist($expediente);
+                    $entityManager->flush();
+                }
+
+                return $this->redirectToRoute('expediente_index');
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }  
+        } 
         if ($this->isCsrfTokenValid('delete'.$expediente->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $expediente->setHabilitado(false);

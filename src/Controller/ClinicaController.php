@@ -24,8 +24,14 @@ class ClinicaController extends AbstractController
      */
     public function index(ClinicaRepository $clinicaRepository, Security $AuthUser): Response
     {
+        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            $clinicas = $clinicaRepository->findBy(['id' => $AuthUser->getUser()->getClinica()->getId()]);
+        }else{
+            $clinicas = $clinicaRepository->findAll();
+        }   
         return $this->render('clinica/index.html.twig', [
-            'clinicas' => $clinicaRepository->findAll(),
+            'clinicas' => $clinicas,
             'user' => $AuthUser,
         ]);
     }
@@ -98,8 +104,21 @@ class ClinicaController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_CLINICA')")
      */
-    public function show(Clinica $clinica): Response
+    public function show(Clinica $clinica, Security $AuthUser): Response
     {
+        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
+                return $this->render('clinica/show.html.twig', [
+                    'clinica' => $clinica,
+                ]);
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('clinica_index', [
+                    'id' => $clinica->getId(),
+                ]);
+            }
+        }
         return $this->render('clinica/show.html.twig', [
             'clinica' => $clinica,
         ]);
@@ -110,21 +129,31 @@ class ClinicaController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_CLINICA')")
      */
-    public function edit(Request $request, Clinica $clinica): Response
+    public function edit(Request $request, Clinica $clinica, Security $AuthUser): Response
     {
-        $editar = true;
-        $form = $this->createForm(ClinicaType::class, $clinica);
-        $form->handleRequest($request);
+        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
+                $editar = true;
+                $form = $this->createForm(ClinicaType::class, $clinica);
+                $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Clinica modificada con exito');
-            return $this->redirectToRoute('clinica_index', [
-                'id' => $clinica->getId(),
-            ]);
+                    $this->addFlash('success', 'Clinica modificada con exito');
+                    return $this->redirectToRoute('clinica_index', [
+                        'id' => $clinica->getId(),
+                    ]);
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('clinica_index', [
+                    'id' => $clinica->getId(),
+                ]);
+            }
         }
-
+        //FIN VALIDACION
         return $this->render('clinica/edit.html.twig', [
             'clinica' => $clinica,
             'editar' => $editar,
@@ -139,6 +168,24 @@ class ClinicaController extends AbstractController
      */
     public function delete(Request $request, Clinica $clinica): Response
     {
+        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
+                if ($this->isCsrfTokenValid('delete'.$clinica->getId(), $request->request->get('_token'))) {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->remove($clinica);
+                    $entityManager->flush();
+                }
+                $this->addFlash('success', 'Clinica eliminada con exito');
+                return $this->redirectToRoute('clinica_index');
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('clinica_index', [
+                    'id' => $clinica->getId(),
+                ]);
+            }
+        }
+        //FIN VALIDACION
         if ($this->isCsrfTokenValid('delete'.$clinica->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($clinica);

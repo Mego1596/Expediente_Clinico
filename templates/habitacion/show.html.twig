@@ -24,7 +24,7 @@
     {% if(is_granted('ROLE_PERMISSION_EDIT_HABITACION')) %}
         <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
     {% endif %}
-    {% if is_granted('ROLE_PERMISSION_INDEX_HABITACION')%}
+    {% if is_granted('ROLE_PERMISSION_INDEX_CAMILLA')%}
         <a class="btn btn-success" href="{{path('camilla_index', {'habitacion':habitacion.id} )}}">Asignar Camillas</a>
     {% endif %}
 {% endblock %}
