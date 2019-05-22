@@ -53,6 +53,11 @@ class HistoriaMedica
      */
     private $actualizado_en;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $codigoEspecifico;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class HistoriaMedica
     public function setActualizadoEn(?\DateTimeInterface $actualizado_en): self
     {
         $this->actualizado_en = $actualizado_en;
+
+        return $this;
+    }
+
+    public function getCodigoEspecifico(): ?string
+    {
+        return $this->codigoEspecifico;
+    }
+
+    public function setCodigoEspecifico(string $codigoEspecifico): self
+    {
+        $this->codigoEspecifico = $codigoEspecifico;
 
         return $this;
     }

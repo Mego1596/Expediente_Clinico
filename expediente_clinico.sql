@@ -1,3 +1,28 @@
+INSERT INTO `diagnostico`(`id`, `descripcion`, `creado_en`, `actualizado_en`, `codigo_categoria`) VALUES 
+(1,'Ciertas enfermedades infecciosas y parasitarias',NULL,NULL,'A00-B99'),
+(2,'Neoplasias',NULL,NULL,'C00-D48'),
+(3,'Enfermedades de la sangre y de los órganos hematopoyéticos y otros trastornos que afectan el mecanismo de la inmunidad',NULL,NULL,'D50-D89'),
+(4,'Enfermedades endocrinas, nutricionales y metabólicas',NULL,NULL,'E00-E90'),
+(5,'Trastornos mentales y del comportamiento',NULL,NULL,'F00-F99'),
+(6,'Enfermedades del sistema nervioso',NULL,NULL,'G00-G99'),
+(7,'Enfermedades del ojo y sus anexos',NULL,NULL,'H00-H59'),
+(8,'Enfermedades del oído y de la apófisis mastoides',NULL,NULL,'H60-H95'),
+(9,'Enfermedades del sistema circulatorio',NULL,NULL,'I00-I99'),
+(10,'Enfermedades del sistema respiratorio',NULL,NULL,'J00-J99'),
+(11,'Enfermedades del aparato digestivo',NULL,NULL,'K00-K93'),
+(12,'Enfermedades de la piel y el tejido subcutáneo',NULL,NULL,'L00-L99'),
+(13,'Enfermedades del sistema osteomuscular y del tejido conectivo',NULL,NULL,'M00-M99'),
+(14,'Enfermedades del aparato genitourinario',NULL,NULL,'N00-N99'),
+(15,'Embarazo, parto y puerperio',NULL,NULL,'O00-O99'),
+(16,'Ciertas afecciones originadas en el periodo perinatal',NULL,NULL,'P00-P96'),
+(17,'Malformaciones congénitas, deformidades y anomalías cromosómicas',NULL,NULL,'Q00-Q99'),
+(18,'Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte',NULL,NULL,'R00-R99'),
+(19,'Traumatismos, envenenamientos y algunas otras consecuencias de causa externa',NULL,NULL,'S00-T98'),
+(20,'Causas externas de morbilidad y de mortalidad',NULL,NULL,'V01-Y98'),
+(21,'Factores que influyen en el estado de salud y contacto con los servicios de salud',NULL,NULL,'Z00-099'),
+(22,'Códigos para situaciones especiales',NULL,NULL,'U00-U99');
+
+
 INSERT INTO `clinica` (`id`, `nombre_clinica`, `direccion`, `telefono`, `email`, `creado_en`, `actualizado_en`) VALUES
 (1, 'CLINICA 1', 'San Salvador', '2257-7777', 'gggg@gmail.com', NULL, NULL),
 (2, 'CLINICA 2', 'San Salvador', '1111-1111', 'go14002@ues.edu.sv', NULL, NULL);

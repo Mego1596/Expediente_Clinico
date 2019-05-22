@@ -43,6 +43,11 @@ class Diagnostico
      */
     private $planTratamientos;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $codigoCategoria;
+
     public function __construct()
     {
         $this->planTratamientos = new ArrayCollection();
@@ -133,6 +138,18 @@ class Diagnostico
                 $planTratamiento->setDiagnostico(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCodigoCategoria(): ?string
+    {
+        return $this->codigoCategoria;
+    }
+
+    public function setCodigoCategoria(string $codigoCategoria): self
+    {
+        $this->codigoCategoria = $codigoCategoria;
 
         return $this;
     }
