@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar Signos Vitales{% endblock %}
+
+{% block body %}
+    {{ include('signo_vital/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
+    	<a class="btn btn-secondary" href="{{ path('signo_vital_index',{'cita': cita.id }) }}">Atras</a>
+    {% endif %}
+{% endblock %}

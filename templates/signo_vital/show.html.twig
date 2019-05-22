@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SignoVital{% endblock %}
+
+{% block body %}
+    <h1>SignoVital</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ signo_vital.id }}</td>
+            </tr>
+            <tr>
+                <th>Peso</th>
+                <td>{{ signo_vital.peso }}</td>
+            </tr>
+            <tr>
+                <th>Temperatura</th>
+                <td>{{ signo_vital.temperatura }}</td>
+            </tr>
+            <tr>
+                <th>Estatura</th>
+                <td>{{ signo_vital.estatura }}</td>
+            </tr>
+            <tr>
+                <th>PresionArterial</th>
+                <td>{{ signo_vital.presionArterial }}</td>
+            </tr>
+            <tr>
+                <th>RitmoCardiaco</th>
+                <td>{{ signo_vital.ritmoCardiaco }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ signo_vital.creadoEn ? signo_vital.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ signo_vital.actualizadoEn ? signo_vital.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
+        <a class="btn btn-secondary" href="{{ path('signo_vital_index',{'cita': cita.id }) }}">Atras</a>
+    {% endif %}
+    {% if(is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL')) %}
+        <a class="btn btn-primary" href="{{ path('signo_vital_edit',{'id': signo_vital.id,'cita': cita.id }) }}">Editar</a>
+    {% endif %}
+{% endblock %}

@@ -17,7 +17,7 @@ class SignoVital
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Cita", inversedBy="signoVital", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Cita", inversedBy="signoVital")
      * @ORM\JoinColumn(nullable=false)
      */
     private $cita;

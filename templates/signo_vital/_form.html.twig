@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">
+        {% if editar == true %}
+          Modificar Signos Vitales
+        {% else %}
+          Registrar Signos Vitales
+        {% endif %}
+      </h5>
+      <div class="card-body">
+        {{ form_start(form) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row">
+            <div class="col-md-12">
+              {{ form_label(form.peso,"Peso (lbs)") }}
+              {{ form_widget(form.peso) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.temperatura) }}
+              {{ form_widget(form.temperatura) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.estatura) }}
+              {{ form_widget(form.estatura) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.presionArterial) }}
+              {{ form_widget(form.presionArterial) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.ritmoCardiaco) }}
+              {{ form_widget(form.ritmoCardiaco) }}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              {% if editar == false %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+                </div>
+              {% else %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info" style="visibility:hidden">Limpiar Pantalla</button>
+                </div>
+              {% endif%}
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
