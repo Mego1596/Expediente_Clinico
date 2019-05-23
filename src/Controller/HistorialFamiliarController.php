@@ -26,16 +26,44 @@ class HistorialFamiliarController extends AbstractController
      */
     public function index(HistorialFamiliarRepository $historialFamiliarRepository, Familiar $familiar,Security $AuthUser): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT historial.* FROM historial_familiar as historial, familiar as fam WHERE fam.id=historial.familiar_id AND familiar_id=".$familiar->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-        return $this->render('historial_familiar/index.html.twig', [
-            'historial_familiares' => $result,
-            'user'              => $AuthUser,
-            'familiar'          => $familiar,
-        ]);
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($familiar->getFamiliaresExpedientes()[0]->getExpediente()->getHabilitado()){
+                    $em = $this->getDoctrine()->getManager();
+                    $RAW_QUERY = "SELECT historial.* FROM historial_familiar as historial, familiar as fam WHERE fam.id=historial.familiar_id AND familiar_id=".$familiar->getId().";";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    return $this->render('historial_familiar/index.html.twig', [
+                        'historial_familiares' => $result,
+                        'user'              => $AuthUser,
+                        'familiar'          => $familiar,
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }  
+        } 
+        
+        if($familiar->getFamiliaresExpedientes()[0]->getExpediente()->getHabilitado()){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT historial.* FROM historial_familiar as historial, familiar as fam WHERE fam.id=historial.familiar_id AND familiar_id=".$familiar->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->render('historial_familiar/index.html.twig', [
+                'historial_familiares' => $result,
+                'user'              => $AuthUser,
+                'familiar'          => $familiar,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('expediente_index');
+        }
     }
 
     /**
@@ -43,39 +71,89 @@ class HistorialFamiliarController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIAL_FAMILIAR')")
      */
-    public function new(Request $request, Familiar $familiar): Response
+    public function new(Request $request, Familiar $familiar, Security $AuthUser): Response
     {
-        $editar = false;
-        $historialFamiliar = new HistorialFamiliar();
-        $form = $this->createForm(HistorialFamiliarType::class, $historialFamiliar);
-        $form->handleRequest($request);
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($familiar->getFamiliaresExpedientes()[0]->getExpediente()->getHabilitado()){
+                    $editar = false;
+                    $historialFamiliar = new HistorialFamiliar();
+                    $form = $this->createForm(HistorialFamiliarType::class, $historialFamiliar);
+                    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            if($form["descripcion"]->getData() != ""){
-                $historialFamiliar->setDescripcion($form["descripcion"]->getData());
-                $historialFamiliar->setFamiliar($familiar);
-                $entityManager->persist($historialFamiliar);
-                $entityManager->flush();
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        if($form["descripcion"]->getData() != ""){
+                            $historialFamiliar->setDescripcion($form["descripcion"]->getData());
+                            $historialFamiliar->setFamiliar($familiar);
+                            $entityManager->persist($historialFamiliar);
+                            $entityManager->flush();
+                        }else{
+                            $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                            return $this->render('historial_familiar/new.html.twig', [
+                                'historial_familiar'  => $historialFamiliar,
+                                'familiar'          => $familiar,
+                                'editar'            => $editar,
+                                'form'              => $form->createView(),
+                            ]);
+                        }
+                        $this->addFlash('success', 'Historial añadido con exito');
+                        return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
+                    }
+
+                    return $this->render('historial_familiar/new.html.twig', [
+                        'historial_familiar' => $historialFamiliar,
+                        'familiar' => $familiar,
+                        'editar'     => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
             }else{
-                $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
-                return $this->render('historial_familiar/new.html.twig', [
-                    'historial_familiar'  => $historialFamiliar,
-                    'familiar'          => $familiar,
-                    'editar'            => $editar,
-                    'form'              => $form->createView(),
-                ]);
-            }
-            $this->addFlash('success', 'Historial añadido con exito');
-            return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
-        }
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }  
+        } 
 
-        return $this->render('historial_familiar/new.html.twig', [
-            'historial_familiar' => $historialFamiliar,
-            'familiar' => $familiar,
-            'editar'     => $editar,
-            'form' => $form->createView(),
-        ]);
+        if($familiar->getFamiliaresExpedientes()[0]->getExpediente()->getHabilitado()){
+            $editar = false;
+            $historialFamiliar = new HistorialFamiliar();
+            $form = $this->createForm(HistorialFamiliarType::class, $historialFamiliar);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                if($form["descripcion"]->getData() != ""){
+                    $historialFamiliar->setDescripcion($form["descripcion"]->getData());
+                    $historialFamiliar->setFamiliar($familiar);
+                    $entityManager->persist($historialFamiliar);
+                    $entityManager->flush();
+                }else{
+                    $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                    return $this->render('historial_familiar/new.html.twig', [
+                        'historial_familiar'  => $historialFamiliar,
+                        'familiar'          => $familiar,
+                        'editar'            => $editar,
+                        'form'              => $form->createView(),
+                    ]);
+                }
+                $this->addFlash('success', 'Historial añadido con exito');
+                return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
+            }
+
+            return $this->render('historial_familiar/new.html.twig', [
+                'historial_familiar' => $historialFamiliar,
+                'familiar' => $familiar,
+                'editar'     => $editar,
+                'form' => $form->createView(),
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('expediente_index');
+        }
+        
     }
 
     /**

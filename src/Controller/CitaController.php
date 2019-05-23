@@ -406,7 +406,7 @@ class CitaController extends AbstractController
     {   
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente->getId() == $expediente->getId() ){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
                 if($expediente->getHabilitado()){
                     return $this->render('cita/show.html.twig', [
                         'citum'      => $citum,
@@ -444,7 +444,7 @@ class CitaController extends AbstractController
     {   
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente->getId() == $expediente->getId() ){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
                 if($expediente->getHabilitado()){
                     if($expediente->getHabilitado()){
                         $editar = true;
@@ -716,7 +716,7 @@ class CitaController extends AbstractController
     public function delete(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente->getId() == $expediente->getId() ){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
                 if($expediente->getHabilitado()){
                     if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
                         $entityManager = $this->getDoctrine()->getManager();
