@@ -51,12 +51,21 @@ class HomeController extends AbstractController
      */
     public function cargaGeneral(Security $AuthUser, Request $request)
     { 
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id;";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-        return $this->json($result);
+        if(empty($AuthUser->getUser()->getClinica())){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->json($result);
+        }else{
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->json($result);
+        }
 
     }
 
@@ -67,14 +76,37 @@ class HomeController extends AbstractController
     public function cargaEspecialidad(Security $AuthUser, Request $request)
     { 
         if($request->request->get('especialidad')!=""){
-             $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id;";
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $result = $statement->fetchAll();
-            return $this->json($result);
+            if(empty($AuthUser->getUser()->getClinica())){
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$request->request->get('clinica').";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                return $this->json($result);
+            }else{
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                return $this->json($result);
+            }
         }else{
-            return $this->redirectToRoute('ajax_cargaGeneral');
+            if(empty($AuthUser->getUser()->getClinica())){
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                return $this->json($result);
+            }else{
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY="SELECT u.id as id ,CONCAT('Dr. ',u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r  WHERE u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                return $this->json($result);
+            }
         }
        
 

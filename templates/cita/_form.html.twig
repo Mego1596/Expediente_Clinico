@@ -20,6 +20,20 @@
               </div>
             </div>
           {% endif %}
+          
+          {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+            <div class="row" style="text-align:center;">
+              <div class="col-md-12">
+                <label style="align-content: center;">Clinica:</label>
+                <select class="form-control" id="clinica" name="clinica" required>
+                  {% for clin in clinica %}
+                    <option value="{{clin.id}}"> {{clin.nombreClinica}}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          {% endif %}
+
           <div class="row" style="text-align:center">
             <div class="col-md-6">
               {{ form_label(form.fechaReservacion) }}

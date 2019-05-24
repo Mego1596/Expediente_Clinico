@@ -35,6 +35,11 @@
     <div class="" id="mensaje2" style="width: 100%">
       <p id="paragraph2"></p>
     </div>
+    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      <div class="" id="mensaje3" style="width: 100%">
+        <p id="paragraph3"></p>
+      </div>
+    {% endif %}
     {{ include('cita/_form.html.twig', {'button_label': 'Update'}) }}
     <table>
         {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
@@ -67,6 +72,10 @@ $(document).ready(function(){
       var datos="especialidad="+especialidad;
       let route = "{{ path('ajax_cargaEspecialidad' )}}";
       var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+      {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+        var clinica = $("#clinica").val();
+        datos += "&clinica="+ clinica; 
+      {% endif %}
       $.ajax({
         url: route , 
         type: "POST",
@@ -126,9 +135,16 @@ $(document).ready(function(){
     $('#cita_fechaReservacion').attr('min',fechaMinima);
     let route = "{{ path('ajax_cargaGeneral' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      var clinica = $("#clinica").val();
+      datos = "clinica="+ clinica; 
+    {% endif %}
     $.ajax({
       url: route , 
       type: "POST",
+      {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+        data: datos,
+      {% endif %}
       success: function(result){
         if(result == ""){
 
@@ -151,6 +167,10 @@ $(document).ready(function(){
     var datos="especialidad="+especialidad;
     let route = "{{ path('ajax_cargaEspecialidad' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      var clinica = $("#clinica").val();
+      datos += "&clinica="+ clinica; 
+    {% endif %}
     $.ajax({
       url: route , 
       type: "POST",
@@ -178,6 +198,47 @@ $(document).ready(function(){
 });
 });
 </script>
+
+<script>
+$(document).ready(function(){
+  $("#clinica").change(function() {
+    $("#btnReiniciar").css('visibility','visible');
+    var especialidad=$("#especialidad").val();
+    var datos="especialidad="+especialidad;
+    let route = "{{ path('ajax_cargaEspecialidad' )}}";
+    var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      var clinica = $("#clinica").val();
+      datos += "&clinica="+ clinica; 
+    {% endif %}
+    $.ajax({
+      url: route , 
+      type: "POST",
+      data: datos,
+      success: function(result){
+        if(result == ""){
+          document.getElementById('parrafoInicial').style.visibility = "hidden";
+          document.getElementById('reporte').style.visibility = "hidden";
+          $("#table-scroll").css('overflow','hidden');
+          $("#hora").empty();
+          $("#reporte-info").empty();
+        }else{
+          document.getElementById('parrafoInicial').style.visibility = "hidden";
+          document.getElementById('reporte').style.visibility = "hidden";
+          $("#table-scroll").css('overflow','hidden');
+          $("#hora").empty();
+          $("#reporte-info").empty();
+          $.each(result,function(i,value){
+            html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+          });
+        }
+        $('#user').html(html_code);
+      }
+    });
+});
+});
+</script>
+
 <script>
 $(document).ready(function(){
   $( "#user" ).change(function() {

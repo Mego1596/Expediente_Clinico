@@ -49,6 +49,46 @@
                                                 <td>{{paciente.nombre_clinica}}</td>
                                                 {% endif %}
                                                 <td>
+                                                <!--
+                                                    {% if paciente.habilitado == true %}
+                                                        
+                                                        Button trigger modal 
+                                                        <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#exampleModalIngreso{{ paciente.id }}">
+                                                          Ingresar
+                                                        </button>
+
+                                                         Modal 
+                                                        <div class="modal fade" id="exampleModalIngreso{{ paciente.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-fw fa-procedures"></i>Ingresar Paciente</h5>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body">
+                                                                        Paciente: {{paciente.nombre_completo}}
+                                                                        <br/>
+                                                                        <div class="row" style="text-align: center">
+                                                                            <form method="POST" action="">
+                                                                                <div class="col-md-12">
+                                                                                    <label for="fechaIngreso">Fecha de Ingreso</label>
+                                                                                    <input type="date" name="fechaIngreso" id="fechaIngreso">
+
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                        <button type="button" class="btn btn-outline-success">Guardar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% endif %}
+                                                -->
                                                     {% if is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE') %}
                                                         <a href="{{ path('expediente_show', {'id': paciente.id}) }}" class="btn btn-info">Mostrar</a>
                                                     {% endif %}

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Cita;
+use App\Entity\Clinica;
 use App\Entity\User;
 use App\Entity\Especialidad;
 use App\Entity\Expediente;
@@ -126,6 +127,7 @@ class CitaController extends AbstractController
                                                 'editar' => $editar,
                                                 'expediente' => $expediente,
                                                 'especialidades' => $especialidades,
+                                                'userAuth'  => $AuthUser,
                                                 'form' => $form->createView(),
                                             ]);
 
@@ -136,6 +138,7 @@ class CitaController extends AbstractController
                                                 'editar' => $editar,
                                                 'expediente' => $expediente,
                                                 'especialidades' => $especialidades,
+                                                'userAuth'  => $AuthUser,
                                                 'form' => $form->createView(),
                                             ]);
 
@@ -146,6 +149,7 @@ class CitaController extends AbstractController
                                                 'editar' => $editar,
                                                 'expediente' => $expediente,
                                                 'especialidades' => $especialidades,
+                                                'userAuth'  => $AuthUser,
                                                 'form' => $form->createView(),
                                             ]);
                                         }else{
@@ -160,6 +164,7 @@ class CitaController extends AbstractController
                                                     'editar' => $editar,
                                                     'expediente' => $expediente,
                                                     'especialidades' => $especialidades,
+                                                    'userAuth'  => $AuthUser,
                                                     'form' => $form->createView(),
                                                 ]);
                                             }else{
@@ -188,6 +193,7 @@ class CitaController extends AbstractController
                                             'editar' => $editar,
                                             'expediente' => $expediente,
                                             'especialidades' => $especialidades,
+                                            'userAuth'  => $AuthUser,
                                             'form' => $form->createView(),
                                         ]);
                                     }
@@ -198,6 +204,7 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'especialidades' => $especialidades,
+                                        'userAuth'  => $AuthUser,
                                         'form' => $form->createView(),
                                     ]);
                                 }
@@ -208,6 +215,7 @@ class CitaController extends AbstractController
                                     'editar' => $editar,
                                     'expediente' => $expediente,
                                     'especialidades' => $especialidades,
+                                    'userAuth'  => $AuthUser,
                                     'form' => $form->createView(),
                                 ]);
                             }
@@ -218,6 +226,7 @@ class CitaController extends AbstractController
                                 'editar' => $editar,
                                 'expediente' => $expediente,
                                 'especialidades' => $especialidades,
+                                'userAuth'  => $AuthUser,
                                 'form' => $form->createView(),
                             ]);
                         }
@@ -227,6 +236,7 @@ class CitaController extends AbstractController
                         'editar' => $editar,
                         'expediente' => $expediente,
                         'especialidades' => $especialidades,
+                        'userAuth'  => $AuthUser,
                         'form' => $form->createView(),
                     ]);
                 }else{
@@ -240,6 +250,7 @@ class CitaController extends AbstractController
         }
 
         if($expediente->getHabilitado()){
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
             $editar = false;
             $citum = new Cita();
             date_default_timezone_set("America/El_Salvador");
@@ -272,6 +283,8 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'especialidades' => $especialidades,
+                                        'userAuth'  => $AuthUser,
+                                        'clinica'   => $clinicas,
                                         'form' => $form->createView(),
                                     ]);
 
@@ -282,6 +295,8 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'especialidades' => $especialidades,
+                                        'userAuth'  => $AuthUser,
+                                        'clinica'   => $clinicas,
                                         'form' => $form->createView(),
                                     ]);
 
@@ -292,6 +307,8 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'especialidades' => $especialidades,
+                                        'userAuth'  => $AuthUser,
+                                        'clinica'   => $clinicas,
                                         'form' => $form->createView(),
                                     ]);
                                 }else{
@@ -306,6 +323,8 @@ class CitaController extends AbstractController
                                             'editar' => $editar,
                                             'expediente' => $expediente,
                                             'especialidades' => $especialidades,
+                                            'userAuth'  => $AuthUser,
+                                            'clinica'   => $clinicas,
                                             'form' => $form->createView(),
                                         ]);
                                     }else{
@@ -334,6 +353,8 @@ class CitaController extends AbstractController
                                     'editar' => $editar,
                                     'expediente' => $expediente,
                                     'especialidades' => $especialidades,
+                                    'userAuth'  => $AuthUser,
+                                    'clinica'   => $clinicas,
                                     'form' => $form->createView(),
                                 ]);
                             }
@@ -344,6 +365,8 @@ class CitaController extends AbstractController
                                 'editar' => $editar,
                                 'expediente' => $expediente,
                                 'especialidades' => $especialidades,
+                                'userAuth'  => $AuthUser,
+                                'clinica'   => $clinicas,
                                 'form' => $form->createView(),
                             ]);
                         }
@@ -354,6 +377,8 @@ class CitaController extends AbstractController
                             'editar' => $editar,
                             'expediente' => $expediente,
                             'especialidades' => $especialidades,
+                            'userAuth'  => $AuthUser,
+                            'clinica'   => $clinicas,
                             'form' => $form->createView(),
                         ]);
                     }
@@ -364,6 +389,8 @@ class CitaController extends AbstractController
                         'editar' => $editar,
                         'expediente' => $expediente,
                         'especialidades' => $especialidades,
+                        'userAuth'  => $AuthUser,
+                        'clinica'   => $clinicas,
                         'form' => $form->createView(),
                     ]);
                 }
@@ -373,6 +400,8 @@ class CitaController extends AbstractController
                 'editar' => $editar,
                 'expediente' => $expediente,
                 'especialidades' => $especialidades,
+                'userAuth'  => $AuthUser,
+                'clinica'   => $clinicas,
                 'form' => $form->createView(),
             ]);
         }else{
@@ -582,6 +611,7 @@ class CitaController extends AbstractController
         } 
 
         if($expediente->getHabilitado()){
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
             $editar = true;
             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
                 $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
@@ -612,6 +642,7 @@ class CitaController extends AbstractController
                             'user'  => $citum->getUsuario(),
                             'loggedUser' => $AuthUser,
                             'especialidades' => $especialidades,
+                            'clinica'   => $clinicas,
                             'form' => $form->createView(),
                         ]);
 
@@ -624,6 +655,7 @@ class CitaController extends AbstractController
                             'user'  => $citum->getUsuario(),
                             'loggedUser' => $AuthUser,
                             'especialidades' => $especialidades,
+                            'clinica'   => $clinicas,
                             'form' => $form->createView(),
                         ]);
 
@@ -636,6 +668,7 @@ class CitaController extends AbstractController
                             'user'  => $citum->getUsuario(),
                             'loggedUser' => $AuthUser,
                             'especialidades' => $especialidades,
+                            'clinica'   => $clinicas,
                             'form' => $form->createView(),
                         ]);
                     }else{
@@ -652,6 +685,7 @@ class CitaController extends AbstractController
                                 'user'  => $citum->getUsuario(),
                                 'loggedUser' => $AuthUser,
                                 'especialidades' => $especialidades,
+                                'clinica'   => $clinicas,
                                 'form' => $form->createView(),
                             ]);
                         }else{
@@ -700,6 +734,7 @@ class CitaController extends AbstractController
                 'loggedUser' => $AuthUser,
                 'especialidades' => $especialidades,
                 'expediente' => $expediente,
+                'clinica'   => $clinicas,
                 'form' => $form->createView(),
             ]);
         }else{
