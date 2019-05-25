@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -59,14 +61,19 @@ class Cita
     private $historiaMedica;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\CitaExamen", mappedBy="cita", cascade={"persist", "remove"})
-     */
-    private $citaExamen;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $fechaFin=null;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenSolicitado", mappedBy="cita")
+     */
+    private $examenes;
+
+    public function __construct()
+    {
+        $this->examenes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -179,23 +186,6 @@ class Cita
         return $this;
     }
 
-    public function getCitaExamen(): ?CitaExamen
-    {
-        return $this->citaExamen;
-    }
-
-    public function setCitaExamen(CitaExamen $citaExamen): self
-    {
-        $this->citaExamen = $citaExamen;
-
-        // set the owning side of the relation if necessary
-        if ($this !== $citaExamen->getCita()) {
-            $citaExamen->setCita($this);
-        }
-
-        return $this;
-    }
-
     public function getFechaFin(): ?\DateTimeInterface
     {
         return $this->fechaFin;
@@ -204,6 +194,37 @@ class Cita
     public function setFechaFin(?\DateTimeInterface $fechaFin): self
     {
         $this->fechaFin = $fechaFin;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExamenSolicitado[]
+     */
+    public function getExamenes(): Collection
+    {
+        return $this->examenes;
+    }
+
+    public function addExamene(ExamenSolicitado $examene): self
+    {
+        if (!$this->examenes->contains($examene)) {
+            $this->examenes[] = $examene;
+            $examene->setCita($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExamene(ExamenSolicitado $examene): self
+    {
+        if ($this->examenes->contains($examene)) {
+            $this->examenes->removeElement($examene);
+            // set the owning side to null (unless already changed)
+            if ($examene->getCita() === $this) {
+                $examene->setCita(null);
+            }
+        }
 
         return $this;
     }

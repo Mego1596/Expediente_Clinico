@@ -19,12 +19,6 @@ class ExamenSolicitado
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CitaExamen", inversedBy="examenSolicitados")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $cita_examen;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $tipoExamen;
@@ -94,6 +88,11 @@ class ExamenSolicitado
      */
     private $examenQuimicaSanguinea;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Cita", inversedBy="examenes")
+     */
+    private $cita;
+
     public function __construct()
     {
         $this->anexos = new ArrayCollection();
@@ -102,18 +101,6 @@ class ExamenSolicitado
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getCitaExamen(): ?CitaExamen
-    {
-        return $this->cita_examen;
-    }
-
-    public function setCitaExamen(?CitaExamen $cita_examen): self
-    {
-        $this->cita_examen = $cita_examen;
-
-        return $this;
     }
 
     public function getTipoExamen(): ?string
@@ -344,6 +331,18 @@ class ExamenSolicitado
         if ($this !== $examenQuimicaSanguinea->getExamenSolicitado()) {
             $examenQuimicaSanguinea->setExamenSolicitado($this);
         }
+
+        return $this;
+    }
+
+    public function getCita(): ?Cita
+    {
+        return $this->cita;
+    }
+
+    public function setCita(?Cita $cita): self
+    {
+        $this->cita = $cita;
 
         return $this;
     }
