@@ -21,6 +21,8 @@ class SignoVitalController extends AbstractController
 {
     /**
      * @Route("/{cita}", name="signo_vital_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')")
      */
     public function index(SignoVitalRepository $signoVitalRepository, Security $AuthUser, Cita $cita): Response
     {
@@ -69,6 +71,8 @@ class SignoVitalController extends AbstractController
 
     /**
      * @Route("/new/{cita}", name="signo_vital_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_SIGNO_VITAL')")
      */
     public function new(Request $request, Cita $cita, Security $AuthUser): Response
     {
@@ -173,6 +177,8 @@ class SignoVitalController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}", name="signo_vital_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_SIGNO_VITAL')")
      */
     public function show(SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
     {
@@ -207,6 +213,8 @@ class SignoVitalController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}/edit", name="signo_vital_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL')")
      */
     public function edit(Request $request, SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
     {
@@ -265,6 +273,8 @@ class SignoVitalController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}", name="signo_vital_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_SIGNO_VITAL')")
      */
     public function delete(Request $request, SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
     {
