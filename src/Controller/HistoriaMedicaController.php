@@ -196,11 +196,11 @@ class HistoriaMedicaController extends AbstractController
                     ]);
                 }else{
                     $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
+                    return $this->redirectToRoute('home');
                 }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                return $this->redirectToRoute('home');
             }  
         }
         return $this->render('historia_medica/show.html.twig', [
@@ -236,11 +236,11 @@ class HistoriaMedicaController extends AbstractController
                     ]);
                 }else{
                     $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
+                    return $this->redirectToRoute('home');
                 }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                return $this->redirectToRoute('home');
             }  
         }
 
@@ -280,11 +280,11 @@ class HistoriaMedicaController extends AbstractController
                     return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                 }else{
                     $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
+                    return $this->redirectToRoute('home');
                 }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                return $this->redirectToRoute('home');
             }  
         }
         if($citum->getExpediente()->getHabilitado()){
@@ -297,7 +297,7 @@ class HistoriaMedicaController extends AbstractController
             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
         }else{
             $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-            return $this->redirectToRoute('expediente_index');
+            return $this->redirectToRoute('home');
         }
     }
 }
