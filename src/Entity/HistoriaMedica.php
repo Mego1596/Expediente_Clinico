@@ -19,13 +19,13 @@ class HistoriaMedica
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Cita", inversedBy="historiaMedica", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Cita", inversedBy="historiaMedica")
      * @ORM\JoinColumn(nullable=false)
      */
     private $cita;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Diagnostico", inversedBy="historiaMedica", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Diagnostico", inversedBy="historiaMedica")
      * @ORM\JoinColumn(nullable=false)
      */
     private $diagnostico;

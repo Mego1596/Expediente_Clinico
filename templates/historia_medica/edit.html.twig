@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit HistoriaMedica{% endblock %}
+
+{% block body %}
+    <h1>Edit HistoriaMedica</h1>
+
+    {{ include('historia_medica/_form.html.twig', {'button_label': 'Update'}) }}
+
+    {% if (is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
+    	<a class="btn btn-secondary" href="{{ path('historia_medica_index', {'citum': cita.id}) }}">Atras</a>
+    {% endif %}
+{% endblock %}
