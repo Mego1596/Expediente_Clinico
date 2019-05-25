@@ -33,7 +33,7 @@ class CalendarListener
         $filters = $calendar->getFilters();
         // Modify the query to fit to your entity and needs
         // Change booking.beginAt by your start date property
-        if($filters['expediente'] != 0){
+        if($filters['expediente'] > 0){
             $citas = $this->citaRepository
             ->createQueryBuilder('cita')
             ->where('cita.fechaReservacion BETWEEN :start and :end and cita.expediente = :expe')
@@ -42,7 +42,7 @@ class CalendarListener
             ->setParameter('expe', $filters['expediente'])
             ->getQuery()
             ->getResult();
-        }else{
+        }elseif($filters["expediente"] == 0){
             $citas = $this->citaRepository->createQueryBuilder('c')
             ->innerJoin('c.expediente', 'exp')
             ->innerJoin('exp.usuario', 'u')
@@ -54,6 +54,8 @@ class CalendarListener
             ->getQuery()
             ->getResult();
             ;
+        }else{
+            
         }
         
 
