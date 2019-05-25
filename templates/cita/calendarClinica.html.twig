@@ -70,28 +70,11 @@
                     timeGridWeek:    'Semana',
                     timeGridDay:     'Dia'
                   },
-                {% if is_granted('ROLE_PERMISSION_NEW_CITA')%}
-                customButtons: {
-                    myCustomButton: {
-                      text: 'agendar cita',
-                      click: function() {
-                        let route = "{{ path('cita_new', {expediente: expediente.getId()})|escape('js') }}";
-                        window.location.replace(route);
-                      }
-                    }
-                  },
-                  header: {
-                    left: 'prev,next today myCustomButton',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
-                },
-                {% else %}
                     header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay',
                 },
-                {% endif %}
                 
                 prev: 'fa-user',
                 plugins: [ 'interaction', 'dayGrid', 'timeGrid' ], // https://fullcalendar.io/docs/plugin-index
