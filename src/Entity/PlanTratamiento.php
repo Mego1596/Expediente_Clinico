@@ -16,11 +16,6 @@ class PlanTratamiento
      */
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Diagnostico", inversedBy="planTratamientos")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $diagnostico;
 
     /**
      * @ORM\Column(type="text")
@@ -52,21 +47,15 @@ class PlanTratamiento
      */
     private $actualizado_en;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\HistoriaMedica", inversedBy="planTratamientos")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $historiaMedica;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getDiagnostico(): ?Diagnostico
-    {
-        return $this->diagnostico;
-    }
-
-    public function setDiagnostico(?Diagnostico $diagnostico): self
-    {
-        $this->diagnostico = $diagnostico;
-
-        return $this;
     }
 
     public function getDosis(): ?string
@@ -137,6 +126,18 @@ class PlanTratamiento
     public function setActualizadoEn(?\DateTimeInterface $actualizado_en): self
     {
         $this->actualizado_en = $actualizado_en;
+
+        return $this;
+    }
+
+    public function getHistoriaMedica(): ?HistoriaMedica
+    {
+        return $this->historiaMedica;
+    }
+
+    public function setHistoriaMedica(?HistoriaMedica $historiaMedica): self
+    {
+        $this->historiaMedica = $historiaMedica;
 
         return $this;
     }

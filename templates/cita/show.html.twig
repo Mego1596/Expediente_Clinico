@@ -57,6 +57,11 @@
                         <a class="btn btn-success" href="{{ path('signo_vital_index', {'cita': citum.id}) }}">Registrar Signos Vitales</a>
                     </td>
                 {% endif %}
+                {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
+                    <td>
+                        <a class="btn btn-success" href="{{ path('signo_vital_index', {'cita': citum.id}) }}">Registrar Historia Clinica</a>
+                    </td>
+                {% endif %}
 
             {% endif %}
         </tr>

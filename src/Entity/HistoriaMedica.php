@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,6 +59,16 @@ class HistoriaMedica
      * @ORM\Column(type="string", length=50)
      */
     private $codigoEspecifico;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanTratamiento", mappedBy="historiaMedica", orphanRemoval=true)
+     */
+    private $planTratamientos;
+
+    public function __construct()
+    {
+        $this->planTratamientos = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -158,4 +170,37 @@ class HistoriaMedica
 
         return $this;
     }
+
+    /**
+     * @return Collection|PlanTratamiento[]
+     */
+    public function getPlanTratamientos(): Collection
+    {
+        return $this->planTratamientos;
+    }
+
+    public function addPlanTratamiento(PlanTratamiento $planTratamiento): self
+    {
+        if (!$this->planTratamientos->contains($planTratamiento)) {
+            $this->planTratamientos[] = $planTratamiento;
+            $planTratamiento->setHistoriaMedica($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanTratamiento(PlanTratamiento $planTratamiento): self
+    {
+        if ($this->planTratamientos->contains($planTratamiento)) {
+            $this->planTratamientos->removeElement($planTratamiento);
+            // set the owning side to null (unless already changed)
+            if ($planTratamiento->getHistoriaMedica() === $this) {
+                $planTratamiento->setHistoriaMedica(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
 }

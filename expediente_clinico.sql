@@ -142,7 +142,19 @@ INSERT INTO `permiso` (`id`, `permiso`, `descripcion`, `nombre_tabla`, `creado_e
 (82,'ROLE_PERMISSION_NEW_','Permiso de Creacion','INGRESADO',NULL,NULL),
 (83,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','INGRESADO',NULL,NULL),
 (84,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','INGRESADO',NULL,NULL),
-(85,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','INGRESADO',NULL,NULL);
+(85,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','INGRESADO',NULL,NULL),
+
+(86,'ROLE_PERMISSION_INDEX_','Permiso de Entrada','HISTORIA_MEDICA',NULL,NULL),
+(87,'ROLE_PERMISSION_NEW_','Permiso de Creacion','HISTORIA_MEDICA',NULL,NULL),
+(88,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','HISTORIA_MEDICA',NULL,NULL),
+(89,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','HISTORIA_MEDICA',NULL,NULL),
+(90,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','HISTORIA_MEDICA',NULL,NULL),
+
+(91,'ROLE_PERMISSION_INDEX_','Permiso de Entrada','PLAN_TRATAMIENTO',NULL,NULL),
+(92,'ROLE_PERMISSION_NEW_','Permiso de Creacion','PLAN_TRATAMIENTO',NULL,NULL),
+(93,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','PLAN_TRATAMIENTO',NULL,NULL),
+(94,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','PLAN_TRATAMIENTO',NULL,NULL),
+(95,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','PLAN_TRATAMIENTO',NULL,NULL);
 
 INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_en`) VALUES
 (1, 'ROLE_SA', 'Rol de Super Administrador', NULL, NULL),
@@ -273,4 +285,16 @@ INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
 (1, 82), 
 (1, 83), 
 (1, 84), 
-(1, 85);
+(1, 85),
+
+(1, 86),
+(1, 87),
+(1, 88),
+(1, 89),
+(1, 90),
+
+(1, 91),
+(1, 92), 
+(1, 93), 
+(1, 94), 
+(1, 95);

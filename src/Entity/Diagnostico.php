@@ -39,11 +39,6 @@ class Diagnostico
     private $historiaMedica;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PlanTratamiento", mappedBy="diagnostico", orphanRemoval=true)
-     */
-    private $planTratamientos;
-
-    /**
      * @ORM\Column(type="string", length=50)
      */
     private $codigoCategoria;
@@ -110,38 +105,6 @@ class Diagnostico
 
         return $this;
     }
-
-    /**
-     * @return Collection|PlanTratamiento[]
-     */
-    public function getPlanTratamientos(): Collection
-    {
-        return $this->planTratamientos;
-    }
-
-    public function addPlanTratamiento(PlanTratamiento $planTratamiento): self
-    {
-        if (!$this->planTratamientos->contains($planTratamiento)) {
-            $this->planTratamientos[] = $planTratamiento;
-            $planTratamiento->setDiagnostico($this);
-        }
-
-        return $this;
-    }
-
-    public function removePlanTratamiento(PlanTratamiento $planTratamiento): self
-    {
-        if ($this->planTratamientos->contains($planTratamiento)) {
-            $this->planTratamientos->removeElement($planTratamiento);
-            // set the owning side to null (unless already changed)
-            if ($planTratamiento->getDiagnostico() === $this) {
-                $planTratamiento->setDiagnostico(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getCodigoCategoria(): ?string
     {
         return $this->codigoCategoria;
