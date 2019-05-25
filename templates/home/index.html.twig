@@ -100,7 +100,18 @@
 				</div>
 			</div>
 		{% endif %}
-		
+		{% if is_granted('ROLE_PERMISSION_INDEX_INGRESADO')%}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('ingresado_index')}}"><i class="fas fa-fw fa-procedures" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('ingresado_index')}}">Ingresados</a>
+				</div>
+			</div>
+		{% endif %}
+		<div class="col-md-1"></div>
+		<div class="col-md-12"><br/></div>
+		<div class="col-md-1"></div>
 	</div>
 </div>
 	

@@ -36,7 +36,6 @@ class ExpedienteController extends AbstractController
      */
     public function index(ExpedienteRepository $expedienteRepository,Security $AuthUser): Response
     {
-
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
             $RAW_QUERY = 'SELECT CONCAT(u.nombres," ",u.apellidos) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c WHERE u.id = e.usuario_id AND u.clinica_id = c.id;';
@@ -381,11 +380,18 @@ class ExpedienteController extends AbstractController
     public function show(Expediente $expediente, Security $AuthUser): Response
     {   
         //VALIDACION DE BLOQUEO DE RUTAS EN CASO DE INTENTAR ACCEDER A REGISTROS DE OTRAS CLINICAS SI NO ES ROLE_SA
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY="SELECT * FROM `ingresado` WHERE fecha_salida IS NULL AND expediente_id =".$expediente->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $ingresoActual = $statement->fetchAll();
+
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
                 if($expediente->getHabilitado()){
                     return $this->render('expediente/show.html.twig', [
                         'expediente' => $expediente,
+                        'ingresado'  => $ingresoActual,
                     ]);
                 }else{
                     $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -399,6 +405,7 @@ class ExpedienteController extends AbstractController
         if($expediente->getHabilitado()){
             return $this->render('expediente/show.html.twig', [
                 'expediente' => $expediente,
+                'ingresado'  => $ingresoActual,
             ]);
         }else{
             $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');

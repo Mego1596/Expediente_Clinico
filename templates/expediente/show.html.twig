@@ -3,7 +3,7 @@
 {% block title %}Expediente{% endblock %}
 
 {% block body %}
-    <h1>Detalles del Paciente</h1>
+    <h1>Detalles del expediente</h1>
 
     <table class="table">
         <tbody>
@@ -58,4 +58,328 @@
 {% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
 <a class="btn btn-success" href="{{ path('familiar_index', {'expediente': expediente.id}) }}">Registrar Familiar</a>
 {% endif %}
+{% if ingresado == null %}
+    {% if (is_granted('ROLE_PERMISSION_NEW_INGRESADO')) %}
+        <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#ModalIngreso" onclick="autocargado('{{expediente.id}}')">
+          Ingresar
+        </button>
+        <div class="modal fade" id="ModalIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-fw fa-procedures"></i>Ingresar expediente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="{{path('ingresado_new',{'expediente': expediente.id})}}">
+                        <div class="modal-body" align="center">
+                        expediente: {{expediente.getUsuario().getNombres()}} {{expediente.getUsuario().getApellidos()}}
+                        <br/>
+                         {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                            <input type="hidden" name="_token" value="{{ csrf_token('create-item') }}"/>
+                            <div class="row" style="text-align: center;color: black">
+                                <div class="" id="mensaje" style="width: 100%">
+                                    <p id="paragraph"></p>
+                                </div>
+                                <div class="" id="mensaje2" style="width: 100%">
+                                    <p id="paragraph2"></p>
+                                </div>
+                                <div class="" id="mensaje3" style="width: 100%">
+                                    <p id="paragraph3"></p>
+                                </div>
+                                <div class="" id="mensaje4" style="width: 100%">
+                                    <p id="paragraph4"></p>
+                                </div>
+                                <div class="" id="mensaje5" style="width: 100%">
+                                    <p id="paragraph5"></p>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="sala"  id="labelSala">Salas:</label>
+                                    <select id="sala" name="sala" class="form-control">
+                                        <option value="">Seleccione una sala</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="habitacion" id="labelHabitacion" style="display: none">Habitaciones Disponibles:</label>
+                                    <select id="habitacion" name="habitacion" class="form-control" style="display: none">
+                                        <option value="">Seleccione una habitacion</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="camilla" id="labelCamilla" style="display: none">Camillas Disponibles:</label>
+                                    <select id="camilla" name="camilla" class="form-control" style="display: none">
+                                        <option value="">Seleccione una camilla</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="emergencia" id="labelEmergencia" style="display: none">Emergencia:</label>
+                                    <select id="emergencia" name="emergencia" class="form-control" style="display: none">
+                                        <option value="">Seleccione un estado</option>
+                                        <option value="1">Si</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label for="user" id="labelDoctor" style="display: none">Doctores Disponibles:</label>
+                                    <select id="user" name="user" class="form-control" style="display: none">
+                                        <option value="">Seleccione un doctor</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="limpiar" class="btn btn-secondary" data-dismiss="modal" onclick="limpiarModal()">Cancelar</button>
+                            <button type="submit" class="btn btn-outline-success">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
 {% endblock %}
+
+{% block javascripts %}
+<!-- ESTE SCRIPT ES QUE CARGA LAS SALAS DE LA CLINICA A LA QUE PERTENECE EL PACIENTE -->
+<script type="text/javascript">
+function autocargado() {
+    $(document).ready(function(){
+        var url = window.location + "";
+        var expediente = url.substring(33, 34);
+        var datos="expediente="+expediente;
+        var html_code = html_code + '<option value="">Seleccione una sala</option>';
+        let route = "{{ path('ajax_cargaSalas' )}}";
+        $.ajax({
+        url: route, 
+        type: "POST",
+        data: datos,
+        success: function(result){
+          if(result == ""){
+            
+          }else{
+            $('#sala').empty();
+            $("#labelHabitacion").css('display', 'none');
+            $("#habitacion").css('display', 'none');
+            $("#labelCamilla").css('display', 'none');
+            $("#camilla").css('display', 'none');
+            $("#labelEmergencia").css('display', 'none');
+            $("#emergencia").css('display', 'none');
+            $("#labelDoctor").css('display', 'none');
+            $("#user").css('display', 'none');
+            $.each(result,function(i,value){
+              html_code= html_code +'<option value="'+value.id+'">'+value.nombre_sala+'</option>';
+            });
+          }
+          $('#sala').html(html_code);
+        }
+      });
+    });
+}
+
+</script>
+
+<script type="text/javascript">
+function limpiarModal() {
+    $(document).ready(function(){
+        $("#sala").val("");
+        $("#habitacion").val("");
+        $("#camilla").val("");
+        $("#emergencia").val("");
+        $("#user").val("");
+    });
+}
+
+</script>
+
+<!-- ESTE SCRIPT ES QUE CARGA LAS HABITACIONES DE LAS SALAS DE LA CLINICA -->
+<script type="text/javascript">
+$(document).ready(function(){
+    var url = window.location + "";
+    var expediente = url.substring(33, 34);
+    $("#sala").change(function(){
+        var datos="sala="+$("#sala").val()+"&expediente="+expediente;
+        var html_code = html_code + '<option value="">Seleccione una habitacion</option>';
+        let route = "{{ path('ajax_cargaHabitaciones' )}}";
+        if( $("#sala").val() != ""){
+            $("#mensaje").hide();
+            $("#mensaje2").hide();
+            $("#mensaje3").hide();
+            $("#mensaje4").hide();
+            $("#mensaje5").hide();
+            $.ajax({
+                url: route, 
+                type: "POST",
+                data: datos,
+                success: function(result){
+                  if(result == ""){
+                    $("#mensaje4").attr('class','alert alert-danger alert-dismissible fade show');
+                    $("#mensaje4").attr('role','alert');
+                    $("#paragraph4").html('Lo sentimos no hay habitaciones disponibles');
+                    $("#mensaje4").show();
+                    $("#labelHabitacion").css('display', 'none');
+                    $("#habitacion").css('display', 'none');
+                    $("#labelCamilla").css('display', 'none');
+                    $("#camilla").css('display', 'none');
+                    $("#labelEmergencia").css('display', 'none');
+                    $("#emergencia").css('display', 'none');
+                    $("#labelDoctor").css('display', 'none');
+                    $("#user").css('display', 'none');
+                  }else{
+                    $('#habitacion').empty();
+                    $("#labelHabitacion").css('display', 'inline');
+                    $("#habitacion").css('display', 'inline');
+                    $.each(result,function(i,value){
+                      html_code= html_code +'<option value="'+value.id+'">'+value.numero_habitacion+'</option>';
+                    });
+                  }
+                  $('#habitacion').html(html_code);
+                }
+            });
+        }else{
+            $('#habitacion').empty();
+            $("#labelHabitacion").css('display', 'none');
+            $("#habitacion").css('display', 'none');
+            $("#labelCamilla").css('display', 'none');
+            $("#camilla").css('display', 'none');
+            $("#labelEmergencia").css('display', 'none');
+            $("#emergencia").css('display', 'none');
+            $("#labelDoctor").css('display', 'none');
+            $("#user").css('display', 'none');
+            var html_code ='<option value="">Seleccione una habitacion</option>';
+            $('#habitacion').html(html_code);
+            $("#mensaje").attr('class','alert alert-danger alert-dismissible fade show');
+            $("#mensaje").attr('role','alert');
+            $("#paragraph").html('Error, la sala no puede estar vacia por favor elija una.');
+            $("#mensaje").show();
+        }
+    });
+});
+</script>
+
+<!-- ESTE SCRIPT ES QUE CARGA LAS CAMILLAS DE LAS HABITACIONES DE LA CLINICA -->
+<script type="text/javascript">
+$(document).ready(function(){
+    var url = window.location + "";
+    var expediente = url.substring(33, 34);
+    $("#habitacion").change(function(){
+        var datos="sala="+$("#sala").val()+"&expediente="+expediente+"&habitacion="+$("#habitacion").val();
+        var html_code = html_code + '<option value="">Seleccione una camilla</option>';
+        let route = "{{ path('ajax_cargaCamillas' )}}";
+        if( $("#habitacion").val() != ""){
+            $("#mensaje").hide();
+            $("#mensaje2").hide();
+            $("#mensaje3").hide();
+            $("#mensaje4").hide();
+            $("#mensaje5").hide();
+            $.ajax({
+                url: route, 
+                type: "POST",
+                data: datos,
+                success: function(result){
+                  if(result == ""){
+                    $("#mensaje5").attr('class','alert alert-danger alert-dismissible fade show');
+                    $("#mensaje5").attr('role','alert');
+                    $("#paragraph5").html('Lo sentimos no hay camillas disponibles en esta habitacion');
+                    $("#mensaje5").show();
+                    $("#labelCamilla").css('display', 'none');
+                    $("#camilla").css('display', 'none');
+                    $("#labelEmergencia").css('display', 'none');
+                    $("#emergencia").css('display', 'none');
+                    $("#labelDoctor").css('display', 'none');
+                    $("#user").css('display', 'none');
+                  }else{
+                    $('#camilla').empty();
+                    $("#labelCamilla").css('display', 'inline');
+                    $("#camilla").css('display', 'inline');
+                    $("#labelEmergencia").css('display', 'inline');
+                    $("#emergencia").css('display', 'inline');
+                    $.each(result,function(i,value){
+                      html_code= html_code +'<option value="'+value.id+'">'+value.numero_camilla+'</option>';
+                    });
+                  }
+                  $('#camilla').html(html_code);
+                }
+            });
+        }else{
+            $('#camilla').empty();
+            $("#labelCamilla").css('display', 'none');
+            $("#camilla").css('display', 'none');
+            $("#labelEmergencia").css('display', 'none');
+            $("#emergencia").css('display', 'none');
+            $("#labelDoctor").css('display', 'none');
+            $("#user").css('display', 'none');
+            var html_code ='<option value="">Seleccione una camilla</option>';
+            $('#camilla').html(html_code);
+            $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
+            $("#mensaje2").attr('role','alert');
+            $("#paragraph2").html('Error, la habitacion no puede estar vacia por favor elija una.');
+            $("#mensaje2").show();
+        }
+    });
+});
+</script>
+
+<!-- ESTE SCRIPT ES QUE CARGA DOCTORES DISPONIBLES DE LA CLINICA -->
+<script type="text/javascript">
+$(document).ready(function(){
+    var url = window.location + "";
+    var expediente = url.substring(33, 34);
+    $("#emergencia").change(function(){
+        var datos="sala="+$("#sala").val()+"&expediente="+expediente+"&habitacion="+$("#habitacion").val()+"&emergencia="+$(this).val();
+        var html_code = html_code + '<option value="">Seleccione un doctor</option>';
+        let route = "{{ path('ajax_cargaDoctores' )}}";
+        if( $("#emergencia").val() != ""){
+            if($("#sala").val()!= ""){
+                if($("#habitacion").val()!=""){
+                    $("#mensaje").hide();
+                    $("#mensaje2").hide();
+                    $("#mensaje3").hide();
+                    $("#mensaje4").hide();
+                    $("#mensaje5").hide();
+                    $.ajax({
+                        url: route, 
+                        type: "POST",
+                        data: datos,
+                        success: function(result){
+                          if(result == ""){
+                            $("#labelDoctor").css('display', 'none');
+                            $("#user").css('display', 'none');
+                          }else{
+                            $('#user').empty();
+                            $("#labelDoctor").css('display', 'inline');
+                            $("#user").css('display', 'inline');
+                            $.each(result,function(i,value){
+                              html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
+                            });
+                          }
+                          $('#user').html(html_code);
+                        }
+                    });
+                }else{
+                    $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
+                    $("#mensaje2").attr('role','alert');
+                    $("#paragraph2").html('Error, la habitacion no puede estar vacia por favor elija una.');
+                    $("#mensaje2").show();
+                }
+            }else{
+                $("#mensaje").attr('class','alert alert-danger alert-dismissible fade show');
+                $("#mensaje").attr('role','alert');
+                $("#paragraph").html('Error, la sala no puede estar vacia por favor elija una.');
+                $("#mensaje").show();
+            }
+        }else{
+            $('#user').empty();
+            $("#labelDoctor").css('display', 'none');
+            $("#user").css('display', 'none');
+            var html_code ='<option value="">Seleccione un doctor</option>';
+            $('#user').html(html_code);
+            $("#mensaje3").attr('class','alert alert-danger alert-dismissible fade show');
+            $("#mensaje3").attr('role','alert');
+            $("#paragraph3").html('Error, Elija si el estado es de emergencia o no, por favor elija una.');
+            $("#mensaje3").show();
+        }
+    });
+});
+</script>
+{% endblock%}

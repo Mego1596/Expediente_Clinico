@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingresado{% endblock %}
+
+{% block body %}
+    <h1>Ingresado</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ ingresado.id }}</td>
+            </tr>
+            <tr>
+                <th>FechaIngreso</th>
+                <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>FechaSalida</th>
+                <td>{{ ingresado.fechaSalida ? ingresado.fechaSalida|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ ingresado.creadoEn ? ingresado.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ ingresado.actualizadoEn ? ingresado.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('ingresado_index') }}">back to list</a>
+
+    <a href="{{ path('ingresado_edit', {'id': ingresado.id}) }}">edit</a>
+
+    {{ include('ingresado/_delete_form.html.twig') }}
+{% endblock %}

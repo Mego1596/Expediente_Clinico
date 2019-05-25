@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Expediente;
+use App\Entity\Habitacion;
+use App\Entity\Sala;
+use App\Entity\Clinica;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -42,6 +46,160 @@ class HomeController extends AbstractController
         return $this->render('user/passwordUpdate.html.twig', [
         'controller_name' => 'HomeController',
         ]);
+    }
+
+    /**
+     * @Route("/salaClinica", name="ajax_cargaSalas", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     */
+    public function cargaSalas(Security $AuthUser, Request $request)
+    { 
+        $expediente = $this->getDoctrine()->getRepository(Expediente::class)->find($request->request->get('expediente'));
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY="SELECT * FROM sala WHERE clinica_id=".$expediente->getUsuario()->getClinica()->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
+        return $this->json($result);
+    }
+
+    /**
+     * @Route("/habitacionesClinica", name="ajax_cargaHabitaciones", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     */
+    public function cargaHabitaciones(Security $AuthUser, Request $request)
+    { 
+        $sala = $this->getDoctrine()->getRepository(Sala::class)->find($request->request->get('sala'));
+        $expediente = $this->getDoctrine()->getRepository(Expediente::class)->find($request->request->get('expediente'));
+        if($sala->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+            $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($sala->getClinica()->getId());
+            $em = $this->getDoctrine()->getManager();
+            //SI EL EXPEDIENTE QUE YO LLEVO CON LA SALA QUE YO LLEVO DEBEN COINCIDIR EN EL ID DE LA CLINICA
+            $RAW_QUERY="SELECT DISTINCT habitacion.* FROM habitacion,clinica,sala, camilla WHERE
+                        camilla.habitacion_id = habitacion.id           AND
+                        habitacion.sala_id    = sala.id                 AND
+                        sala.clinica_id       = clinica.id              AND
+                        clinica.id            = ".$clinica->getId()."   AND
+                        sala.id               = ".$sala->getId()."      AND
+                        camilla.id NOT IN (
+                            SELECT camilla_id FROM ingresado WHERE fecha_salida IS NULL
+                        );";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->json($result);
+        }else{
+            $this->addFlash('fail','Error, este expediente no es valido');
+            $this->redirectToRoute('expediente_index');
+        }
+        
+    }
+
+
+    /**
+     * @Route("/camillasClinica", name="ajax_cargaCamillas", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     */
+    public function cargaCamillas(Security $AuthUser, Request $request)
+    { 
+        $sala = $this->getDoctrine()->getRepository(Sala::class)->find($request->request->get('sala'));
+        $expediente = $this->getDoctrine()->getRepository(Expediente::class)->find($request->request->get('expediente'));
+        $habitacion = $this->getDoctrine()->getRepository(Habitacion::class)->find($request->request->get('habitacion'));
+        if($sala->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $habitacion->getSala()->getId()== $sala->getId()){
+            $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($sala->getClinica()->getId());
+            $em = $this->getDoctrine()->getManager();
+            //SI EL EXPEDIENTE QUE YO LLEVO CON LA SALA QUE YO LLEVO DEBEN COINCIDIR EN EL ID DE LA CLINICA
+            $RAW_QUERY="SELECT DISTINCT camilla.* FROM habitacion,clinica,sala, camilla WHERE
+                        camilla.habitacion_id = habitacion.id            AND
+                        habitacion.sala_id    = sala.id                  AND
+                        sala.clinica_id       = clinica.id               AND
+                        clinica.id            = ".$clinica->getId()."    AND
+                        sala.id               = ".$sala->getId()."       AND
+                        habitacion.id         = ".$habitacion->getId()." AND
+                        camilla.id NOT IN (
+                            SELECT camilla_id FROM ingresado WHERE fecha_salida IS NULL
+                        );";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->json($result);
+        }else{
+            $this->addFlash('fail','Error, este expediente no es valido');
+            $this->redirectToRoute('expediente_index');
+        }
+        
+    }
+
+    /**
+     * @Route("/doctoresClinica", name="ajax_cargaDoctores", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     */
+    public function cargaDoctores(Security $AuthUser, Request $request)
+    { 
+
+        if($request->request->get('sala')!="") {
+            
+            if($request->request->get('habitacion')!=""){
+                
+                if($request->request->get('expediente')!=""){
+
+
+                    $sala = $this->getDoctrine()->getRepository(Sala::class)->find($request->request->get('sala'));
+                    $expediente = $this->getDoctrine()->getRepository(Expediente::class)->find($request->request->get('expediente'));
+                    $habitacion = $this->getDoctrine()->getRepository(Habitacion::class)->find($request->request->get('habitacion'));
+                    
+                    if($sala->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $habitacion->getSala()->getId()== $sala->getId()){
+
+                        if ($request->request->get('emergencia')!=""){
+                            if ($request->request->get('emergencia') == 1) {
+                                $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($sala->getClinica()->getId());
+                                $em = $this->getDoctrine()->getManager();
+                                //SI EL EXPEDIENTE QUE YO LLEVO CON LA SALA QUE YO LLEVO DEBEN COINCIDIR EN EL ID DE LA CLINICA
+                                $RAW_QUERY="SELECT u.id as id ,CONCAT(u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r, `clinica` as c   WHERE u.clinica_id = c.id AND u.emergencia = 1 AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$sala->getClinica()->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                return $this->json($result);
+                                
+                            }else{
+                                $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($sala->getClinica()->getId());
+                                $em = $this->getDoctrine()->getManager();
+                                //SI EL EXPEDIENTE QUE YO LLEVO CON LA SALA QUE YO LLEVO DEBEN COINCIDIR EN EL ID DE LA CLINICA
+                                $RAW_QUERY="SELECT u.id as id ,CONCAT(u.nombres,' ',u.apellidos) as nombre_completo FROM `user` as u ,`rol` as r, `clinica` as c   WHERE u.clinica_id = c.id AND u.planta = 1 AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$sala->getClinica()->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                return $this->json($result);
+                            }
+                        }
+                        else{
+                            $this->addFlash('fail','Error, el estado del ingreso no puede estar vacio');
+                            $this->redirectToRoute('expediente_index');
+
+                        }
+                        
+
+
+                    }else{
+                        $this->addFlash('fail','Error, este expediente no es valido');
+                        $this->redirectToRoute('expediente_index');
+                    }
+
+                }else{
+                    $this->addFlash('fail', 'Error, no se selecciono ningun expediente');
+                    $this->redirectToRoute('expediente_index');
+                }
+
+            }else{
+                $this->addFlash('fail', 'Error, no se selecciono ninguna habitacion');
+                $this->redirectToRoute('expediente_index');
+            }
+
+        }else{
+            $this->addFlash('fail', 'Error, no se selecciono ninguna sala');
+            $this->redirectToRoute('expediente_index');
+        }     
+
     }
 
 

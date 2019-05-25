@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Listado de Ingresados{% endblock %}
+
+{% block body %}
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <!--<th id="relevante" class="all">Descripcion</th>-->
+                                            <th id="relevante" class="all">Fecha de Entrada</th>
+                                            <th id="relevante" class="all">Fecha de Salida</th>
+                                            <th  class="all">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for ingresado in ingresados %}
+                                        <tr>
+                                            
+                                            <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d H:i:s') : '' }}</td>
+                                            <td>{{ ingresado.fechaSalida ? ingresado.fechaSalida|date('Y-m-d H:i:s') : ''}}</td>
+
+                                            <td>
+                                                {% if (is_granted('ROLE_PERMISSION_EDIT_INGRESADO')) %}
+                                                    <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#ModalIngreso">
+                                                      Dar de Alta
+                                                    </button>
+                                                    <div class="modal fade" id="ModalIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-fw fa-procedures"></i>Dar de Alta</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <form method="POST" action="{{path('ingresado_edit',{'id': ingresado.id})}}">
+                                                                    <div class="modal-body" align="center">
+                                                                     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                                                                        <input type="hidden" name="_token" value="{{ csrf_token('update-item') }}"/>
+                                                                        Esta seguro que desea dar de alta al paciente?
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" id="limpiar" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                                                        <button type="submit" class="btn btn-outline-success">Si</button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_INGRESADO') %}
+                                                    <a href="{{ path('ingresado_show', {id: ingresado.id}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_INGRESADO') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ ingresado.id}}">
+                                                    Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ ingresado.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Registro</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Esta seguro que desea eliminar el registro?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('ingresado_delete', {id: ingresado.id}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ingresado.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}

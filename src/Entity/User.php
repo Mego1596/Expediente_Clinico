@@ -96,10 +96,15 @@ class User implements UserInterface,\Serializable
      */
     private $planta;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ingresado", mappedBy="usuario")
+     */
+    private $ingresados;
+
 
     public function __construct()
     {
-
+        $this->ingresados = new ArrayCollection();
     }
 
 
@@ -362,6 +367,37 @@ class User implements UserInterface,\Serializable
     public function setPlanta(?bool $planta): self
     {
         $this->planta = $planta;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Ingresado[]
+     */
+    public function getIngresados(): Collection
+    {
+        return $this->ingresados;
+    }
+
+    public function addIngresado(Ingresado $ingresado): self
+    {
+        if (!$this->ingresados->contains($ingresado)) {
+            $this->ingresados[] = $ingresado;
+            $ingresado->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIngresado(Ingresado $ingresado): self
+    {
+        if ($this->ingresados->contains($ingresado)) {
+            $this->ingresados->removeElement($ingresado);
+            // set the owning side to null (unless already changed)
+            if ($ingresado->getUsuario() === $this) {
+                $ingresado->setUsuario(null);
+            }
+        }
 
         return $this;
     }
