@@ -33,16 +33,29 @@ class CalendarListener
         $filters = $calendar->getFilters();
         // Modify the query to fit to your entity and needs
         // Change booking.beginAt by your start date property
-
-        $citas = $this->citaRepository
+        if($filters['expediente'] != 0){
+            $citas = $this->citaRepository
             ->createQueryBuilder('cita')
             ->where('cita.fechaReservacion BETWEEN :start and :end and cita.expediente = :expe')
             ->setParameter('start', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->setParameter('expe', $filters['expediente'])
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
+        }else{
+            $citas = $this->citaRepository->createQueryBuilder('c')
+            ->innerJoin('c.expediente', 'exp')
+            ->innerJoin('exp.usuario', 'u')
+            ->innerJoin('u.clinica', 'cli')
+            ->where('c.fechaReservacion BETWEEN :inicio AND :end AND cli.id =:cl')
+            ->setParameter('inicio', $start->format('Y-m-d H:i:s'))
+            ->setParameter('end', $end->format('Y-m-d H:i:s'))
+            ->setParameter('cl', $this->Auth->getUser()->getClinica()->getId())
+            ->getQuery()
+            ->getResult();
+            ;
+        }
+        
 
         foreach ($citas as $cita) {
             // this create the events with your data (here booking data) to fill calendar

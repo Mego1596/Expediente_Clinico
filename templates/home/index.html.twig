@@ -112,6 +112,15 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-12"><br/></div>
 		<div class="col-md-1"></div>
+		{% if user.getUser().getRol().getNombreRol() == 'ROLE_DOCTOR' %}
+			<div class="col-md-2">
+				<div style="border:1px solid;" align="center">
+					<a href="{{path('calendario_trabajo')}}"><i class="fa fa-calendar" style="margin-left:5%;margin-top:3%;font-size:90px"></i></a>
+					<br/>
+					<a href="{{path('calendario_trabajo')}}">Calendario</a>
+				</div>
+			</div>
+		{% endif %}
 	</div>
 </div>
 	

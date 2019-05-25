@@ -37,6 +37,17 @@ class HomeController extends AbstractController
         'user'            => $AuthUser,
         ]);
     }
+
+    /**
+     * @Route("/agenda", name="calendario_trabajo")
+     */
+    public function calendarioTrabajo(Security $AuthUser)
+    {   
+        return $this->render('cita/calendarClinica.html.twig', [
+        'controller_name' => 'HomeController',
+        'user'            => $AuthUser,
+        ]);
+    }
     /**
      * @Route("/cambioContrasena", name="app_cambio")
      * @Security2("is_authenticated()")
