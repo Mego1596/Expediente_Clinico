@@ -203,7 +203,7 @@ class PlanTratamientoController extends AbstractController
     public function edit(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $historiaMedica->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $historiaMedica->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $planTratamiento->getHistoriaMedica()->getId() == $historiaMedica->getId()){
                 if($historiaMedica->getCita()->getExpediente()->getHabilitado()){
 
                     //DESDE AQUI
@@ -265,7 +265,7 @@ class PlanTratamientoController extends AbstractController
     public function delete(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $historiaMedica->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $historiaMedica->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $planTratamiento->getHistoriaMedica()->getId() == $historiaMedica->getId()){
                 if($historiaMedica->getCita()->getExpediente()->getHabilitado()){
                     if ($this->isCsrfTokenValid('delete'.$planTratamiento->getId(), $request->request->get('_token'))) {
                         $entityManager = $this->getDoctrine()->getManager();
