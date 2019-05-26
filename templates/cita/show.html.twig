@@ -62,6 +62,11 @@
                         <a class="btn btn-success" href="{{ path('historia_medica_index', {'citum': citum.id}) }}">Registrar Historia Clinica</a>
                     </td>
                 {% endif %}
+                {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+                    <td>
+                        <a class="btn btn-success" href="{{ path('examen_solicitado_index', {'cita': citum.getId()}) }}">Registrar Examenes</a>
+                    </td>
+                {% endif %}
 
             {% endif %}
         </tr>

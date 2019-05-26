@@ -154,7 +154,19 @@ INSERT INTO `permiso` (`id`, `permiso`, `descripcion`, `nombre_tabla`, `creado_e
 (92,'ROLE_PERMISSION_NEW_','Permiso de Creacion','PLAN_TRATAMIENTO',NULL,NULL),
 (93,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','PLAN_TRATAMIENTO',NULL,NULL),
 (94,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','PLAN_TRATAMIENTO',NULL,NULL),
-(95,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','PLAN_TRATAMIENTO',NULL,NULL);
+(95,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','PLAN_TRATAMIENTO',NULL,NULL),
+
+(96,'ROLE_PERMISSION_INDEX_','Permiso de Entrada','EXAMEN_SOLICITADO',NULL,NULL),
+(97,'ROLE_PERMISSION_NEW_','Permiso de Creacion','EXAMEN_SOLICITADO',NULL,NULL),
+(98,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','EXAMEN_SOLICITADO',NULL,NULL),
+(99,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','EXAMEN_SOLICITADO',NULL,NULL),
+(100,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','EXAMEN_SOLICITADO',NULL,NULL),
+
+(101,'ROLE_PERMISSION_INDEX_','Permiso de Entrada','EXAMENES',NULL,NULL),
+(102,'ROLE_PERMISSION_NEW_','Permiso de Creacion','EXAMENES',NULL,NULL),
+(103,'ROLE_PERMISSION_SHOW_','Permiso de Ver ','EXAMENES',NULL,NULL),
+(104,'ROLE_PERMISSION_EDIT_','Permiso de Editar ','EXAMENES',NULL,NULL),
+(105,'ROLE_PERMISSION_DELETE_','Permiso de Eliminar','EXAMENES',NULL,NULL);
 
 INSERT INTO `rol` (`id`, `nombre_rol`, `descripcion`, `creado_en`, `actualizado_en`) VALUES
 (1, 'ROLE_SA', 'Rol de Super Administrador', NULL, NULL),
@@ -297,4 +309,16 @@ INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
 (1, 92), 
 (1, 93), 
 (1, 94), 
-(1, 95);
+(1, 95),
+
+(1, 96),
+(1, 97),
+(1, 98),
+(1, 99),
+(1, 100),
+
+(1, 101),
+(1, 102), 
+(1, 103), 
+(1, 104), 
+(1, 105);

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nuevo Examen Solicitado{% endblock %}
+
+{% block body %}
+    {{ include('examen_solicitado/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+    	<a class="btn btn-secondary" href="{{ path('examen_solicitado_index',{'cita': cita.id}) }}">Atras</a>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#examen_solicitado_tipoExamen").change(function(){
+			let examen = $("#examen_solicitado_tipoExamen").val();
+			var html_code = "";
+			if(examen != "" ){
+				if(examen == 1){
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').show();
+					html_code = html_code +	'<option value="">Seleccione una categoria</option>';
+					html_code= html_code + '<option value="1">Quimico</option>'+
+					'<option value="2">Microscopico</option>'+
+					'<option value="3">Macroscopico</option>'+
+					'<option value="4">Cristaluria</option>';
+					$("#examen_solicitado_categoria").html(html_code);
+				}else if( examen == 2){
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').show();
+					html_code = html_code + '<option value="">Seleccione una categoria</option>';
+					html_code = html_code + '<option value="1">Quimico</option>'+
+					'<option value="2">Microscopico</option>'+
+					'<option value="3">Macroscopico</option>';
+					$("#examen_solicitado_categoria").html(html_code);
+				}else{
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').hide();
+					html_code = html_code + '<option value="">Seleccione una categoria</option>';
+				}
+				
+			}
+		});
+		//BOTON LIMPIAR PANTALLA
+
+	})
+</script>
+
+{% endblock %}

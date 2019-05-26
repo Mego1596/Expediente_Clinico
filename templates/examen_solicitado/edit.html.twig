@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ExamenSolicitado{% endblock %}
+
+{% block body %}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">
+        {% if editar == true %}
+          Modificar Examen
+        {% else %}
+          Registrar Examen
+        {% endif %}
+      </h5>
+      <div class="card-body">
+        {{ form_start(form,{'attr': {'id': 'examen'}}) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row">
+            {% if (examen_solicitado.getTipoExamen() == 'Orina') %}
+	            <div class="col-md-12">
+	            	<select id="examen_solicitado_tipoExamen" name="examen_solicitado_tipoExamen" class="form-control">
+	            		<option value="">Seleccione un examen</option>
+	            		<option value="1" selected="true">Orina</option>
+	            		<option value="2">Heces</option>
+	            		<option value="3">Quimica Sanguinea</option>
+	            		<option value="4">Hematologico</option>
+	            	</select>
+	            </div>
+            {% endif %}
+            {% if (examen_solicitado.getTipoExamen() == 'Heces') %}
+	            <div class="col-md-12">
+	            	<select id="examen_solicitado_tipoExamen" name="examen_solicitado_tipoExamen" class="form-control">
+	            		<option value="">Seleccione un examen</option>
+	            		<option value="1">Orina</option>
+	            		<option value="2" selected="true">Heces</option>
+	            		<option value="3">Quimica Sanguinea</option>
+	            		<option value="4">Hematologico</option>
+	            	</select>
+	            </div>
+            {% endif %}
+            {% if (examen_solicitado.getTipoExamen() == 'Quimica Sanguinea') %}
+	            <div class="col-md-12">
+	            	<select id="examen_solicitado_tipoExamen" name="examen_solicitado_tipoExamen" class="form-control">
+	            		<option value="">Seleccione un examen</option>
+	            		<option value="1">Orina</option>
+	            		<option value="2">Heces</option>
+	            		<option value="3"selected="true">Quimica Sanguinea</option>
+	            		<option value="4">Hematologico</option>
+	            	</select>
+	            </div>
+            {% endif %}
+            {% if (examen_solicitado.getTipoExamen() == 'Hematologico') %}
+	            <div class="col-md-12">
+	            	<select id="examen_solicitado_tipoExamen" name="examen_solicitado_tipoExamen" class="form-control">
+	            		<option value="">Seleccione un examen</option>
+	            		<option value="1">Orina</option>
+	            		<option value="2">Heces</option>
+	            		<option value="3">Quimica Sanguinea</option>
+	            		<option value="4" selected="true">Hematologico</option>
+	            	</select>
+	            </div>
+            {% endif %}
+            <div class="col-md-12" id="seccion_categoria">
+            	{% if (examen_solicitado.getTipoExamen() == 'Orina') %}
+	            	{% if (examen_solicitado.getCategoria() == 'Quimico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1" selected="true">Quimico</option>
+				            	<option value="2">Microscopico</option>
+				            	<option value="3">Macroscopico</option>
+				            	<option value="4">Cristaluria</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            	{% if (examen_solicitado.getCategoria() == 'Microscopico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1">Quimico</option>
+				            	<option value="2" selected="true">Microscopico</option>
+				            	<option value="3">Macroscopico</option>
+				            	<option value="4">Cristaluria</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            	{% if (examen_solicitado.getCategoria() == 'Macroscopico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1">Quimico</option>
+				            	<option value="2">Microscopico</option>
+				            	<option value="3" selected="true">Macroscopico</option>
+				            	<option value="4">Cristaluria</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            	{% if (examen_solicitado.getCategoria() == 'Cristaluria') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1">Quimico</option>
+				            	<option value="2">Microscopico</option>
+				            	<option value="3">Macroscopico</option>
+				            	<option value="4" selected="true">Cristaluria</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            {% endif %}
+	            {% if (examen_solicitado.getTipoExamen() == 'Heces') %}
+	            	{% if (examen_solicitado.getCategoria() == 'Quimico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1" selected="true">Quimico</option>
+				            	<option value="2">Microscopico</option>
+				            	<option value="3">Macroscopico</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            	{% if (examen_solicitado.getCategoria() == 'Microscopico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1">Quimico</option>
+				            	<option value="2" selected="true">Microscopico</option>
+				            	<option value="3">Macroscopico</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            	{% if (examen_solicitado.getCategoria() == 'Macroscopico') %}
+			            <div class="col-md-12">
+			            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+				            	<option value="">Seleccione una categoria</option>
+				            	<option value="1">Quimico</option>
+				            	<option value="2">Microscopico</option>
+				            	<option value="3" selected="true">Macroscopico</option>
+			            	</select>
+			            </div>
+	            	{% endif %}
+	            {% endif %}
+	            {% if (examen_solicitado.getTipoExamen() == 'Quimica Sanguinea' or examen_solicitado.getTipoExamen() == 'Hematologico' ) %}
+		            <div class="col-md-12">
+		            	<select id="examen_solicitado_categoria" name="examen_solicitado_categoria" class="form-control">
+			            	<option value="">Seleccione una categoria</option>
+		            	</select>
+		            </div>
+	            {% endif %}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              {% if editar == false %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+                </div>
+              {% else %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info" style="visibility:hidden">Limpiar Pantalla</button>
+                </div>
+              {% endif%}
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
+
+    {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+    	<a class="btn btn-secondary" href="{{ path('examen_solicitado_index',{'cita': cita.id}) }}">Atras</a>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		if( $("#examen_solicitado_tipoExamen").val() == 3 || $("#examen_solicitado_tipoExamen").val() == 4 ){
+			$("#examen_solicitado_categoria").hide();
+		}
+		$("#examen_solicitado_tipoExamen").change(function(){
+			$("#examen_solicitado_categoria").show();
+			let examen = $("#examen_solicitado_tipoExamen").val();
+			var html_code = "";
+			if(examen != "" ){
+				if(examen == 1){
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').show();
+					html_code = html_code +	'<option value="">Seleccione una categoria</option>';
+					html_code= html_code + '<option value="1">Quimico</option>'+
+					'<option value="2">Microscopico</option>'+
+					'<option value="3">Macroscopico</option>'+
+					'<option value="4">Cristaluria</option>';
+					$("#examen_solicitado_categoria").html(html_code);
+				}else if( examen == 2){
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').show();
+					html_code = html_code + '<option value="">Seleccione una categoria</option>';
+					html_code = html_code + '<option value="1">Quimico</option>'+
+					'<option value="2">Microscopico</option>'+
+					'<option value="3">Macroscopico</option>';
+					$("#examen_solicitado_categoria").html(html_code);
+				}else{
+					$("#examen_solicitado_categoria").empty();
+					$('#seccion_categoria').hide();
+					html_code = html_code + '<option value="">Seleccione una categoria</option>';
+				}
+				
+			}
+		});
+		//BOTON LIMPIAR PANTALLA
+
+	})
+</script>
+
+{% endblock %}
