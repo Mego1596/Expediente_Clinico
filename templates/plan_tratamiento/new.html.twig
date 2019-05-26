@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Registrar Medicamento{% endblock %}
+
+{% block body %}
+    {{ include('plan_tratamiento/_form.html.twig') }}
+    {% if(is_granted('ROLE_PERMISSION_INDEX_PLAN_TRATAMIENTO'))%}
+    	<a class="btn btn-secondary" href="{{ path('plan_tratamiento_index',{'historiaMedica': historia_medica.id}) }}">Atras</a>
+    {% endif %}
+{% endblock %}

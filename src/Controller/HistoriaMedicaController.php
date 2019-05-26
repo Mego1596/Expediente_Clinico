@@ -48,9 +48,16 @@ class HistoriaMedicaController extends AbstractController
             }  
         }
 
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT h.*, d.codigo_categoria as codigo,d.descripcion as descripcion FROM `historia_medica` as h, `diagnostico` as d WHERE h.diagnostico_id = d.id AND cita_id =".$citum->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
+
         return $this->render('historia_medica/index.html.twig', [
-            'historia_medicas' => $historiaMedicaRepository->findAll(),
-            'cita'             => $citum,
+            'historia_medicas' => $result,
+            'user'           => $AuthUser,
+            'cita'           => $citum,
         ]);
     }
 

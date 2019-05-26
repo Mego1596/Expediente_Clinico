@@ -19,7 +19,7 @@ INSERT INTO `diagnostico`(`id`, `descripcion`, `creado_en`, `actualizado_en`, `c
 (18,'Síntomas, signos y hallazgos anormales clínicos y de laboratorio, no clasificados en otra parte',NULL,NULL,'R00-R99'),
 (19,'Traumatismos, envenenamientos y algunas otras consecuencias de causa externa',NULL,NULL,'S00-T98'),
 (20,'Causas externas de morbilidad y de mortalidad',NULL,NULL,'V01-Y98'),
-(21,'Factores que influyen en el estado de salud y contacto con los servicios de salud',NULL,NULL,'Z00-099'),
+(21,'Factores que influyen en el estado de salud y contacto con los servicios de salud',NULL,NULL,'Z00-Z99'),
 (22,'Códigos para situaciones especiales',NULL,NULL,'U00-U99');
 
 
