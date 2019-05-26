@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenHecesQuimico index{% endblock %}
+
+{% block body %}
+    <h1>ExamenHecesQuimico index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdExamen_Heces_Quimico</th>
+                <th>Ph</th>
+                <th>Azucares_reductores</th>
+                <th>Sangre_oculta</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_heces_quimico in examen_heces_quimicos %}
+            <tr>
+                <td>{{ examen_heces_quimico.idExamenHecesQuimico }}</td>
+                <td>{{ examen_heces_quimico.ph }}</td>
+                <td>{{ examen_heces_quimico.azucaresReductores }}</td>
+                <td>{{ examen_heces_quimico.sangreOculta }}</td>
+                <td>{{ examen_heces_quimico.creadoEn ? examen_heces_quimico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_heces_quimico.actualizadoEn ? examen_heces_quimico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_heces_quimico_show', {'idExamen_Heces_Quimico': examen_heces_quimico.idExamen_Heces_Quimico}) }}">show</a>
+                    <a href="{{ path('examen_heces_quimico_edit', {'idExamen_Heces_Quimico': examen_heces_quimico.idExamen_Heces_Quimico}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_heces_quimico_new') }}">Create new</a>
+{% endblock %}

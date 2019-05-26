@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenOrinaMacroscopico index{% endblock %}
+
+{% block body %}
+    <h1>ExamenOrinaMacroscopico index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Color</th>
+                <th>Aspecto</th>
+                <th>Sedimento</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_orina_macroscopico in examen_orina_macroscopicos %}
+            <tr>
+                <td>{{ examen_orina_macroscopico.id }}</td>
+                <td>{{ examen_orina_macroscopico.color }}</td>
+                <td>{{ examen_orina_macroscopico.aspecto }}</td>
+                <td>{{ examen_orina_macroscopico.sedimento }}</td>
+                <td>{{ examen_orina_macroscopico.creadoEn ? examen_orina_macroscopico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_macroscopico.actualizadoEn ? examen_orina_macroscopico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_orina_macroscopico_show', {'id': examen_orina_macroscopico.id}) }}">show</a>
+                    <a href="{{ path('examen_orina_macroscopico_edit', {'id': examen_orina_macroscopico.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_orina_macroscopico_new') }}">Create new</a>
+{% endblock %}

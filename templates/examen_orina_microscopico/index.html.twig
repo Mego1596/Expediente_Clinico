@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenOrinaMicroscopico index{% endblock %}
+
+{% block body %}
+    <h1>ExamenOrinaMicroscopico index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Uretral</th>
+                <th>Urotelio</th>
+                <th>Renal</th>
+                <th>Leucocitos</th>
+                <th>Piocitos</th>
+                <th>Eritrocitos</th>
+                <th>Bacteria</th>
+                <th>Parasitos</th>
+                <th>Funguria</th>
+                <th>FilamentoDeMucina</th>
+                <th>ProteinaUromocoide</th>
+                <th>Cilindros</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_orina_microscopico in examen_orina_microscopicos %}
+            <tr>
+                <td>{{ examen_orina_microscopico.id }}</td>
+                <td>{{ examen_orina_microscopico.uretral }}</td>
+                <td>{{ examen_orina_microscopico.urotelio }}</td>
+                <td>{{ examen_orina_microscopico.renal }}</td>
+                <td>{{ examen_orina_microscopico.leucocitos }}</td>
+                <td>{{ examen_orina_microscopico.piocitos }}</td>
+                <td>{{ examen_orina_microscopico.eritrocitos }}</td>
+                <td>{{ examen_orina_microscopico.bacteria }}</td>
+                <td>{{ examen_orina_microscopico.parasitos }}</td>
+                <td>{{ examen_orina_microscopico.funguria }}</td>
+                <td>{{ examen_orina_microscopico.filamentoDeMucina }}</td>
+                <td>{{ examen_orina_microscopico.proteinaUromocoide }}</td>
+                <td>{{ examen_orina_microscopico.cilindros }}</td>
+                <td>{{ examen_orina_microscopico.creadoEn ? examen_orina_microscopico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_microscopico.actualizadoEn ? examen_orina_microscopico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_orina_microscopico_show', {'id': examen_orina_microscopico.id}) }}">show</a>
+                    <a href="{{ path('examen_orina_microscopico_edit', {'id': examen_orina_microscopico.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="16">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_orina_microscopico_new') }}">Create new</a>
+{% endblock %}

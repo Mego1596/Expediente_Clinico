@@ -276,6 +276,7 @@ class ExamenSolicitadoController extends AbstractController
     /**
      * @Route("/{id}/{cita}", name="examen_solicitado_show", methods={"GET"})
      */
+    /*
     public function show(ExamenSolicitado $examenSolicitado, Cita $cita, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -295,6 +296,7 @@ class ExamenSolicitadoController extends AbstractController
         }
         
     }
+    */
 
     /**
      * @Route("/{id}/{cita}/edit", name="examen_solicitado_edit", methods={"GET","POST"})

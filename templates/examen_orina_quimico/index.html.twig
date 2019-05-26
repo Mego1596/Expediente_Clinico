@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenOrinaQuimico index{% endblock %}
+
+{% block body %}
+    <h1>ExamenOrinaQuimico index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Densidad</th>
+                <th>Ph</th>
+                <th>Glucosa</th>
+                <th>Proteinas</th>
+                <th>Hemoglobina</th>
+                <th>CuerpoCetonico</th>
+                <th>PigmentoBiliar</th>
+                <th>Urobilinogeno</th>
+                <th>Nitritos</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_orina_quimico in examen_orina_quimicos %}
+            <tr>
+                <td>{{ examen_orina_quimico.id }}</td>
+                <td>{{ examen_orina_quimico.densidad }}</td>
+                <td>{{ examen_orina_quimico.ph }}</td>
+                <td>{{ examen_orina_quimico.glucosa }}</td>
+                <td>{{ examen_orina_quimico.proteinas }}</td>
+                <td>{{ examen_orina_quimico.hemoglobina }}</td>
+                <td>{{ examen_orina_quimico.cuerpoCetonico }}</td>
+                <td>{{ examen_orina_quimico.pigmentoBiliar }}</td>
+                <td>{{ examen_orina_quimico.urobilinogeno }}</td>
+                <td>{{ examen_orina_quimico.nitritos }}</td>
+                <td>{{ examen_orina_quimico.creadoEn ? examen_orina_quimico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_quimico.actualizadoEn ? examen_orina_quimico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_orina_quimico_show', {'id': examen_orina_quimico.id}) }}">show</a>
+                    <a href="{{ path('examen_orina_quimico_edit', {'id': examen_orina_quimico.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_orina_quimico_new') }}">Create new</a>
+{% endblock %}

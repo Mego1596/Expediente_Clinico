@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenOrinaQuimico{% endblock %}
+
+{% block body %}
+    <h1>ExamenOrinaQuimico</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ examen_orina_quimico.id }}</td>
+            </tr>
+            <tr>
+                <th>Densidad</th>
+                <td>{{ examen_orina_quimico.densidad }}</td>
+            </tr>
+            <tr>
+                <th>Ph</th>
+                <td>{{ examen_orina_quimico.ph }}</td>
+            </tr>
+            <tr>
+                <th>Glucosa</th>
+                <td>{{ examen_orina_quimico.glucosa }}</td>
+            </tr>
+            <tr>
+                <th>Proteinas</th>
+                <td>{{ examen_orina_quimico.proteinas }}</td>
+            </tr>
+            <tr>
+                <th>Hemoglobina</th>
+                <td>{{ examen_orina_quimico.hemoglobina }}</td>
+            </tr>
+            <tr>
+                <th>CuerpoCetonico</th>
+                <td>{{ examen_orina_quimico.cuerpoCetonico }}</td>
+            </tr>
+            <tr>
+                <th>PigmentoBiliar</th>
+                <td>{{ examen_orina_quimico.pigmentoBiliar }}</td>
+            </tr>
+            <tr>
+                <th>Urobilinogeno</th>
+                <td>{{ examen_orina_quimico.urobilinogeno }}</td>
+            </tr>
+            <tr>
+                <th>Nitritos</th>
+                <td>{{ examen_orina_quimico.nitritos }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ examen_orina_quimico.creadoEn ? examen_orina_quimico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ examen_orina_quimico.actualizadoEn ? examen_orina_quimico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_orina_quimico_index') }}">back to list</a>
+
+    <a href="{{ path('examen_orina_quimico_edit', {'id': examen_orina_quimico.id}) }}">edit</a>
+
+    {{ include('examen_orina_quimico/_delete_form.html.twig') }}
+{% endblock %}

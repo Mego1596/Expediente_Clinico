@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenHecesQuimico{% endblock %}
+
+{% block body %}
+    <h1>ExamenHecesQuimico</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>IdExamen_Heces_Quimico</th>
+                <td>{{ examen_heces_quimico.idExamenHecesQuimico }}</td>
+            </tr>
+            <tr>
+                <th>Ph</th>
+                <td>{{ examen_heces_quimico.ph }}</td>
+            </tr>
+            <tr>
+                <th>Azucares_reductores</th>
+                <td>{{ examen_heces_quimico.azucaresReductores }}</td>
+            </tr>
+            <tr>
+                <th>Sangre_oculta</th>
+                <td>{{ examen_heces_quimico.sangreOculta }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ examen_heces_quimico.creadoEn ? examen_heces_quimico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ examen_heces_quimico.actualizadoEn ? examen_heces_quimico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_heces_quimico_index') }}">back to list</a>
+
+    <a href="{{ path('examen_heces_quimico_edit', {'idExamen_Heces_Quimico': examen_heces_quimico.idExamen_Heces_Quimico}) }}">edit</a>
+
+    {{ include('examen_heces_quimico/_delete_form.html.twig') }}
+{% endblock %}

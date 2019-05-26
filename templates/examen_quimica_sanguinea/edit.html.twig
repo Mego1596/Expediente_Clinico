@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ExamenQuimicaSanguinea{% endblock %}
+
+{% block body %}
+    <h1>Edit ExamenQuimicaSanguinea</h1>
+
+    {{ include('examen_quimica_sanguinea/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('examen_quimica_sanguinea_index') }}">back to list</a>
+
+    {{ include('examen_quimica_sanguinea/_delete_form.html.twig') }}
+{% endblock %}

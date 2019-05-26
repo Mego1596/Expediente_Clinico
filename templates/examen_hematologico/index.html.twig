@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenHematologico index{% endblock %}
+
+{% block body %}
+    <h1>ExamenHematologico index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>TipoSerie</th>
+                <th>Unidad</th>
+                <th>ValorReferencia</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_hematologico in examen_hematologicos %}
+            <tr>
+                <td>{{ examen_hematologico.id }}</td>
+                <td>{{ examen_hematologico.tipoSerie }}</td>
+                <td>{{ examen_hematologico.unidad }}</td>
+                <td>{{ examen_hematologico.valorReferencia }}</td>
+                <td>{{ examen_hematologico.creadoEn ? examen_hematologico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_hematologico.actualizadoEn ? examen_hematologico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_hematologico_show', {'id': examen_hematologico.id}) }}">show</a>
+                    <a href="{{ path('examen_hematologico_edit', {'id': examen_hematologico.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_hematologico_new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenHecesMacroscopico{% endblock %}
+
+{% block body %}
+    <h1>ExamenHecesMacroscopico</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ examen_heces_macroscopico.id }}</td>
+            </tr>
+            <tr>
+                <th>Aspecto</th>
+                <td>{{ examen_heces_macroscopico.aspecto }}</td>
+            </tr>
+            <tr>
+                <th>Consistencia</th>
+                <td>{{ examen_heces_macroscopico.consistencia }}</td>
+            </tr>
+            <tr>
+                <th>Color</th>
+                <td>{{ examen_heces_macroscopico.color }}</td>
+            </tr>
+            <tr>
+                <th>Olor</th>
+                <td>{{ examen_heces_macroscopico.olor }}</td>
+            </tr>
+            <tr>
+                <th>Presencia_de_sangre</th>
+                <td>{{ examen_heces_macroscopico.presenciaDeSangre }}</td>
+            </tr>
+            <tr>
+                <th>Restos_alimenticios</th>
+                <td>{{ examen_heces_macroscopico.restosAlimenticios }}</td>
+            </tr>
+            <tr>
+                <th>Presencia_moco</th>
+                <td>{{ examen_heces_macroscopico.presenciaMoco }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ examen_heces_macroscopico.creadoEn ? examen_heces_macroscopico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ examen_heces_macroscopico.actualizadoEn ? examen_heces_macroscopico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_heces_macroscopico_index') }}">back to list</a>
+
+    <a href="{{ path('examen_heces_macroscopico_edit', {'id': examen_heces_macroscopico.id}) }}">edit</a>
+
+    {{ include('examen_heces_macroscopico/_delete_form.html.twig') }}
+{% endblock %}

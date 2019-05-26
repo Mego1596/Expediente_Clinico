@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New ExamenOrinaMacroscopico{% endblock %}
+
+{% block body %}
+    <h1>Create new ExamenOrinaMacroscopico</h1>
+
+    {{ include('examen_orina_macroscopico/_form.html.twig') }}
+
+    <a href="{{ path('examen_orina_macroscopico_index') }}">back to list</a>
+{% endblock %}

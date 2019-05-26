@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenQuimicaSanguinea{% endblock %}
+
+{% block body %}
+    <h1>ExamenQuimicaSanguinea</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ examen_quimica_sanguinea.id }}</td>
+            </tr>
+            <tr>
+                <th>Parametro</th>
+                <td>{{ examen_quimica_sanguinea.parametro }}</td>
+            </tr>
+            <tr>
+                <th>Resultado</th>
+                <td>{{ examen_quimica_sanguinea.resultado }}</td>
+            </tr>
+            <tr>
+                <th>Comentario</th>
+                <td>{{ examen_quimica_sanguinea.comentario }}</td>
+            </tr>
+            <tr>
+                <th>Unidades</th>
+                <td>{{ examen_quimica_sanguinea.unidades }}</td>
+            </tr>
+            <tr>
+                <th>Rango</th>
+                <td>{{ examen_quimica_sanguinea.rango }}</td>
+            </tr>
+            <tr>
+                <th>Creado_en</th>
+                <td>{{ examen_quimica_sanguinea.creadoEn ? examen_quimica_sanguinea.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Actualizado_en</th>
+                <td>{{ examen_quimica_sanguinea.actualizadoEn ? examen_quimica_sanguinea.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_quimica_sanguinea_index') }}">back to list</a>
+
+    <a href="{{ path('examen_quimica_sanguinea_edit', {'id': examen_quimica_sanguinea.id}) }}">edit</a>
+
+    {{ include('examen_quimica_sanguinea/_delete_form.html.twig') }}
+{% endblock %}

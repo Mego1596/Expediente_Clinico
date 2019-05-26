@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ExamenOrinaCristaluria index{% endblock %}
+
+{% block body %}
+    <h1>ExamenOrinaCristaluria index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UratosAmorfos</th>
+                <th>AcidoUrico</th>
+                <th>OxalatosCalcicos</th>
+                <th>FosfatosAmorfos</th>
+                <th>FosfatosCalcicos</th>
+                <th>FosfatosAmonicos</th>
+                <th>RiesgoLitogenico</th>
+                <th>Creado_en</th>
+                <th>Actualizado_en</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for examen_orina_cristalurium in examen_orina_cristalurias %}
+            <tr>
+                <td>{{ examen_orina_cristalurium.id }}</td>
+                <td>{{ examen_orina_cristalurium.uratosAmorfos }}</td>
+                <td>{{ examen_orina_cristalurium.acidoUrico }}</td>
+                <td>{{ examen_orina_cristalurium.oxalatosCalcicos }}</td>
+                <td>{{ examen_orina_cristalurium.fosfatosAmorfos }}</td>
+                <td>{{ examen_orina_cristalurium.fosfatosCalcicos }}</td>
+                <td>{{ examen_orina_cristalurium.fosfatosAmonicos }}</td>
+                <td>{{ examen_orina_cristalurium.riesgoLitogenico }}</td>
+                <td>{{ examen_orina_cristalurium.creadoEn ? examen_orina_cristalurium.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_cristalurium.actualizadoEn ? examen_orina_cristalurium.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>
+                    <a href="{{ path('examen_orina_cristaluria_show', {'id': examen_orina_cristalurium.id}) }}">show</a>
+                    <a href="{{ path('examen_orina_cristaluria_edit', {'id': examen_orina_cristalurium.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="11">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('examen_orina_cristaluria_new') }}">Create new</a>
+{% endblock %}

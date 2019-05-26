@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ExamenHematologico{% endblock %}
+
+{% block body %}
+    <h1>Edit ExamenHematologico</h1>
+
+    {{ include('examen_hematologico/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('examen_hematologico_index') }}">back to list</a>
+
+    {{ include('examen_hematologico/_delete_form.html.twig') }}
+{% endblock %}

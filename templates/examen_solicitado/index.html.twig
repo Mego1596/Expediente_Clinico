@@ -45,7 +45,7 @@
                                             <td>{{ examen_solicitado.categoria}}</td>
                                             <td>
                                                 {% if is_granted('ROLE_PERMISSION_INDEX_EXAMENES') %}
-                                                    <a href="{{ path('examen_solicitado_show', {'cita': cita.getId(), id: examen_solicitado.id}) }}" class="btn btn-info">Asignar Resultados</a>
+                                                    <a href="" class="btn btn-info">Asignar Resultados</a>
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_EXAMEN_SOLICITADO') %}
@@ -108,5 +108,10 @@
 </script>
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
+<script type="text/javascript">
+    
+    
+    
+</script>
 
 {% endblock %}
