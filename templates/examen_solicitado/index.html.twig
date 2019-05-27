@@ -45,7 +45,7 @@
                                             <td>{{ examen_solicitado.categoria}}</td>
                                             <td>
                                                 {% if is_granted('ROLE_PERMISSION_INDEX_EXAMENES') %}
-                                                    <a href="" class="btn btn-info">Asignar Resultados</a>
+                                                    <a href="#" id="ruteo" class="btn btn-info" style="color: white" onclick="ruteodinamico(&#39;{{examen_solicitado.tipo_examen}}&#39;,&#39;{{examen_solicitado.categoria}}&#39;)">Asignar Resultados</a>
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_EXAMEN_SOLICITADO') %}
@@ -109,9 +109,40 @@
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 
 <script type="text/javascript">
-    
-    
-    
+    function ruteodinamico(tipo_examen, categoria) {
+        $(document).ready(function(){
+            if(tipo_examen == 'Quimica Sanguinea' && categoria == '-'){
+                let route = "{{path('examen_quimica_sanguinea_index') | escape('js')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Hematologico' && categoria == '-'){
+                let route = "{{path('examen_hematologico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Orina' && categoria == 'Quimico'){
+                let route = "{{path('examen_orina_quimico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Orina' && categoria == 'Microscopico'){
+                let route = "{{path('examen_orina_microscopico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Orina' && categoria == 'Macroscopico'){
+                let route = "{{path('examen_orina_macroscopico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Orina' && categoria == 'Cristaluria'){
+                let route = "{{path('examen_orina_cristaluria_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Heces' && categoria == 'Quimico'){
+                let route = "{{path('examen_heces_quimico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Heces' && categoria == 'Microscopico'){
+                let route = "{{path('examen_heces_microscopico_index')}}"
+                location.replace(route);
+            }else if(tipo_examen == 'Heces' && categoria == 'Macroscopico'){
+                let route = "{{path('examen_heces_macroscopico_index')}}"
+                location.replace(route);
+            }else{
+                location.replace('');
+            }
+        });
+    }
 </script>
 
 {% endblock %}
