@@ -37,9 +37,9 @@ class ExamenSolicitadoController extends AbstractController
                     $statement = $em->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
                     $result = $statement->fetchAll();
-
                     return $this->render('examen_solicitado/index.html.twig', [
                         'examen_solicitados' => $result,
+                        'cantidad'       => count($result),
                         'user'           => $AuthUser,
                         'cita'           => $cita,
                     ]);
@@ -62,6 +62,7 @@ class ExamenSolicitadoController extends AbstractController
 
         return $this->render('examen_solicitado/index.html.twig', [
             'historia_medicas' => $result,
+            'cantidad'       => count($result),
             'user'           => $AuthUser,
             'cita'           => $cita,
         ]);
@@ -81,79 +82,201 @@ class ExamenSolicitadoController extends AbstractController
                     $form = $this->createForm(ExamenSolicitadoType::class, $examenSolicitado);
                     $form->handleRequest($request);
 
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        if($form["tipoExamen"]->getData() != ""){
-                            if(($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 4) ){
-                                $entityManager = $this->getDoctrine()->getManager();
-                                $examenSolicitado->setTipoExamen("Orina");
-                                if($form["categoria"]->getData() == 1){
-                                    $examenSolicitado->setCategoria("Quimico");
-                                }
-                                if($form["categoria"]->getData() == 2){
-                                    $examenSolicitado->setCategoria("Microscopico");   
-                                }
-                                if($form["categoria"]->getData() == 3){
-                                    $examenSolicitado->setCategoria("Macroscopico");
-                                }
-                                if($form["categoria"]->getData() == 4){
-                                    $examenSolicitado->setCategoria("Cristaluria");
-                                }
-                                $examenSolicitado->setCita($cita);
-                                $entityManager->persist($examenSolicitado);
-                                $entityManager->flush();
-                                $this->addFlash('success', 'Examen añadido con exito');
-                                return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-
-                            }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
+                    $em = $this->getDoctrine()->getManager();
+                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE cita_id =".$cita->getId().";";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    if(count($result) < 9 ){
+                        if ($form->isSubmitted() && $form->isValid()) {
+                            if($form["tipoExamen"]->getData() != ""){
+                                if(($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 4) ){
                                     $entityManager = $this->getDoctrine()->getManager();
-                                    $examenSolicitado->setTipoExamen("Heces");
+                                    $examenSolicitado->setTipoExamen("Orina");
                                     if($form["categoria"]->getData() == 1){
-                                    $examenSolicitado->setCategoria("Quimico");
+                                        $examenSolicitado->setCategoria("Quimico");
+                                        $em = $this->getDoctrine()->getManager();
+                                        $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Quimico' AND cita_id =".$cita->getId().";";
+                                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                        $statement->execute();
+                                        $result = $statement->fetchAll();
+                                        if($result == null){
+                                            $examenSolicitado->setCita($cita);
+                                            $entityManager->persist($examenSolicitado);
+                                            $entityManager->flush();
+                                        }else{
+                                            $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                        }
                                     }
                                     if($form["categoria"]->getData() == 2){
-                                        $examenSolicitado->setCategoria("Microscopico");   
+                                        $examenSolicitado->setCategoria("Microscopico");
+                                        $em = $this->getDoctrine()->getManager();
+                                        $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Microscopico' AND cita_id =".$cita->getId().";";
+                                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                        $statement->execute();
+                                        $result = $statement->fetchAll();
+                                        if($result == null){
+                                            $examenSolicitado->setCita($cita);
+                                            $entityManager->persist($examenSolicitado);
+                                            $entityManager->flush();
+                                        }else{
+                                            $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                        } 
                                     }
                                     if($form["categoria"]->getData() == 3){
                                         $examenSolicitado->setCategoria("Macroscopico");
+                                        $em = $this->getDoctrine()->getManager();
+                                        $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Macroscopico' AND cita_id =".$cita->getId().";";
+                                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                        $statement->execute();
+                                        $result = $statement->fetchAll();
+                                        if($result == null){
+                                            $examenSolicitado->setCita($cita);
+                                            $entityManager->persist($examenSolicitado);
+                                            $entityManager->flush();
+                                        }else{
+                                            $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                        }
                                     }
-                                    $examenSolicitado->setCita($cita);
-                                    $entityManager->persist($examenSolicitado);
-                                    $entityManager->flush();
+                                    if($form["categoria"]->getData() == 4){
+                                        $examenSolicitado->setCategoria("Cristaluria");
+                                        $em = $this->getDoctrine()->getManager();
+                                        $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Cristaluria' AND cita_id =".$cita->getId().";";
+                                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                        $statement->execute();
+                                        $result = $statement->fetchAll();
+                                        if($result == null){
+                                            $examenSolicitado->setCita($cita);
+                                            $entityManager->persist($examenSolicitado);
+                                            $entityManager->flush();
+                                        }else{
+                                            $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                        }
+                                    }
                                     $this->addFlash('success', 'Examen añadido con exito');
                                     return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-                            }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
-                                    $entityManager = $this->getDoctrine()->getManager();
-                                    $examenSolicitado->setCita($cita);
-                                    $examenSolicitado->setCategoria("-");
-                                    if($form["tipoExamen"]->getData() == 3){
-                                        $examenSolicitado->setTipoExamen("Quimica Sanguinea");
-                                    }else{
-                                        $examenSolicitado->setTipoExamen("Hematologico");
-                                    }
-                                    $entityManager->persist($examenSolicitado);
-                                    $entityManager->flush();
-                                    $this->addFlash('success', 'Examen añadido con exito');
-                                    return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-                            }else{
-                                if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
-                                    $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
-                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
-                                }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
-                                    $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
-                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
-                                }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
-                                    $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
-                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+
+                                }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
+                                        $entityManager = $this->getDoctrine()->getManager();
+                                        $examenSolicitado->setTipoExamen("Heces");
+                                        if($form["categoria"]->getData() == 1){
+                                            $examenSolicitado->setCategoria("Quimico");
+                                            $em = $this->getDoctrine()->getManager();
+                                            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Quimico' AND cita_id =".$cita->getId().";";
+                                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $examenSolicitado->setCita($cita);
+                                                $entityManager->persist($examenSolicitado);
+                                                $entityManager->flush();
+                                            }else{
+                                                $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                            }
+                                        }
+                                        if($form["categoria"]->getData() == 2){
+                                            $examenSolicitado->setCategoria("Microscopico");  
+                                            $em = $this->getDoctrine()->getManager();
+                                            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Microscopico' AND cita_id =".$cita->getId().";";
+                                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $examenSolicitado->setCita($cita);
+                                                $entityManager->persist($examenSolicitado);
+                                                $entityManager->flush();
+                                            }else{
+                                                $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                            } 
+                                        }
+                                        if($form["categoria"]->getData() == 3){
+                                            $examenSolicitado->setCategoria("Macroscopico");
+                                            $em = $this->getDoctrine()->getManager();
+                                            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Macroscopico' AND cita_id =".$cita->getId().";";
+                                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $examenSolicitado->setCita($cita);
+                                                $entityManager->persist($examenSolicitado);
+                                                $entityManager->flush();
+                                            }else{
+                                                $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                            }
+                                        }
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                        $this->addFlash('success', 'Examen añadido con exito');
+                                        return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
+                                }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
+                                        $entityManager = $this->getDoctrine()->getManager();
+                                        $examenSolicitado->setCita($cita);
+                                        $examenSolicitado->setCategoria("-");
+                                        if($form["tipoExamen"]->getData() == 3){
+                                            $examenSolicitado->setTipoExamen("Quimica Sanguinea");
+                                            $em = $this->getDoctrine()->getManager();
+                                            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Quimica Sanguinea' AND categoria ='-' AND cita_id =".$cita->getId().";";
+                                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $examenSolicitado->setCita($cita);
+                                                $entityManager->persist($examenSolicitado);
+                                                $entityManager->flush();
+                                            }else{
+                                                $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                            } 
+
+                                        }else{
+                                            $examenSolicitado->setTipoExamen("Hematologico");
+                                            $em = $this->getDoctrine()->getManager();
+                                            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Hematologico' AND categoria ='-' AND cita_id =".$cita->getId().";";
+                                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $examenSolicitado->setCita($cita);
+                                                $entityManager->persist($examenSolicitado);
+                                                $entityManager->flush();
+                                            }else{
+                                                $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                            }
+                                        }
+                                        $this->addFlash('success', 'Examen añadido con exito');
+                                        return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                                 }else{
-                                    $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
-                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
+                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
+                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
+                                        $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }else{
+                                        $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }
                                 }
+                            }else{
+                                $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                             }
-                            
-                        }else{
-                            $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
-                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                         }
+                    }else{
+                        $this->addFlash('fail', 'Error, ya ha creado todos los examenes posibles que se pueden solicitar por cita, por favor verifique el examen existente si desea hacer modificaciones');
+                        return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                     }
 
                     return $this->render('examen_solicitado/new.html.twig', [
@@ -179,85 +302,201 @@ class ExamenSolicitadoController extends AbstractController
             $form = $this->createForm(ExamenSolicitadoType::class, $examenSolicitado);
             $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                if($form["tipoExamen"]->getData() != ""){
-                    if(($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 4) ){
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $examenSolicitado->setTipoExamen("Orina");
-                        if($form["categoria"]->getData() == 1){
-                            $examenSolicitado->setCategoria("Quimico");
-                        }
-                        if($form["categoria"]->getData() == 2){
-                            $examenSolicitado->setCategoria("Microscopico");   
-                        }
-                        if($form["categoria"]->getData() == 3){
-                            $examenSolicitado->setCategoria("Macroscopico");
-                        }
-                        if($form["categoria"]->getData() == 4){
-                            $examenSolicitado->setCategoria("Cristaluria");
-                        }
-                        $examenSolicitado->setCita($cita);
-                        $entityManager->persist($examenSolicitado);
-                        $entityManager->flush();
-                        $this->addFlash('success', 'Examen añadido con exito');
-                        return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-
-                    }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE cita_id =".$cita->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if(count($result) < 9 ){
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if($form["tipoExamen"]->getData() != ""){
+                        if(($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == 4) ){
                             $entityManager = $this->getDoctrine()->getManager();
-                            $examenSolicitado->setTipoExamen("Heces");
+                            $examenSolicitado->setTipoExamen("Orina");
                             if($form["categoria"]->getData() == 1){
-                            $examenSolicitado->setCategoria("Quimico");
+                                $examenSolicitado->setCategoria("Quimico");
+                                $em = $this->getDoctrine()->getManager();
+                                $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Quimico' AND cita_id =".$cita->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                if($result == null){
+                                    $examenSolicitado->setCita($cita);
+                                    $entityManager->persist($examenSolicitado);
+                                    $entityManager->flush();
+                                }else{
+                                    $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                }
                             }
                             if($form["categoria"]->getData() == 2){
-                                $examenSolicitado->setCategoria("Microscopico");   
+                                $examenSolicitado->setCategoria("Microscopico");
+                                $em = $this->getDoctrine()->getManager();
+                                $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Microscopico' AND cita_id =".$cita->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                if($result == null){
+                                    $examenSolicitado->setCita($cita);
+                                    $entityManager->persist($examenSolicitado);
+                                    $entityManager->flush();
+                                }else{
+                                    $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                } 
                             }
                             if($form["categoria"]->getData() == 3){
                                 $examenSolicitado->setCategoria("Macroscopico");
+                                $em = $this->getDoctrine()->getManager();
+                                $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Macroscopico' AND cita_id =".$cita->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                if($result == null){
+                                    $examenSolicitado->setCita($cita);
+                                    $entityManager->persist($examenSolicitado);
+                                    $entityManager->flush();
+                                }else{
+                                    $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                }
                             }
-                            $examenSolicitado->setCita($cita);
-                            $entityManager->persist($examenSolicitado);
-                            $entityManager->flush();
+                            if($form["categoria"]->getData() == 4){
+                                $examenSolicitado->setCategoria("Cristaluria");
+                                $em = $this->getDoctrine()->getManager();
+                                $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Orina' AND categoria ='Cristaluria' AND cita_id =".$cita->getId().";";
+                                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                $statement->execute();
+                                $result = $statement->fetchAll();
+                                if($result == null){
+                                    $examenSolicitado->setCita($cita);
+                                    $entityManager->persist($examenSolicitado);
+                                    $entityManager->flush();
+                                }else{
+                                    $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                    return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                }
+                            }
                             $this->addFlash('success', 'Examen añadido con exito');
                             return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-                    }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $examenSolicitado->setCita($cita);
-                            $examenSolicitado->setCategoria("-");
-                            if($form["tipoExamen"]->getData() == 3){
-                                $examenSolicitado->setTipoExamen("Quimica Sanguinea");
-                            }else{
-                                $examenSolicitado->setTipoExamen("Hematologico");
-                            }
-                            $entityManager->persist($examenSolicitado);
-                            $entityManager->flush();
-                            $this->addFlash('success', 'Examen añadido con exito');
-                            return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
-                    }else{
-                        if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
-                            $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
-                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);    
-                        }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
-                            $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
-                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]); 
-                        }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
-                            $examenSolicitado->setTipoExamen("");
-                            $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
-                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]); 
+
+                        }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $examenSolicitado->setTipoExamen("Heces");
+                                if($form["categoria"]->getData() == 1){
+                                    $examenSolicitado->setCategoria("Quimico");
+                                    $em = $this->getDoctrine()->getManager();
+                                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Quimico' AND cita_id =".$cita->getId().";";
+                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                    $statement->execute();
+                                    $result = $statement->fetchAll();
+                                    if($result == null){
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                    }else{
+                                        $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }
+                                }
+                                if($form["categoria"]->getData() == 2){
+                                    $examenSolicitado->setCategoria("Microscopico");  
+                                    $em = $this->getDoctrine()->getManager();
+                                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Microscopico' AND cita_id =".$cita->getId().";";
+                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                    $statement->execute();
+                                    $result = $statement->fetchAll();
+                                    if($result == null){
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                    }else{
+                                        $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    } 
+                                }
+                                if($form["categoria"]->getData() == 3){
+                                    $examenSolicitado->setCategoria("Macroscopico");
+                                    $em = $this->getDoctrine()->getManager();
+                                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Heces' AND categoria ='Macroscopico' AND cita_id =".$cita->getId().";";
+                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                    $statement->execute();
+                                    $result = $statement->fetchAll();
+                                    if($result == null){
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                    }else{
+                                        $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }
+                                }
+                                $examenSolicitado->setCita($cita);
+                                $entityManager->persist($examenSolicitado);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Examen añadido con exito');
+                                return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
+                        }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $examenSolicitado->setCita($cita);
+                                $examenSolicitado->setCategoria("-");
+                                if($form["tipoExamen"]->getData() == 3){
+                                    $examenSolicitado->setTipoExamen("Quimica Sanguinea");
+                                    $em = $this->getDoctrine()->getManager();
+                                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Quimica Sanguinea' AND categoria ='-' AND cita_id =".$cita->getId().";";
+                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                    $statement->execute();
+                                    $result = $statement->fetchAll();
+                                    if($result == null){
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                    }else{
+                                        $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    } 
+
+                                }else{
+                                    $examenSolicitado->setTipoExamen("Hematologico");
+                                    $em = $this->getDoctrine()->getManager();
+                                    $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE tipo_examen= 'Hematologico' AND categoria ='-' AND cita_id =".$cita->getId().";";
+                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                                    $statement->execute();
+                                    $result = $statement->fetchAll();
+                                    if($result == null){
+                                        $examenSolicitado->setCita($cita);
+                                        $entityManager->persist($examenSolicitado);
+                                        $entityManager->flush();
+                                    }else{
+                                        $this->addFlash('fail', 'Error, ya se ha registrado este tipo de examen, vuelva a intentarlo con otro tipo de examen');
+                                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                                    }
+                                }
+                                $this->addFlash('success', 'Examen añadido con exito');
+                                return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                         }else{
-                            $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
-                            return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]); 
+                            if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
+                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                            }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
+                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                            }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
+                                $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                            }else{
+                                $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
+                                return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
+                            }
                         }
+                    }else{
+                        $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                        return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                     }
-                    
-                }else{
-                    $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
-                    return $this->render('examen_solicitado/new.html.twig', [
-                        'examen_solicitado' => $examenSolicitado,
-                        'cita' => $cita,
-                        'editar' => $editar,
-                        'form' => $form->createView(),
-                    ]);
                 }
+            }else{
+                $this->addFlash('fail', 'Error, ya ha creado todos los examenes posibles que se pueden solicitar por cita, por favor verifique el examen existente si desea hacer modificaciones');
+                return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
             }
 
             return $this->render('examen_solicitado/new.html.twig', [

@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\ExamenSolicitado;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 
 /**
  * @Route("/examen/hematologico")
@@ -16,9 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExamenHematologicoController extends AbstractController
 {
     /**
-     * @Route("/", name="examen_hematologico_index", methods={"GET"})
+     * @Route("/{examen_solicitado}", name="examen_hematologico_index", methods={"GET"})
      */
-    public function index(ExamenHematologicoRepository $examenHematologicoRepository): Response
+    public function index(ExamenHematologicoRepository $examenHematologicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_hematologico/index.html.twig', [
             'examen_hematologicos' => $examenHematologicoRepository->findAll(),
@@ -26,9 +30,9 @@ class ExamenHematologicoController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="examen_hematologico_new", methods={"GET","POST"})
+     * @Route("/new/{examen_solicitado}", name="examen_hematologico_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $examenHematologico = new ExamenHematologico();
         $form = $this->createForm(ExamenHematologicoType::class, $examenHematologico);
@@ -49,9 +53,9 @@ class ExamenHematologicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_hematologico_show", methods={"GET"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_hematologico_show", methods={"GET"})
      */
-    public function show(ExamenHematologico $examenHematologico): Response
+    public function show(ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_hematologico/show.html.twig', [
             'examen_hematologico' => $examenHematologico,
@@ -59,9 +63,9 @@ class ExamenHematologicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="examen_hematologico_edit", methods={"GET","POST"})
+     * @Route("/{id}/{examen_solicitado}/edit", name="examen_hematologico_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ExamenHematologico $examenHematologico): Response
+    public function edit(Request $request, ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $form = $this->createForm(ExamenHematologicoType::class, $examenHematologico);
         $form->handleRequest($request);
@@ -81,9 +85,9 @@ class ExamenHematologicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_hematologico_delete", methods={"DELETE"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_hematologico_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, ExamenHematologico $examenHematologico): Response
+    public function delete(Request $request, ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if ($this->isCsrfTokenValid('delete'.$examenHematologico->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

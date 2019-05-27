@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\ExamenHecesMicroscopico;
+use App\Entity\ExamenSolicitado;
 use App\Form\ExamenHecesMicroscopicoType;
 use App\Repository\ExamenHecesMicroscopicoRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 
 /**
  * @Route("/examen/heces/microscopico")
@@ -16,9 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExamenHecesMicroscopicoController extends AbstractController
 {
     /**
-     * @Route("/", name="examen_heces_microscopico_index", methods={"GET"})
+     * @Route("/{examen_solicitado}", name="examen_heces_microscopico_index", methods={"GET"})
      */
-    public function index(ExamenHecesMicroscopicoRepository $examenHecesMicroscopicoRepository): Response
+    public function index(ExamenHecesMicroscopicoRepository $examenHecesMicroscopicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_heces_microscopico/index.html.twig', [
             'examen_heces_microscopicos' => $examenHecesMicroscopicoRepository->findAll(),
@@ -26,9 +30,9 @@ class ExamenHecesMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="examen_heces_microscopico_new", methods={"GET","POST"})
+     * @Route("/new/{examen_solicitado}", name="examen_heces_microscopico_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $examenHecesMicroscopico = new ExamenHecesMicroscopico();
         $form = $this->createForm(ExamenHecesMicroscopicoType::class, $examenHecesMicroscopico);
@@ -49,9 +53,9 @@ class ExamenHecesMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_heces_microscopico_show", methods={"GET"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_heces_microscopico_show", methods={"GET"})
      */
-    public function show(ExamenHecesMicroscopico $examenHecesMicroscopico): Response
+    public function show(ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_heces_microscopico/show.html.twig', [
             'examen_heces_microscopico' => $examenHecesMicroscopico,
@@ -59,9 +63,9 @@ class ExamenHecesMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="examen_heces_microscopico_edit", methods={"GET","POST"})
+     * @Route("/{id}/{examen_solicitado}/edit", name="examen_heces_microscopico_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico): Response
+    public function edit(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $form = $this->createForm(ExamenHecesMicroscopicoType::class, $examenHecesMicroscopico);
         $form->handleRequest($request);
@@ -81,9 +85,9 @@ class ExamenHecesMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_heces_microscopico_delete", methods={"DELETE"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_heces_microscopico_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico): Response
+    public function delete(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if ($this->isCsrfTokenValid('delete'.$examenHecesMicroscopico->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();

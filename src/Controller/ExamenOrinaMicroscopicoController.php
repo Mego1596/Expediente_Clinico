@@ -9,6 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\ExamenSolicitado;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
 
 /**
  * @Route("/examen/orina/microscopico")
@@ -16,9 +20,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class ExamenOrinaMicroscopicoController extends AbstractController
 {
     /**
-     * @Route("/", name="examen_orina_microscopico_index", methods={"GET"})
+     * @Route("/{examen_solicitado}", name="examen_orina_microscopico_index", methods={"GET"})
      */
-    public function index(ExamenOrinaMicroscopicoRepository $examenOrinaMicroscopicoRepository): Response
+    public function index(ExamenOrinaMicroscopicoRepository $examenOrinaMicroscopicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_orina_microscopico/index.html.twig', [
             'examen_orina_microscopicos' => $examenOrinaMicroscopicoRepository->findAll(),
@@ -26,9 +30,9 @@ class ExamenOrinaMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="examen_orina_microscopico_new", methods={"GET","POST"})
+     * @Route("/new/{examen_solicitado}", name="examen_orina_microscopico_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $examenOrinaMicroscopico = new ExamenOrinaMicroscopico();
         $form = $this->createForm(ExamenOrinaMicroscopicoType::class, $examenOrinaMicroscopico);
@@ -49,9 +53,9 @@ class ExamenOrinaMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_orina_microscopico_show", methods={"GET"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_orina_microscopico_show", methods={"GET"})
      */
-    public function show(ExamenOrinaMicroscopico $examenOrinaMicroscopico): Response
+    public function show(ExamenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         return $this->render('examen_orina_microscopico/show.html.twig', [
             'examen_orina_microscopico' => $examenOrinaMicroscopico,
@@ -59,9 +63,9 @@ class ExamenOrinaMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="examen_orina_microscopico_edit", methods={"GET","POST"})
+     * @Route("/{id}/{examen_solicitado}/edit", name="examen_orina_microscopico_edit", methods={"GET","POST"})
      */
-    public function edit(Request $request, ExamenOrinaMicroscopico $examenOrinaMicroscopico): Response
+    public function edit(Request $request, ExamenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         $form = $this->createForm(ExamenOrinaMicroscopicoType::class, $examenOrinaMicroscopico);
         $form->handleRequest($request);
@@ -81,9 +85,9 @@ class ExamenOrinaMicroscopicoController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="examen_orina_microscopico_delete", methods={"DELETE"})
+     * @Route("/{id}/{examen_solicitado}", name="examen_orina_microscopico_delete", methods={"DELETE"})
      */
-    public function delete(Request $request, ExamenOrinaMicroscopico $examenOrinaMicroscopico): Response
+    public function delete(Request $request, ExamenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if ($this->isCsrfTokenValid('delete'.$examenOrinaMicroscopico->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
