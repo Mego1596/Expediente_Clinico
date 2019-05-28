@@ -17,7 +17,7 @@ class ExamenHecesMicroscopico
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenHecesMicroscopico", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenHecesMicroscopico")
      * @ORM\JoinColumn(nullable=false)
      */
     private $examen_solicitado;

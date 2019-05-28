@@ -112,7 +112,6 @@
 
 <script type="text/javascript">
     function ruteodinamico(tipo_examen, categoria,id) {
-        alert(id);
         $(document).ready(function(){
             if(tipo_examen == 'Quimica Sanguinea' && categoria == '-'){
                 let url = '{{ path("examen_quimica_sanguinea_index", {'examen_solicitado': 'examen_solicitado'}) }}'; 

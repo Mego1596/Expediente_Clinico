@@ -17,7 +17,7 @@ class ExamenOrinaMacroscopico
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenOrinaMacroscopico", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenOrinaMacroscopico")
      * @ORM\JoinColumn(nullable=false)
      */
     private $examen_solicitado;

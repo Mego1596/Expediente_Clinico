@@ -27,20 +27,13 @@
                 <th>Levadura</th>
                 <td>{{ examen_heces_microscopico.levadura }}</td>
             </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ examen_heces_microscopico.creadoEn ? examen_heces_microscopico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ examen_heces_microscopico.actualizadoEn ? examen_heces_microscopico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('examen_heces_microscopico_index') }}">back to list</a>
-
-    <a href="{{ path('examen_heces_microscopico_edit', {'id': examen_heces_microscopico.id}) }}">edit</a>
-
-    {{ include('examen_heces_microscopico/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_heces_microscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
+    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+        <a href="{{ path('examen_heces_microscopico_edit', {'id': examen_heces_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+    {% endif %}
 {% endblock %}
