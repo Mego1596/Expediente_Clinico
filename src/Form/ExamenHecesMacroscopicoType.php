@@ -5,6 +5,8 @@ namespace App\Form;
 use App\Entity\ExamenHecesMacroscopico;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ExamenHecesMacroscopicoType extends AbstractType
@@ -12,16 +14,14 @@ class ExamenHecesMacroscopicoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('aspecto')
-            ->add('consistencia')
-            ->add('color')
-            ->add('olor')
-            ->add('presencia_de_sangre')
-            ->add('restos_alimenticios')
-            ->add('presencia_moco')
-            ->add('creado_en')
-            ->add('actualizado_en')
-            ->add('examen_solicitado')
+            ->add('aspecto',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('consistencia',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('color',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('olor',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('presencia_de_sangre',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('restos_alimenticios',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('presencia_moco',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('guardar',SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success','placeholder'=> 'Digite * si no desea establecer ningun dato')))
         ;
     }
 

@@ -23,9 +23,51 @@ class ExamenHecesQuimicoController extends AbstractController
      */
     public function index(ExamenHecesQuimicoRepository $examenHecesQuimicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
-        return $this->render('examen_heces_quimico/index.html.twig', [
-            'examen_heces_quimicos' => $examenHecesQuimicoRepository->findAll(),
-        ]);
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+
+                    $em = $this->getDoctrine()->getManager();
+                    $RAW_QUERY = "SELECT examen.* FROM `examen_heces_quimico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+
+                    return $this->render('examen_heces_quimico/index.html.twig', [
+                        'examen_heces_quimicos'    => $result,
+                        'cantidad'                      => count($result),
+                        'user'                          => $AuthUser,
+                        'examen_solicitado'             => $examen_solicitado,
+                    ]);
+
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('home');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('home');
+            }  
+        }
+
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_heces_quimico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+
+            return $this->render('examen_heces_quimico/index.html.twig', [
+                'examen_heces_quimicos'    => $result,
+                'cantidad'                      => count($result),
+                'user'                          => $AuthUser,
+                'examen_solicitado'             => $examen_solicitado,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
+
     }
 
     /**
@@ -33,20 +75,140 @@ class ExamenHecesQuimicoController extends AbstractController
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
-        $examenHecesQuimico = new ExamenHecesQuimico();
-        $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+                    $editar = false;
+                    $examenHecesQuimico = new ExamenHecesQuimico();
+                    $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
+                    $form->handleRequest($request);
+
+                    //VALIDACION DE RUTA PARA NO INGRESAR SI YA EXISTE 1 REGISTRO 
+                    $em = $this->getDoctrine()->getManager();
+                    $RAW_QUERY = "SELECT examen.* FROM `examen_heces_quimico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $result = $statement->fetchAll();
+                    if(count($result) < 1){
+                        if ($form->isSubmitted() && $form->isValid()) {
+                            if($form["ph"]->getData() != ""){
+                                if($form["azucares_reductores"]->getData() != ""){
+                                    if($form["sangre_oculta"]->getData() != ""){
+                                       
+                                            //PROCESAMIENTO DE DATOS
+                                            $entityManager = $this->getDoctrine()->getManager();
+                                            $examenHecesQuimico->setExamenSolicitado($examen_solicitado);
+                                            $entityManager->persist($examenHecesQuimico);
+                                            $entityManager->flush();
+                                            //FIN DE PROCESAMIENTO DE DATOS
+
+                                        }
+                                    else{
+                                        $this->addFlash('fail', 'Error, ph no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                        return $this->render('examen_heces_quimico/new.html.twig', [
+                                            'examen_heces_quimicos' => $examenHecesQuimico,
+                                            'examen_solicitado' => $examen_solicitado,
+                                            'editar'            => $editar,
+                                            'form' => $form->createView(),
+                                        ]);
+                                    }
+                                }else{
+                                    $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                    return $this->render('examen_heces_quimico/new.html.twig', [
+                                        'examen_heces_quimicos' => $examenHecesQuimico,
+                                        'examen_solicitado' => $examen_solicitado,
+                                        'editar'            => $editar,
+                                        'form' => $form->createView(),
+                                    ]);
+                                }
+                            }else{
+                                $this->addFlash('fail', 'Error, sangre oculta no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                return $this->render('examen_heces_quimico/new.html.twig', [
+                                    'examen_heces_quimicos' => $examenHecesQuimico,
+                                    'examen_solicitado' => $examen_solicitado,
+                                    'editar'            => $editar,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
+                            $this->addFlash('success', 'Examen añadido con exito');
+                            return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                        }
+                    }else{
+                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                        return $this->redirectToRoute('examen_heces_quimico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
+                    }
+
+                    return $this->render('examen_heces_quimico/new.html.twig', [
+                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_solicitado' => $examen_solicitado,
+                        'editar'            => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('home');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('home');
+            }  
+        }
+
+
+
+        $editar = false;
+        $examenHecesMacroscopico = new ExamenHecesMacroscopico();
+        $form = $this->createForm(ExamenHecesMacroscopicoType::class, $examenHecesMacroscopico);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($examenHecesQuimico);
-            $entityManager->flush();
+            if($form["ph"]->getData() != ""){
+                if($form["azucares_reductores"]->getData() != ""){
+                    if($form["sangre_oculta"]->getData() != ""){
+                     
+                            //PROCESAMIENTO DE DATOS
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $examenHecesQuimico->setExamenSolicitado($examen_solicitado);
+                            $entityManager->persist($examenHecesQuimico);
+                            $entityManager->flush();
+                            //FIN DE PROCESAMIENTO DE DATOS
 
-            return $this->redirectToRoute('examen_heces_quimico_index');
+                        
+                    }else{
+                        $this->addFlash('fail', 'Error, ph no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                        return $this->render('examen_heces_quimico/new.html.twig', [
+                            'examen_heces_quimicos' => $examenHecesQuimico,
+                            'examen_solicitado' => $examen_solicitado,
+                            'editar'            => $editar,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                }else{
+                    $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                    return $this->render('examen_heces_quimico/new.html.twig', [
+                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_solicitado' => $examen_solicitado,
+                        'editar'            => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }
+            }else{
+                $this->addFlash('fail', 'Error, sangre oculta no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                return $this->render('examen_heces_quimico/new.html.twig', [
+                    'examen_heces_quimicos' => $examenHecesQuimico,
+                    'examen_solicitado' => $examen_solicitado,
+                    'editar'            => $editar,
+                    'form' => $form->createView(),
+                ]);
+            }
+            $this->addFlash('success', 'Examen añadido con exito');
+            return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }
 
         return $this->render('examen_heces_quimico/new.html.twig', [
-            'examen_heces_quimico' => $examenHecesQuimico,
+            'examen_heces_quimicos' => $examenHecesQuimico,
+            'examen_solicitado' => $examen_solicitado,
+            'editar'            => $editar,
             'form' => $form->createView(),
         ]);
     }
@@ -56,8 +218,25 @@ class ExamenHecesQuimicoController extends AbstractController
      */
     public function show(ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+                    return $this->render('examen_heces_quimico/show.html.twig', [
+                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_solicitado' => $examen_solicitado,
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('home');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('home');
+            }  
+        }
         return $this->render('examen_heces_quimico/show.html.twig', [
-            'examen_heces_quimico' => $examenHecesQuimico,
+            'examen_heces_quimicos' => $examenHecesQuimico,
+            'examen_solicitado' => $examen_solicitado,
         ]);
     }
 
@@ -66,21 +245,61 @@ class ExamenHecesQuimicoController extends AbstractController
      */
     public function edit(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
-        $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('examen_heces_quimico_index', [
-                'idExamen_Heces_Quimico' => $examenHecesQuimico->getIdExamen_Heces_Quimico(),
-            ]);
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+                    $editar = true;
+                    $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
+                    $form->handleRequest($request);
+                    
+                    if ($form->isSubmitted() && $form->isValid()) {
+                        $this->getDoctrine()->getManager()->flush();
+                        $this->addFlash('success', 'Examen modificado con exito');
+                        return $this->redirectToRoute('examen_heces_quimico_index', [
+                            'id' => $examenHecesQuimico->getId(),
+                            'examen_solicitado' => $examen_solicitado->getId(),
+                        ]);
+                    }
+        
+                    return $this->render('examen_heces_quimico/edit.html.twig', [
+                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_solicitado' => $examen_solicitado,
+                        'editar'            => $editar,
+                        'form' => $form->createView(),
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('home');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('home');
+            }  
         }
+        
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $editar = true;
+            $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
+            $form->handleRequest($request);
 
-        return $this->render('examen_heces_quimico/edit.html.twig', [
-            'examen_heces_quimico' => $examenHecesQuimico,
-            'form' => $form->createView(),
-        ]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Examen modificado con exito');
+                return $this->redirectToRoute('examen_heces_quimico_index', [
+                    'id' => $examenHecesQuimico->getId(),
+                    'examen_solicitado' => $examen_solicitado->getId(),
+                ]);
+            }
+            return $this->render('examen_heces_quimico/edit.html.twig', [
+                'examen_heces_qumicos' => $examenHecesQuimico,
+                'examen_solicitado' => $examen_solicitado,
+                'editar'            => $editar,
+                'form' => $form->createView(),
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
@@ -88,12 +307,37 @@ class ExamenHecesQuimicoController extends AbstractController
      */
     public function delete(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$examenHecesQuimico->getIdExamen_Heces_Quimico(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($examenHecesQuimico);
-            $entityManager->flush();
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+                    if ($this->isCsrfTokenValid('delete'.$examenHecesQuimico->getId(), $request->request->get('_token'))) {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->remove($examenHecesQuimico);
+                        $entityManager->flush();
+                    }
+                    $this->addFlash('success', 'Examen eliminado con exito');
+                    return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('home');
+                }
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('home');
+            }  
         }
 
-        return $this->redirectToRoute('examen_heces_quimico_index');
+       if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            if ($this->isCsrfTokenValid('delete'.$examenHecesQuimico->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($examenHecesQuimico);
+                $entityManager->flush();
+            }
+            $this->addFlash('success', 'Examen eliminado con exito');
+            return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 }

@@ -7,7 +7,7 @@
 
     {{ include('examen_heces_macroscopico/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('examen_heces_macroscopico_index') }}">back to list</a>
+    <a href="{{ path('examen_heces_macroscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">back to list</a>
 
-    {{ include('examen_heces_macroscopico/_delete_form.html.twig') }}
+
 {% endblock %}

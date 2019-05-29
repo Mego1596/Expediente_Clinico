@@ -7,5 +7,6 @@
 
     {{ include('examen_heces_quimico/_form.html.twig') }}
 
-    <a href="{{ path('examen_heces_quimico_index') }}">back to list</a>
+   <a href="{{ path('examen_heces_quimico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">back to list</a>
+   
 {% endblock %}

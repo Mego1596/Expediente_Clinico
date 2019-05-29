@@ -14,7 +14,7 @@ class ExamenHecesQuimico
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $idExamen_Heces_Quimico;
+    private $id;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenHecesQuimico")

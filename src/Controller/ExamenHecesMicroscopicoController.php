@@ -52,10 +52,17 @@ class ExamenHecesMicroscopicoController extends AbstractController
         }
 
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_heces_microscopico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+
             return $this->render('examen_heces_microscopico/index.html.twig', [
-                'examen_heces_microscopicos' => $examenHecesMicroscopicoRepository->findAll(),
-                'user'  => $AuthUser,
-                'examen_solicitado' => $examen_solicitado,
+                'examen_heces_microscopicos'    => $result,
+                'cantidad'                      => count($result),
+                'user'                          => $AuthUser,
+                'examen_solicitado'             => $examen_solicitado,
             ]);
         }else{
             $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
