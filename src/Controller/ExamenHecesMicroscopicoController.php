@@ -166,25 +166,51 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
 
 
-        $editar = false;
-        $examenHecesMicroscopico = new ExamenHecesMicroscopico();
-        $form = $this->createForm(ExamenHecesMicroscopicoType::class, $examenHecesMicroscopico);
-        $form->handleRequest($request);
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $editar = false;
+            $examenHecesMicroscopico = new ExamenHecesMicroscopico();
+            $form = $this->createForm(ExamenHecesMicroscopicoType::class, $examenHecesMicroscopico);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if($form["hematies"]->getData() != ""){
-                if($form["leucocito"]->getData() != ""){
-                    if($form["floraBacteriana"]->getData() != ""){
-                        if($form["levadura"]->getData() != ""){
-                            //PROCESAMIENTO DE DATOS
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $examenHecesMicroscopico->setExamenSolicitado($examen_solicitado);
-                            $entityManager->persist($examenHecesMicroscopico);
-                            $entityManager->flush();
-                            //FIN DE PROCESAMIENTO DE DATOS
+            //VALIDACION DE RUTA PARA NO INGRESAR SI YA EXISTE 1 REGISTRO 
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_heces_microscopico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if(count($result) < 1){
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if($form["hematies"]->getData() != ""){
+                        if($form["leucocito"]->getData() != ""){
+                            if($form["floraBacteriana"]->getData() != ""){
+                                if($form["levadura"]->getData() != ""){
+                                    //PROCESAMIENTO DE DATOS
+                                    $entityManager = $this->getDoctrine()->getManager();
+                                    $examenHecesMicroscopico->setExamenSolicitado($examen_solicitado);
+                                    $entityManager->persist($examenHecesMicroscopico);
+                                    $entityManager->flush();
+                                    //FIN DE PROCESAMIENTO DE DATOS
 
+                                }else{
+                                    $this->addFlash('fail', 'Error, hematies no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                                    return $this->render('examen_heces_microscopico/new.html.twig', [
+                                        'examen_heces_microscopico' => $examenHecesMicroscopico,
+                                        'examen_solicitado' => $examen_solicitado,
+                                        'editar'            => $editar,
+                                        'form' => $form->createView(),
+                                    ]);
+                                }
+                            }else{
+                                $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                return $this->render('examen_heces_microscopico/new.html.twig', [
+                                    'examen_heces_microscopico' => $examenHecesMicroscopico,
+                                    'examen_solicitado' => $examen_solicitado,
+                                    'editar'            => $editar,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
                         }else{
-                            $this->addFlash('fail', 'Error, hematies no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                            $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                             return $this->render('examen_heces_microscopico/new.html.twig', [
                                 'examen_heces_microscopico' => $examenHecesMicroscopico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -193,7 +219,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                        $this->addFlash('fail', 'Error, Levadura no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                         return $this->render('examen_heces_microscopico/new.html.twig', [
                             'examen_heces_microscopico' => $examenHecesMicroscopico,
                             'examen_solicitado' => $examen_solicitado,
@@ -201,34 +227,24 @@ class ExamenHecesMicroscopicoController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                }else{
-                    $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
-                    return $this->render('examen_heces_microscopico/new.html.twig', [
-                        'examen_heces_microscopico' => $examenHecesMicroscopico,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
+                    $this->addFlash('success', 'Examen añadido con exito');
+                    return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, Levadura no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
-                return $this->render('examen_heces_microscopico/new.html.twig', [
-                    'examen_heces_microscopico' => $examenHecesMicroscopico,
-                    'examen_solicitado' => $examen_solicitado,
-                    'editar'            => $editar,
-                    'form' => $form->createView(),
-                ]);
+                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                return $this->redirectToRoute('examen_heces_microscopico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
             }
-            $this->addFlash('success', 'Examen añadido con exito');
-            return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
-        }
 
-        return $this->render('examen_heces_microscopico/new.html.twig', [
-            'examen_heces_microscopico' => $examenHecesMicroscopico,
-            'examen_solicitado' => $examen_solicitado,
-            'editar'            => $editar,
-            'form' => $form->createView(),
-        ]);
+            return $this->render('examen_heces_microscopico/new.html.twig', [
+                'examen_heces_microscopico' => $examenHecesMicroscopico,
+                'examen_solicitado' => $examen_solicitado,
+                'editar'            => $editar,
+                'form' => $form->createView(),
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**

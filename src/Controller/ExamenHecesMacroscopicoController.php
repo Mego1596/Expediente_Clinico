@@ -165,25 +165,51 @@ class ExamenHecesMacroscopicoController extends AbstractController
 
 
 
-        $editar = false;
-        $examenHecesMacroscopico = new ExamenHecesMacroscopico();
-        $form = $this->createForm(ExamenHecesMacroscopicoType::class, $examenHecesMacroscopico);
-        $form->handleRequest($request);
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $editar = false;
+            $examenHecesMacroscopico = new ExamenHecesMacroscopico();
+            $form = $this->createForm(ExamenHecesMacroscopicoType::class, $examenHecesMacroscopico);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            if($form["aspecto"]->getData() != ""){
-                if($form["consistencia"]->getData() != ""){
-                    if($form["color"]->getData() != ""){
-                        if($form["olor"]->getData() != ""){
-                            //PROCESAMIENTO DE DATOS
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $examenHecesMacroscopico->setExamenSolicitado($examen_solicitado);
-                            $entityManager->persist($examenHecesMacroscopico);
-                            $entityManager->flush();
-                            //FIN DE PROCESAMIENTO DE DATOS
+            //VALIDACION DE RUTA PARA NO INGRESAR SI YA EXISTE 1 REGISTRO 
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_heces_macroscopico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if(count($result) < 1){
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if($form["aspecto"]->getData() != ""){
+                        if($form["consistencia"]->getData() != ""){
+                            if($form["color"]->getData() != ""){
+                                if($form["olor"]->getData() != ""){
+                                    //PROCESAMIENTO DE DATOS
+                                    $entityManager = $this->getDoctrine()->getManager();
+                                    $examenHecesMacroscopico->setExamenSolicitado($examen_solicitado);
+                                    $entityManager->persist($examenHecesMacroscopico);
+                                    $entityManager->flush();
+                                    //FIN DE PROCESAMIENTO DE DATOS
 
+                                }else{
+                                    $this->addFlash('fail', 'Error, aspecto no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                                    return $this->render('examen_heces_macroscopico/new.html.twig', [
+                                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
+                                        'examen_solicitado' => $examen_solicitado,
+                                        'editar'            => $editar,
+                                        'form' => $form->createView(),
+                                    ]);
+                                }
+                            }else{
+                                $this->addFlash('fail', 'Error, consistencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                return $this->render('examen_heces_macroscopico/new.html.twig', [
+                                    'examen_heces_macroscopico' => $examenHecesMacroscopico,
+                                    'examen_solicitado' => $examen_solicitado,
+                                    'editar'            => $editar,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
                         }else{
-                            $this->addFlash('fail', 'Error, aspecto no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                            $this->addFlash('fail', 'Error, color no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                             return $this->render('examen_heces_macroscopico/new.html.twig', [
                                 'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -192,7 +218,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, consistencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                        $this->addFlash('fail', 'Error, olor no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                         return $this->render('examen_heces_macroscopico/new.html.twig', [
                             'examen_heces_macroscopico' => $examenHecesMacroscopico,
                             'examen_solicitado' => $examen_solicitado,
@@ -200,34 +226,24 @@ class ExamenHecesMacroscopicoController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                }else{
-                    $this->addFlash('fail', 'Error, color no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
-                    return $this->render('examen_heces_macroscopico/new.html.twig', [
-                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
+                    $this->addFlash('success', 'Examen añadido con exito');
+                    return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, olor no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
-                return $this->render('examen_heces_macroscopico/new.html.twig', [
-                    'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                    'examen_solicitado' => $examen_solicitado,
-                    'editar'            => $editar,
-                    'form' => $form->createView(),
-                ]);
+                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                return $this->redirectToRoute('examen_heces_macroscopico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
             }
-            $this->addFlash('success', 'Examen añadido con exito');
-            return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
-        }
 
-        return $this->render('examen_heces_macroscopico/new.html.twig', [
-            'examen_heces_macroscopico' => $examenHecesMacroscopico,
-            'examen_solicitado' => $examen_solicitado,
-            'editar'            => $editar,
-            'form' => $form->createView(),
-        ]);
+            return $this->render('examen_heces_macroscopico/new.html.twig', [
+                'examen_heces_macroscopico' => $examenHecesMacroscopico,
+                'examen_solicitado' => $examen_solicitado,
+                'editar'            => $editar,
+                'form' => $form->createView(),
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
 }
 
     /**
@@ -251,6 +267,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                 return $this->redirectToRoute('home');
             }  
         }
+        
         return $this->render('examen_heces_macroscopico/show.html.twig', [
             'examen_heces_macroscopico' => $examenHecesMacroscopico,
             'examen_solicitado' => $examen_solicitado,
