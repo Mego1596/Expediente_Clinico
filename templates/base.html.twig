@@ -78,7 +78,7 @@
       <hr class="sidebar-divider">
        <!-- Heading -->
       <div class="sidebar-heading">
-        Clinica
+        Clínica
       </div>
 
       <!-- Nav Item - Pages Collapse Menu -->
@@ -212,12 +212,12 @@
                 {% if is_granted('ROLE_PERMISSION_USER') %}
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                     <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Cerrar Sesion
+                    Cerrar Sesión
                   </a>
                 {% else %}
                   <a class="dropdown-item" href="{{path('app_login')}}">
                     <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Iniciar Sesion
+                    Iniciar Sesión
                   </a>
                 {% endif %}
               </div>
@@ -252,7 +252,7 @@
       <footer class="sticky-footer bg-white">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
-            <span>CLINICA BAD-115</span>
+            <span>CLÍNICA BAD-115</span>
           </div>
         </div>
       </footer>
@@ -274,15 +274,15 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Estas listo para salir?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">¿Estas listo para salir?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
         </div>
-        <div class="modal-body">Seleccione "Cerrar Sesion" si realmente esta listo para finalizar la sesion actual.</div>
+        <div class="modal-body">Seleccione "Cerrar Sesión" si realmente está listo para finalizar la sesión actual.</div>
         <div class="modal-footer">
             <button class="btn btn-outline-secondary" type="button" data-dismiss="modal">Cancelar</button>
-            <a class="btn btn-outline-danger" href="{{path('app_logout')}}">Cerrar Sesion</a>
+            <a class="btn btn-outline-danger" href="{{path('app_logout')}}">Cerrar Sesión</a>
         </div>
       </div>
     </div>

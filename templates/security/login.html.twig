@@ -8,12 +8,12 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal" align="center">Inicio de Sesion</h1>
+    <h1 class="h3 mb-3 font-weight-normal" align="center">Inicio de Sesión</h1>
     <label for="inputEmail" class="sr-only">Email</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Email" required autofocus>
+    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" placeholder="Correo Electrónico" required autofocus>
     <br/>
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+    <label for="inputPassword" class="sr-only">Contraseña</label>
+    <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Contraseña" required>
 
     <input type="hidden" name="_csrf_token"
            value="{{ csrf_token('authenticate') }}"
@@ -31,7 +31,7 @@
     #}
     <br/>
     <div class="mx-auto" style="width: 100px;">
-        <button class="btn btn-sm btn-primary" type="submit">Iniciar Sesion</button>    
+        <button class="btn btn-sm btn-primary" type="submit">Iniciar Sesión</button>    
     </div>
 </form>
 {% endblock %}

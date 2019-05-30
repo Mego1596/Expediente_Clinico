@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
+                            Bienvenido al Sistema Informático de la Clínica Hospitalaria
                             {% if(userAuth.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{userAuth.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -34,7 +34,7 @@
                                             <th id="relevante" class="all">Nombre Completo</th>
                                             <th id="relevante" class="all">Email</th>
                                             {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
-                                            <th id="relevante" class="all">Clinica</th>
+                                            <th id="relevante" class="all">Clínica</th>
                                             {% endif %}
                                             <th id="relevante" class="all">Rol</th>
                                             <th  class="all">Acciones</th>
@@ -74,7 +74,7 @@
                                                         </button>
                                                       </div>
                                                       <div class="modal-body">
-                                                        Esta seguro que desea eliminar el usuario?
+                                                        ¿Está seguro que desea eliminar el usuario?
                                                       </div>
                                                       <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>

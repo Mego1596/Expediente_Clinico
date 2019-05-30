@@ -31,9 +31,9 @@
             </div>
             {% if pertenece == null %}
             <div class="col-md-4" style="color:white">
-              <label style="align-content: center;">Clinica:</label>
+              <label style="align-content: center;">Clínica:</label>
               <select class="form-control" id="clinica" name="clinica" required>
-              <option value="">Seleccionar la Clinica</option>
+              <option value="">Seleccionar la Clínica</option>
                   {% for clinica in clinicas %}
                     <option value="{{clinica.id}}"> {{clinica.nombreClinica}}</option>
                   {% endfor %}
@@ -90,7 +90,7 @@
       </div>
     </div>
       {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
-        <a class="btn btn-secondary btn-inline" href="{{ path('user_index') }}">Atras</a>
+        <a class="btn btn-secondary btn-inline" href="{{ path('user_index') }}">Atrás</a>
       {% endif %}
   </div>
 </div>

@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
+                            Bienvenido al Sistema Informático de la Clínica Hospitalaria
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -61,7 +61,7 @@
                                                         </button>
                                                       </div>
                                                       <div class="modal-body">
-                                                        Esta seguro que desea eliminar el anexo?
+                                                        ¿Está seguro que desea eliminar el anexo?
                                                       </div>
                                                       <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
