@@ -1,0 +1,137 @@
+<?php
+
+namespace App\Controller;
+
+use App\Entity\Anexo;
+use App\Form\AnexoType;
+use App\Entity\ExamenSolicitado;
+use App\Repository\AnexoRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+/**
+ * @Route("/anexo")
+ */
+class AnexoController extends AbstractController
+{
+    /**
+     * @Route("/{examen_solicitado}", name="anexo_index", methods={"GET"})
+     */
+    public function index(AnexoRepository $anexoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT examen.* FROM `anexo` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $result = $statement->fetchAll();
+        return $this->render('anexo/index.html.twig', [
+            'anexos' => $result,
+            'user'                          => $AuthUser,
+            'examen_solicitado'             => $examen_solicitado,
+        ]);
+    }
+
+    /**
+     * @Route("/new/{examen_solicitado}", name="anexo_new", methods={"GET","POST"})
+     */
+    public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
+    {
+        $anexo = new Anexo();
+        $form = $this->createForm(AnexoType::class, $anexo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $anexo->setExamenSolicitado($examen_solicitado);
+            $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
+           // dd($form['ruta']->getData()->getClientOriginalName());
+
+
+            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+            $file = $form['ruta']->getData();
+            $filename= md5(uniqid()).'.'.$file->guessExtension();
+            $file->move($this->getParameter('image_directory'),$filename);
+            $anexo->setRuta($filename);
+            $entityManager->persist($anexo);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
+        }
+
+        return $this->render('anexo/new.html.twig', [
+            'anexo'             => $anexo,
+            'examen_solicitado' => $examen_solicitado,
+            'form'              => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/{examen_solicitado}", name="anexo_show", methods={"GET"})
+     */
+    public function show(Anexo $anexo,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
+    {   
+        $displayName = $anexo->getNombreArchivo();
+        $fileName = $anexo->getRuta();
+        $file_with_path = $this->getParameter ( 'image_directory' ) . "/" . $fileName;
+        $response = new BinaryFileResponse ( $file_with_path );
+        $response->headers->set ( 'Content-Type', 'text/plain' );
+        $response->setContentDisposition ( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $displayName );
+        return $response;
+
+
+        return $this->render('anexo/show.html.twig', [
+            'anexo'             => $anexo,
+            'examen_solicitado' => $examen_solicitado,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/{examen_solicitado}/edit", name="anexo_edit", methods={"GET","POST"})
+     */
+    public function edit(Request $request, Anexo $anexo): Response
+    {
+        $form = $this->createForm(AnexoType::class, $anexo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('anexo_index', [
+                'examen_solicitado' => $examen_solicitado,
+                'id'                => $anexo->getId(),
+            ]);
+        }
+
+        return $this->render('anexo/edit.html.twig', [
+            'anexo'             => $anexo,
+            'examen_solicitado' => $examen_solicitado,
+            'form'              => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/{examen_solicitado}", name="anexo_delete", methods={"DELETE"})
+     */
+    public function delete(Request $request, ExamenSolicitado $examen_solicitado, Anexo $anexo): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$anexo->getId(), $request->request->get('_token'))) {
+            $filename = $this->getParameter('image_directory').'/'.$anexo->getRuta();
+
+            $filesystem = new Filesystem();
+            $filesystem->remove($filename);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($anexo);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('anexo_index',[
+            'examen_solicitado' => $examen_solicitado->getId(),
+        ]);
+    }
+}

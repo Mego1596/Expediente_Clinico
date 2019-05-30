@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lista de anexos{% endblock %}
+
+{% block body %}
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                    {% if is_granted('ROLE_PERMISSION_NEW_ANEXO') %}
+                        <a href="{{ path('anexo_new',{'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar anexo</a>
+                    {% endif %}
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Nombre del examen</th>
+                                            <th  class="all">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for anexo in anexos %}
+                                        <tr>
+                                            <td>{{ anexo.nombre_archivo }}</td>
+                                            <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_ANEXO') %}
+                                                <a href="{{ path('anexo_show', {'id': anexo.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-outline-primary">Descargar</a>
+                                                {% endif %}
+                                                
+                                               
+                                                
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_ANEXO') %}
+                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ anexo.id}}">
+                                                  Eliminar
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal{{ anexo.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Eliminar anexo</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        Esta seguro que desea eliminar el anexo?
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                        <form method="post" action="{{ path('anexo_delete', {'id': anexo.id,'examen_solicitado': examen_solicitado.getId()}) }}">
+                                                            <input type="hidden" name="_method" value="DELETE">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ anexo.id) }}">
+                                                            <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                        </form>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}

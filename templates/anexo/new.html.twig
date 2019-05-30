@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Anexo{% endblock %}
+
+{% block body %}
+    <h1>Create new Anexo</h1>
+
+    {{ include('anexo/_form.html.twig') }}
+
+    <a href="{{ path('anexo_index',{'examen_solicitado': examen_solicitado.getId()}) }}">back to list</a>
+{% endblock %}
