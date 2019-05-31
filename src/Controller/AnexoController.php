@@ -74,23 +74,30 @@ class AnexoController extends AbstractController
                     $form->handleRequest($request);
 
                     if ($form->isSubmitted() && $form->isValid()) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $anexo->setExamenSolicitado($examen_solicitado);
-                        $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
-                       // dd($form['ruta']->getData()->getClientOriginalName());
+                        if($form["ruta"]->getData() != ""){
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $anexo->setExamenSolicitado($examen_solicitado);
+                            $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
 
+                            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+                            $file = $form['ruta']->getData();
+                            $filename= md5(uniqid()).'.'.$file->guessExtension();
+                            $file->move($this->getParameter('image_directory'),$filename);
+                            $anexo->setRuta($filename);
+                            $entityManager->persist($anexo);
+                            $entityManager->flush();
 
-                        /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-                        $file = $form['ruta']->getData();
-                        $filename= md5(uniqid()).'.'.$file->guessExtension();
-                        $file->move($this->getParameter('image_directory'),$filename);
-                        $anexo->setRuta($filename);
-                        $entityManager->persist($anexo);
-                        $entityManager->flush();
-
-                        return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                            return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                        }else{
+                            $this->addFlash('fail', 'Error, agregue un archivo.');
+                            return $this->render('anexo/new.html.twig', [
+                                'anexo'             => $anexo,
+                                'examen_solicitado' => $examen_solicitado,
+                                'form'              => $form->createView(),
+                            ]);
+                        }
+                        
                     }
-
                     return $this->render('anexo/new.html.twig', [
                         'anexo'             => $anexo,
                         'examen_solicitado' => $examen_solicitado,

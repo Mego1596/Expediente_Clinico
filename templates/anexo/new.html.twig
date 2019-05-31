@@ -3,9 +3,8 @@
 {% block title %}New Anexo{% endblock %}
 
 {% block body %}
-    <h1>Crear nuevo Anexo</h1>
-
     {{ include('anexo/_form.html.twig') }}
-
-    <a href="{{ path('anexo_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Regresar a la lista</a>
+    {% if is_granted('ROLE_PERMISSION_INDEX_ANEXO') %}
+    	<a class="btn btn-sm btn-secondary" href="{{ path('anexo_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

@@ -61,7 +61,6 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{path('home')}}">
         <img src="{{asset('images/logo/logow.png')}}" style="height: 120%" style="width: 120%">
-        
       </a>
 
       <!-- Divider -->
@@ -304,6 +303,11 @@
   <script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
   <!-- Page level custom scripts -->
   {% block javascripts %}{% endblock %}
+  <script type="text/javascript">
+    $( document ).ready(function() {
+        $("#sidebarToggleTop").click();
+    });
+  </script>
 </body>
 
 </html>
