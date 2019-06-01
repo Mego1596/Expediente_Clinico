@@ -14,13 +14,13 @@ class ExamenHecesMacroscopicoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('aspecto',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('consistencia',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('color',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('olor',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('presencia_de_sangre',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('restos_alimenticios',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
-            ->add('presencia_moco',TextType::class, array('attr' => array('class' => 'form-control','placeholder'=> 'Digite * si no desea establecer ningun dato')))
+            ->add('aspecto',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('consistencia',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('color',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('olor',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('presencia_de_sangre',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('restos_alimenticios',TextType::class, array('attr' => array('class' => 'form-control')))
+            ->add('presencia_moco',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('guardar',SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success','placeholder'=> 'Digite * si no desea establecer ningun dato')))
         ;
     }

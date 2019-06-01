@@ -93,8 +93,8 @@ class ExamenOrinaQuimicoController extends AbstractController
                     $result = $statement->fetchAll();
                     if(count($result) < 1){
                         if ($form->isSubmitted() && $form->isValid()) {
-                            if($form["densidad"]->getData() != ""){
-                                if($form["ph"]->getData() != ""){
+                            if($form["densidad"]->getData() >= 0){
+                                if($form["ph"]->getData() >= 0){
                                     if($form["glucosa"]->getData() != ""){
                                         if($form["proteinas"]->getData() != ""){
                                             if($form["hemoglobina"]->getData() != ""){
@@ -227,8 +227,8 @@ class ExamenOrinaQuimicoController extends AbstractController
             $result = $statement->fetchAll();
             if(count($result) < 1){
                 if ($form->isSubmitted() && $form->isValid()) {
-                    if($form["densidad"]->getData() != ""){
-                        if($form["ph"]->getData() != ""){
+                    if($form["densidad"]->getData() >= 0){
+                        if($form["ph"]->getData() >= 0){
                             if($form["glucosa"]->getData() != ""){
                                 if($form["proteinas"]->getData() != ""){
                                     if($form["hemoglobina"]->getData() != ""){

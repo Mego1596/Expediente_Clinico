@@ -811,5 +811,19 @@ class ExamenSolicitadoController extends AbstractController
             }  
         }
         
+
+        if($cita->getExpediente()->getHabilitado()){
+            if ($this->isCsrfTokenValid('delete'.$examenSolicitado->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($examenSolicitado);
+                $entityManager->flush();
+            }
+            $this->addFlash('success', 'Examen eliminado con exito');
+            return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
+
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 }
