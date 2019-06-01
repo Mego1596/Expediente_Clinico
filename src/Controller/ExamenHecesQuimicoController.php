@@ -106,7 +106,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                     else{
                                         $this->addFlash('fail', 'Error, ph no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                                         return $this->render('examen_heces_quimico/new.html.twig', [
-                                            'examen_heces_quimicos' => $examenHecesQuimico,
+                                            'examen_heces_quimico' => $examenHecesQuimico,
                                             'examen_solicitado' => $examen_solicitado,
                                             'editar'            => $editar,
                                             'form' => $form->createView(),
@@ -115,7 +115,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                 }else{
                                     $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                                     return $this->render('examen_heces_quimico/new.html.twig', [
-                                        'examen_heces_quimicos' => $examenHecesQuimico,
+                                        'examen_heces_quimico' => $examenHecesQuimico,
                                         'examen_solicitado' => $examen_solicitado,
                                         'editar'            => $editar,
                                         'form' => $form->createView(),
@@ -124,7 +124,7 @@ class ExamenHecesQuimicoController extends AbstractController
                             }else{
                                 $this->addFlash('fail', 'Error, sangre oculta no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                                 return $this->render('examen_heces_quimico/new.html.twig', [
-                                    'examen_heces_quimicos' => $examenHecesQuimico,
+                                    'examen_heces_quimico' => $examenHecesQuimico,
                                     'examen_solicitado' => $examen_solicitado,
                                     'editar'            => $editar,
                                     'form' => $form->createView(),
@@ -139,7 +139,7 @@ class ExamenHecesQuimicoController extends AbstractController
                     }
 
                     return $this->render('examen_heces_quimico/new.html.twig', [
-                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_heces_quimico' => $examenHecesQuimico,
                         'examen_solicitado' => $examen_solicitado,
                         'editar'            => $editar,
                         'form' => $form->createView(),
@@ -185,7 +185,7 @@ class ExamenHecesQuimicoController extends AbstractController
                             else{
                                 $this->addFlash('fail', 'Error, ph no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                                 return $this->render('examen_heces_quimico/new.html.twig', [
-                                    'examen_heces_quimicos' => $examenHecesQuimico,
+                                    'examen_heces_quimico' => $examenHecesQuimico,
                                     'examen_solicitado' => $examen_solicitado,
                                     'editar'            => $editar,
                                     'form' => $form->createView(),
@@ -194,7 +194,7 @@ class ExamenHecesQuimicoController extends AbstractController
                         }else{
                             $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                             return $this->render('examen_heces_quimico/new.html.twig', [
-                                'examen_heces_quimicos' => $examenHecesQuimico,
+                                'examen_heces_quimico' => $examenHecesQuimico,
                                 'examen_solicitado' => $examen_solicitado,
                                 'editar'            => $editar,
                                 'form' => $form->createView(),
@@ -203,7 +203,7 @@ class ExamenHecesQuimicoController extends AbstractController
                     }else{
                         $this->addFlash('fail', 'Error, sangre oculta no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                         return $this->render('examen_heces_quimico/new.html.twig', [
-                            'examen_heces_quimicos' => $examenHecesQuimico,
+                            'examen_heces_quimico' => $examenHecesQuimico,
                             'examen_solicitado' => $examen_solicitado,
                             'editar'            => $editar,
                             'form' => $form->createView(),
@@ -218,7 +218,7 @@ class ExamenHecesQuimicoController extends AbstractController
             }
 
             return $this->render('examen_heces_quimico/new.html.twig', [
-                'examen_heces_quimicos' => $examenHecesQuimico,
+                'examen_heces_quimico' => $examenHecesQuimico,
                 'examen_solicitado' => $examen_solicitado,
                 'editar'            => $editar,
                 'form' => $form->createView(),
@@ -238,7 +238,7 @@ class ExamenHecesQuimicoController extends AbstractController
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     return $this->render('examen_heces_quimico/show.html.twig', [
-                        'examen_heces_quimicos' => $examenHecesQuimico,
+                        'examen_heces_quimico' => $examenHecesQuimico,
                         'examen_solicitado' => $examen_solicitado,
                     ]);
                 }else{
@@ -251,7 +251,7 @@ class ExamenHecesQuimicoController extends AbstractController
             }  
         }
         return $this->render('examen_heces_quimico/show.html.twig', [
-            'examen_heces_quimicos' => $examenHecesQuimico,
+            'examen_heces_quimico' => $examenHecesQuimico,
             'examen_solicitado' => $examen_solicitado,
         ]);
     }

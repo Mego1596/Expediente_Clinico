@@ -253,7 +253,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
     public function show(ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesMicroscopico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     return $this->render('examen_heces_microscopico/show.html.twig', [
                         'examen_heces_microscopico' => $examenHecesMicroscopico,
@@ -281,7 +281,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
     {   
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesMicroscopico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     $editar = true;
                     $form = $this->createForm(ExamenHecesMicroscopicoType::class, $examenHecesMicroscopico);
@@ -342,7 +342,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
     public function delete(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesMicroscopico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     if ($this->isCsrfTokenValid('delete'.$examenHecesMicroscopico->getId(), $request->request->get('_token'))) {
                         $entityManager = $this->getDoctrine()->getManager();

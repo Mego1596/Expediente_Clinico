@@ -1,43 +1,114 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ExamenHematologico index{% endblock %}
+{% block title %}Examenes de Heces Microscopicos{% endblock %}
 
 {% block body %}
-    <h1>ExamenHematologico index</h1>
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                        {% if is_granted('ROLE_PERMISSION_NEW_EXAMENES') %}
+                            <a href="{{ path('examen_hematologico_new',{'examen_solicitado': examen_solicitado.getId() }) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-file-medical"></i> Registrar Resultados</a>
+                        {% endif %}
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Serie</th>
+                                            <th id="relevante" class="all">Unidad</th>
+                                            <th id="relevante" class="all">Valor de Referencia</th>
+                                            <th  class="all">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for examen_hematologico in examen_hematologicos %}
+                                        <tr>
+                                            <td>{{ examen_hematologico.tipo_serie }}</td>
+                                            <td>{{ examen_hematologico.unidad }}</td>
+                                            <td>{{ examen_hematologico.valor_referencia}}</td>
+                                            <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_EXAMENES') %}
+                                                    <a href="{{ path('examen_hematologico_show', {'id': examen_hematologico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>TipoSerie</th>
-                <th>Unidad</th>
-                <th>ValorReferencia</th>
-                <th>Creado_en</th>
-                <th>Actualizado_en</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for examen_hematologico in examen_hematologicos %}
-            <tr>
-                <td>{{ examen_hematologico.id }}</td>
-                <td>{{ examen_hematologico.tipoSerie }}</td>
-                <td>{{ examen_hematologico.unidad }}</td>
-                <td>{{ examen_hematologico.valorReferencia }}</td>
-                <td>{{ examen_hematologico.creadoEn ? examen_hematologico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ examen_hematologico.actualizadoEn ? examen_hematologico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('examen_hematologico_show', {'id': examen_hematologico.id}) }}">show</a>
-                    <a href="{{ path('examen_hematologico_edit', {'id': examen_hematologico.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_EXAMENES') %}
+                                                    <a href="{{ path('examen_hematologico_edit', {'id': examen_hematologico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-success">Modificar</a>
+                                                {% endif %}
 
-    <a href="{{ path('examen_hematologico_new') }}">Create new</a>
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_EXAMENES') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ examen_hematologico.id}}">
+                                                    Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ examen_hematologico.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Examen</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Esta seguro que desea eliminar este examen?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('examen_hematologico_delete', {'id': examen_hematologico.id,'examen_solicitado': examen_solicitado.getId()}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ examen_hematologico.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 {% endblock %}

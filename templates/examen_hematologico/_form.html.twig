@@ -1,4 +1,46 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <h5 class="card-header">
+        {% if editar == true %}
+          Modificar Examen
+        {% else %}
+          Registrar Examen
+        {% endif %}
+      </h5>
+      <div class="card-body">
+        {{ form_start(form) }}
+          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+          <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
+          <div class="row">
+            <div class="col-md-12">
+              {{ form_label(form.tipoSerie) }}
+              {{ form_widget(form.tipoSerie) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.unidad) }}
+              {{ form_widget(form.unidad) }}
+            </div>
+            <div class="col-md-12">
+              {{ form_label(form.valorReferencia) }}
+              {{ form_widget(form.valorReferencia) }}
+            </div>
+          </div>
+          <div class="container" style="margin-top: 1%">
+            <div class="row" style="text-align: center;">
+              <div class="col-md-3"></div>
+              <div class="col-md-3">
+                {{ form_label(form.guardar) }}
+                {{ form_widget(form.guardar) }}
+              </div>
+              <div class="col-md-3" style="text-align: left;">
+                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+              </div>
+              <div class="col-md-3"></div>
+            </div>
+          </div>
+        {{ form_end(form) }}
+      </div>
+    </div>
+  </div>
+</div>
