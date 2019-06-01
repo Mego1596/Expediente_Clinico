@@ -1,55 +1,126 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ExamenOrinaQuimico index{% endblock %}
+{% block title %}Examenes de Orina Quimicos{% endblock %}
 
 {% block body %}
-    <h1>ExamenOrinaQuimico index</h1>
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                        {% if is_granted('ROLE_PERMISSION_NEW_EXAMENES') and cantidad < 1 %}
+                            <a href="{{ path('examen_orina_quimico_new',{'examen_solicitado': examen_solicitado.getId() }) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-file-medical"></i> Registrar Resultados</a>
+                        {% endif %}
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Densidad</th>
+                                            <th id="relevante" class="all">Ph</th>
+                                            <th id="relevante" class="all">Glucosa</th>
+                                            <th id="relevante" class="all">Proteinas</th>
+                                            <th id="relevante" class="all">Hemoglobina</th>
+                                            <th id="relevante" class="all">Cuerpo Cetonico</th>
+                                            <th id="relevante" class="all">Pigmento Biliar</th>
+                                            <th id="relevante" class="all">Urobilinogeno</th>
+                                            <th id="relevante" class="all">Nitritos</th>
+                                            <th  class="all" >Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for examen_orina_quimico in examen_orina_quimicos %}
+                                        <tr>
+                                            <td>{{ examen_orina_quimico.densidad }}</td>
+                                            <td>{{ examen_orina_quimico.ph }}</td>
+                                            <td>{{ examen_orina_quimico.glucosa }}</td>
+                                            <td>{{ examen_orina_quimico.proteinas }}</td>
+                                            <td>{{ examen_orina_quimico.hemoglobina }}</td>
+                                            <td>{{ examen_orina_quimico.cuerpo_cetonico }}</td>
+                                            <td>{{ examen_orina_quimico.pigmento_biliar }}</td>
+                                            <td>{{ examen_orina_quimico.urobilinogeno }}</td>
+                                            <td>{{ examen_orina_quimico.nitritos }}</td>
+                                            <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_EXAMENES') %}
+                                                    <a href="{{ path('examen_orina_quimico_show', {'id': examen_orina_quimico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Densidad</th>
-                <th>Ph</th>
-                <th>Glucosa</th>
-                <th>Proteinas</th>
-                <th>Hemoglobina</th>
-                <th>CuerpoCetonico</th>
-                <th>PigmentoBiliar</th>
-                <th>Urobilinogeno</th>
-                <th>Nitritos</th>
-                <th>Creado_en</th>
-                <th>Actualizado_en</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for examen_orina_quimico in examen_orina_quimicos %}
-            <tr>
-                <td>{{ examen_orina_quimico.id }}</td>
-                <td>{{ examen_orina_quimico.densidad }}</td>
-                <td>{{ examen_orina_quimico.ph }}</td>
-                <td>{{ examen_orina_quimico.glucosa }}</td>
-                <td>{{ examen_orina_quimico.proteinas }}</td>
-                <td>{{ examen_orina_quimico.hemoglobina }}</td>
-                <td>{{ examen_orina_quimico.cuerpoCetonico }}</td>
-                <td>{{ examen_orina_quimico.pigmentoBiliar }}</td>
-                <td>{{ examen_orina_quimico.urobilinogeno }}</td>
-                <td>{{ examen_orina_quimico.nitritos }}</td>
-                <td>{{ examen_orina_quimico.creadoEn ? examen_orina_quimico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ examen_orina_quimico.actualizadoEn ? examen_orina_quimico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('examen_orina_quimico_show', {'id': examen_orina_quimico.id}) }}">show</a>
-                    <a href="{{ path('examen_orina_quimico_edit', {'id': examen_orina_quimico.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="13">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_EXAMENES') %}
+                                                    <a href="{{ path('examen_orina_quimico_edit', {'id': examen_orina_quimico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-success">Modificar</a>
+                                                {% endif %}
 
-    <a href="{{ path('examen_orina_quimico_new') }}">Create new</a>
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_EXAMENES') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ examen_orina_quimico.id}}">
+                                                    Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ examen_orina_quimico.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Examen</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Esta seguro que desea eliminar este examen?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('examen_orina_quimico_delete', {'id': examen_orina_quimico.id,'examen_solicitado': examen_solicitado.getId()}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ examen_orina_quimico.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 {% endblock %}

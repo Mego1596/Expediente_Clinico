@@ -1,13 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit ExamenOrinaMacroscopico{% endblock %}
+{% block title %}Editar Examen{% endblock %}
 
 {% block body %}
-    <h1>Edit ExamenOrinaMacroscopico</h1>
-
     {{ include('examen_orina_macroscopico/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('examen_orina_macroscopico_index') }}">back to list</a>
-
-    {{ include('examen_orina_macroscopico/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_orina_macroscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

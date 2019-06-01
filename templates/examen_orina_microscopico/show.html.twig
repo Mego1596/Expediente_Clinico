@@ -70,9 +70,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('examen_orina_microscopico_index') }}">back to list</a>
-
-    <a href="{{ path('examen_orina_microscopico_edit', {'id': examen_orina_microscopico.id}) }}">edit</a>
-
-    {{ include('examen_orina_microscopico/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_orina_microscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
+    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+        <a class="btn btn-primary" href="{{ path('examen_orina_microscopico_edit', {'id': examen_orina_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+    {% endif %}
 {% endblock %}

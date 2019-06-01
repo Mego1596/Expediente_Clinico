@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New ExamenOrinaQuimico{% endblock %}
+{% block title %}Registrar Examen {% endblock %}
 
 {% block body %}
-    <h1>Create new ExamenOrinaQuimico</h1>
-
     {{ include('examen_orina_quimico/_form.html.twig') }}
 
-    <a href="{{ path('examen_orina_quimico_index') }}">back to list</a>
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+    	<a class="btn btn-secondary" href="{{ path('examen_heces_quimico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

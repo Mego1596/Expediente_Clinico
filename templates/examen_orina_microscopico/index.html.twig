@@ -1,61 +1,133 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ExamenOrinaMicroscopico index{% endblock %}
+{% block title %}Examenes de Heces Microscopicos{% endblock %}
 
 {% block body %}
-    <h1>ExamenOrinaMicroscopico index</h1>
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
+                                {{user.getUser().getClinica().getNombreClinica()}}
+                            {% else %}
+                                
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-right" align="center">
+                        {% if is_granted('ROLE_PERMISSION_NEW_EXAMENES') and cantidad < 1 %}
+                            <a href="{{ path('examen_orina_microscopico_new',{'examen_solicitado': examen_solicitado.getId() }) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-file-medical"></i> Registrar Resultados</a>
+                        {% endif %}
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Uretral</th>
+                                            <th id="relevante" class="all">Urotelio</th>
+                                            <th id="relevante" class="all">Renal</th>
+                                            <th id="relevante" class="all">Leucocitos</th>
+                                            <th id="relevante" class="all">Piocitos</th>
+                                            <th id="relevante" class="all">Eritrocitos</th>
+                                            <th id="relevante" class="all">Bacteria</th>
+                                            <th id="relevante" class="all">Parasitos</th>
+                                            <th id="relevante" class="all">Funguria</th>
+                                            <th id="relevante" class="all">FilamentoDeMucina</th>
+                                            <th id="relevante" class="all">ProteinaUromocoide</th>
+                                            <th id="relevante" class="all">Cilindros</th>
+                                            <th  class="all">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for examen_orina_microscopico in examen_orina_microscopicos %}
+                                        <tr>
+                                            <td>{{ examen_orina_microscopico.uretral }}</td>
+                                            <td>{{ examen_orina_microscopico.urotelio }}</td>
+                                            <td>{{ examen_orina_microscopico.renal }}</td>
+                                            <td>{{ examen_orina_microscopico.leucocitos }}</td>
+                                            <td>{{ examen_orina_microscopico.piocitos }}</td>
+                                            <td>{{ examen_orina_microscopico.eritrocitos }}</td>
+                                            <td>{{ examen_orina_microscopico.bacteria }}</td>
+                                            <td>{{ examen_orina_microscopico.parasitos }}</td>
+                                            <td>{{ examen_orina_microscopico.funguria }}</td>
+                                            <td>{{ examen_orina_microscopico.filamento_de_mucina }}</td>
+                                            <td>{{ examen_orina_microscopico.proteina_uromocoide }}</td>
+                                            <td>{{ examen_orina_microscopico.cilindros }}</td>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Uretral</th>
-                <th>Urotelio</th>
-                <th>Renal</th>
-                <th>Leucocitos</th>
-                <th>Piocitos</th>
-                <th>Eritrocitos</th>
-                <th>Bacteria</th>
-                <th>Parasitos</th>
-                <th>Funguria</th>
-                <th>FilamentoDeMucina</th>
-                <th>ProteinaUromocoide</th>
-                <th>Cilindros</th>
-                <th>Creado_en</th>
-                <th>Actualizado_en</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for examen_orina_microscopico in examen_orina_microscopicos %}
-            <tr>
-                <td>{{ examen_orina_microscopico.id }}</td>
-                <td>{{ examen_orina_microscopico.uretral }}</td>
-                <td>{{ examen_orina_microscopico.urotelio }}</td>
-                <td>{{ examen_orina_microscopico.renal }}</td>
-                <td>{{ examen_orina_microscopico.leucocitos }}</td>
-                <td>{{ examen_orina_microscopico.piocitos }}</td>
-                <td>{{ examen_orina_microscopico.eritrocitos }}</td>
-                <td>{{ examen_orina_microscopico.bacteria }}</td>
-                <td>{{ examen_orina_microscopico.parasitos }}</td>
-                <td>{{ examen_orina_microscopico.funguria }}</td>
-                <td>{{ examen_orina_microscopico.filamentoDeMucina }}</td>
-                <td>{{ examen_orina_microscopico.proteinaUromocoide }}</td>
-                <td>{{ examen_orina_microscopico.cilindros }}</td>
-                <td>{{ examen_orina_microscopico.creadoEn ? examen_orina_microscopico.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ examen_orina_microscopico.actualizadoEn ? examen_orina_microscopico.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-                <td>
-                    <a href="{{ path('examen_orina_microscopico_show', {'id': examen_orina_microscopico.id}) }}">show</a>
-                    <a href="{{ path('examen_orina_microscopico_edit', {'id': examen_orina_microscopico.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="16">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                                            <td>
+                                                {% if is_granted('ROLE_PERMISSION_SHOW_EXAMENES') %}
+                                                    <a href="{{ path('examen_orina_microscopico_show', {'id': examen_orina_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-info">Mostrar</a>
+                                                {% endif %}
 
-    <a href="{{ path('examen_orina_microscopico_new') }}">Create new</a>
+                                                {% if is_granted('ROLE_PERMISSION_EDIT_EXAMENES') %}
+                                                    <a href="{{ path('examen_orina_microscopico_edit', {'id': examen_orina_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}" class="btn btn-success">Modificar</a>
+                                                {% endif %}
+
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_EXAMENES') %}
+                                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ examen_orina_microscopico.id}}">
+                                                    Eliminar
+                                                    </button>
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="exampleModal{{ examen_orina_microscopico.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Examen</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            Esta seguro que desea eliminar este examen?
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                            <form method="post" action="{{ path('examen_orina_microscopico_delete', {'id': examen_orina_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}">
+                                                                <input type="hidden" name="_method" value="DELETE">
+                                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ examen_orina_microscopico.id) }}">
+                                                                <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                            </form>
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
 {% endblock %}
