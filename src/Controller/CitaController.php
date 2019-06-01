@@ -414,15 +414,45 @@ class CitaController extends AbstractController
      * @Route("/calendar/{expediente}", name="cita_calendar", methods={"GET"})
      * @Security2("is_authenticated()")
      */
-    public function calendar(Expediente $expediente): Response
+    public function calendar(Expediente $expediente, Security $AuthUser): Response
     {   
-        if($expediente->getHabilitado()){
-            return $this->render('cita/calendar.html.twig',[
-                'expediente' =>$expediente,
-            ]);
+        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
+            if($AuthUser->getUser()->getExpediente()->getId() == $expediente->getId()){
+                if($expediente->getHabilitado()){
+                    return $this->render('cita/calendar.html.twig',[
+                        'expediente' =>$expediente,
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
+            }else{
+                $this->addFlash('fail', 'Error, este no es su expediente.');
+                return $this->redirectToRoute('cita_calendar',['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+            }
+        }elseif ($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+                if($expediente->getHabilitado()){
+                    return $this->render('cita/calendar.html.twig',[
+                        'expediente' =>$expediente,
+                    ]);
+                }else{
+                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    return $this->redirectToRoute('expediente_index');
+                }
+            }else{
+                $this->addFlash('fail', 'Error, este expediente pueda que no exista o no le pertence.');
+                return $this->redirectToRoute('expediente_index');
+            }
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-            return $this->redirectToRoute('expediente_index');
+            if($expediente->getHabilitado()){
+                return $this->render('cita/calendar.html.twig',[
+                    'expediente' =>$expediente,
+                ]);
+            }else{
+                $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                return $this->redirectToRoute('expediente_index');
+            }
         }
     }
 
