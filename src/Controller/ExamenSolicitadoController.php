@@ -54,18 +54,22 @@ class ExamenSolicitadoController extends AbstractController
         }
         
 
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE cita_id =".$cita->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-
-        return $this->render('examen_solicitado/index.html.twig', [
-            'historia_medicas' => $result,
-            'cantidad'       => count($result),
-            'user'           => $AuthUser,
-            'cita'           => $cita,
-        ]);
+        if($cita->getExpediente()->getHabilitado()){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `examen_solicitado` as examen WHERE cita_id =".$cita->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->render('examen_solicitado/index.html.twig', [
+                'examen_solicitados' => $result,
+                'cantidad'       => count($result),
+                'user'           => $AuthUser,
+                'cita'           => $cita,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**

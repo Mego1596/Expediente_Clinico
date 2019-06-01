@@ -49,7 +49,9 @@
                                                 {% if is_granted('ROLE_PERMISSION_INDEX_EXAMENES') %}
                                                     <a href="#" id="ruteo" class="btn btn-info" style="color: white" onclick="ruteodinamico(&#39;{{examen_solicitado.tipo_examen}}&#39;,&#39;{{examen_solicitado.categoria}}&#39;,{{examen_solicitado.id}})">Asignar Resultados</a>
                                                 {% endif %}
-
+                                                {% if is_granted('ROLE_PERMISSION_INDEX_ANEXO') %}
+                                                    <a href="{{path('anexo_index',{'examen_solicitado': examen_solicitado.id})}}" id="ruteo" class="btn btn-secondary bg-dark">Anexos</a>
+                                                {% endif %}
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_EXAMEN_SOLICITADO') %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ examen_solicitado.id}}">
                                                     Eliminar

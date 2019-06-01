@@ -171,6 +171,95 @@ class SignoVitalController extends AbstractController
                 return $this->redirectToRoute('expediente_index');
             }  
         }
+
+        if($cita->getExpediente()->getHabilitado()){
+            //VALIDACION INICIAL PARA LA RUTA ES QUE SI LA CITA YA TIENE UN REGISTRO DE SIGNO VITAL BLOQUEARLA
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT * FROM `signo_vital` WHERE cita_id =".$cita->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($result == null){
+                $editar = false;
+                $signoVital = new SignoVital();
+                $form = $this->createForm(SignoVitalType::class, $signoVital);
+                $form->handleRequest($request);
+
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if($form["peso"]->getData() != ""){
+                        if($form["temperatura"]->getData() != ""){
+                            if($form["estatura"]->getData() != ""){
+                                if($form["presionArterial"]->getData() != ""){
+                                    if($form["ritmoCardiaco"]->getData() != ""){
+                                        //INICIO DE PROCESO DE DATOS
+                                        $entityManager = $this->getDoctrine()->getManager();
+                                        $signoVital->setCita($cita);
+                                        $entityManager->persist($signoVital);
+                                        $entityManager->flush();
+                                        //FIN DE PROCESO DE DATOS
+                                    }else{
+                                       $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacio');
+                                        return $this->render('signo_vital/new.html.twig', [
+                                            'signo_vital' => $signoVital,
+                                            'cita'           => $cita,
+                                            'editar'         => $editar,
+                                            'form' => $form->createView(),
+                                        ]);
+                                    }
+                                }else{
+                                   $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacia');
+                                    return $this->render('signo_vital/new.html.twig', [
+                                        'signo_vital' => $signoVital,
+                                        'cita'           => $cita,
+                                        'editar'         => $editar,
+                                        'form' => $form->createView(),
+                                    ]);
+                                }
+                            }else{
+                                $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacia');
+                                return $this->render('signo_vital/new.html.twig', [
+                                    'signo_vital' => $signoVital,
+                                    'cita'           => $cita,
+                                    'editar'         => $editar,
+                                    'form' => $form->createView(),
+                                ]);
+                            }
+                        }else{
+                            $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacia');
+                            return $this->render('signo_vital/new.html.twig', [
+                                'signo_vital' => $signoVital,
+                                'cita'           => $cita,
+                                'editar'         => $editar,
+                                'form' => $form->createView(),
+                            ]);
+                        }
+                    }else{
+                        $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacio');
+                        return $this->render('signo_vital/new.html.twig', [
+                            'signo_vital' => $signoVital,
+                            'cita'           => $cita,
+                            'editar'         => $editar,
+                            'form' => $form->createView(),
+                        ]);
+                    }
+                    $this->addFlash('success', 'Signos Vitales añadidos con exito');
+                    return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
+                }
+            }else{
+                $this->addFlash('fail', 'Error, no se puede registrar signos vitales diferentes por favor modifique el registro ya ingresado');
+                return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
+            }
+
+            return $this->render('signo_vital/new.html.twig', [
+                'signo_vital' => $signoVital,
+                'cita'           => $cita,
+                'editar'         => $editar,
+                'form' => $form->createView(),
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('expediente_index');
+        }
         
 
     }
