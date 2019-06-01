@@ -21,6 +21,8 @@ class ExamenQuimicaSanguineaController extends AbstractController
 {
     /**
      * @Route("/{examen_solicitado}", name="examen_quimica_sanguinea_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(ExamenQuimicaSanguineaRepository $examenQuimicaSanguineaRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -71,6 +73,8 @@ class ExamenQuimicaSanguineaController extends AbstractController
 
     /**
      * @Route("/new/{examen_solicitado}", name="examen_quimica_sanguinea_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -245,6 +249,8 @@ class ExamenQuimicaSanguineaController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_quimica_sanguinea_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenQuimicaSanguinea $examenQuimicaSanguinea,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -272,6 +278,8 @@ class ExamenQuimicaSanguineaController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_quimica_sanguinea_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, ExamenQuimicaSanguinea $examenQuimicaSanguinea,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {   
@@ -334,6 +342,8 @@ class ExamenQuimicaSanguineaController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_quimica_sanguinea_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, ExamenQuimicaSanguinea $examenQuimicaSanguinea,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {

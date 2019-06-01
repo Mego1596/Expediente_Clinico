@@ -21,6 +21,8 @@ class PlanTratamientoController extends AbstractController
 {
     /**
      * @Route("/{historiaMedica}", name="plan_tratamiento_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_PLAN_TRATAMIENTO')")
      */
     public function index(PlanTratamientoRepository $planTratamientoRepository, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {
@@ -50,6 +52,8 @@ class PlanTratamientoController extends AbstractController
 
     /**
      * @Route("/new/{historiaMedica}", name="plan_tratamiento_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_PLAN_TRATAMIENTO')")
      */
     public function new(Request $request, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {
@@ -199,6 +203,8 @@ class PlanTratamientoController extends AbstractController
 
     /**
      * @Route("/{id}/{historiaMedica}/edit", name="plan_tratamiento_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_PLAN_TRATAMIENTO')")
      */
     public function edit(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {
@@ -261,6 +267,8 @@ class PlanTratamientoController extends AbstractController
 
     /**
      * @Route("/{id}/{historiaMedica}", name="plan_tratamiento_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_PLAN_TRATAMIENTO')")
      */
     public function delete(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
     {

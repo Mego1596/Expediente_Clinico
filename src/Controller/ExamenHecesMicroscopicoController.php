@@ -21,6 +21,8 @@ class ExamenHecesMicroscopicoController extends AbstractController
 {
     /**
      * @Route("/{examen_solicitado}", name="examen_heces_microscopico_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(ExamenHecesMicroscopicoRepository $examenHecesMicroscopicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -73,6 +75,8 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
     /**
      * @Route("/new/{examen_solicitado}", name="examen_heces_microscopico_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -249,6 +253,8 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_microscopico_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -276,6 +282,8 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_heces_microscopico_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {   
@@ -338,6 +346,8 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_microscopico_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, ExamenHecesMicroscopico $examenHecesMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {

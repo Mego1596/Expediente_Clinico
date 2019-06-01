@@ -25,6 +25,8 @@ class ExamenSolicitadoController extends AbstractController
 {
     /**
      * @Route("/{cita}", name="examen_solicitado_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')")
      */
     public function index(ExamenSolicitadoRepository $examenSolicitadoRepository, Cita $cita, Security $AuthUser): Response
     {
@@ -74,6 +76,8 @@ class ExamenSolicitadoController extends AbstractController
 
     /**
      * @Route("/new/{cita}", name="examen_solicitado_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMEN_SOLICITADO')")
      */
     public function new(Request $request, Cita $cita, Security $AuthUser): Response
     {
@@ -518,6 +522,8 @@ class ExamenSolicitadoController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}", name="examen_solicitado_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMEN_SOLICITADO')")
      */
     /*
     public function show(ExamenSolicitado $examenSolicitado, Cita $cita, Security $AuthUser): Response
@@ -543,6 +549,8 @@ class ExamenSolicitadoController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}/edit", name="examen_solicitado_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMEN_SOLICITADO')")
      */
     /*
     public function edit(Request $request, ExamenSolicitado $examenSolicitado, Cita $cita, Security $AuthUser): Response
@@ -786,6 +794,8 @@ class ExamenSolicitadoController extends AbstractController
 
     /**
      * @Route("/{id}/{cita}", name="examen_solicitado_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMEN_SOLICITADO')")
      */
     public function delete(Request $request, ExamenSolicitado $examenSolicitado, Cita $cita, Security $AuthUser): Response
     {

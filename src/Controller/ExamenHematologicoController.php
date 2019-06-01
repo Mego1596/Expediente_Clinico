@@ -21,6 +21,8 @@ class ExamenHematologicoController extends AbstractController
 {
     /**
      * @Route("/{examen_solicitado}", name="examen_hematologico_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(ExamenHematologicoRepository $examenHematologicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -71,6 +73,8 @@ class ExamenHematologicoController extends AbstractController
 
     /**
      * @Route("/new/{examen_solicitado}", name="examen_hematologico_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -202,6 +206,8 @@ class ExamenHematologicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_hematologico_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -229,6 +235,8 @@ class ExamenHematologicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_hematologico_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
 
     public function edit(Request $request, ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -292,6 +300,8 @@ class ExamenHematologicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_hematologico_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, ExamenHematologico $examenHematologico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {

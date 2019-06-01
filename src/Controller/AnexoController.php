@@ -22,6 +22,8 @@ class AnexoController extends AbstractController
 {
     /**
      * @Route("/{examen_solicitado}", name="anexo_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_ANEXO')")
      */
     public function index(AnexoRepository $anexoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -63,6 +65,8 @@ class AnexoController extends AbstractController
 
     /**
      * @Route("/new/{examen_solicitado}", name="anexo_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_ANEXO')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -153,6 +157,8 @@ class AnexoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="anexo_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_ANEXO')")
      */
     public function show(Anexo $anexo,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {   
@@ -207,6 +213,8 @@ class AnexoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="anexo_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_ANEXO')")
      */
     public function edit(Request $request, Anexo $anexo): Response
     {
@@ -231,6 +239,8 @@ class AnexoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="anexo_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_ANEXO')")
      */
     public function delete(Request $request, ExamenSolicitado $examen_solicitado, Anexo $anexo): Response
     {

@@ -21,6 +21,8 @@ class ExamenOrinaMicroscopicoController extends AbstractController
 {
     /**
      * @Route("/{examen_solicitado}", name="examen_orina_microscopico_index", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(examenOrinaMicroscopicoRepository $examenOrinaMicroscopicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -74,6 +76,8 @@ class ExamenOrinaMicroscopicoController extends AbstractController
 
     /**
      * @Route("/new/{examen_solicitado}", name="examen_orina_microscopico_new", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -408,6 +412,8 @@ class ExamenOrinaMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_microscopico_show", methods={"GET"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(examenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
@@ -435,6 +441,8 @@ class ExamenOrinaMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_orina_microscopico_edit", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, examenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {   
@@ -499,6 +507,8 @@ class ExamenOrinaMicroscopicoController extends AbstractController
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_microscopico_delete", methods={"DELETE"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, examenOrinaMicroscopico $examenOrinaMicroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
