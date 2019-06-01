@@ -28,7 +28,7 @@ class ExamenQuimicaSanguinea
     private $parametro;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float")
      */
     private $resultado;
 
@@ -74,12 +74,12 @@ class ExamenQuimicaSanguinea
         return $this;
     }
 
-    public function getResultado(): ?int
+    public function getResultado(): ?float
     {
         return $this->resultado;
     }
 
-    public function setResultado(int $resultado): self
+    public function setResultado(float $resultado): self
     {
         $this->resultado = $resultado;
 

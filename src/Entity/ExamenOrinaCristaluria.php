@@ -63,7 +63,7 @@ class ExamenOrinaCristaluria
     private $creado_en;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $actualizado_en;
 

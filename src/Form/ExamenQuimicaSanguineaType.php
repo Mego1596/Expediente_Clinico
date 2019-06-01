@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class ExamenQuimicaSanguineaType extends AbstractType
@@ -16,7 +16,7 @@ class ExamenQuimicaSanguineaType extends AbstractType
     {
         $builder
             ->add('parametro',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('resultado',IntegerType::class, array('attr' => array('class' => 'form-control' , 'step' => '1', 'min' => '0' )))
+            ->add('resultado', NumberType::class, array('attr' => array('class' => 'form-control' , 'step' => '0.01', 'min' => '0.01' )))
             ->add('comentario',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('unidades',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('rango',TextType::class, array('attr' => array('class' => 'form-control')))

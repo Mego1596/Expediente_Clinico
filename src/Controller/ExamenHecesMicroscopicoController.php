@@ -105,7 +105,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                             //FIN DE PROCESAMIENTO DE DATOS
 
                                         }else{
-                                            $this->addFlash('fail', 'Error, hematies no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                                            $this->addFlash('fail', 'Error, hematies no puede ir vacio');
                                             return $this->render('examen_heces_microscopico/new.html.twig', [
                                                 'examen_heces_microscopico' => $examenHecesMicroscopico,
                                                 'examen_solicitado' => $examen_solicitado,
@@ -114,7 +114,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                        $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio');
                                         return $this->render('examen_heces_microscopico/new.html.twig', [
                                             'examen_heces_microscopico' => $examenHecesMicroscopico,
                                             'examen_solicitado' => $examen_solicitado,
@@ -123,7 +123,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                    $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio');
                                     return $this->render('examen_heces_microscopico/new.html.twig', [
                                         'examen_heces_microscopico' => $examenHecesMicroscopico,
                                         'examen_solicitado' => $examen_solicitado,
@@ -132,7 +132,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, Levadura no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                $this->addFlash('fail', 'Error, Levadura no puede ir vacio');
                                 return $this->render('examen_heces_microscopico/new.html.twig', [
                                     'examen_heces_microscopico' => $examenHecesMicroscopico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -201,7 +201,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                $this->addFlash('fail', 'Error, Leucocitos no puede ir vacio');
                                 return $this->render('examen_heces_microscopico/new.html.twig', [
                                     'examen_heces_microscopico' => $examenHecesMicroscopico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -210,7 +210,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                            $this->addFlash('fail', 'Error, Flora Bacteriana no puede ir vacio');
                             return $this->render('examen_heces_microscopico/new.html.twig', [
                                 'examen_heces_microscopico' => $examenHecesMicroscopico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -219,7 +219,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, Levadura no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                        $this->addFlash('fail', 'Error, Levadura no puede ir vacio');
                         return $this->render('examen_heces_microscopico/new.html.twig', [
                             'examen_heces_microscopico' => $examenHecesMicroscopico,
                             'examen_solicitado' => $examen_solicitado,

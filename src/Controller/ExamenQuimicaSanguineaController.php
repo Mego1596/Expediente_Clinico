@@ -89,8 +89,9 @@ class ExamenQuimicaSanguineaController extends AbstractController
                                         if($form["comentario"]->getData() != ""){
                                             //PROCESAMIENTO DE DATOS
                                             $entityManager = $this->getDoctrine()->getManager();
+                                            //dd($form["resultado"]->getData());
                                             $examenQuimicaSanguinea->setExamenSolicitado($examen_solicitado);
-                                            $examenQuimicaSanguinea->setResultado(round($form["resultado"]->getData()));
+                                            $examenQuimicaSanguinea->setResultado($form["resultado"]->getData());
                                             $entityManager->persist($examenQuimicaSanguinea);
                                             $entityManager->flush();
                                             //FIN DE PROCESAMIENTO DE DATOS
@@ -176,7 +177,7 @@ class ExamenQuimicaSanguineaController extends AbstractController
                                     //PROCESAMIENTO DE DATOS
                                     $entityManager = $this->getDoctrine()->getManager();
                                     $examenQuimicaSanguinea->setExamenSolicitado($examen_solicitado);
-                                    $examenQuimicaSanguinea->setResultado(round($form["resultado"]->getData()));
+                                    $examenQuimicaSanguinea->setResultado($form["resultado"]->getData());
                                     $entityManager->persist($examenQuimicaSanguinea);
                                     $entityManager->flush();
                                     //FIN DE PROCESAMIENTO DE DATOS

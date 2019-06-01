@@ -9,50 +9,51 @@
         <tbody>
             <tr>
                 <th>Id</th>
-                <td>{{ examen_orina_cristalurium.id }}</td>
+                <td>{{ examen_orina_cristaluria.id }}</td>
             </tr>
             <tr>
                 <th>UratosAmorfos</th>
-                <td>{{ examen_orina_cristalurium.uratosAmorfos }}</td>
+                <td>{{ examen_orina_cristaluria.uratosAmorfos }}</td>
             </tr>
             <tr>
                 <th>AcidoUrico</th>
-                <td>{{ examen_orina_cristalurium.acidoUrico }}</td>
+                <td>{{ examen_orina_cristaluria.acidoUrico }}</td>
             </tr>
             <tr>
                 <th>OxalatosCalcicos</th>
-                <td>{{ examen_orina_cristalurium.oxalatosCalcicos }}</td>
+                <td>{{ examen_orina_cristaluria.oxalatosCalcicos }}</td>
             </tr>
             <tr>
                 <th>FosfatosAmorfos</th>
-                <td>{{ examen_orina_cristalurium.fosfatosAmorfos }}</td>
+                <td>{{ examen_orina_cristaluria.fosfatosAmorfos }}</td>
             </tr>
             <tr>
                 <th>FosfatosCalcicos</th>
-                <td>{{ examen_orina_cristalurium.fosfatosCalcicos }}</td>
+                <td>{{ examen_orina_cristaluria.fosfatosCalcicos }}</td>
             </tr>
             <tr>
                 <th>FosfatosAmonicos</th>
-                <td>{{ examen_orina_cristalurium.fosfatosAmonicos }}</td>
+                <td>{{ examen_orina_cristaluria.fosfatosAmonicos }}</td>
             </tr>
             <tr>
                 <th>RiesgoLitogenico</th>
-                <td>{{ examen_orina_cristalurium.riesgoLitogenico }}</td>
+                <td>{{ examen_orina_cristaluria.riesgoLitogenico }}</td>
             </tr>
             <tr>
                 <th>Creado_en</th>
-                <td>{{ examen_orina_cristalurium.creadoEn ? examen_orina_cristalurium.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_cristaluria.creadoEn ? examen_orina_cristaluria.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Actualizado_en</th>
-                <td>{{ examen_orina_cristalurium.actualizadoEn ? examen_orina_cristalurium.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ examen_orina_cristaluria.actualizadoEn ? examen_orina_cristaluria.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('examen_orina_cristaluria_index') }}">back to list</a>
-
-    <a href="{{ path('examen_orina_cristaluria_edit', {'id': examen_orina_cristalurium.id}) }}">edit</a>
-
-    {{ include('examen_orina_cristaluria/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_orina_cristaluria_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
+    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+        <a class="btn btn-primary" href="{{ path('examen_orina_cristaluria_edit', {'id': examen_orina_cristaluria.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+    {% endif %}
 {% endblock %}

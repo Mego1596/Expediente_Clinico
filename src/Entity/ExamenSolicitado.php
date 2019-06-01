@@ -44,11 +44,6 @@ class ExamenSolicitado
     private $anexos;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ExamenHematologico", mappedBy="examen_solicitado", cascade={"persist", "remove"})
-     */
-    private $examenHematologico;
-
-    /**
      * @ORM\OneToOne(targetEntity="App\Entity\ExamenOrinaCristaluria", mappedBy="examen_solicitado", cascade={"persist", "remove"})
      */
     private $examenOrinaCristaluria;
@@ -82,11 +77,6 @@ class ExamenSolicitado
      * @ORM\OneToOne(targetEntity="App\Entity\ExamenHecesMicroscopico", mappedBy="examen_solicitado", cascade={"persist", "remove"})
      */
     private $examenHecesMicroscopico;
-
-    /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ExamenQuimicaSanguinea", mappedBy="examen_solicitado", cascade={"persist", "remove"})
-     */
-    private $examenQuimicaSanguinea;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Cita", inversedBy="examenes")
