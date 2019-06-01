@@ -103,7 +103,7 @@ class ExamenHematologicoController extends AbstractController
                             }else{
                                 $this->addFlash('fail', 'Error, la unidad no puede ir vacio');
                                 return $this->render('examen_hematologico/new.html.twig', [
-                                    'examen_hematologico' => $examenHecesQuimico,
+                                    'examen_hematologico' => $examenHematologico,
                                     'examen_solicitado' => $examen_solicitado,
                                     'editar'            => $editar,
                                     'form' => $form->createView(),
@@ -112,7 +112,7 @@ class ExamenHematologicoController extends AbstractController
                         }else{
                             $this->addFlash('fail', 'Error, el valor de referencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                             return $this->render('examen_hematologico/new.html.twig', [
-                                'examen_hematologico' => $examenHecesQuimico,
+                                'examen_hematologico' => $examenHematologico,
                                 'examen_solicitado' => $examen_solicitado,
                                 'editar'            => $editar,
                                 'form' => $form->createView(),
@@ -168,7 +168,7 @@ class ExamenHematologicoController extends AbstractController
                     }else{
                         $this->addFlash('fail', 'Error, la unidad no puede ir vacio');
                         return $this->render('examen_hematologico/new.html.twig', [
-                            'examen_hematologico' => $examenHecesQuimico,
+                            'examen_hematologico' => $examenHematologico,
                             'examen_solicitado' => $examen_solicitado,
                             'editar'            => $editar,
                             'form' => $form->createView(),
@@ -177,7 +177,7 @@ class ExamenHematologicoController extends AbstractController
                 }else{
                     $this->addFlash('fail', 'Error, el valor de referencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
                     return $this->render('examen_hematologico/new.html.twig', [
-                        'examen_hematologico' => $examenHecesQuimico,
+                        'examen_hematologico' => $examenHematologico,
                         'examen_solicitado' => $examen_solicitado,
                         'editar'            => $editar,
                         'form' => $form->createView(),

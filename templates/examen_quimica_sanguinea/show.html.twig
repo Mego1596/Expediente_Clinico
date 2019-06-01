@@ -3,7 +3,7 @@
 {% block title %}ExamenQuimicaSanguinea{% endblock %}
 
 {% block body %}
-    <h1>ExamenQuimicaSanguinea</h1>
+    <h1>Examen de Quimica Sanguinea</h1>
 
     <table class="table">
         <tbody>
@@ -42,9 +42,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('examen_quimica_sanguinea_index') }}">back to list</a>
-
-    <a href="{{ path('examen_quimica_sanguinea_edit', {'id': examen_quimica_sanguinea.id}) }}">edit</a>
-
-    {{ include('examen_quimica_sanguinea/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_quimica_sanguinea_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
+    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+        <a class="btn btn-primary" href="{{ path('examen_quimica_sanguinea_edit', {'id': examen_quimica_sanguinea.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+    {% endif %}
 {% endblock %}
