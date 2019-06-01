@@ -235,7 +235,7 @@ class ExamenHecesQuimicoController extends AbstractController
     public function show(ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesQuimico->getExamenSolicitado()->getId() == $examen_solicitado->getId() ){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     return $this->render('examen_heces_quimico/show.html.twig', [
                         'examen_heces_quimico' => $examenHecesQuimico,
@@ -262,7 +262,7 @@ class ExamenHecesQuimicoController extends AbstractController
     public function edit(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesQuimico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     $editar = true;
                     $form = $this->createForm(ExamenHecesQuimicoType::class, $examenHecesQuimico);
@@ -324,7 +324,7 @@ class ExamenHecesQuimicoController extends AbstractController
     public function delete(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
+            if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHecesQuimico->getExamenSolicitado()->getId() == $examen_solicitado->getId() ){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
                     if ($this->isCsrfTokenValid('delete'.$examenHecesQuimico->getId(), $request->request->get('_token'))) {
                         $entityManager = $this->getDoctrine()->getManager();

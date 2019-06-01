@@ -17,7 +17,7 @@ class ExamenHematologico
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenHematologico")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ExamenSolicitado", inversedBy="examenHematologicos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $examen_solicitado;
@@ -47,21 +47,11 @@ class ExamenHematologico
      */
     private $actualizado_en;
 
+
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getExamenSolicitado(): ?ExamenSolicitado
-    {
-        return $this->examen_solicitado;
-    }
-
-    public function setExamenSolicitado(ExamenSolicitado $examen_solicitado): self
-    {
-        $this->examen_solicitado = $examen_solicitado;
-
-        return $this;
     }
 
     public function getTipoSerie(): ?string
@@ -120,6 +110,18 @@ class ExamenHematologico
     public function setActualizadoEn(?\DateTimeInterface $actualizado_en): self
     {
         $this->actualizado_en = $actualizado_en;
+
+        return $this;
+    }
+
+    public function getExamenSolicitado(): ?ExamenSolicitado
+    {
+        return $this->examen_solicitado;
+    }
+
+    public function setExamenSolicitado(?ExamenSolicitado $examen_solicitado): self
+    {
+        $this->examen_solicitado = $examen_solicitado;
 
         return $this;
     }

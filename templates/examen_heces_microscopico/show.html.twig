@@ -34,6 +34,6 @@
         <a class="btn btn-secondary" href="{{ path('examen_heces_microscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
     {% endif %}
     {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
-        <a href="{{ path('examen_heces_microscopico_edit', {'id': examen_heces_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+        <a class="btn btn-primary" href="{{ path('examen_heces_microscopico_edit', {'id': examen_heces_microscopico.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
     {% endif %}
 {% endblock %}

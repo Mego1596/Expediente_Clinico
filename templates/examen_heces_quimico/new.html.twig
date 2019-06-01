@@ -3,9 +3,8 @@
 {% block title %}New ExamenHecesQuimico{% endblock %}
 
 {% block body %}
-
     {{ include('examen_heces_quimico/_form.html.twig') }}
-
-   <a href="{{ path('examen_heces_quimico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">back to list</a>
-   
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+    	<a class="btn btn-secondary" href="{{ path('examen_heces_quimico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
 {% endblock %}

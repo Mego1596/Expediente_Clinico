@@ -93,9 +93,21 @@ class ExamenSolicitado
      */
     private $cita;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenHematologico", mappedBy="examen_solicitado")
+     */
+    private $examenHematologicos;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenQuimicaSanguinea", mappedBy="examen_solicitado")
+     */
+    private $examenQuimicaSanguineas;
+
     public function __construct()
     {
         $this->anexos = new ArrayCollection();
+        $this->examenHematologicos = new ArrayCollection();
+        $this->examenQuimicaSanguineas = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -343,6 +355,68 @@ class ExamenSolicitado
     public function setCita(?Cita $cita): self
     {
         $this->cita = $cita;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExamenHematologico[]
+     */
+    public function getExamenHematologicos(): Collection
+    {
+        return $this->examenHematologicos;
+    }
+
+    public function addExamenHematologico(ExamenHematologico $examenHematologico): self
+    {
+        if (!$this->examenHematologicos->contains($examenHematologico)) {
+            $this->examenHematologicos[] = $examenHematologico;
+            $examenHematologico->setExamenSolicitado($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExamenHematologico(ExamenHematologico $examenHematologico): self
+    {
+        if ($this->examenHematologicos->contains($examenHematologico)) {
+            $this->examenHematologicos->removeElement($examenHematologico);
+            // set the owning side to null (unless already changed)
+            if ($examenHematologico->getExamenSolicitado() === $this) {
+                $examenHematologico->setExamenSolicitado(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ExamenQuimicaSanguinea[]
+     */
+    public function getExamenQuimicaSanguineas(): Collection
+    {
+        return $this->examenQuimicaSanguineas;
+    }
+
+    public function addExamenQuimicaSanguinea(ExamenQuimicaSanguinea $examenQuimicaSanguinea): self
+    {
+        if (!$this->examenQuimicaSanguineas->contains($examenQuimicaSanguinea)) {
+            $this->examenQuimicaSanguineas[] = $examenQuimicaSanguinea;
+            $examenQuimicaSanguinea->setExamenSolicitado($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExamenQuimicaSanguinea(ExamenQuimicaSanguinea $examenQuimicaSanguinea): self
+    {
+        if ($this->examenQuimicaSanguineas->contains($examenQuimicaSanguinea)) {
+            $this->examenQuimicaSanguineas->removeElement($examenQuimicaSanguinea);
+            // set the owning side to null (unless already changed)
+            if ($examenQuimicaSanguinea->getExamenSolicitado() === $this) {
+                $examenQuimicaSanguinea->setExamenSolicitado(null);
+            }
+        }
 
         return $this;
     }

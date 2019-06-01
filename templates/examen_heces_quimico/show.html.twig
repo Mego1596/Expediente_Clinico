@@ -34,9 +34,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('examen_heces_quimico_index') }}">back to list</a>
-
-    <a href="{{ path('examen_heces_quimico_edit', {'idExamen_Heces_Quimico': examen_heces_quimico.idExamen_Heces_Quimico}) }}">edit</a>
-
-    {{ include('examen_heces_quimico/_delete_form.html.twig') }}
+    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+        <a class="btn btn-secondary" href="{{ path('examen_heces_quimico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    {% endif %}
+    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+        <a class="btn btn-primary" href="{{ path('examen_heces_quimico_edit', {'id': examen_heces_quimico.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+    {% endif %}
 {% endblock %}
