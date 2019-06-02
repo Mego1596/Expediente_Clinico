@@ -33,9 +33,11 @@
                 {{ form_label(form.guardar) }}
                 {{ form_widget(form.guardar) }}
               </div>
-              <div class="col-md-3" style="text-align: left;">
-                <button type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
-              </div>
+              {% if editar == false %}
+                <div class="col-md-3" style="text-align: left;">
+                  <button id="limpiarDatos" type="reset" class="btn btn-outline-info">Limpiar Pantalla</button>
+                </div>
+              {% endif %}
               <div class="col-md-3"></div>
             </div>
           </div>
