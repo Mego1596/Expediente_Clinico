@@ -44,7 +44,7 @@
               <select id="especialidad" name="especialidad" class="form-control">
                 <option value="">Consulta General</option>
                 {%for especialidad in especialidades%}
-                  <option value="{{especialidad.id}}">{{especialidad.nombreEspecialidad}}</option>
+                  <option value="{{especialidad.id}}">{{especialidad.nombre_especialidad}}</option>
                 {% endfor %}
               </select>
             </div>

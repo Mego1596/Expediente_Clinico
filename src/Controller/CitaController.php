@@ -99,9 +99,25 @@ class CitaController extends AbstractController
                     $citum = new Cita();
                     date_default_timezone_set("America/El_Salvador");
                     if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                        $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
+                        $em = $this->getDoctrine()->getManager();
+                        $RAW_QUERY = "SELECT id, nombre_especialidad FROM especialidad";
+
+                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $especialidades = $statement->fetchAll();
                     }else{
                         $especialidades = null;
+                        //TRAER ESPECIALIDADES QUE A LAS QUE HA ASISTIDO EL PACIENTE
+                        $em = $this->getDoctrine()->getManager();
+                        $RAW_QUERY = "SELECT DISTINCT e.id, e.nombre_especialidad FROM especialidad as e, user as u, expediente as exp, cita as c WHERE 
+                            c.usuario_id = u.id AND
+                            c.expediente_id = exp.id AND
+                            u.usuario_especialidades_id= e.id AND
+                            exp.id =".$expediente->getId().";";
+                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $especialidades = $statement->fetchAll();
+                        //FIN DE PROCESO
                     }
                     $form = $this->createForm(CitaType::class, $citum);
                     $form->handleRequest($request);
@@ -255,7 +271,12 @@ class CitaController extends AbstractController
             $citum = new Cita();
             date_default_timezone_set("America/El_Salvador");
             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT id, nombre_especialidad FROM especialidad";
+
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $especialidades = $statement->fetchAll();
             }else{
                 $especialidades = null;
             }
