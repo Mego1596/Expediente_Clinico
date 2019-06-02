@@ -79,7 +79,8 @@ class UserController extends AbstractController
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
             'query_builder' => function (EntityRepository $er) {
                 return $er->createQueryBuilder('u')
-                    ->andWhere('u.nombreRol != :val')
+                    ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                    ->setParameter('super', "ROLE_SA")
                     ->setParameter('val', "ROLE_PACIENTE");
             },'attr' => array('class' => 'form-control')))
         ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
@@ -268,8 +269,13 @@ class UserController extends AbstractController
                         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
                         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
-                            'attr' => array('class' => 'form-control')))
+                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
+                            'query_builder' => function (EntityRepository $er) {
+                                return $er->createQueryBuilder('u')
+                                    ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                                    ->setParameter('super', "ROLE_SA")
+                                    ->setParameter('val', "ROLE_PACIENTE");
+                            },'attr' => array('class' => 'form-control')))
                         ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
                         ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
                         ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
@@ -283,8 +289,13 @@ class UserController extends AbstractController
                         ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
                         ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
-                            'attr' => array('class' => 'form-control')))
+                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
+                            'query_builder' => function (EntityRepository $er) {
+                                return $er->createQueryBuilder('u')
+                                    ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                                    ->setParameter('super', "ROLE_SA")
+                                    ->setParameter('val', "ROLE_PACIENTE");
+                            },'attr' => array('class' => 'form-control')))
                         ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
                         ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
                         ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
@@ -469,8 +480,13 @@ class UserController extends AbstractController
             ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
             ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
-                'attr' => array('class' => 'form-control')))
+            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                        ->setParameter('super', "ROLE_SA")
+                        ->setParameter('val', "ROLE_PACIENTE");
+                },'attr' => array('class' => 'form-control')))
             ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
             ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
             ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
@@ -484,8 +500,13 @@ class UserController extends AbstractController
             ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'nombreRol',
-                'attr' => array('class' => 'form-control')))
+            ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')
+                        ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                        ->setParameter('super', "ROLE_SA")
+                        ->setParameter('val', "ROLE_PACIENTE");
+                },'attr' => array('class' => 'form-control')))
             ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
             ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
             ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
