@@ -35,14 +35,14 @@
     <div class="" id="mensaje2" style="width: 100%">
       <p id="paragraph2"></p>
     </div>
-    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+    {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
       <div class="" id="mensaje3" style="width: 100%">
         <p id="paragraph3"></p>
       </div>
     {% endif %}
     {{ include('cita/_form.html.twig', {'button_label': 'Update'}) }}
     <table>
-        {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
+        {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
             <tr>
                 <td>
                 {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
@@ -72,7 +72,7 @@ $(document).ready(function(){
       var datos="especialidad="+especialidad;
       let route = "{{ path('ajax_cargaEspecialidad' )}}";
       var html_code = html_code + '<option value="">Seleccione un doctor</option>';
-      {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
         var clinica = $("#clinica").val();
         datos += "&clinica="+ clinica; 
       {% endif %}
@@ -135,14 +135,14 @@ $(document).ready(function(){
     $('#cita_fechaReservacion').attr('min',fechaMinima);
     let route = "{{ path('ajax_cargaGeneral' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
-    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+    {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
       var clinica = $("#clinica").val();
       datos = "clinica="+ clinica; 
     {% endif %}
     $.ajax({
       url: route , 
       type: "POST",
-      {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+      {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
         data: datos,
       {% endif %}
       success: function(result){
@@ -167,7 +167,7 @@ $(document).ready(function(){
     var datos="especialidad="+especialidad;
     let route = "{{ path('ajax_cargaEspecialidad' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
-    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+    {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
       var clinica = $("#clinica").val();
       datos += "&clinica="+ clinica; 
     {% endif %}
@@ -207,7 +207,7 @@ $(document).ready(function(){
     var datos="especialidad="+especialidad;
     let route = "{{ path('ajax_cargaEspecialidad' )}}";
     var html_code = html_code + '<option value="">Seleccione un doctor</option>';
-    {% if(loggedUser.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
+    {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
       var clinica = $("#clinica").val();
       datos += "&clinica="+ clinica; 
     {% endif %}

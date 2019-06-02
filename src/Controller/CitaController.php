@@ -529,9 +529,25 @@ class CitaController extends AbstractController
                     if($expediente->getHabilitado()){
                         $editar = true;
                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                            $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
+                            $em = $this->getDoctrine()->getManager();
+                            $RAW_QUERY = "SELECT id, nombre_especialidad FROM especialidad";
+
+                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                            $statement->execute();
+                            $especialidades = $statement->fetchAll();
                         }else{
                             $especialidades = null;
+                            //TRAER ESPECIALIDADES QUE A LAS QUE HA ASISTIDO EL PACIENTE
+                            $em = $this->getDoctrine()->getManager();
+                            $RAW_QUERY = "SELECT DISTINCT e.id, e.nombre_especialidad FROM especialidad as e, user as u, expediente as exp, cita as c WHERE 
+                                c.usuario_id = u.id AND
+                                c.expediente_id = exp.id AND
+                                u.usuario_especialidades_id= e.id AND
+                                exp.id =".$expediente->getId().";";
+                            $statement = $em->getConnection()->prepare($RAW_QUERY);
+                            $statement->execute();
+                            $especialidades = $statement->fetchAll();
+                            //FIN DE PROCESO
                         }
                         $form = $this->createForm(CitaType::class, $citum);
                         $form->handleRequest($request);
@@ -555,7 +571,7 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'user'  => $citum->getUsuario(),
-                                        'loggedUser' => $AuthUser,
+                                        'userAuth' => $AuthUser,
                                         'especialidades' => $especialidades,
                                         'form' => $form->createView(),
                                     ]);
@@ -567,7 +583,7 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'user'  => $citum->getUsuario(),
-                                        'loggedUser' => $AuthUser,
+                                        'userAuth' => $AuthUser,
                                         'especialidades' => $especialidades,
                                         'form' => $form->createView(),
                                     ]);
@@ -579,7 +595,7 @@ class CitaController extends AbstractController
                                         'editar' => $editar,
                                         'expediente' => $expediente,
                                         'user'  => $citum->getUsuario(),
-                                        'loggedUser' => $AuthUser,
+                                        'userAuth' => $AuthUser,
                                         'especialidades' => $especialidades,
                                         'form' => $form->createView(),
                                     ]);
@@ -595,7 +611,7 @@ class CitaController extends AbstractController
                                             'editar' => $editar,
                                             'expediente' => $expediente,
                                             'user'  => $citum->getUsuario(),
-                                            'loggedUser' => $AuthUser,
+                                            'userAuth' => $AuthUser,
                                             'especialidades' => $especialidades,
                                             'form' => $form->createView(),
                                         ]);
@@ -642,7 +658,7 @@ class CitaController extends AbstractController
                             'citum' => $citum,
                             'editar' => $editar,
                             'user'  => $citum->getUsuario(),
-                            'loggedUser' => $AuthUser,
+                            'userAuth' => $AuthUser,
                             'especialidades' => $especialidades,
                             'expediente' => $expediente,
                             'form' => $form->createView(),
@@ -665,7 +681,12 @@ class CitaController extends AbstractController
             $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
             $editar = true;
             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                $especialidades = $this->getDoctrine()->getRepository(Especialidad::class)->findAll();
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT id, nombre_especialidad FROM especialidad";
+
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $especialidades = $statement->fetchAll();
             }else{
                 $especialidades = null;
             }
@@ -691,7 +712,7 @@ class CitaController extends AbstractController
                             'editar' => $editar,
                             'expediente' => $expediente,
                             'user'  => $citum->getUsuario(),
-                            'loggedUser' => $AuthUser,
+                            'userAuth' => $AuthUser,
                             'especialidades' => $especialidades,
                             'clinica'   => $clinicas,
                             'form' => $form->createView(),
@@ -704,7 +725,7 @@ class CitaController extends AbstractController
                             'editar' => $editar,
                             'expediente' => $expediente,
                             'user'  => $citum->getUsuario(),
-                            'loggedUser' => $AuthUser,
+                            'userAuth' => $AuthUser,
                             'especialidades' => $especialidades,
                             'clinica'   => $clinicas,
                             'form' => $form->createView(),
@@ -717,7 +738,7 @@ class CitaController extends AbstractController
                             'editar' => $editar,
                             'expediente' => $expediente,
                             'user'  => $citum->getUsuario(),
-                            'loggedUser' => $AuthUser,
+                            'userAuth' => $AuthUser,
                             'especialidades' => $especialidades,
                             'clinica'   => $clinicas,
                             'form' => $form->createView(),
@@ -734,7 +755,7 @@ class CitaController extends AbstractController
                                 'editar' => $editar,
                                 'expediente' => $expediente,
                                 'user'  => $citum->getUsuario(),
-                                'loggedUser' => $AuthUser,
+                                'userAuth' => $AuthUser,
                                 'especialidades' => $especialidades,
                                 'clinica'   => $clinicas,
                                 'form' => $form->createView(),
@@ -782,7 +803,7 @@ class CitaController extends AbstractController
                 'citum' => $citum,
                 'editar' => $editar,
                 'user'  => $citum->getUsuario(),
-                'loggedUser' => $AuthUser,
+                'userAuth' => $AuthUser,
                 'especialidades' => $especialidades,
                 'expediente' => $expediente,
                 'clinica'   => $clinicas,
