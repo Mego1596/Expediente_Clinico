@@ -5,6 +5,6 @@
 {% block body %}
     {{ include('camilla/_form.html.twig', {'button_label': 'Update'}) }}
     {% if(is_granted('ROLE_PERMISSION_INDEX_CAMILLA')) %}
-    	<a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atras</a>
+    	<a class="btn btn-secondary" href="{{ path('camilla_index', {'habitacion':habitacion.id}) }}">Atrás</a>
     {% endif %}
 {% endblock %}
