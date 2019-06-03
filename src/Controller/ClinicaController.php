@@ -146,6 +146,11 @@ class ClinicaController extends AbstractController
                         'id' => $clinica->getId(),
                     ]);
                 }
+                return $this->render('clinica/edit.html.twig', [
+                    'clinica' => $clinica,
+                    'editar' => $editar,
+                    'form' => $form->createView(),
+                ]);
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('clinica_index', [
@@ -154,6 +159,18 @@ class ClinicaController extends AbstractController
             }
         }
         //FIN VALIDACION
+        $editar = true;
+        $form = $this->createForm(ClinicaType::class, $clinica);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            $this->addFlash('success', 'Clinica modificada con exito');
+            return $this->redirectToRoute('clinica_index', [
+                'id' => $clinica->getId(),
+            ]);
+        }
         return $this->render('clinica/edit.html.twig', [
             'clinica' => $clinica,
             'editar' => $editar,
