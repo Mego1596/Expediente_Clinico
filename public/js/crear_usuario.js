@@ -8,6 +8,7 @@ $(document).ready(function() {
         if (val == 2){
             $('#seccion_especialidad').show();
 		    $('#seccion_emergencia').show();
+		    $('#form_planta').val(0);
         } else {
             $('#seccion_especialidad').hide();
 		    $('#seccion_emergencia').hide();

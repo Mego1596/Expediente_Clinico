@@ -679,7 +679,7 @@ class UserController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_USER')",statusCode=404, message="")
      */
-    public function delete(Request $request, User $user): Response
+    public function delete(Request $request, User $user, Security $AuthUser): Response
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -690,7 +690,7 @@ class UserController extends AbstractController
                         $entityManager->remove($user);
                         $entityManager->flush();
                     }
-
+                    $this->addFlash('success', 'Usuario eliminado con exito');
                     return $this->redirectToRoute('user_index');
                 }else{
                     $this->addFlash('fail', 'Error, este registro puede que no exista o no le pertenece');
@@ -707,7 +707,7 @@ class UserController extends AbstractController
             $entityManager->remove($user);
             $entityManager->flush();
         }
-
+        $this->addFlash('success', 'Usuario eliminado con exito');
         return $this->redirectToRoute('user_index');
     }
 }
