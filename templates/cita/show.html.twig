@@ -29,7 +29,7 @@
         <tr>
             {% if(user.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
                 <td>
-                    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
+                    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atrás</a>
                 </td>
                 {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
                 <td>
@@ -44,7 +44,7 @@
             {% else %}
                 {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
                     <td>
-                        <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>
+                        <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atrás</a>
                     </td>
                 {% endif %}
                 {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
@@ -59,12 +59,12 @@
                 {% endif %}
                 {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
                     <td>
-                        <a class="btn btn-success" href="{{ path('historia_medica_index', {'citum': citum.id}) }}">Registrar Historia Clinica</a>
+                        <a class="btn btn-success" href="{{ path('historia_medica_index', {'citum': citum.id}) }}">Registrar Historia Clínica</a>
                     </td>
                 {% endif %}
                 {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
                     <td>
-                        <a class="btn btn-success" href="{{ path('examen_solicitado_index', {'cita': citum.getId()}) }}">Registrar Examenes</a>
+                        <a class="btn btn-success" href="{{ path('examen_solicitado_index', {'cita': citum.getId()}) }}">Registrar Exámenes</a>
                     </td>
                 {% endif %}
 

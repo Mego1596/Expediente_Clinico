@@ -46,7 +46,7 @@
             <tr>
                 <td>
                 {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
-                  <a class="btn btn-secondary" href="{{ path('cita_show',{'expediente':expediente.getId(), 'id':citum.getId()}) }}">Atras</a>
+                  <a class="btn btn-secondary" href="{{ path('cita_show',{'expediente':expediente.getId(), 'id':citum.getId()}) }}">Atrás</a>
                 {% endif %}
                 </td>
             </tr>
@@ -54,7 +54,7 @@
             <tr>
                 <td>
                     {%if (is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
-                      <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atras</a>  
+                      <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atrás</a>  
                     {% endif %}
                 </td>
             </tr>

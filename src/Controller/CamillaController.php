@@ -356,7 +356,7 @@ class CamillaController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CAMILLA')")
      */
-    public function delete(Request $request, Camilla $camilla, Habitacion $habitacion): Response
+    public function delete(Request $request, Camilla $camilla, Habitacion $habitacion, Security $AuthUser): Response
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -378,7 +378,7 @@ class CamillaController extends AbstractController
             $entityManager->remove($camilla);
             $entityManager->flush();
         }
-        $this->addFlash('success','Camilla eliminada con exito');
+        $this->addFlash('success','Camilla eliminada con éxito');
         return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
     }
 }

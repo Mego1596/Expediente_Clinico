@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            Bienvenido al Sistema Informático de la Clínica Hospitalaria 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -33,9 +33,9 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Descripcion</th>
+                                            <th id="relevante" class="all">Descripción</th>
                                             <th id="relevante" class="all">Fecha de Inicio</th>
-                                            <th id="relevante" class="all">Fecha de Finalizacion</th>
+                                            <th id="relevante" class="all">Fecha de Finalización</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
@@ -70,7 +70,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Esta seguro que desea eliminar la cita?
+                                                            ¿Está seguro que desea eliminar la cita?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>

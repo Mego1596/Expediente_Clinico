@@ -46,7 +46,7 @@
       </div>
     {% endif %}
     {{ include('cita/_form.html.twig') }}
-    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atras</a>
+    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atrás</a>
 {% endblock %}
 
 
@@ -286,7 +286,7 @@ $(document).ready(function(){
       }else{
         $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
         $("#mensaje2").attr('role','alert');
-        $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+        $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el día de su cita.');
         $("#mensaje2").show();
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         document.getElementById('reporte').style.visibility = "hidden"; 
@@ -382,7 +382,7 @@ $(document).ready(function(){
     }else{
       $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
       $("#mensaje2").attr('role','alert');
-      $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+      $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el día de su cita.');
       $("#mensaje2").show();
       $('html, body').animate({ scrollTop: 0 }, 'fast');
       document.getElementById('reporte').style.visibility = "hidden"; 
@@ -402,7 +402,7 @@ function horaValida() {
   if(validadorHora != '00' && validadorHora !='30'){
     $("#mensaje3").attr('class','alert alert-warning alert-dismissible fade show');
     $("#mensaje3").attr('role','alert');
-    $("#paragraph3").html('la hora seleccionada debe ser puntual u hora y media Ejemplo: 8:00 a.m o 8:30 a.m.');
+    $("#paragraph3").html('La hora seleccionada debe ser puntual u hora y media Ejemplo: 8:00 a.m o 8:30 a.m.');
     $("#mensaje3").show();
     window.scrollTo(0,document.body.scrollHeight);
   }else{

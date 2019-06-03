@@ -263,7 +263,7 @@ class AnexoController extends AbstractController
                         'examen_solicitado' => $examen_solicitado->getId(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{

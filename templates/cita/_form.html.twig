@@ -24,7 +24,7 @@
           {% if(userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA') %}
             <div class="row" style="text-align:center;">
               <div class="col-md-12">
-                <label style="align-content: center;">Clinica:</label>
+                <label style="align-content: center;">Clínica:</label>
                 <select class="form-control" id="clinica" name="clinica" required>
                   {% for clin in clinica %}
                     <option value="{{clin.id}}"> {{clin.nombreClinica}}</option>
@@ -55,7 +55,7 @@
               <select id="user" name="user" class="form-control">
                 <option value="">Seleccione un doctor</option>
               </select>
-              <p><li  id="parrafoInicial" style="visibility:visible;font-size:11px;color:black">Los usuarios pre-cargados son medicos generales ya que no ha seleccionado ninguna especialidad</li></p>
+              <p><li  id="parrafoInicial" style="visibility:visible;font-size:11px;color:black">Los usuarios pre-cargados son médicos generales ya que no ha seleccionado ninguna especialidad</li></p>
             </div>
           </div>
           <div class="row">
