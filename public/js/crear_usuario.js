@@ -15,14 +15,17 @@ $(document).ready(function() {
         }
     });
 });
-
+ 
 $("#form_emergencia").change(function(){
 	var emergencia = this.value;
 	if(emergencia == 1){
 		$('#seccion_planta').hide();
+		$('#form_planta').val(0);
 	}else if(emergencia == 0){
 		$('#seccion_planta').show();
+		$('#form_planta').val(0);
 	}else{
 		$('#seccion_planta').hide();
+		$('#form_planta').val(0);
 	}
 });
