@@ -6,6 +6,7 @@ use App\Entity\Expediente;
 use App\Entity\Habitacion;
 use App\Entity\Sala;
 use App\Entity\Clinica;
+use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
@@ -13,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class HomeController extends AbstractController
 {
@@ -52,10 +55,40 @@ class HomeController extends AbstractController
      * @Route("/cambioContrasena", name="app_cambio")
      * @Security2("is_authenticated()")
      */
-    public function cambio_contrasena(Security $AuthUser)
+    public function cambio_contrasena(Request $request,Security $AuthUser): Response
     {   
+        $userForm = new User();
+        $form = $this->createFormBuilder($userForm)
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if ( $request->request->get('password_actual') != "" && $request->request->get('nueva_password') != "" && $request->request->get('confirmar_nueva_password') != "" ) {
+                if(password_verify($request->request->get('password_actual'), $AuthUser->getUser()->getPassword() ) ){
+                    if($request->request->get('nueva_password') == $request->request->get('confirmar_nueva_password') ){
+                        $user = $this->getDoctrine()->getRepository(User::class)->find($AuthUser->getUser()->getId());
+                        $password = $request->request->get('nueva_password');
+                        $hash = password_hash($password, PASSWORD_DEFAULT,[15]);
+                        $user->setPassword($hash);
+                        $entityManager = $this->getDoctrine()->getEntityManager();
+                        $entityManager->persist($user);
+                        $entityManager->flush();
+                        $this->addFlash('success', 'Contraseña modificada con exito');
+                        return $this->redirectToRoute('home');
+                    }else{
+                        $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmacion de contraseña');
+                    }
+                }else{
+                    $this->addFlash('fail', 'Un problema ha ocurrido, compruebe que la contraseña actual sea correcta');
+                }
+            }else{
+                $this->addFlash('fail', 'Un problema ha ocurrido verifique si todos los campos han sido completados');
+            }
+        }
+
         return $this->render('user/passwordUpdate.html.twig', [
         'controller_name' => 'HomeController',
+        'form'            => $form->createView(),
         ]);
     }
 
