@@ -25,7 +25,7 @@ INSERT INTO `diagnostico`(`id`, `descripcion`, `creado_en`, `actualizado_en`, `c
 
 INSERT INTO `clinica` (`id`, `nombre_clinica`, `direccion`, `telefono`, `email`, `creado_en`, `actualizado_en`) VALUES
 (1, 'CLINICA 1', 'San Salvador', '2257-7777', 'gggg@gmail.com', NULL, NULL),
-(2, 'CLINICA 2', 'San Salvador', '1111-1111', 'go14002@ues.edu.sv', NULL, NULL);
+(2, 'CLINICA 2', 'San Salvador', '1111-1111', 'aaaa@gmail.com', NULL, NULL);
 
 
 INSERT INTO `especialidad` (`id`, `nombre_especialidad`, `creado_en`, `actualizado_en`) VALUES
@@ -197,9 +197,9 @@ INSERT INTO `expediente`(`id`, `usuario_id`, `genero_id`, `numero_expediente`, `
 (1,4,1,'U0001-2019','1996-05-01 00:00:00', 'San Salvador','2257-7777','-','Soltero', 1),
 (2,5,1,'U0002-2019','1994-09-03 00:00:00', 'San Salvador','2257-7777','-','Soltero', 1);
 
-INSERT INTO `cita`(`id`, `expediente_id`, `fecha_reservacion`, `consulta_por`, `fecha_fin`) VALUES
-(1,1,'2019-05-08 08:00:00','Motivo 1', '2019-05-08 08:30:00'),
-(2,2,'2019-05-08 08:30:00','Motivo 2', '2019-05-08 09:00:00');
+INSERT INTO `cita`(`id`,`usuario_id`, `expediente_id`, `fecha_reservacion`, `consulta_por`, `fecha_fin`) VALUES
+(1,1,1,'2019-05-08 08:00:00','Motivo 1', '2019-05-08 08:30:00'),
+(2,1,2,'2019-05-08 08:30:00','Motivo 2', '2019-05-08 09:00:00');
 
 INSERT INTO `permiso_rol` (`rol_id`, `permiso_id`) VALUES
 (1, 1),
