@@ -93,6 +93,14 @@ class CitaController extends AbstractController
     {   
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if ($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE') {
+                if ( $AuthUser->getUser()->getExpediente()->getId() == $expediente->getId() ) {
+                    
+                }else{
+                    $this->addFlash('fail', 'Error, estos datos personales no le pertenecen.');
+                    return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                }   
+            }
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
                 if($expediente->getHabilitado()){
                     $editar = false;
@@ -266,7 +274,7 @@ class CitaController extends AbstractController
         }
 
         if($expediente->getHabilitado()){
-            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->find($expediente->getUsuario()->getClinica()->getId());
             $editar = false;
             $citum = new Cita();
             date_default_timezone_set("America/El_Salvador");
@@ -499,7 +507,11 @@ class CitaController extends AbstractController
                 }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
+                    return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                }else{
+                    return $this->redirectToRoute('expediente_index');
+                }
             }  
         } 
 
@@ -525,7 +537,6 @@ class CitaController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
                     if($expediente->getHabilitado()){
                         $editar = true;
                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
@@ -667,18 +678,18 @@ class CitaController extends AbstractController
                         $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                         return $this->redirectToRoute('expediente_index');
                     }
-                }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
+                    return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                }else{
+                    return $this->redirectToRoute('expediente_index');
+                }
             }  
         } 
 
         if($expediente->getHabilitado()){
-            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->findAll();
+            $clinicas = $this->getDoctrine()->getRepository(Clinica::class)->find($expediente->getUsuario()->getClinica()->getId());
             $editar = true;
             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
                 $em = $this->getDoctrine()->getManager();
@@ -843,7 +854,11 @@ class CitaController extends AbstractController
                 }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
+                if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
+                    return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                }else{
+                    return $this->redirectToRoute('expediente_index');
+                }
             }  
         } 
 

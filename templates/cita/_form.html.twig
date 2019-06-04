@@ -25,11 +25,8 @@
             <div class="row" style="text-align:center;">
               <div class="col-md-12">
                 <label style="align-content: center;">Clínica:</label>
-                <select class="form-control" id="clinica" name="clinica" required>
-                  {% for clin in clinica %}
-                    <option value="{{clin.id}}"> {{clin.nombreClinica}}</option>
-                  {% endfor %}
-                </select>
+                <input class="form-control" id="clinicaText" name="clinicaText" required value="{{clinica.nombreClinica}}" readonly="true">
+                <input type="hidden" id="clinica" name="clinica" required value="{{clinica.id}}">
               </div>
             </div>
           {% endif %}
