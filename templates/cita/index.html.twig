@@ -22,7 +22,7 @@
                     <div class="pull-right" align="center">
                         {% if user.getUser().getRol().getNombreRol() != 'ROLE_PACIENTE' %}
                             {% if is_granted('ROLE_PERMISSION_NEW_CITA') %}
-                                <a class="btn btn-outline-primary" href="{{path('cita_calendar',{'expediente': expediente.getId()})}}"><i class="fa fa-calendar"> Ver Agenda</i></a>
+                                <a class="btn btn-outline-primary" href="{{path('cita_calendar',{'expediente': expediente.getId()})}}"><i class="fa fa-calendar"> Ver Agenda, Nueva Cita </i></a>
                             {% endif %}
                         {% endif %}
                     </div>

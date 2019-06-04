@@ -116,7 +116,7 @@ class CamillaController extends AbstractController
                         ]);
                     }
                     //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-                    $this->addFlash('success','Camilla añadida con exito');
+                    $this->addFlash('success','Camilla añadida con éxito');
                     $camilla->setHabitacion($habitacion);
                     $entityManager->persist($camilla);
                     $entityManager->flush();
@@ -177,7 +177,7 @@ class CamillaController extends AbstractController
                 ]);
             }
             //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-            $this->addFlash('success','Camilla añadida con exito');
+            $this->addFlash('success','Camilla añadida con éxito');
             $camilla->setHabitacion($habitacion);
             $entityManager->persist($camilla);
             $entityManager->flush();
@@ -259,7 +259,7 @@ class CamillaController extends AbstractController
                                 $camilla->setNumeroCamilla($result[0]['numero_camilla']);
                                 $entityManager->persist($camilla);
                                 $entityManager->flush();
-                                $mensaje = 'Camilla Modificada con exito, se intercambiaron camillas entre la habitacion: '.$camillaIntercambio->getHabitacion()->getNumeroHabitacion().' de la sala: '.$camillaIntercambio->getHabitacion()->getSala()->getNombreSala().' con la habitacion: '.$camilla->getHabitacion()->getNumeroHabitacion().' de la sala :'.$camilla->getHabitacion()->getSala()->getNombreSala();
+                                $mensaje = 'Camilla Modificada con éxito, se intercambiaron camillas entre la habitacion: '.$camillaIntercambio->getHabitacion()->getNumeroHabitacion().' de la sala: '.$camillaIntercambio->getHabitacion()->getSala()->getNombreSala().' con la habitacion: '.$camilla->getHabitacion()->getNumeroHabitacion().' de la sala :'.$camilla->getHabitacion()->getSala()->getNombreSala();
                                 $this->addFlash('success',$mensaje);
                                 return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
                                 //FIN VERIFICACION PARA OBTENER LA CAMILLA QUE SE VA A TRANSFERIR A LA HABITACION ACTUAL
@@ -274,7 +274,7 @@ class CamillaController extends AbstractController
                         }
                         //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
                     }else{
-                        $this->addFlash('success','Camilla Modificada con exito');
+                        $this->addFlash('success','Camilla Modificada con éxito');
                         return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
                     }
                     
@@ -322,7 +322,7 @@ class CamillaController extends AbstractController
                         $camilla->setNumeroCamilla($result[0]['numero_camilla']);
                         $entityManager->persist($camilla);
                         $entityManager->flush();
-                        $mensaje = 'Camilla Modificada con exito, se intercambiaron camillas entre la habitacion: '.$camillaIntercambio->getHabitacion()->getNumeroHabitacion().' de la sala: '.$camillaIntercambio->getHabitacion()->getSala()->getNombreSala().' con la habitacion: '.$camilla->getHabitacion()->getNumeroHabitacion().' de la sala :'.$camilla->getHabitacion()->getSala()->getNombreSala();
+                        $mensaje = 'Camilla Modificada con éxito, se intercambiaron camillas entre la habitacion: '.$camillaIntercambio->getHabitacion()->getNumeroHabitacion().' de la sala: '.$camillaIntercambio->getHabitacion()->getSala()->getNombreSala().' con la habitacion: '.$camilla->getHabitacion()->getNumeroHabitacion().' de la sala :'.$camilla->getHabitacion()->getSala()->getNombreSala();
                         $this->addFlash('success',$mensaje);
                         return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
                         //FIN VERIFICACION PARA OBTENER LA CAMILLA QUE SE VA A TRANSFERIR A LA HABITACION ACTUAL
@@ -337,7 +337,7 @@ class CamillaController extends AbstractController
                 }
                 //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
             }else{
-                $this->addFlash('success','Camilla Modificada con exito');
+                $this->addFlash('success','Camilla Modificada con éxito');
                 return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
             }
             
@@ -366,7 +366,7 @@ class CamillaController extends AbstractController
                         $entityManager->remove($camilla);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success','Camilla eliminada con exito');
+                    $this->addFlash('success','Camilla eliminada con éxito');
                     return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');

@@ -57,7 +57,7 @@ class EspecialidadController extends AbstractController
                 ]);
             }
 
-            $this->addFlash('success', 'Especialidad agregada con exito');
+            $this->addFlash('success', 'Especialidad agregada con éxito');
             return $this->redirectToRoute('especialidad_index');
         }
 
@@ -95,7 +95,7 @@ class EspecialidadController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Especialidad modificada con exito');
+            $this->addFlash('success', 'Especialidad modificada con éxito');
             return $this->redirectToRoute('especialidad_index', [
                 'id' => $especialidad->getId(),
             ]);
@@ -121,7 +121,7 @@ class EspecialidadController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('success', 'Especialidad eliminada con exito');
+        $this->addFlash('success', 'Especialidad eliminada con éxito');
         return $this->redirectToRoute('especialidad_index');
     }
 }

@@ -68,12 +68,12 @@
                     today: 'Hoy',
                     dayGridMonth:    'Mes',
                     timeGridWeek:    'Semana',
-                    timeGridDay:     'Dia'
+                    timeGridDay:     'Día'
                   },
                 {% if is_granted('ROLE_PERMISSION_NEW_CITA')%}
                 customButtons: {
                     myCustomButton: {
-                      text: 'agendar cita',
+                      text: 'Agendar Nueva Cita',
                       click: function() {
                         let route = "{{ path('cita_new', {expediente: expediente.getId()})|escape('js') }}";
                         window.location.replace(route);

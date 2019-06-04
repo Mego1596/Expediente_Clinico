@@ -45,7 +45,7 @@
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_EDIT_CAMILLA') %}
-                                                    <a href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}" class="btn btn-success">Modificar</a>
+                                                    <a href="{{ path('camilla_edit', {'id': camilla.id,'habitacion':habitacion.id}) }}" class="btn btn-success">Intercambiar</a>
                                                 {% endif %}
 
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_CAMILLA') %}

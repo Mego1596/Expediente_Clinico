@@ -291,7 +291,7 @@ $(document).ready(function(){
               });
         		  $("#hora").append(
               "<br/>"+
-              "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
+              "<label for='time' id='time'>Ingrese la hora de la cita (Ej. 10:00 AM ó 04:30 PM)</label>"+
               "<br/>"+
               "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
               );
@@ -301,7 +301,7 @@ $(document).ready(function(){
       }else{
         $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
         $("#mensaje2").attr('role','alert');
-        $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+        $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el día de su cita.');
         $("#mensaje2").show();
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         document.getElementById('reporte').style.visibility = "hidden"; 
@@ -376,7 +376,7 @@ $(document).ready(function(){
               });
               $("#hora").append(
                 "<br/>"+
-                "<label for='time' id='time'>Ingrese la hora de la cita</label>"+
+                "<label for='time' id='time'>Ingrese la hora de la cita  (Ej. 10:00 AM ó 04:30 PM)</label>"+
                 "<br/>"+
                 "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
               );
@@ -397,7 +397,7 @@ $(document).ready(function(){
     }else{
       $("#mensaje2").attr('class','alert alert-danger alert-dismissible fade show');
       $("#mensaje2").attr('role','alert');
-      $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el dia de su cita.');
+      $("#paragraph2").html('Error, para desplegar la agenda de un doctor seleccione el día de su cita.');
       $("#mensaje2").show();
       $('html, body').animate({ scrollTop: 0 }, 'fast');
       document.getElementById('reporte').style.visibility = "hidden"; 

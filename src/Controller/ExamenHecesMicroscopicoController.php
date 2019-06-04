@@ -144,7 +144,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                         }
                     }else{
@@ -231,7 +231,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success', 'Examen añadido con exito');
+                    $this->addFlash('success', 'Examen añadido con éxito');
                     return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
@@ -297,7 +297,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con exito');
+                        $this->addFlash('success', 'Examen modificado con éxito');
                         return $this->redirectToRoute('examen_heces_microscopico_index', [
                             'id' => $examenHecesMicroscopico->getId(),
                             'examen_solicitado' => $examen_solicitado->getId(),
@@ -326,7 +326,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Examen modificado con exito');
+                $this->addFlash('success', 'Examen modificado con éxito');
                 return $this->redirectToRoute('examen_heces_microscopico_index', [
                     'id' => $examenHecesMicroscopico->getId(),
                     'examen_solicitado' => $examen_solicitado->getId(),
@@ -359,7 +359,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                         $entityManager->remove($examenHecesMicroscopico);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Examen eliminado con exito');
+                    $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }else{
                     $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -377,7 +377,7 @@ class ExamenHecesMicroscopicoController extends AbstractController
                 $entityManager->remove($examenHecesMicroscopico);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Examen eliminado con exito');
+            $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_heces_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }else{
             $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');

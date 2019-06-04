@@ -88,7 +88,7 @@ class ClinicaController extends AbstractController
                     'form' => $form->createView(),
                 ]);
             }
-            $this->addFlash('success', 'Clinica creada con exito');
+            $this->addFlash('success', 'Clinica creada con éxito');
             return $this->redirectToRoute('clinica_index');
         }
 
@@ -141,7 +141,7 @@ class ClinicaController extends AbstractController
                 if ($form->isSubmitted() && $form->isValid()) {
                     $this->getDoctrine()->getManager()->flush();
 
-                    $this->addFlash('success', 'Clinica modificada con exito');
+                    $this->addFlash('success', 'Clinica modificada con éxito');
                     return $this->redirectToRoute('clinica_index', [
                         'id' => $clinica->getId(),
                     ]);
@@ -166,7 +166,7 @@ class ClinicaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Clinica modificada con exito');
+            $this->addFlash('success', 'Clinica modificada con éxito');
             return $this->redirectToRoute('clinica_index', [
                 'id' => $clinica->getId(),
             ]);
@@ -193,7 +193,7 @@ class ClinicaController extends AbstractController
                     $entityManager->remove($clinica);
                     $entityManager->flush();
                 }
-                $this->addFlash('success', 'Clinica eliminada con exito');
+                $this->addFlash('success', 'Clinica eliminada con éxito');
                 return $this->redirectToRoute('clinica_index');
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
@@ -209,7 +209,7 @@ class ClinicaController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('success', 'Clinica eliminada con exito');
+        $this->addFlash('success', 'Clinica eliminada con éxito');
         return $this->redirectToRoute('clinica_index');
     }
 }

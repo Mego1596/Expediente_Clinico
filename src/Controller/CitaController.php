@@ -51,7 +51,7 @@ class CitaController extends AbstractController
                         return $this->redirectToRoute('home');
                     }
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -74,11 +74,11 @@ class CitaController extends AbstractController
                     'user'       => $AuthUser,
                 ]);
             }else{
-                $this->addFlash('fail','No esta autorizado para ver esta pagina');
+                $this->addFlash('fail','No está autorizado para ver esta página');
                 return $this->redirectToRoute('home');
             }
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -156,7 +156,7 @@ class CitaController extends AbstractController
                                             ]);
 
                                         }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
-                                            $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
+                                            $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
                                             return $this->render('cita/new.html.twig', [
                                                 'citum' => $citum,
                                                 'editar' => $editar,
@@ -182,7 +182,7 @@ class CitaController extends AbstractController
                                             $statement->execute();
                                             $result2 = $statement->fetchAll();
                                             if($result2 != null){
-                                                $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Porfavor elija una hora diferente.');
+                                                $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
                                                 return $this->render('cita/new.html.twig', [
                                                     'citum' => $citum,
                                                     'editar' => $editar,
@@ -201,17 +201,17 @@ class CitaController extends AbstractController
                                                 $entityManager->persist($citum);
                                                 $entityManager->flush();
                                                 if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                                    $this->addFlash('success','Cita añadida con exito');
+                                                    $this->addFlash('success','Cita añadida con éxito');
                                                     return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                                                 }else{
-                                                    $this->addFlash('success','Cita añadida con exito');
+                                                    $this->addFlash('success','Cita añadida con éxito');
                                                     return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                                                 }
                                             }
                                         }
                                         //FIN FUNCIONALIDAD INGRESAR UNA CITA
                                     }else{
-                                        $this->addFlash('fail', 'Error, el campo de la hora no puede ir vacio');
+                                        $this->addFlash('fail', 'Error, el campo de la hora no puede ir vacío');
                                         return $this->render('cita/new.html.twig', [
                                             'citum' => $citum,
                                             'editar' => $editar,
@@ -222,7 +222,7 @@ class CitaController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, el campo consulta por no puede ir vacio');
+                                    $this->addFlash('fail', 'Error, el campo consulta por no puede ir vacío');
                                     return $this->render('cita/new.html.twig', [
                                         'citum' => $citum,
                                         'editar' => $editar,
@@ -233,7 +233,7 @@ class CitaController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, el campo de doctores disponibles no puede ir vacio');
+                                $this->addFlash('fail', 'Error, el campo de doctores disponibles no puede ir vacío');
                                 return $this->render('cita/new.html.twig', [
                                     'citum' => $citum,
                                     'editar' => $editar,
@@ -244,7 +244,7 @@ class CitaController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, el campo de fecha de reservacion no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el campo de fecha de reseración no puede ir vacío');
                             return $this->render('cita/new.html.twig', [
                                 'citum' => $citum,
                                 'editar' => $editar,
@@ -264,7 +264,7 @@ class CitaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -346,7 +346,7 @@ class CitaController extends AbstractController
                                     $statement->execute();
                                     $result2 = $statement->fetchAll();
                                     if($result2 != null){
-                                        $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Porfavor elija una hora diferente.');
+                                        $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
                                         return $this->render('cita/new.html.twig', [
                                             'citum' => $citum,
                                             'editar' => $editar,
@@ -366,17 +366,17 @@ class CitaController extends AbstractController
                                         $entityManager->persist($citum);
                                         $entityManager->flush();
                                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                            $this->addFlash('success','Cita añadida con exito');
+                                            $this->addFlash('success','Cita añadida con éxito');
                                             return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                                         }else{
-                                            $this->addFlash('success','Cita añadida con exito');
+                                            $this->addFlash('success','Cita añadida con éxito');
                                             return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                                         }
                                     }
                                 }
                                 //FIN FUNCIONALIDAD INGRESAR UNA CITA
                             }else{
-                                $this->addFlash('fail', 'Error, el campo de la hora no puede ir vacio');
+                                $this->addFlash('fail', 'Error, el campo de la hora no puede ir vacío');
                                 return $this->render('cita/new.html.twig', [
                                     'citum' => $citum,
                                     'editar' => $editar,
@@ -388,7 +388,7 @@ class CitaController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, el campo consulta por no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el campo consulta por no puede ir vacío');
                             return $this->render('cita/new.html.twig', [
                                 'citum' => $citum,
                                 'editar' => $editar,
@@ -400,7 +400,7 @@ class CitaController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, el campo de doctores disponibles no puede ir vacio');
+                        $this->addFlash('fail', 'Error, el campo de doctores disponibles no puede ir vacío');
                         return $this->render('cita/new.html.twig', [
                             'citum' => $citum,
                             'editar' => $editar,
@@ -412,7 +412,7 @@ class CitaController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail', 'Error, el campo de fecha de reservacion no puede ir vacio');
+                    $this->addFlash('fail', 'Error, el campo de fecha de reseración no puede ir vacío');
                     return $this->render('cita/new.html.twig', [
                         'citum' => $citum,
                         'editar' => $editar,
@@ -434,7 +434,7 @@ class CitaController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -452,7 +452,7 @@ class CitaController extends AbstractController
                         'expediente' =>$expediente,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -466,7 +466,7 @@ class CitaController extends AbstractController
                         'expediente' =>$expediente,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -479,7 +479,7 @@ class CitaController extends AbstractController
                     'expediente' =>$expediente,
                 ]);
             }else{
-                $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                 return $this->redirectToRoute('expediente_index');
             }
         }
@@ -502,7 +502,7 @@ class CitaController extends AbstractController
                         'expediente' => $expediente,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -522,7 +522,7 @@ class CitaController extends AbstractController
                 'expediente' => $expediente,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -616,7 +616,7 @@ class CitaController extends AbstractController
                                     $statement->execute();
                                     $result2 = $statement->fetchAll();
                                     if($result2 != null){
-                                        $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Porfavor elija una hora diferente.');
+                                        $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
                                         return $this->render('cita/edit.html.twig', [
                                             'citum' => $citum,
                                             'editar' => $editar,
@@ -636,10 +636,10 @@ class CitaController extends AbstractController
                                         $entityManager->persist($citum);
                                         $entityManager->flush();
                                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                            $this->addFlash('success','Cita Modificada con exito');
+                                            $this->addFlash('success','Cita Modificada con éxito');
                                             return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                                         }else{
-                                            $this->addFlash('success','Cita Modificada con exito');
+                                            $this->addFlash('success','Cita Modificada con éxito');
                                             return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                                         }
                                     }
@@ -651,13 +651,13 @@ class CitaController extends AbstractController
                                 $entityManager->persist($citum);
                                 $entityManager->flush();
                                 if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                    $this->addFlash('success','Cita Modificada con exito');
+                                    $this->addFlash('success','Cita Modificada con éxito');
                                     return $this->redirectToRoute('cita_index', [
                                         'id' => $citum->getId(),
                                         'expediente' => $expediente->getId(),
                                     ]);
                                 }else{
-                                    $this->addFlash('success','Cita Modificada con exito');
+                                    $this->addFlash('success','Cita Modificada con éxito');
                                     return $this->redirectToRoute('cita_calendar', [
                                         'expediente' => $expediente->getId(),
                                     ]);
@@ -675,7 +675,7 @@ class CitaController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }else{
-                        $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                        $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                         return $this->redirectToRoute('expediente_index');
                     }
             }else{
@@ -760,7 +760,7 @@ class CitaController extends AbstractController
                         $statement->execute();
                         $result2 = $statement->fetchAll();
                         if($result2 != null){
-                            $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Porfavor elija una hora diferente.');
+                            $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
                             return $this->render('cita/edit.html.twig', [
                                 'citum' => $citum,
                                 'editar' => $editar,
@@ -781,10 +781,10 @@ class CitaController extends AbstractController
                             $entityManager->persist($citum);
                             $entityManager->flush();
                             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                $this->addFlash('success','Cita Modificada con exito');
+                                $this->addFlash('success','Cita Modificada con éxito');
                                 return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                             }else{
-                                $this->addFlash('success','Cita Modificada con exito');
+                                $this->addFlash('success','Cita Modificada con éxito');
                                 return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                             }
                         }
@@ -796,13 +796,13 @@ class CitaController extends AbstractController
                     $entityManager->persist($citum);
                     $entityManager->flush();
                     if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                        $this->addFlash('success','Cita Modificada con exito');
+                        $this->addFlash('success','Cita Modificada con éxito');
                         return $this->redirectToRoute('cita_index', [
                             'id' => $citum->getId(),
                             'expediente' => $expediente->getId(),
                         ]);
                     }else{
-                        $this->addFlash('success','Cita Modificada con exito');
+                        $this->addFlash('success','Cita Modificada con éxito');
                         return $this->redirectToRoute('cita_calendar', [
                             'expediente' => $expediente->getId(),
                         ]);
@@ -821,7 +821,7 @@ class CitaController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -842,14 +842,14 @@ class CitaController extends AbstractController
                         $entityManager->flush();
                     }
                     if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                        $this->addFlash('success','Cita eliminada con exito');
+                        $this->addFlash('success','Cita eliminada con éxito');
                         return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
                     }else{
-                        $this->addFlash('success','Cita eliminada con exito');
+                        $this->addFlash('success','Cita eliminada con éxito');
                         return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
                     }
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -868,10 +868,10 @@ class CitaController extends AbstractController
             $entityManager->flush();
         }
         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-            $this->addFlash('success','Cita eliminada con exito');
+            $this->addFlash('success','Cita eliminada con éxito');
             return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
         }else{
-            $this->addFlash('success','Cita eliminada con exito');
+            $this->addFlash('success','Cita eliminada con éxito');
             return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
         }
     }
