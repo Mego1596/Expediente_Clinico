@@ -244,7 +244,7 @@ class AnexoController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_ANEXO')")
      */
-    public function delete(Request $request, ExamenSolicitado $examen_solicitado, Anexo $anexo): Response
+    public function delete(Request $request, ExamenSolicitado $examen_solicitado, Anexo $anexo, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $anexo->getExamenSolicitado()->getId() == $examen_solicitado->getId() ){
