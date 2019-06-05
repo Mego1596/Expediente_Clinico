@@ -5,6 +5,6 @@
 {% block body %}
     {{ include('especialidad/_form.html.twig') }}
     {%if (is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')) %}
-    	<a class="btn btn-secondary" href="{{ path('especialidad_index') }}">Atras</a>
+    	<a class="btn btn-secondary" href="{{ path('especialidad_index') }}">Atrás</a>
   	{% endif %}
 {% endblock %}

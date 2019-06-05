@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria
+                            Bienvenido al Sistema Informático de la Clínica Hospitalaria
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="pull-right" align="center">
                     {% if is_granted('ROLE_PERMISSION_NEW_ESPECIALIDAD') %}
-                        <a href="{{ path('especialidad_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar Especialidad</a>
+                        <a href="{{ path('especialidad_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-fw fa-list-ol"></i> Registrar Nueva Especialidad</a>
                     {% endif %}
                     </div>
                     <br/>
@@ -63,7 +63,7 @@
                                                         </button>
                                                       </div>
                                                       <div class="modal-body">
-                                                        Esta seguro que desea eliminar la especialidad?
+                                                        ¿Esta seguro que desea eliminar la especialidad?
                                                       </div>
                                                       <div class="modal-footer">
                                                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
