@@ -33,9 +33,9 @@
         <a class="btn btn-primary" href="{{ path('clinica_edit', {'id': clinica.id}) }}">Editar</a>
     {% endif %}
     {% if is_granted('ROLE_PERMISSION_INDEX_SALA')%}
-        <a class="btn btn-success" href="{{path('sala_index', {'clinica':clinica.id} )}}">Crear Salas</a>
+        <a class="btn btn-success" href="{{path('sala_index', {'clinica':clinica.id} )}}">Administrar Salas</a>
     {% endif %}
     {% if is_granted('ROLE_PERMISSION_INDEX_HABITACION')%}
-        <a class="btn btn-success" href="{{path('habitacion_index', {'clinica':clinica.id} )}}">Crear Habitaciones</a>
+        <a class="btn btn-success" href="{{path('habitacion_index', {'clinica':clinica.id} )}}">Administrar Habitaciones</a>
     {% endif %}
 {% endblock %}

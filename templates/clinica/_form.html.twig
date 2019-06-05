@@ -15,15 +15,15 @@
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
           <div class="row">
             <div class="col-md-12">
-              {{ form_label(form.nombreClinica) }}
+              {{ form_label(form.nombreClinica, "Nombre Clínica") }}
               {{ form_widget(form.nombreClinica) }}
             </div>
             <div class="col-md-12">
-              {{ form_label(form.direccion) }}
+              {{ form_label(form.direccion, "Dirección") }}
               {{ form_widget(form.direccion) }}
             </div>
             <div class="col-md-12">
-              {{ form_label(form.telefono) }}
+              {{ form_label(form.telefono, "Teléfono") }}
               {{ form_widget(form.telefono) }}
             </div>
           </div>

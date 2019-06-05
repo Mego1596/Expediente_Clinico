@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            Bienvenido al Sistema Informático de la Clínica Hospitalaria 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -21,7 +21,7 @@
                 <div class="card-body">
                     <div class="pull-right" align="center">
                         {% if is_granted('ROLE_PERMISSION_NEW_CLINICA') %}
-                            <a href="{{ path('clinica_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-hospital-o"></i> Registrar Clinica</a>
+                            <a href="{{ path('clinica_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-hospital-o"></i> Registrar Nueva Clínica</a>
                         {% endif %}
                     </div>
                     <br/>
@@ -31,10 +31,10 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Nombre de la Clinica</th>
-                                            <th id="relevante" class="all">Direccion</th>
-                                            <th id="relevante" class="all">Telefono</th>
-                                            <th id="relevante" class="all">E-Mail</th>
+                                            <th id="relevante" class="all">Nombre de la Clínica</th>
+                                            <th id="relevante" class="all">Dirección</th>
+                                            <th id="relevante" class="all">Teléfono</th>
+                                            <th id="relevante" class="all">Email</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
@@ -64,13 +64,13 @@
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Clinica</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Eliminar Clínica</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Esta seguro que desea eliminar la clinica?
+                                                            ¿Está seguro que desea eliminar la clínica?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>

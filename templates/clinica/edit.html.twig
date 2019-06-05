@@ -5,7 +5,7 @@
 {% block body %}
     {{ include('clinica/_form.html.twig', {'button_label': 'Update'}) }}
     {%if (is_granted('ROLE_PERMISSION_INDEX_CLINICA')) %}
-    	<a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atras</a>
+    	<a class="btn btn-secondary" href="{{ path('clinica_index') }}">Atrás</a>
   	{% endif %}
     
 {% endblock %}

@@ -57,7 +57,7 @@ class ClinicaController extends AbstractController
                             $entityManager->persist($clinica);
                             $entityManager->flush();
                         }else{
-                            $this->addFlash('fail', 'Error, el email no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el email no puede ir vacío');
                             return $this->render('clinica/new.html.twig', [
                                 'clinica' => $clinica,
                                 'editar' => $editar,
@@ -65,7 +65,7 @@ class ClinicaController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, el telefono de contacto no puede ir vacio');
+                        $this->addFlash('fail', 'Error, el teléfono de contacto no puede ir vacío');
                         return $this->render('clinica/new.html.twig', [
                             'clinica' => $clinica,
                             'editar' => $editar,
@@ -73,7 +73,7 @@ class ClinicaController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail', 'Error, la direccion no puede ir vacia');
+                    $this->addFlash('fail', 'Error, la dirección no puede ir vacía');
                     return $this->render('clinica/new.html.twig', [
                         'clinica' => $clinica,
                         'editar' => $editar,
@@ -81,14 +81,14 @@ class ClinicaController extends AbstractController
                     ]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, el nombre de la clinica no puede ir vacio');
+                $this->addFlash('fail', 'Error, el nombre de la clínica no puede ir vacío');
                 return $this->render('clinica/new.html.twig', [
                     'clinica' => $clinica,
                     'editar' => $editar,
                     'form' => $form->createView(),
                 ]);
             }
-            $this->addFlash('success', 'Clinica creada con éxito');
+            $this->addFlash('success', 'Clínica creada con éxito');
             return $this->redirectToRoute('clinica_index');
         }
 
@@ -141,7 +141,7 @@ class ClinicaController extends AbstractController
                 if ($form->isSubmitted() && $form->isValid()) {
                     $this->getDoctrine()->getManager()->flush();
 
-                    $this->addFlash('success', 'Clinica modificada con éxito');
+                    $this->addFlash('success', 'Clínica modificada con éxito');
                     return $this->redirectToRoute('clinica_index', [
                         'id' => $clinica->getId(),
                     ]);
@@ -166,7 +166,7 @@ class ClinicaController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Clinica modificada con éxito');
+            $this->addFlash('success', 'Clínica modificada con éxito');
             return $this->redirectToRoute('clinica_index', [
                 'id' => $clinica->getId(),
             ]);
@@ -183,7 +183,7 @@ class ClinicaController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CLINICA')")
      */
-    public function delete(Request $request, Clinica $clinica): Response
+    public function delete(Request $request, Clinica $clinica, Security $AuthUser): Response
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -193,7 +193,7 @@ class ClinicaController extends AbstractController
                     $entityManager->remove($clinica);
                     $entityManager->flush();
                 }
-                $this->addFlash('success', 'Clinica eliminada con éxito');
+                $this->addFlash('success', 'Clínica eliminada con éxito');
                 return $this->redirectToRoute('clinica_index');
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
@@ -209,7 +209,7 @@ class ClinicaController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('success', 'Clinica eliminada con éxito');
+        $this->addFlash('success', 'Clínica eliminada con éxito');
         return $this->redirectToRoute('clinica_index');
     }
 }
