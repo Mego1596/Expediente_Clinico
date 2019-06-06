@@ -1100,11 +1100,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `usuario_especialidades_id`, `email`, `password`, `nombres`, `apellidos`, `is_active`, `emergencia`, `planta`) VALUES
-(1, 1, NULL, NULL, 'superusuario@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1', 0, 0, 0),
+(1, 1, NULL, NULL, 'superusuario@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1', 1, 0, 0),
 (2, 2, 1, 1, 'doctor1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 2', 'Usuario 2', 1, 0, 0),
 (3, 2, 1, 3, 'doctor2@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3', 1, 1, 0),
-(4, 4, 1, NULL, 'paciente1@usuario.com', '$2y$10$R5krUXRnjMEhHI.IWtsy/eZNiHUjNX0GXeqBYCehtuHIfDvQUd322', 'Usuario 4', 'Usuario 4', 0, 0, 0),
-(5, 4, 2, NULL, 'paciente2@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5', 0, 0, 0),
+(4, 4, 1, NULL, 'paciente1@usuario.com', '$2y$10$R5krUXRnjMEhHI.IWtsy/eZNiHUjNX0GXeqBYCehtuHIfDvQUd322', 'Usuario 4', 'Usuario 4', 1, 0, 0),
+(5, 4, 2, NULL, 'paciente2@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5', 1, 0, 0),
 (9, 5, 1, NULL, 'enfermera@usuario.com', '$2y$10$R7GZb.neiuDaF9fF8zMW4uy.5nk0wb6FCx6aAGIrqjezGRc.GsvPe', 'Enfermera 1', 'Lo que sea', 1, 0, 0),
 (10, 3, 1, NULL, 'archivista@usuario.com', '$2y$10$4DziEky9z7wanf0Fn3lPZOSOpx6.VdkX1tWHDWXYeKQLKdjt0z5UO', 'Archivista 1', 'Lo que sea', 1, 0, 0),
 (11, 6, 1, NULL, 'laboratorista@usuario.com', '$2y$10$f2FPJhq2OJM4eUsZuizXR.SH9iCamvKrXlQ/DbHtvH6C45oyS/6jy', 'Laboratorista 1', 'Lo que sea', 1, 0, 0),
