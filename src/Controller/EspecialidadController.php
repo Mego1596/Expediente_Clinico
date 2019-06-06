@@ -49,7 +49,7 @@ class EspecialidadController extends AbstractController
                 $entityManager->persist($especialidad);
                 $entityManager->flush();
             }else{
-                $this->addFlash('fail', 'El nombre de la especialidad no puede estar vacio');
+                $this->addFlash('fail', 'El nombre de la especialidad no puede estar vacío');
                 return $this->render('especialidad/new.html.twig', [
                     'especialidad' => $especialidad,
                     'editar' => $editar,
