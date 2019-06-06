@@ -47,10 +47,11 @@ class CalendarListener
             ->innerJoin('c.expediente', 'exp')
             ->innerJoin('exp.usuario', 'u')
             ->innerJoin('u.clinica', 'cli')
-            ->where('c.fechaReservacion BETWEEN :inicio AND :end AND cli.id =:cl')
+            ->where('c.fechaReservacion BETWEEN :inicio AND :end AND cli.id =:cl AND c.usuario=:doctor')
             ->setParameter('inicio', $start->format('Y-m-d H:i:s'))
             ->setParameter('end', $end->format('Y-m-d H:i:s'))
             ->setParameter('cl', $this->Auth->getUser()->getClinica()->getId())
+            ->setParameter('doctor', $this->Auth->getUser()->getId())
             ->getQuery()
             ->getResult();
             ;

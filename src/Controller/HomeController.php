@@ -32,6 +32,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/home", name="home")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      */
     public function home(Security $AuthUser)
     {   

@@ -50,7 +50,7 @@
 <a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id}) }}">Editar</a>
 {% endif %}
 {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
-<a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id}) }}">Crear Cita</a>
+<a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id}) }}">Ver / Crear Cita</a>
 {% endif %}
 {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
 <a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Registrar Historial</a>
