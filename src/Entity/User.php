@@ -91,6 +91,12 @@ class User implements UserInterface,\Serializable
      */
     private $ingresados;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Persona", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $persona;
+
 
     public function __construct()
     {
@@ -364,6 +370,18 @@ class User implements UserInterface,\Serializable
                 $ingresado->setUsuario(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPersona(): ?Persona
+    {
+        return $this->persona;
+    }
+
+    public function setPersona(Persona $persona): self
+    {
+        $this->persona = $persona;
 
         return $this;
     }
