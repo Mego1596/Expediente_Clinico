@@ -13,12 +13,20 @@
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
           <div class="row" style="text-align: center">
             <div class="col-md-4">
-              {{ form_label(form.nombres) }}
-              {{ form_widget(form.nombres) }}
+              <label for="primerNombre">Primer Nombre</label>
+              <input class="form-control" type="text" name="primerNombre" id="primerNombre">
             </div>
             <div class="col-md-4">
-              <label>Apellidos</label>
-              <input type="text" name="apellidos" id="apellidos" class="form-control">
+              <label for="segundoNombre">Segundo Nombre</label>
+              <input class="form-control" type="text" name="segundoNombre" id="segundoNombre">
+            </div>
+            <div class="col-md-4">
+              <label for="primerApellido">Primer Apellido</label>
+              <input class="form-control" type="text" name="primerApellido" id="primerApellido">
+            </div>
+            <div class="col-md-4">
+              <label for="segundoApellido">Segundo Apellido</label>
+              <input class="form-control" type="text" name="segundoApellido" id="segundoApellido">
             </div>
             <div class="col-md-4">
               {{ form_label(form.email) }}

@@ -20,6 +20,7 @@ class ClinicaController extends AbstractController
     /**
      * @Route("/", name="clinica_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_CLINICA')")
      */
     public function index(ClinicaRepository $clinicaRepository, Security $AuthUser): Response
@@ -39,6 +40,7 @@ class ClinicaController extends AbstractController
     /**
      * @Route("/new", name="clinica_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_CLINICA')")
      */
     public function new(Request $request): Response
@@ -102,6 +104,7 @@ class ClinicaController extends AbstractController
     /**
      * @Route("/{id}", name="clinica_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_CLINICA')")
      */
     public function show(Clinica $clinica, Security $AuthUser): Response
@@ -127,6 +130,7 @@ class ClinicaController extends AbstractController
     /**
      * @Route("/{id}/edit", name="clinica_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_CLINICA')")
      */
     public function edit(Request $request, Clinica $clinica, Security $AuthUser): Response
@@ -181,6 +185,7 @@ class ClinicaController extends AbstractController
     /**
      * @Route("/{id}", name="clinica_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CLINICA')")
      */
     public function delete(Request $request, Clinica $clinica, Security $AuthUser): Response

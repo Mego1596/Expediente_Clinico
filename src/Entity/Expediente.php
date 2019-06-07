@@ -25,10 +25,6 @@ class Expediente
      */
     private $usuario;
 
-    /**
-     * @Assert\NotBlank
-     */
-    public $nombres;
 
     /**
      * @Assert\NotBlank

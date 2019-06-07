@@ -6,6 +6,7 @@ use App\Entity\Expediente;
 use App\Entity\Clinica;
 use App\Entity\Genero;
 use App\Entity\Rol;
+use App\Entity\Persona;
 use App\Entity\User;
 use App\Repository\ExpedienteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,6 +33,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/", name="expediente_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')")
      */
     public function index(ExpedienteRepository $expedienteRepository,Security $AuthUser): Response
@@ -57,12 +59,14 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/new", name="expediente_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function new(Request $request, Security $AuthUser): Response
     {
         $editar = false;
         $expediente = new Expediente();
+        $persona = new Persona();
         $clinicaPerteneciente = $AuthUser->getUser()->getClinica();
 
         if(is_null($AuthUser->getUser()->getClinica())){
@@ -71,7 +75,6 @@ class ExpedienteController extends AbstractController
             $clinicas=null;
         }
         $form = $this->createFormBuilder($expediente)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
             ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
@@ -84,8 +87,8 @@ class ExpedienteController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            if($form["nombres"]->getData() != ""){
-                if($request->request->get("apellidos") != ""){
+            if($request->request->get('primerNombre') != ""){
+                if($request->request->get('primerApellido') != ""){
                     if($form["email"]->getData() != ""){
                         if($form["direccion"]->getData() != ""){
                             if($form["telefono"]->getData() != ""){
@@ -110,14 +113,20 @@ class ExpedienteController extends AbstractController
                                         if(is_null($AuthUser->getUser()->getClinica()) && $valido){
                                             if($request->request->get('clinica') != ""){
                                             	$user = new User();
-	                                            $user->setNombres($form["nombres"]->getData());
-	                                            $user->setApellidos($request->request->get('apellidos'));
+	                                            $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                                $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                                $persona->setSegundoApellido($request->request->get('segundoApellido'));
 	                                            $user->setEmail($form["email"]->getData());
 	                                            $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
 	                                            $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
 	                                            $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
 	                                            $user->setIsActive(true);
-	                                            $entityManager->persist($user);
+                                                $entityManager->persist($persona);
+                                                $entityManager->flush();
+                                                $user->setPersona($persona);
+                                                $entityManager->persist($user);
+                                                $entityManager->flush();
 	                                            $expediente->setUsuario($user);
 	                                            $expediente->setGenero($form["genero"]->getData());
 	                                            $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
@@ -126,8 +135,8 @@ class ExpedienteController extends AbstractController
 	                                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
 	                                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
 	                                            $expediente->setHabilitado(true);   
-	                                            $inicio = strtoupper($request->request->get('apellidos')[0])."%".date("Y");
-	                                            $iniciales = strtoupper($request->request->get('apellidos')[0]);
+	                                            $inicio = strtoupper($request->request->get('primerApellido')[0])."%".date("Y");
+	                                            $iniciales = strtoupper($request->request->get('primerApellido')[0]);
 	                                            $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
 	                                            IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
 	                                            WHERE u.id = exp.usuario_id AND u.clinica_id =".$request->request->get('clinica')." AND exp.numero_expediente LIKE '".$inicio."')";
@@ -204,13 +213,17 @@ class ExpedienteController extends AbstractController
                                             }
                                         }elseif($valido){
                                             $user = new User();
-                                            $user->setNombres($form["nombres"]->getData());
-                                            $user->setApellidos($request->request->get('apellidos'));
+                                            $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                            $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                            $persona->setSegundoApellido($request->request->get('segundoApellido'));
                                             $user->setEmail($form["email"]->getData());
                                             $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                                             $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
                                             $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
-                                            $user->setIsActive(true);
+                                            $user->setIsActive(true); 
+                                            $entityManager->persist($persona);
+                                            $user->setPersona($persona);
                                             $entityManager->persist($user);
                                             $expediente->setUsuario($user);
                                             $expediente->setGenero($form["genero"]->getData());
@@ -220,8 +233,8 @@ class ExpedienteController extends AbstractController
                                             $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
                                             $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                                             $expediente->setHabilitado(true);
-                                            $inicio = strtoupper($request->request->get('apellidos')[0])."%".date("Y");
-                                            $iniciales = strtoupper($request->request->get('apellidos')[0]);
+                                            $inicio = strtoupper($request->request->get('primerApellido')[0])."%".date("Y");
+                                            $iniciales = strtoupper($request->request->get('primerApellido')[0]);
                                             $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
                                             IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
                                             WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
@@ -375,6 +388,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}", name="expediente_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
      */
     public function show(Expediente $expediente, Security $AuthUser): Response
@@ -416,18 +430,19 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}/edit", name="expediente_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')")
      */
     public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
     {   
+        $persona = $this->getDoctrine()->getRepository(Persona::class)->find($expediente->getUsuario()->getPersona()->getId());
+
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
                 if($expediente->getHabilitado()){
                     $editar = true;
-                    $expediente->nombres = $expediente->getUsuario()->getNombres();
                     $expediente->email = $expediente->getUsuario()->getEmail();
                     $form = $this->createFormBuilder($expediente)
-                    ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
                     ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
                     ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
                     ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
@@ -452,16 +467,21 @@ class ExpedienteController extends AbstractController
                                     'expediente' => $expediente,
                                     'form' => $form->createView(),
                                     'editar' => $editar,
+                                    'persona'    => $persona,
                                     ]);
                         }
                         if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
                                 if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                                     $entityManager = $this->getDoctrine()->getManager();
                                     $user = $expediente->getUsuario();
-                                    $user->setNombres($form["nombres"]->getData());
+                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+                                    $entityManager->persist($persona);
+                                    $entityManager->flush();
                                     $entityManager->persist($user);
+                                    $entityManager->flush();
                                     $expediente->setGenero($form["genero"]->getData());
                                     $expediente->setDireccion($form["direccion"]->getData());
                                     $expediente->setTelefono($form["telefono"]->getData());
@@ -476,15 +496,20 @@ class ExpedienteController extends AbstractController
                                     return $this->render('expediente/edit.html.twig',[
                                     'expediente' => $expediente,
                                     'form' => $form->createView(),
+                                    'persona'    => $persona,
                                     'editar' => $editar,
                                     ]);
                                 }
                             }else{
                                 $entityManager = $this->getDoctrine()->getManager();
                                 $user = $expediente->getUsuario();
-                                $user->setNombres($form["nombres"]->getData());
+                                $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
                                 $user->setEmail($form["email"]->getData());
+                                $entityManager->persist($persona);
+                                $entityManager->flush();
                                 $entityManager->persist($user);
+                                $entityManager->flush();
                                 $expediente->setGenero($form["genero"]->getData());
                                 $expediente->setDireccion($form["direccion"]->getData());
                                 $expediente->setTelefono($form["telefono"]->getData());
@@ -499,6 +524,8 @@ class ExpedienteController extends AbstractController
                     return $this->render('expediente/edit.html.twig', [
                         'expediente' => $expediente,
                         'editar'     => $editar,
+                        'persona'    => $persona,
+
                         'form' => $form->createView(),
                     ]);
                 }else{
@@ -512,10 +539,8 @@ class ExpedienteController extends AbstractController
         }
         if($expediente->getHabilitado()){
             $editar = true;
-            $expediente->nombres = $expediente->getUsuario()->getNombres();
             $expediente->email = $expediente->getUsuario()->getEmail();
             $form = $this->createFormBuilder($expediente)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
             ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
@@ -540,16 +565,22 @@ class ExpedienteController extends AbstractController
                             'expediente' => $expediente,
                             'form' => $form->createView(),
                             'editar' => $editar,
+                            'persona'    => $persona,
                             ]);
                 }
                 if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
                         if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                             $entityManager = $this->getDoctrine()->getManager();
                             $user = $expediente->getUsuario();
-                            $user->setNombres($form["nombres"]->getData());
+                            $persona->setPrimerNombre($request->request->get('primerNombre'));
+                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
                             $user->setEmail($form["email"]->getData());
                             $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+                            $entityManager->persist($persona);
+                            $entityManager->flush();
                             $entityManager->persist($user);
+                            $entityManager->flush();
+
                             $expediente->setGenero($form["genero"]->getData());
                             $expediente->setDireccion($form["direccion"]->getData());
                             $expediente->setTelefono($form["telefono"]->getData());
@@ -565,14 +596,19 @@ class ExpedienteController extends AbstractController
                             'expediente' => $expediente,
                             'form' => $form->createView(),
                             'editar' => $editar,
+                            'persona'    => $persona,
                             ]);
                         }
                     }else{
                         $entityManager = $this->getDoctrine()->getManager();
                         $user = $expediente->getUsuario();
-                        $user->setNombres($form["nombres"]->getData());
+                        $persona->setPrimerNombre($request->request->get('primerNombre'));
+                        $persona->setSegundoNombre($request->request->get('segundoNombre'));
                         $user->setEmail($form["email"]->getData());
+                        $entityManager->persist($persona);
+                        $entityManager->flush();
                         $entityManager->persist($user);
+                        $entityManager->flush();
                         $expediente->setGenero($form["genero"]->getData());
                         $expediente->setDireccion($form["direccion"]->getData());
                         $expediente->setTelefono($form["telefono"]->getData());
@@ -586,6 +622,7 @@ class ExpedienteController extends AbstractController
             }
             return $this->render('expediente/edit.html.twig', [
                 'expediente' => $expediente,
+                'persona' => $persona,
                 'editar'     => $editar,
                 'form' => $form->createView(),
             ]);
@@ -597,6 +634,7 @@ class ExpedienteController extends AbstractController
 
     /**
      * @Route("/{id}", name="expediente_delete", methods={"DELETE"})
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE')")
      */
     public function delete(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -630,6 +668,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}/habilitar", name="expediente_habilitar", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function habilitar(Request $request, Expediente $expediente): Response

@@ -26,6 +26,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}", name="cita_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_CITA')")
      */
     public function index(CitaRepository $citaRepository,Expediente $expediente,Security $AuthUser): Response
@@ -87,6 +88,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="cita_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_CITA')")
      */
     public function new(Request $request,Expediente $expediente,Security $AuthUser): Response
@@ -442,6 +444,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/calendar/{expediente}", name="cita_calendar", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      */
     public function calendar(Expediente $expediente, Security $AuthUser): Response
     {   
@@ -488,6 +491,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/", name="cita_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_CITA')")
      */
     public function show(Cita $citum,Expediente $expediente,Security $AuthUser): Response
@@ -530,6 +534,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/edit", name="cita_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_CITA')")
      */
     public function edit(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
@@ -829,6 +834,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}", name="cita_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CITA')")
      */
     public function delete(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response

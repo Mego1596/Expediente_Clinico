@@ -32,6 +32,7 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="user_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_USER')")
      */
     public function index(UserRepository $userRepository, Security $AuthUser): Response
@@ -59,6 +60,7 @@ class UserController extends AbstractController
     /**
      * @Route("/new", name="user_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_USER')")
      */
     public function new(Request $request, Security $AuthUser): Response
@@ -234,6 +236,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_USER')")
      */
     public function show(User $user, Security $AuthUser): Response
@@ -262,6 +265,7 @@ class UserController extends AbstractController
     /**
      * @Route("/doctor/{id}/edit", name="user_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_USER')")
      */
     public function edit(Request $request, User $user, Security $AuthUser): Response
@@ -683,6 +687,7 @@ class UserController extends AbstractController
     /**
      * @Route("/{id}", name="user_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_USER')",statusCode=404, message="")
      */
     public function delete(Request $request, User $user, Security $AuthUser): Response
@@ -722,6 +727,7 @@ class UserController extends AbstractController
      /**
      * @Route("/{id}", name="user_habilitar", methods={"GET", "POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_USER')",statusCode=404, message="")
      */
     public function habilitar(Request $request, User $user): Response
