@@ -74,7 +74,8 @@
                     </div>
                     <form method="POST" action="{{path('ingresado_new',{'expediente': expediente.id})}}">
                         <div class="modal-body" align="center">
-                        expediente: {{expediente.getUsuario().getNombres()}} {{expediente.getUsuario().getApellidos()}}
+                        expediente:
+                        {{expediente.getUsuario().getPersona().getPrimerNombre()}} {{expediente.getUsuario().getPersona().getSegundoNombre()}} {{expediente.getUsuario().getPersona().getPrimerApellido()}} {{expediente.getUsuario().getPersona().getSegundoApellido()}}
                         <br/>
                          {# the argument of csrf_token() is an arbitrary string used to generate the token #}
                             <input type="hidden" name="_token" value="{{ csrf_token('create-item') }}"/>
