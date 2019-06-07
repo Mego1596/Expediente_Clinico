@@ -71,9 +71,9 @@ class UserController extends AbstractController
         }
         
         $user = new User();
-        $form = $this->createFormBuilder($user)
-        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+        $form = $this->createFormBuilder($user) 
+        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))  //AFECTADA
+        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control'))) //AFECTADA
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -104,8 +104,8 @@ class UserController extends AbstractController
                                     //INICIO PROCESO DE DATOS
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $user->setNombres($form["nombres"]->getData());
-                                    $user->setApellidos($form["apellidos"]->getData());
+                                    $user->setNombres($form["nombres"]->getData());//AFECTADA
+                                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                                     $user->setRol($form["rol"]->getData());
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
                                     $user->setIsActive(true);
@@ -136,8 +136,8 @@ class UserController extends AbstractController
                                     //INICIO PROCESO DE DATOS
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $user->setNombres($form["nombres"]->getData());
-                                    $user->setApellidos($form["apellidos"]->getData());
+                                    $user->setNombres($form["nombres"]->getData());//AFECTADA
+                                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                                     $user->setRol($form["rol"]->getData());
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                                     $user->setIsActive(true);
@@ -265,8 +265,8 @@ class UserController extends AbstractController
                     if(is_null($AuthUser->getUser()->getClinica())){
                         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
                         $form = $this->createFormBuilder($user)
-                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
+                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
                         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
                         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -286,8 +286,8 @@ class UserController extends AbstractController
                     }else{
                         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
                         $form = $this->createFormBuilder($user)
-                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
+                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
                         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
                             'query_builder' => function (EntityRepository $er) {
@@ -347,10 +347,9 @@ class UserController extends AbstractController
                                 
                                 $user->setPassword($pwd);
                                 $user->setEmail($form["email"]->getData());
-                                $user->setNombres($form["nombres"]->getData());
-                                $user->setApellidos($form["apellidos"]->getData());
+                                $user->setNombres($form["nombres"]->getData());//AFECTADA
+                                $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                                 $user->setRol($rol);
-                                $user->setIsActive(true);
                                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($form['clinica']->getData()));
 
                                 if ($agregar_especialidades)
@@ -418,10 +417,9 @@ class UserController extends AbstractController
                                 
                                 $user->setPassword($pwd);
                                 $user->setEmail($form["email"]->getData());
-                                $user->setNombres($form["nombres"]->getData());
-                                $user->setApellidos($form["apellidos"]->getData());
+                                $user->setNombres($form["nombres"]->getData());//AFECTADA
+                                $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                                 $user->setRol($rol);
-                                $user->setIsActive(true);
                                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
 
                                 if ($agregar_especialidades)
@@ -476,8 +474,8 @@ class UserController extends AbstractController
         if(is_null($AuthUser->getUser()->getClinica())){
             //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
             $form = $this->createFormBuilder($user)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
+            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
             ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
             ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -497,8 +495,8 @@ class UserController extends AbstractController
         }else{
             //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
             $form = $this->createFormBuilder($user)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))
+            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
+            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
             ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
                 'query_builder' => function (EntityRepository $er) {
@@ -558,10 +556,9 @@ class UserController extends AbstractController
                     
                     $user->setPassword($pwd);
                     $user->setEmail($form["email"]->getData());
-                    $user->setNombres($form["nombres"]->getData());
-                    $user->setApellidos($form["apellidos"]->getData());
+                    $user->setNombres($form["nombres"]->getData());//AFECTADA
+                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                     $user->setRol($rol);
-                    $user->setIsActive(true);
                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($form['clinica']->getData()));
 
                     if ($agregar_especialidades)
@@ -629,10 +626,9 @@ class UserController extends AbstractController
                     
                     $user->setPassword($pwd);
                     $user->setEmail($form["email"]->getData());
-                    $user->setNombres($form["nombres"]->getData());
-                    $user->setApellidos($form["apellidos"]->getData());
+                    $user->setNombres($form["nombres"]->getData());//AFECTADA
+                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
                     $user->setRol($rol);
-                    $user->setIsActive(true);
                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
 
                     if ($agregar_especialidades)
