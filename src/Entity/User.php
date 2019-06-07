@@ -95,6 +95,7 @@ class User implements UserInterface,\Serializable
     public function __construct()
     {
         $this->ingresados = new ArrayCollection();
+        $this->citas = new ArrayCollection();
     }
 
 

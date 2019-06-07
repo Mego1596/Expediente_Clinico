@@ -114,4 +114,27 @@ class TipoHabitacion
 
         return $this;
     }
+
+    public function addHabitacione(Habitacion $habitacione): self
+    {
+        if (!$this->habitaciones->contains($habitacione)) {
+            $this->habitaciones[] = $habitacione;
+            $habitacione->setTipoHabitacion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHabitacione(Habitacion $habitacione): self
+    {
+        if ($this->habitaciones->contains($habitacione)) {
+            $this->habitaciones->removeElement($habitacione);
+            // set the owning side to null (unless already changed)
+            if ($habitacione->getTipoHabitacion() === $this) {
+                $habitacione->setTipoHabitacion(null);
+            }
+        }
+
+        return $this;
+    }
 }

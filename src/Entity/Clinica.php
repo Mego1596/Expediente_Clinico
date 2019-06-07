@@ -202,4 +202,12 @@ class Clinica
 
         return $this;
     }
+
+    /**
+     * @return Collection|User[]
+     */
+    public function getUsuario(): Collection
+    {
+        return $this->usuario;
+    }
 }

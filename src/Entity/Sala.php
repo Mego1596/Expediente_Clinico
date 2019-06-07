@@ -135,6 +135,19 @@ class Sala
         return $this;
     }
 
+    public function removeHabitacione(Habitacion $habitacione): self
+    {
+        if ($this->habitaciones->contains($habitacione)) {
+            $this->habitaciones->removeElement($habitacione);
+            // set the owning side to null (unless already changed)
+            if ($habitacione->getSala() === $this) {
+                $habitacione->setSala(null);
+            }
+        }
+
+        return $this;
+    }
+
 
 
 }
