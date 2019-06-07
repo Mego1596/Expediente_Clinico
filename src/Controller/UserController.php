@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Clinica;
 use App\Entity\Rol;
 use App\Entity\Especialidad;
+use App\Entity\Persona;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
