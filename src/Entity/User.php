@@ -57,16 +57,6 @@ class User implements UserInterface,\Serializable
     private $citas;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Nombres;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $Apellidos;
-
-    /**
      * @Assert\Blank
      */
     private $nuevo_password;
@@ -208,31 +198,6 @@ class User implements UserInterface,\Serializable
 
         return $this;
     }
-
-    public function getNombres(): ?string
-    {
-        return $this->Nombres;
-    }
-
-    public function setNombres(string $Nombres): self
-    {
-        $this->Nombres = $Nombres;
-
-        return $this;
-    }
-
-    public function getApellidos(): ?string
-    {
-        return $this->Apellidos;
-    }
-
-    public function setApellidos(string $Apellidos): self
-    {
-        $this->Apellidos = $Apellidos;
-
-        return $this;
-    }
-
 
     public function getExpediente(): ?Expediente
     {
