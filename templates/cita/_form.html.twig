@@ -16,7 +16,7 @@
             <div class="row" style="text-align:center;">
               <div class="col-md-12">
                 <label>Doctor Asignado:</label>
-                <input disabled type="text" class="form-control" name="doctor" value="Dr.{{user.getNombres()}} {{user.getApellidos()}}" style="text-align:center;font-size:20px">
+                <input disabled type="text" class="form-control" name="doctor" value="Dr.{{user.getPersona().getPrimerNombre()}} {{user.getPersona().getSegundoNombre()}} {{user.getPersona().getPrimerApellido()}} {{user.getPersona().getSegundoApellido()}}" style="text-align:center;font-size:20px">
               </div>
             </div>
           {% endif %}
