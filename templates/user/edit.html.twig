@@ -14,19 +14,26 @@
           <input type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
           <div class="row" style="text-align: center">
             <div class="col-md-4">
-              {{ form_label(form.nombres) }}
-              {{ form_widget(form.nombres) }}
+              <label for="primerNombre">Primer Nombre</label>
+              <input class="form-control" type="text" name="primerNombre" id="primerNombre" value="{{persona.primerNombre}}">
             </div>
             <div class="col-md-4">
-              {{ form_label(form.apellidos) }}
-              {{ form_widget(form.apellidos) }}
+              <label for="segundoNombre">Segundo Nombre</label>
+              <input class="form-control" type="text" name="segundoNombre" id="segundoNombre" value="{{persona.segundoNombre}}">
+            </div>
+            <div class="col-md-4">
+              <label for="primerApellido">Primer Apellido</label>
+              <input class="form-control" type="text" name="primerApellido" id="primerApellido" value="{{persona.primerApellido}}">
+            </div>
+            <div class="col-md-4">
+              <label for="segundoApellido">Segundo Apellido</label>
+              <input class="form-control" type="text" name="segundoApellido" id="segundoApellido" value="{{persona.segundoApellido}}">
             </div>
             <div class="col-md-4">
               {{ form_label(form.email) }}
               {{ form_widget(form.email) }}
             </div>
           </div>
-
           <div class="row" style="text-align: center;">
             {% if (userAuth.getUser().getClinica() == null) %}
             <div class="col-md-4">

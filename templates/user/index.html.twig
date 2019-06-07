@@ -42,6 +42,7 @@
                                     </thead>
                                     <tbody>
                                     {% for user in users %}
+                                        {% if user.activo %}  
                                         <tr>
                                             <td>{{ user.nombre_completo}}</td>
                                             <td>{{ user.email }}</td>
@@ -90,6 +91,50 @@
                                                 {% endif %}
                                             </td>
                                         </tr>
+                                        {% else %}
+                                            <tr style="background-color: #f2dede;">
+                                            <td>{{ user.nombre_completo}}</td>
+                                            <td>{{ user.email }}</td>
+                                            {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
+                                                <td>{{ user.clinica}}</td>
+                                            {% endif %}
+                                            <td>{{ user.rol}}</td>
+
+                                            <td>
+                                               
+
+                                                {% if is_granted('ROLE_PERMISSION_DELETE_USER') %}
+                                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal{{ user.id}}">
+                                                  Habilitar
+                                                </button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="exampleModal{{ user.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Habilitar Usuario</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        ¿Está seguro que desea habilitar el usuario?
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">No</button>
+                                                        <form method="post" action="{{ path('user_habilitar', {'id': user.id}) }}">
+                                                            <input type="hidden" name="_method" value="POST">
+                                                            <input type="hidden" name="_token" value="{{ csrf_token('habilitar' ~ user.id) }}">
+                                                            <button type="submit" class="btn btn-outline-danger">Si</button>
+                                                        </form>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endif %}
                                     {% endfor %}
                                     </tbody>
                                 </table>

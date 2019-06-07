@@ -38,10 +38,10 @@ class UserController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c, `persona` as p
+            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol, u.is_active as activo FROM `user` as u,rol as r,clinica as c, `persona` as p
                 WHERE u.persona_id = p.id AND u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_PACIENTE";';
         }else{
-            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol FROM `user` as u,rol as r,clinica as c, `persona` as p
+            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.nombre_rol as rol, u.is_active as activo FROM `user` as u,rol as r,clinica as c, `persona` as p
                 WHERE u.persona_id = p.id AND u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_SA" AND r.nombre_rol != "ROLE_PACIENTE" AND c.id= '.$AuthUser->getUser()->getClinica()->getId().'
                 AND u.id !='.$AuthUser->getUser()->getId().';';
         }
@@ -72,9 +72,8 @@ class UserController extends AbstractController
         }
         
         $user = new User();
+        $persona = new Persona();
         $form = $this->createFormBuilder($user) 
-        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))  //AFECTADA
-        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control'))) //AFECTADA
         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
         ->add('password', PasswordType::class, array('attr' => array('class' => 'form-control')))
         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -94,8 +93,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getEntityManager();
-            if($form["nombres"]->getData() != ""){
-                if($form["apellidos"]->getData() != ""){
+            if($request->request->get('primerNombre') != ""){
+                if($request->request->get('primerApellido') != ""){
                     if($form["email"]->getData() != ""){
                         if($form["password"]->getData() != ""){
                             if($form["rol"]->getData() != ""){
@@ -105,8 +104,10 @@ class UserController extends AbstractController
                                     //INICIO PROCESO DE DATOS
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $user->setNombres($form["nombres"]->getData());//AFECTADA
-                                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                    $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
                                     $user->setRol($form["rol"]->getData());
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
                                     $user->setIsActive(true);
@@ -129,6 +130,8 @@ class UserController extends AbstractController
                                             
                                         }
                                     }
+                                    $entityManager->persist($persona);
+                                    $user->setPersona($persona);
                                     $entityManager->persist($user);
                                     $entityManager->flush();
                                     //FIN PROCESO DE DATOS
@@ -137,8 +140,10 @@ class UserController extends AbstractController
                                     //INICIO PROCESO DE DATOS
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $user->setNombres($form["nombres"]->getData());//AFECTADA
-                                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                    $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
                                     $user->setRol($form["rol"]->getData());
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                                     $user->setIsActive(true);
@@ -161,6 +166,8 @@ class UserController extends AbstractController
                                             
                                         }
                                     }
+                                    $entityManager->persist($persona);
+                                    $user->setPersona($persona);
                                     $entityManager->persist($user);
                                     $entityManager->flush();
                                     //FIN PROCESO DE DATOS
@@ -259,6 +266,7 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user, Security $AuthUser): Response
     {   
+        $persona = $this->getDoctrine()->getRepository(Persona::class)->find($user->getPersona()->getId());
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($user->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -266,8 +274,6 @@ class UserController extends AbstractController
                     if(is_null($AuthUser->getUser()->getClinica())){
                         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
                         $form = $this->createFormBuilder($user)
-                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
-                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
                         ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
                         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -287,8 +293,6 @@ class UserController extends AbstractController
                     }else{
                         //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
                         $form = $this->createFormBuilder($user)
-                        ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
-                        ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
                         ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
                         ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
                             'query_builder' => function (EntityRepository $er) {
@@ -308,7 +312,6 @@ class UserController extends AbstractController
 
 
                     $form->handleRequest($request);
-
                     /////////////////////////////// ZONA DE PROCESAMIENTO /////////////////////////////////////
                     if ($form->isSubmitted() && $form->isValid()) 
                     {
@@ -348,8 +351,10 @@ class UserController extends AbstractController
                                 
                                 $user->setPassword($pwd);
                                 $user->setEmail($form["email"]->getData());
-                                $user->setNombres($form["nombres"]->getData());//AFECTADA
-                                $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                                $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                $persona->setSegundoApellido($request->request->get('segundoApellido'));
                                 $user->setRol($rol);
                                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($form['clinica']->getData()));
 
@@ -418,8 +423,10 @@ class UserController extends AbstractController
                                 
                                 $user->setPassword($pwd);
                                 $user->setEmail($form["email"]->getData());
-                                $user->setNombres($form["nombres"]->getData());//AFECTADA
-                                $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                                $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                $persona->setSegundoApellido($request->request->get('segundoApellido'));
                                 $user->setRol($rol);
                                 $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
 
@@ -457,6 +464,7 @@ class UserController extends AbstractController
 
                     return $this->render('user/edit.html.twig', [
                         'user' => $user,
+                        'persona' => $persona,
                         'userAuth' => $AuthUser,
                         'form' => $form->createView(),
                     ]);
@@ -475,8 +483,6 @@ class UserController extends AbstractController
         if(is_null($AuthUser->getUser()->getClinica())){
             //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
             $form = $this->createFormBuilder($user)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
-            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
             ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
             ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
@@ -496,8 +502,6 @@ class UserController extends AbstractController
         }else{
             //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
             $form = $this->createFormBuilder($user)
-            ->add('nombres', TextType::class, array('attr' => array('class' => 'form-control')))//AFECTADA
-            ->add('apellidos', TextType::class,array('attr' => array('class' => 'form-control')))//AFECTADA
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
             ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
                 'query_builder' => function (EntityRepository $er) {
@@ -557,8 +561,10 @@ class UserController extends AbstractController
                     
                     $user->setPassword($pwd);
                     $user->setEmail($form["email"]->getData());
-                    $user->setNombres($form["nombres"]->getData());//AFECTADA
-                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                    $persona->setPrimerApellido($request->request->get('primerApellido'));
+                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
                     $user->setRol($rol);
                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($form['clinica']->getData()));
 
@@ -627,8 +633,10 @@ class UserController extends AbstractController
                     
                     $user->setPassword($pwd);
                     $user->setEmail($form["email"]->getData());
-                    $user->setNombres($form["nombres"]->getData());//AFECTADA
-                    $user->setApellidos($form["apellidos"]->getData());//AFECTADA
+                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                    $persona->setPrimerApellido($request->request->get('primerApellido'));
+                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
                     $user->setRol($rol);
                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
 
@@ -666,6 +674,7 @@ class UserController extends AbstractController
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
+            'persona' => $persona,
             'userAuth' => $AuthUser,
             'form' => $form->createView(),
         ]);
@@ -684,7 +693,8 @@ class UserController extends AbstractController
                 if($AuthUser->getUser()->getClinica()->getId() == $user->getClinica()->getId()){
                     if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
                         $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($user);
+                        $user->setIsActive(false);
+                        $entityManager->persist($user);
                         $entityManager->flush();
                     }
                     $this->addFlash('success', 'Usuario eliminado con exito');
@@ -701,12 +711,31 @@ class UserController extends AbstractController
         //FIN VALIDACION
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+            $user->setIsActive(false);
+            $entityManager->persist($user);
+            $entityManager->flush();       
         }
         $this->addFlash('success', 'Usuario eliminado con exito');
         return $this->redirectToRoute('user_index');
     }
+
+     /**
+     * @Route("/{id}", name="user_habilitar", methods={"GET", "POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("is_granted('ROLE_PERMISSION_DELETE_USER')",statusCode=404, message="")
+     */
+    public function habilitar(Request $request, User $user): Response
+    {
+        if ($this->isCsrfTokenValid('habilitar'.$user->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $user->setIsActive(true);
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('user_index');
+    }
+
 }
 
 
