@@ -10,14 +10,6 @@
                 <th>Email</th>
                 <td>{{ user.email }}</td>
             </tr>
-            <tr>
-                <th>Nombres</th>
-                <td>{{ user.Nombres }}</td>
-            </tr>
-            <tr>
-                <th>Apellidos</th>
-                <td>{{ user.Apellidos }}</td>
-            </tr>
         </tbody>
     </table>
     {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
