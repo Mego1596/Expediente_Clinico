@@ -256,14 +256,14 @@ class HomeController extends AbstractController
     { 
         if(empty($AuthUser->getUser()->getClinica())){
             $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.usuario_especialidades_id IS NULL AND u.persona_id = p.id AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
+            $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.usuario_especialidades_id IS NULL AND u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
             $statement = $em->getConnection()->prepare($RAW_QUERY);
             $statement->execute();
             $result = $statement->fetchAll();
             return $this->json($result);
         }else{
             $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.usuario_especialidades_id IS NULL AND u.persona_id = p.id AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+            $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.usuario_especialidades_id IS NULL AND u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
             $statement = $em->getConnection()->prepare($RAW_QUERY);
             $statement->execute();
             $result = $statement->fetchAll();
@@ -281,14 +281,14 @@ class HomeController extends AbstractController
         if($request->request->get('especialidad')!=""){
             if(empty($AuthUser->getUser()->getClinica())){
                 $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.persona_id = p.id AND u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$request->request->get('clinica').";";
+                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$request->request->get('clinica').";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                 $statement->execute();
                 $result = $statement->fetchAll();
                 return $this->json($result);
             }else{
                 $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.persona_id = p.id AND u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND u.usuario_especialidades_id =".$request->request->get('especialidad')." AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id AND u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                 $statement->execute();
                 $result = $statement->fetchAll();
@@ -297,14 +297,14 @@ class HomeController extends AbstractController
         }else{
             if(empty($AuthUser->getUser()->getClinica())){
                 $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo  FROM `user` as u ,`rol` as r, `persona` as p   WHERE u.persona_id = p.id AND u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
+                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo  FROM `user` as u ,`rol` as r, `persona` as p   WHERE u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$request->request->get('clinica').";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                 $statement->execute();
                 $result = $statement->fetchAll();
                 return $this->json($result);
             }else{
                 $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.persona_id = p.id AND u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
+                $RAW_QUERY="SELECT u.id as id ,CONCAT(p.primer_nombre,' ',IFNULL(p.segundo_nombre,' '),' ',p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo FROM `user` as u ,`rol` as r, `persona` as p  WHERE u.emergencia = false AND u.planta = false AND u.persona_id = p.id AND u.usuario_especialidades_id IS NULL AND r.nombre_rol='ROLE_DOCTOR' AND u.rol_id = r.id  and u.clinica_id=".$AuthUser->getUser()->getClinica()->getId().";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                 $statement->execute();
                 $result = $statement->fetchAll();
