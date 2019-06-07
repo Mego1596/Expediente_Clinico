@@ -38,10 +38,10 @@ class ExpedienteController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT CONCAT(p.primerNombre," ",p.segundoNombre," ",p.primerApellido," ",p.segundoApellido) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id;';
+            $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",p.segundo_nombre," ",p.primer_apellido," ",p.segundo_apellido) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id;';
 
         }else{
-             $RAW_QUERY = 'SELECT CONCAT(p.primerNombre," ",p.segundoNombre," ",p.primerApellido," ",p.segundoApellido) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
+             $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",p.segundo_nombre," ",p.primer_apellido," ",p.segundo_apellido) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
         }
        
 
