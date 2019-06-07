@@ -44,6 +44,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/agenda", name="calendario_trabajo")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      */
     public function calendarioTrabajo(Security $AuthUser)
     {   
@@ -55,6 +56,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/cambioContrasena", name="app_cambio")
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      */
     public function cambio_contrasena(Request $request,Security $AuthUser): Response
     {   
