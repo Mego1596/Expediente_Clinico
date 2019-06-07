@@ -30,6 +30,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{clinica}", name="habitacion_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HABITACION')")
      */
     public function index(HabitacionRepository $habitacionRepository,Security $AuthUser, Clinica $clinica): Response
@@ -71,6 +72,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/new/{clinica}", name="habitacion_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HABITACION')")
      */
     public function new(Request $request, Clinica $clinica, Security $AuthUser): Response
@@ -286,6 +288,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="habitacion_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_HABITACION')")
      */
     public function show(Habitacion $habitacion, Clinica $clinica, Security $AuthUser): Response
@@ -311,6 +314,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}/edit", name="habitacion_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HABITACION')")
      */
     public function edit(Request $request, Habitacion $habitacion, Clinica $clinica,Security $AuthUser): Response
@@ -436,6 +440,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="habitacion_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HABITACION')")
      */
     public function delete(Request $request, Habitacion $habitacion, Clinica $clinica, Security $AuthUser): Response

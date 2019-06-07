@@ -22,6 +22,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{citum}", name="historia_medica_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')")
      */
     public function index(HistoriaMedicaRepository $historiaMedicaRepository, Cita $citum, Security $AuthUser): Response
@@ -66,6 +67,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/new/{citum}", name="historia_medica_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIA_MEDICA')")
      */
     public function new(Request $request, Cita $citum, Security $AuthUser): Response
@@ -281,6 +283,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{id}/{citum}/edit", name="historia_medica_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HISTORIA_MEDICA')")
      */
     public function edit(Request $request, HistoriaMedica $historiaMedica, Cita $citum, Security $AuthUser): Response
@@ -339,6 +342,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{id}/{citum}", name="historia_medica_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HISTORIA_MEDICA')")
      */
     public function delete(Request $request, HistoriaMedica $historiaMedica, Cita $citum, Security $AuthUser): Response
