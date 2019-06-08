@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-06-2019 a las 19:09:34
+-- Tiempo de generación: 08-06-2019 a las 20:56:45
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -99,7 +99,7 @@ CREATE TABLE `clinica` (
 
 INSERT INTO `clinica` (`id`, `nombre_clinica`, `direccion`, `telefono`, `email`, `creado_en`, `actualizado_en`) VALUES
 (1, 'CLINICA 1', 'San Salvador', '2257-7777', 'gggg@gmail.com', NULL, NULL),
-(2, 'CLINICA 2', 'San Salvador', '1111-1111', 'go14002@ues.edu.sv', NULL, NULL);
+(2, 'CLINICA 2', 'San Salvador', '1111-1111', 'aaaa@ues.edu.sv', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -319,13 +319,6 @@ CREATE TABLE `examen_orina_quimico` (
   `actualizado_en` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `examen_orina_quimico`
---
-
-INSERT INTO `examen_orina_quimico` (`id`, `examen_solicitado_id`, `densidad`, `ph`, `glucosa`, `proteinas`, `hemoglobina`, `cuerpo_cetonico`, `pigmento_biliar`, `urobilinogeno`, `nitritos`, `creado_en`, `actualizado_en`) VALUES
-(5, 2, 0, 0, '*', '*', '*', '*', '*', '*', '*', NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -359,17 +352,6 @@ CREATE TABLE `examen_solicitado` (
   `actualizado_en` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Volcado de datos para la tabla `examen_solicitado`
---
-
-INSERT INTO `examen_solicitado` (`id`, `cita_id`, `tipo_examen`, `categoria`, `creado_en`, `actualizado_en`) VALUES
-(1, 1, 'Orina', 'Cristaluria', NULL, NULL),
-(2, 1, 'Orina', 'Quimico', NULL, NULL),
-(3, 1, 'Orina', 'Macroscopico', NULL, NULL),
-(4, 1, 'Orina', 'Microscopico', NULL, NULL),
-(5, 2, 'Orina', 'Quimico', NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -396,8 +378,8 @@ CREATE TABLE `expediente` (
 --
 
 INSERT INTO `expediente` (`id`, `usuario_id`, `genero_id`, `numero_expediente`, `fecha_nacimiento`, `direccion`, `telefono`, `apellido_casada`, `estado_civil`, `creado_en`, `actualizado_en`, `habilitado`) VALUES
-(1, 4, 1, 'U0001-2019', '1996-05-01 00:00:00', 'San Salvador', '2257-7777', '-', 'Soltero', NULL, NULL, 1),
-(2, 5, 1, 'U0002-2019', '1994-09-03 00:00:00', 'San Salvador', '2257-7777', '-', 'Soltero', NULL, NULL, 1);
+(1, 4, 1, 'R0001-2019', '1996-05-01 00:00:00', 'San Salvador', '2257-7777', '-', 'Soltero', NULL, NULL, 1),
+(2, 5, 1, 'S0001-2019', '1994-09-03 00:00:00', 'San Salvador', '2257-7777', '-', 'Soltero', NULL, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -546,7 +528,7 @@ CREATE TABLE `migration_versions` (
 --
 
 INSERT INTO `migration_versions` (`version`, `executed_at`) VALUES
-('20190601040117', '2019-06-01 04:02:46');
+('20190607030751', '2019-06-08 18:56:22');
 
 -- --------------------------------------------------------
 
@@ -988,6 +970,36 @@ INSERT INTO `permiso_rol` (`permiso_id`, `rol_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `persona`
+--
+
+CREATE TABLE `persona` (
+  `id` int(11) NOT NULL,
+  `primer_nombre` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `segundo_nombre` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `primer_apellido` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `segundo_apellido` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `persona`
+--
+
+INSERT INTO `persona` (`id`, `primer_nombre`, `segundo_nombre`, `primer_apellido`, `segundo_apellido`) VALUES
+(1, 'Francisco', 'Javier', 'Serrano', 'Vicente'),
+(2, 'Gonzalo', NULL, 'Segura', 'Gutierrez'),
+(3, 'Juan', 'José', 'Hernandez', 'Moya'),
+(4, 'Bruno', 'Vladimir', 'Rodriguez', 'Santos'),
+(5, 'Sergio', 'Emmanuel', 'Sanchez', 'Molina'),
+(6, 'Marta', 'Nohemy', 'Bracamonte', 'Perez'),
+(7, 'Eduardo', 'Enrique', 'Fuentes', 'Diaz'),
+(8, 'Ricardo', 'Joel', 'Ramos', 'Santana'),
+(9, 'Roberto', 'Ernesto', 'Rivera', 'Rubio'),
+(10, 'Elmer', 'Daniel', 'Segura', 'Peña');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `plan_tratamiento`
 --
 
@@ -1086,10 +1098,9 @@ CREATE TABLE `user` (
   `rol_id` int(11) NOT NULL,
   `clinica_id` int(11) DEFAULT NULL,
   `usuario_especialidades_id` int(11) DEFAULT NULL,
+  `persona_id` int(11) NOT NULL,
   `email` varchar(180) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombres` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `apellidos` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `emergencia` tinyint(1) DEFAULT NULL,
   `planta` tinyint(1) DEFAULT NULL
@@ -1099,17 +1110,17 @@ CREATE TABLE `user` (
 -- Volcado de datos para la tabla `user`
 --
 
-INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `usuario_especialidades_id`, `email`, `password`, `nombres`, `apellidos`, `is_active`, `emergencia`, `planta`) VALUES
-(1, 1, NULL, NULL, 'superusuario@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 1', 'Usuario 1', 1, 0, 0),
-(2, 2, 1, 1, 'doctor1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 2', 'Usuario 2', 1, 0, 0),
-(3, 2, 1, 3, 'doctor2@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 'Usuario 3', 'Usuario 3', 1, 1, 0),
-(4, 4, 1, NULL, 'paciente1@usuario.com', '$2y$10$R5krUXRnjMEhHI.IWtsy/eZNiHUjNX0GXeqBYCehtuHIfDvQUd322', 'Usuario 4', 'Usuario 4', 1, 0, 0),
-(5, 4, 2, NULL, 'paciente2@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 'Usuario 5', 'Usuario 5', 1, 0, 0),
-(9, 5, 1, NULL, 'enfermera@usuario.com', '$2y$10$R7GZb.neiuDaF9fF8zMW4uy.5nk0wb6FCx6aAGIrqjezGRc.GsvPe', 'Enfermera 1', 'Lo que sea', 1, 0, 0),
-(10, 3, 1, NULL, 'archivista@usuario.com', '$2y$10$4DziEky9z7wanf0Fn3lPZOSOpx6.VdkX1tWHDWXYeKQLKdjt0z5UO', 'Archivista 1', 'Lo que sea', 1, 0, 0),
-(11, 6, 1, NULL, 'laboratorista@usuario.com', '$2y$10$f2FPJhq2OJM4eUsZuizXR.SH9iCamvKrXlQ/DbHtvH6C45oyS/6jy', 'Laboratorista 1', 'Lo que sea', 1, 0, 0),
-(12, 7, 1, NULL, 'administrador1@usuario.com', '$2y$10$/huqZHDSCTsDHYpluNwIVuHrzCdUd.oTuwVtz0BMW3Xg/U7J/Ved.', 'administrador clinica 1', 'Lo que sea', 1, 0, 0),
-(13, 8, 1, NULL, 'secretaria1@usuario.com', '$2y$10$Kko4noJPiYVxMPS4UdBJpOUJAqPk2j70vUcl87AzmW7svHuA0exru', 'Secretaria 1', 'Lo que sea', 1, 0, 0);
+INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `usuario_especialidades_id`, `persona_id`, `email`, `password`, `is_active`, `emergencia`, `planta`) VALUES
+(1, 1, NULL, NULL, 1, 'superusuario@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 1, 0, 0),
+(2, 2, 1, 1, 2, 'doctor1@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 1, 0, 0),
+(3, 2, 1, 3, 3, 'doctor2@usuario.com', '$2y$12$ZS8r3085MtvYxtWNgfQkYenZqjLkp1rqo3zUD1YL5MMA98ALooXai', 1, 1, 0),
+(4, 4, 1, NULL, 4, 'paciente1@usuario.com', '$2y$10$R5krUXRnjMEhHI.IWtsy/eZNiHUjNX0GXeqBYCehtuHIfDvQUd322', 1, 0, 0),
+(5, 4, 1, NULL, 5, 'paciente2@usuario.com', '$2y$12$lQlW4LjkrLpCs2MlX77zxO80xF/.uNnPAnRtEXpVEEq7TMO1emtsS', 1, 0, 0),
+(6, 5, 1, NULL, 6, 'enfermera@usuario.com', '$2y$10$R7GZb.neiuDaF9fF8zMW4uy.5nk0wb6FCx6aAGIrqjezGRc.GsvPe', 1, 0, 0),
+(7, 3, 1, NULL, 7, 'archivista@usuario.com', '$2y$10$4DziEky9z7wanf0Fn3lPZOSOpx6.VdkX1tWHDWXYeKQLKdjt0z5UO', 1, 0, 0),
+(8, 6, 1, NULL, 8, 'laboratorista@usuario.com', '$2y$10$f2FPJhq2OJM4eUsZuizXR.SH9iCamvKrXlQ/DbHtvH6C45oyS/6jy', 1, 0, 0),
+(9, 7, 1, NULL, 9, 'administrador1@usuario.com', '$2y$10$/huqZHDSCTsDHYpluNwIVuHrzCdUd.oTuwVtz0BMW3Xg/U7J/Ved.', 1, 0, 0),
+(10, 8, 1, NULL, 10, 'secretaria1@usuario.com', '$2y$10$Kko4noJPiYVxMPS4UdBJpOUJAqPk2j70vUcl87AzmW7svHuA0exru', 1, 0, 0);
 
 --
 -- Índices para tablas volcadas
@@ -1120,22 +1131,22 @@ INSERT INTO `user` (`id`, `rol_id`, `clinica_id`, `usuario_especialidades_id`, `
 --
 ALTER TABLE `anexo`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_CD7EAF2C43CA3347` (`examen_solicitado_id`);
+  ADD KEY `IDX_EXAMEN_SOLICITADO_1` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `camilla`
 --
 ALTER TABLE `camilla`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_712619ADB009290D` (`habitacion_id`);
+  ADD KEY `IDX_HABITACION_1` (`habitacion_id`);
 
 --
 -- Indices de la tabla `cita`
 --
 ALTER TABLE `cita`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_3E379A62DB38439E` (`usuario_id`),
-  ADD KEY `IDX_3E379A624BF37E4E` (`expediente_id`);
+  ADD KEY `IDX_USUARIO_1` (`usuario_id`),
+  ADD KEY `IDX_EXPEDIENTE_1` (`expediente_id`);
 
 --
 -- Indices de la tabla `clinica`
@@ -1160,78 +1171,78 @@ ALTER TABLE `especialidad`
 --
 ALTER TABLE `examen_heces_macroscopico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_B368264143CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_2` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_heces_microscopico`
 --
 ALTER TABLE `examen_heces_microscopico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_9ABC70443CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_3` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_heces_quimico`
 --
 ALTER TABLE `examen_heces_quimico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_49A805AC43CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_4` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_hematologico`
 --
 ALTER TABLE `examen_hematologico`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_AE3CB97343CA3347` (`examen_solicitado_id`);
+  ADD KEY `IDX_EXAMEN_SOLICITADO_5` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_orina_cristaluria`
 --
 ALTER TABLE `examen_orina_cristaluria`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_7AC4955A43CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_6` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_orina_macroscopico`
 --
 ALTER TABLE `examen_orina_macroscopico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_C81E2D0043CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_7` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_orina_microscopico`
 --
 ALTER TABLE `examen_orina_microscopico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_72DDCC4543CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_8` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_orina_quimico`
 --
 ALTER TABLE `examen_orina_quimico`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_D422CE0343CA3347` (`examen_solicitado_id`);
+  ADD UNIQUE KEY `UNIQ_EXAMEN_SOLICITADO_9` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_quimica_sanguinea`
 --
 ALTER TABLE `examen_quimica_sanguinea`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_D8F766BE43CA3347` (`examen_solicitado_id`);
+  ADD KEY `IDX_EXAMEN_SOLICITADO_10` (`examen_solicitado_id`);
 
 --
 -- Indices de la tabla `examen_solicitado`
 --
 ALTER TABLE `examen_solicitado`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_779218FB1E011DDF` (`cita_id`);
+  ADD KEY `IDX_CITA_1` (`cita_id`);
 
 --
 -- Indices de la tabla `expediente`
 --
 ALTER TABLE `expediente`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_D59CA413DB38439E` (`usuario_id`),
-  ADD KEY `IDX_D59CA413BCE7B795` (`genero_id`);
+  ADD UNIQUE KEY `UNIQ_USUARIO_2` (`usuario_id`),
+  ADD KEY `IDX_GENERO_1` (`genero_id`);
 
 --
 -- Indices de la tabla `familiar`
@@ -1244,8 +1255,8 @@ ALTER TABLE `familiar`
 --
 ALTER TABLE `familiares_expediente`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_B24733AA10C20D71` (`familiar_id`),
-  ADD KEY `IDX_B24733AA4BF37E4E` (`expediente_id`);
+  ADD KEY `IDX_FAMILIAR_1` (`familiar_id`),
+  ADD KEY `IDX_EXPEDIENTE_2` (`expediente_id`);
 
 --
 -- Indices de la tabla `genero`
@@ -1258,39 +1269,39 @@ ALTER TABLE `genero`
 --
 ALTER TABLE `habitacion`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_F45995BAC51CDF3F` (`sala_id`),
-  ADD KEY `IDX_F45995BAB0BA7A53` (`tipo_habitacion_id`);
+  ADD KEY `IDX_SALA_1` (`sala_id`),
+  ADD KEY `IDX_TIPO_HABITACION_1` (`tipo_habitacion_id`);
 
 --
 -- Indices de la tabla `historial_familiar`
 --
 ALTER TABLE `historial_familiar`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_523A50F910C20D71` (`familiar_id`);
+  ADD KEY `IDX_FAMILIAR_2` (`familiar_id`);
 
 --
 -- Indices de la tabla `historial_propio`
 --
 ALTER TABLE `historial_propio`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_60EB986D4BF37E4E` (`expediente_id`);
+  ADD KEY `IDX_EXPEDIENTE_3` (`expediente_id`);
 
 --
 -- Indices de la tabla `historia_medica`
 --
 ALTER TABLE `historia_medica`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_328E741C1E011DDF` (`cita_id`),
-  ADD UNIQUE KEY `UNIQ_328E741C7A94BA1A` (`diagnostico_id`);
+  ADD UNIQUE KEY `UNIQ_CITA_2` (`cita_id`),
+  ADD UNIQUE KEY `UNIQ_DIAGNOSTICO_1` (`diagnostico_id`);
 
 --
 -- Indices de la tabla `ingresado`
 --
 ALTER TABLE `ingresado`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_6682CB4BFEEC2797` (`camilla_id`),
-  ADD KEY `IDX_6682CB4B4BF37E4E` (`expediente_id`),
-  ADD KEY `IDX_6682CB4BDB38439E` (`usuario_id`);
+  ADD KEY `IDX_CAMILLA_1` (`camilla_id`),
+  ADD KEY `IDX_EXPEDIENTE_4` (`expediente_id`),
+  ADD KEY `IDX_USUARIO_3` (`usuario_id`);
 
 --
 -- Indices de la tabla `migration_versions`
@@ -1309,15 +1320,21 @@ ALTER TABLE `permiso`
 --
 ALTER TABLE `permiso_rol`
   ADD PRIMARY KEY (`permiso_id`,`rol_id`),
-  ADD KEY `IDX_DD501D066CEFAD37` (`permiso_id`),
-  ADD KEY `IDX_DD501D064BAB96C` (`rol_id`);
+  ADD KEY `IDX_PERMISO_1` (`permiso_id`),
+  ADD KEY `IDX_ROL_1` (`rol_id`);
+
+--
+-- Indices de la tabla `persona`
+--
+ALTER TABLE `persona`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `plan_tratamiento`
 --
 ALTER TABLE `plan_tratamiento`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_951D7817322E8DC3` (`historia_medica_id`);
+  ADD KEY `IDX_HISTORIA_MEDICA_1` (`historia_medica_id`);
 
 --
 -- Indices de la tabla `rol`
@@ -1330,14 +1347,14 @@ ALTER TABLE `rol`
 --
 ALTER TABLE `sala`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_E226041C9CD3F6D6` (`clinica_id`);
+  ADD KEY `IDX_CLINICA_1` (`clinica_id`);
 
 --
 -- Indices de la tabla `signo_vital`
 --
 ALTER TABLE `signo_vital`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_75668911E011DDF` (`cita_id`);
+  ADD UNIQUE KEY `UNIQ_CITA_3` (`cita_id`);
 
 --
 -- Indices de la tabla `tipo_habitacion`
@@ -1350,10 +1367,11 @@ ALTER TABLE `tipo_habitacion`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `UNIQ_8D93D649E7927C74` (`email`),
-  ADD KEY `IDX_8D93D6494BAB96C` (`rol_id`),
-  ADD KEY `IDX_8D93D6499CD3F6D6` (`clinica_id`),
-  ADD KEY `IDX_8D93D649AF3A97F` (`usuario_especialidades_id`);
+  ADD UNIQUE KEY `UNIQ_EMAIL_1` (`email`),
+  ADD UNIQUE KEY `UNIQ_PERSONA_1` (`persona_id`),
+  ADD KEY `IDX_ROL_2` (`rol_id`),
+  ADD KEY `IDX_CLINICA_2` (`clinica_id`),
+  ADD KEY `IDX_ESPECIALIDAD_1` (`usuario_especialidades_id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1381,7 +1399,7 @@ ALTER TABLE `cita`
 -- AUTO_INCREMENT de la tabla `clinica`
 --
 ALTER TABLE `clinica`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `diagnostico`
@@ -1441,7 +1459,7 @@ ALTER TABLE `examen_orina_microscopico`
 -- AUTO_INCREMENT de la tabla `examen_orina_quimico`
 --
 ALTER TABLE `examen_orina_quimico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `examen_quimica_sanguinea`
@@ -1453,7 +1471,7 @@ ALTER TABLE `examen_quimica_sanguinea`
 -- AUTO_INCREMENT de la tabla `examen_solicitado`
 --
 ALTER TABLE `examen_solicitado`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `expediente`
@@ -1516,6 +1534,12 @@ ALTER TABLE `permiso`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
+-- AUTO_INCREMENT de la tabla `persona`
+--
+ALTER TABLE `persona`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT de la tabla `plan_tratamiento`
 --
 ALTER TABLE `plan_tratamiento`
@@ -1549,7 +1573,7 @@ ALTER TABLE `tipo_habitacion`
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restricciones para tablas volcadas
@@ -1559,161 +1583,162 @@ ALTER TABLE `user`
 -- Filtros para la tabla `anexo`
 --
 ALTER TABLE `anexo`
-  ADD CONSTRAINT `FK_CD7EAF2C43CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_1` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `camilla`
 --
 ALTER TABLE `camilla`
-  ADD CONSTRAINT `FK_712619ADB009290D` FOREIGN KEY (`habitacion_id`) REFERENCES `habitacion` (`id`);
+  ADD CONSTRAINT `FK_HABITACION_1` FOREIGN KEY (`habitacion_id`) REFERENCES `habitacion` (`id`);
 
 --
 -- Filtros para la tabla `cita`
 --
 ALTER TABLE `cita`
-  ADD CONSTRAINT `FK_3E379A624BF37E4E` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`),
-  ADD CONSTRAINT `FK_3E379A62DB38439E` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_EXPEDIENTE_1` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`),
+  ADD CONSTRAINT `FK_USUARIO_1` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `examen_heces_macroscopico`
 --
 ALTER TABLE `examen_heces_macroscopico`
-  ADD CONSTRAINT `FK_B368264143CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_2` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_heces_microscopico`
 --
 ALTER TABLE `examen_heces_microscopico`
-  ADD CONSTRAINT `FK_9ABC70443CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_3` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_heces_quimico`
 --
 ALTER TABLE `examen_heces_quimico`
-  ADD CONSTRAINT `FK_49A805AC43CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_4` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_hematologico`
 --
 ALTER TABLE `examen_hematologico`
-  ADD CONSTRAINT `FK_AE3CB97343CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_5` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_orina_cristaluria`
 --
 ALTER TABLE `examen_orina_cristaluria`
-  ADD CONSTRAINT `FK_7AC4955A43CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_6` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_orina_macroscopico`
 --
 ALTER TABLE `examen_orina_macroscopico`
-  ADD CONSTRAINT `FK_C81E2D0043CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_7` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_orina_microscopico`
 --
 ALTER TABLE `examen_orina_microscopico`
-  ADD CONSTRAINT `FK_72DDCC4543CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_8` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_orina_quimico`
 --
 ALTER TABLE `examen_orina_quimico`
-  ADD CONSTRAINT `FK_D422CE0343CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_9` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_quimica_sanguinea`
 --
 ALTER TABLE `examen_quimica_sanguinea`
-  ADD CONSTRAINT `FK_D8F766BE43CA3347` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
+  ADD CONSTRAINT `FK_EXAMEN_SOLICITADO_10` FOREIGN KEY (`examen_solicitado_id`) REFERENCES `examen_solicitado` (`id`);
 
 --
 -- Filtros para la tabla `examen_solicitado`
 --
 ALTER TABLE `examen_solicitado`
-  ADD CONSTRAINT `FK_779218FB1E011DDF` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`);
+  ADD CONSTRAINT `FK_CITA_1` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`);
 
 --
 -- Filtros para la tabla `expediente`
 --
 ALTER TABLE `expediente`
-  ADD CONSTRAINT `FK_D59CA413BCE7B795` FOREIGN KEY (`genero_id`) REFERENCES `genero` (`id`),
-  ADD CONSTRAINT `FK_D59CA413DB38439E` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `FK_GENERO_1` FOREIGN KEY (`genero_id`) REFERENCES `genero` (`id`),
+  ADD CONSTRAINT `FK_USUARIO_2` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `familiares_expediente`
 --
 ALTER TABLE `familiares_expediente`
-  ADD CONSTRAINT `FK_B24733AA10C20D71` FOREIGN KEY (`familiar_id`) REFERENCES `familiar` (`id`),
-  ADD CONSTRAINT `FK_B24733AA4BF37E4E` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`);
+  ADD CONSTRAINT `FK_EXPEDIENTE_2` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`),
+  ADD CONSTRAINT `FK_FAMILIAR_1` FOREIGN KEY (`familiar_id`) REFERENCES `familiar` (`id`);
 
 --
 -- Filtros para la tabla `habitacion`
 --
 ALTER TABLE `habitacion`
-  ADD CONSTRAINT `FK_F45995BAB0BA7A53` FOREIGN KEY (`tipo_habitacion_id`) REFERENCES `tipo_habitacion` (`id`),
-  ADD CONSTRAINT `FK_F45995BAC51CDF3F` FOREIGN KEY (`sala_id`) REFERENCES `sala` (`id`);
+  ADD CONSTRAINT `FK_SALA_1` FOREIGN KEY (`sala_id`) REFERENCES `sala` (`id`),
+  ADD CONSTRAINT `FK_TIPO_HABITACION_1` FOREIGN KEY (`tipo_habitacion_id`) REFERENCES `tipo_habitacion` (`id`);
 
 --
 -- Filtros para la tabla `historial_familiar`
 --
 ALTER TABLE `historial_familiar`
-  ADD CONSTRAINT `FK_523A50F910C20D71` FOREIGN KEY (`familiar_id`) REFERENCES `familiar` (`id`);
+  ADD CONSTRAINT `FK_FAMILIAR_2` FOREIGN KEY (`familiar_id`) REFERENCES `familiar` (`id`);
 
 --
 -- Filtros para la tabla `historial_propio`
 --
 ALTER TABLE `historial_propio`
-  ADD CONSTRAINT `FK_60EB986D4BF37E4E` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`);
+  ADD CONSTRAINT `FK_EXPEDIENTE_3` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`);
 
 --
 -- Filtros para la tabla `historia_medica`
 --
 ALTER TABLE `historia_medica`
-  ADD CONSTRAINT `FK_328E741C1E011DDF` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`),
-  ADD CONSTRAINT `FK_328E741C7A94BA1A` FOREIGN KEY (`diagnostico_id`) REFERENCES `diagnostico` (`id`);
+  ADD CONSTRAINT `FK_CITA_2` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`),
+  ADD CONSTRAINT `FK_DIAGNOSTICO_1` FOREIGN KEY (`diagnostico_id`) REFERENCES `diagnostico` (`id`);
 
 --
 -- Filtros para la tabla `ingresado`
 --
 ALTER TABLE `ingresado`
-  ADD CONSTRAINT `FK_6682CB4B4BF37E4E` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`),
-  ADD CONSTRAINT `FK_6682CB4BDB38439E` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `FK_6682CB4BFEEC2797` FOREIGN KEY (`camilla_id`) REFERENCES `camilla` (`id`);
+  ADD CONSTRAINT `FK_CAMILLA_1` FOREIGN KEY (`camilla_id`) REFERENCES `camilla` (`id`),
+  ADD CONSTRAINT `FK_EXPEDIENTE_4` FOREIGN KEY (`expediente_id`) REFERENCES `expediente` (`id`),
+  ADD CONSTRAINT `FK_USUARIO_3` FOREIGN KEY (`usuario_id`) REFERENCES `user` (`id`);
 
 --
 -- Filtros para la tabla `permiso_rol`
 --
 ALTER TABLE `permiso_rol`
-  ADD CONSTRAINT `FK_DD501D064BAB96C` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `FK_DD501D066CEFAD37` FOREIGN KEY (`permiso_id`) REFERENCES `permiso` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `FK_PERMISO_1` FOREIGN KEY (`permiso_id`) REFERENCES `permiso` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_ROL_1` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `plan_tratamiento`
 --
 ALTER TABLE `plan_tratamiento`
-  ADD CONSTRAINT `FK_951D7817322E8DC3` FOREIGN KEY (`historia_medica_id`) REFERENCES `historia_medica` (`id`);
+  ADD CONSTRAINT `FK_HISTORIA_MEDICA_1` FOREIGN KEY (`historia_medica_id`) REFERENCES `historia_medica` (`id`);
 
 --
 -- Filtros para la tabla `sala`
 --
 ALTER TABLE `sala`
-  ADD CONSTRAINT `FK_E226041C9CD3F6D6` FOREIGN KEY (`clinica_id`) REFERENCES `clinica` (`id`);
+  ADD CONSTRAINT `FK_CLINICA_1` FOREIGN KEY (`clinica_id`) REFERENCES `clinica` (`id`);
 
 --
 -- Filtros para la tabla `signo_vital`
 --
 ALTER TABLE `signo_vital`
-  ADD CONSTRAINT `FK_75668911E011DDF` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`);
+  ADD CONSTRAINT `FK_CITA_3` FOREIGN KEY (`cita_id`) REFERENCES `cita` (`id`);
 
 --
 -- Filtros para la tabla `user`
 --
 ALTER TABLE `user`
-  ADD CONSTRAINT `FK_8D93D6494BAB96C` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`),
-  ADD CONSTRAINT `FK_8D93D6499CD3F6D6` FOREIGN KEY (`clinica_id`) REFERENCES `clinica` (`id`),
-  ADD CONSTRAINT `FK_8D93D649AF3A97F` FOREIGN KEY (`usuario_especialidades_id`) REFERENCES `especialidad` (`id`);
+  ADD CONSTRAINT `FK_CLINICA_2` FOREIGN KEY (`clinica_id`) REFERENCES `clinica` (`id`),
+  ADD CONSTRAINT `FK_ESPECIALIDAD_1` FOREIGN KEY (`usuario_especialidades_id`) REFERENCES `especialidad` (`id`),
+  ADD CONSTRAINT `FK_PERSONA_1` FOREIGN KEY (`persona_id`) REFERENCES `persona` (`id`),
+  ADD CONSTRAINT `FK_ROL_2` FOREIGN KEY (`rol_id`) REFERENCES `rol` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
