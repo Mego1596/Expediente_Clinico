@@ -160,6 +160,11 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_ESPECIALIDAD_1 FOREIGN KEY (usuario_especialidades_id) REFERENCES especialidad (id)');
         
         $this->addSql('ALTER TABLE user ADD CONSTRAINT FK_PERSONA_1 FOREIGN KEY (persona_id) REFERENCES persona (id)');
+
+
+        //FUNCTION GET EDAD
+
+        $this->addSql('CREATE DEFINER=`root`@`localhost` FUNCTION `getEdad`(`paciente` INT UNSIGNED) RETURNS INT(3) DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DECLARE salida INT DEFAULT 0; SET salida =(SELECT TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad from expediente WHERE id = paciente) ; RETURN salida; END');
     }
 
     public function down(Schema $schema) : void
