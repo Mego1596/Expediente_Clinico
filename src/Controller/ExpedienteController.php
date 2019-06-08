@@ -33,7 +33,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/", name="expediente_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')")
      */
     public function index(ExpedienteRepository $expedienteRepository,Security $AuthUser): Response
@@ -59,7 +59,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/new", name="expediente_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function new(Request $request, Security $AuthUser): Response
@@ -101,7 +101,7 @@ class ExpedienteController extends AbstractController
                                         if (count($usuario) > 0)
                                         {
                                             $valido = false;
-                                            $this->addFlash('fail', 'Usuario con este email ya existe');
+                                            $this->addFlash('fail', 'Usuario con este Email ya existe');
                                             return $this->render('expediente/new.html.twig', [
                                                     'expediente' => $expediente,
                                                     'clinicas'   => $clinicas,
@@ -202,7 +202,7 @@ class ExpedienteController extends AbstractController
 	                                                }
 	                                            }
                                             }else{
-                                        		$this->addFlash('fail', 'Error, debe elegir la clinica a la cual desea asignar este paciente.');
+                                        		$this->addFlash('fail', 'Error, debe elegir la clínica a la cual desea asignar este paciente.');
                                         		return $this->render('expediente/new.html.twig', [
                                                     'expediente' => $expediente,
                                                     'clinicas'   => $clinicas,
@@ -303,7 +303,7 @@ class ExpedienteController extends AbstractController
                                         $entityManager->flush();
                                         //FIN PROCESO DE DATOS
                                     }else{
-                                        $this->addFlash('fail', 'Error el genero del paciente no puede estar vacio');
+                                        $this->addFlash('fail', 'Error el género del paciente no puede estar vacío');
                                         return $this->render('expediente/new.html.twig', [
                                             'expediente' => $expediente,
                                             'clinicas'   => $clinicas,
@@ -313,7 +313,7 @@ class ExpedienteController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error la fecha de nacimiento del paciente no puede estar vacia');
+                                    $this->addFlash('fail', 'Error la fecha de nacimiento del paciente no puede estar vacía');
                                     return $this->render('expediente/new.html.twig', [
                                         'expediente' => $expediente,
                                         'clinicas'   => $clinicas,
@@ -323,7 +323,7 @@ class ExpedienteController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error el telefono de contacto del paciente no puede estar vacio');
+                                $this->addFlash('fail', 'Error el teléfono de contacto del paciente no puede estar vacío');
                                 return $this->render('expediente/new.html.twig', [
                                     'expediente' => $expediente,
                                     'clinicas'   => $clinicas,
@@ -333,7 +333,7 @@ class ExpedienteController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error la direccion del paciente no puede estar vacia');
+                            $this->addFlash('fail', 'Error la dirección del paciente no puede estar vacía');
                             return $this->render('expediente/new.html.twig', [
                                 'expediente' => $expediente,
                                 'clinicas'   => $clinicas,
@@ -343,7 +343,7 @@ class ExpedienteController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error el email del paciente no puede estar vacio');
+                        $this->addFlash('fail', 'Error el email del paciente no puede estar vacío');
                         return $this->render('expediente/new.html.twig', [
                             'expediente' => $expediente,
                             'clinicas'   => $clinicas,
@@ -353,7 +353,7 @@ class ExpedienteController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail', 'Error los apellidos del paciente no pueden estar vacios');
+                    $this->addFlash('fail', 'Error los apellidos del paciente no pueden estar vacíos');
                     return $this->render('expediente/new.html.twig', [
                         'expediente' => $expediente,
                         'clinicas'   => $clinicas,
@@ -363,7 +363,7 @@ class ExpedienteController extends AbstractController
                     ]);
                 }
             }else{
-                $this->addFlash('fail', 'Error los nombres del paciente no pueden estar vacios');
+                $this->addFlash('fail', 'Error los nombres del paciente no pueden estar vacíos');
                 return $this->render('expediente/new.html.twig', [
                     'expediente' => $expediente,
                     'clinicas'   => $clinicas,
@@ -372,7 +372,7 @@ class ExpedienteController extends AbstractController
                     'form'       => $form->createView(),
                 ]);
             }
-            $this->addFlash('success', 'Paciente añadido con exito');
+            $this->addFlash('success', 'Paciente añadido con éxito');
             return $this->redirectToRoute('expediente_index');
         }
 
@@ -388,7 +388,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}", name="expediente_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
      */
     public function show(Expediente $expediente, Security $AuthUser): Response
@@ -408,7 +408,7 @@ class ExpedienteController extends AbstractController
                         'ingresado'  => $ingresoActual,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -422,7 +422,7 @@ class ExpedienteController extends AbstractController
                 'ingresado'  => $ingresoActual,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -430,7 +430,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}/edit", name="expediente_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')")
      */
     public function edit(Request $request, Expediente $expediente,Security $AuthUser): Response
@@ -489,7 +489,7 @@ class ExpedienteController extends AbstractController
                                     $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                                     $entityManager->persist($expediente);
                                     $entityManager->flush();
-                                    $this->addFlash('success', 'Paciente modificado con exito');
+                                    $this->addFlash('success', 'Paciente modificado con éxito');
                                     return $this->redirectToRoute('expediente_index');
                                 }else{
                                     $this->addFlash('fail', 'ambas contraseñas deben coincidir');
@@ -517,7 +517,7 @@ class ExpedienteController extends AbstractController
                                 $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                                 $entityManager->persist($expediente);
                                 $entityManager->flush();
-                                $this->addFlash('success', 'Paciente modificado con exito');
+                                $this->addFlash('success', 'Paciente modificado con éxito');
                                 return $this->redirectToRoute('expediente_index');
                             }
                     }
@@ -529,7 +529,7 @@ class ExpedienteController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -560,7 +560,7 @@ class ExpedienteController extends AbstractController
                 $usuario = $statement->fetchAll();
                 if (count($usuario) > 0)
                 {
-                    $this->addFlash('fail', 'Usuario con este email ya existe');
+                    $this->addFlash('fail', 'Usuario con este Email ya existe');
                     return $this->render('expediente/edit.html.twig',[
                             'expediente' => $expediente,
                             'form' => $form->createView(),
@@ -588,7 +588,7 @@ class ExpedienteController extends AbstractController
                             $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                             $entityManager->persist($expediente);
                             $entityManager->flush();
-                            $this->addFlash('success', 'Paciente modificado con exito');
+                            $this->addFlash('success', 'Paciente modificado con éxito');
                             return $this->redirectToRoute('expediente_index');
                         }else{
                             $this->addFlash('fail', 'ambas contraseñas deben coincidir');
@@ -616,7 +616,7 @@ class ExpedienteController extends AbstractController
                         $expediente->setEstadoCivil($form["estadoCivil"]->getData());
                         $entityManager->persist($expediente);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Paciente modificado con exito');
+                        $this->addFlash('success', 'Paciente modificado con éxito');
                         return $this->redirectToRoute('expediente_index');
                     }
             }
@@ -627,14 +627,14 @@ class ExpedienteController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
 
     /**
      * @Route("/{id}", name="expediente_delete", methods={"DELETE"})
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXPEDIENTE')")
      */
     public function delete(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -668,7 +668,7 @@ class ExpedienteController extends AbstractController
     /**
      * @Route("/{id}/habilitar", name="expediente_habilitar", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXPEDIENTE')")
      */
     public function habilitar(Request $request, Expediente $expediente): Response
