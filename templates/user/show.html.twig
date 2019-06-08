@@ -1,14 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Detalles del Usuario{% endblock %}
+{% block title %}Detalles del Usuario:{% endblock %}
 
 {% block body %}
-<h1>Detalles del Usuario </h1>
+<h4>Detalles del Usuario: {{persona.nombre_completo}} </h4>
     <table class="table">
         <tbody>
             <tr>
                 <th>Email</th>
                 <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Rol</th>
+                <td>{{ persona.nombre_rol }}</td>
+            </tr>
+
+            <tr>
+                <th>Clinica</th>
+                <td>{{ persona.nombre_clinica }}</td>
             </tr>
         </tbody>
     </table>

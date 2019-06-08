@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informático de la Clínica Hospitalaria
+                            <h4>Usuarios registrados en el sistema</h4>
                             {% if(userAuth.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{userAuth.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -32,7 +32,6 @@
                                     <thead>
                                         <tr>
                                             <th id="relevante" class="all">Nombre Completo</th>
-                                            <th id="relevante" class="all">Email</th>
                                             {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
                                             <th id="relevante" class="all">Clínica</th>
                                             {% endif %}
@@ -44,8 +43,7 @@
                                     {% for user in users %}
                                         {% if user.activo %}  
                                         <tr>
-                                            <td>{{ user.nombre_completo}}</td>
-                                            <td>{{ user.email }}</td>
+                                            <td>{{user.nombre_completo}}</td>
                                             {% if userAuth.getUser().getRol().getNombreRol() == 'ROLE_SA'%}
                                                 <td>{{ user.clinica}}</td>
                                             {% endif %}
@@ -137,7 +135,9 @@
                                     {% endif %}
                                     {% endfor %}
                                     </tbody>
+                                     
                                 </table>
+                                <a class="btn btn-secondary" href="{{path('home')}}">Atrás</a> 
                         </div>
                     </div>
                 </div>
