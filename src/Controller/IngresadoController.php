@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as Security2;
+
 /**
  * @Route("/ingresado")
  */
@@ -30,20 +31,20 @@ class IngresadoController extends AbstractController
      */
     public function index(IngresadoRepository $ingresadoRepository, Security $AuthUser): Response
     {
+
         //UBICAR SOLO LOS DE MI CLINICA
         if(empty($AuthUser->getUser()->getClinica())){
             $em = $this->getDoctrine()->getManager();
             $RAW_QUERY="SELECT i.id as id,
-            i.fecha_ingreso as fechaIngreso, i.fecha_salida as fechaSalida, exp.numero_expediente as expediente,
-            u2.emergencia as emergencia, u2.planta as planta, CONCAT(u.nombres,' ',u.apellidos) as nombre_completo,
-            h.numero_habitacion as habitacion, cam.numero_camilla as camilla
-            FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2 WHERE
+            i.fecha_ingreso as fechaIngreso, CONCAT(p.primer_nombre,' ' ,IFNULL(p.segundo_nombre,' '),' ' ,p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo, s.nombre_sala as sala, c.nombre_clinica as nombre_clinica
+            FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p WHERE
             i.expediente_id    =exp.id          AND
             exp.usuario_id     =u.id            AND
             i.camilla_id       =cam.id          AND
             cam.habitacion_id  =h.id            AND
             h.sala_id          =s.id            AND
             s.clinica_id       =c.id            AND
+            u.persona_id       =p.id            AND
             i.fecha_salida IS NULL              AND
             u2.id              =i.usuario_id";
             $statement = $em->getConnection()->prepare($RAW_QUERY);
@@ -52,10 +53,8 @@ class IngresadoController extends AbstractController
         }else{
             $em = $this->getDoctrine()->getManager();
             $RAW_QUERY="SELECT i.id as id,
-            i.fecha_ingreso as fechaIngreso, i.fecha_salida as fechaSalida, exp.numero_expediente as expediente,
-            u2.emergencia as emergencia, u2.planta as planta, CONCAT(u.nombres,' ',u.apellidos) as nombre_completo,
-            h.numero_habitacion as habitacion, cam.numero_camilla as camilla
-            FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2 WHERE
+            i.fecha_ingreso as fechaIngreso, CONCAT(p.primer_nombre,' ' ,IFNULL(p.segundo_nombre,' '),' ' ,p.primer_apellido,' ',IFNULL(p.segundo_apellido,' ')) as nombre_completo, s.nombre_sala as sala, c.nombre_clinica as nombre_clinica
+            FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p WHERE
             i.expediente_id    =exp.id          AND
             exp.usuario_id     =u.id            AND
             u.clinica_id       =c.id            AND
@@ -64,6 +63,7 @@ class IngresadoController extends AbstractController
             h.sala_id          =s.id            AND
             s.clinica_id       =c.id            AND
             u2.id              =i.usuario_id    AND
+            u.persona_id       =p.id            AND
             u2.clinica_id      =c.id            AND
             i.fecha_salida IS NULL              AND
             c.id = ".$AuthUser->getUser()->getClinica()->getId().";";
@@ -125,11 +125,65 @@ class IngresadoController extends AbstractController
      * @Security2("is_authenticated()")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_INGRESADO')")
      */
-    public function show(IngresadoRepository $ingresadoRepository,Ingresado $ingresado, Security $AuthUser): Response
+    public function show(IngresadoRepository $ingresadoRepository, Ingresado $ingresado, Security $AuthUser): Response
     {   
+
+    
         if($ingresado->getExpediente()->getHabilitado()){
+                //UBICAR SOLO LOS DE MI CLINICA
+            if(empty($AuthUser->getUser()->getClinica())){
+                
+            $conn = $this->getDoctrine()->getManager()->getConnection();
+            $sql = '
+                SELECT i.id as id, i.creado_en as creadoEn, i.actualizado_en as actualizadoEn,
+                i.fecha_ingreso as fechaIngreso, i.fecha_salida as fechaSalida, exp.numero_expediente as expediente,
+                u2.emergencia as emergencia, u2.planta as planta, CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, s.nombre_sala as sala, c.nombre_clinica as nombr_clinica,
+                h.numero_habitacion as habitacion, cam.numero_camilla as camilla
+                FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p WHERE
+                i.expediente_id    =exp.id          AND
+                exp.usuario_id     =u.id            AND
+                i.camilla_id       =cam.id          AND
+                cam.habitacion_id  =h.id            AND
+                h.sala_id          =s.id            AND
+                s.clinica_id       =c.id            AND
+                u.persona_id       =p.id            AND
+                i.fecha_salida IS NULL              AND
+                u2.id              =i.usuario_id    AND
+                i.id = :idIngregado
+                ';
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array('idIngregado' => $ingresado->getId()));
+            $result= $stmt->fetch();
+            
+
+            }else{
+                
+                $conn = $this->getDoctrine()->getManager()->getConnection();
+                $sql = '
+                    SELECT i.id as id, i.creado_en as creadoEn, i.actualizado_en as actualizadoEn,
+                    i.fecha_ingreso as fechaIngreso, i.fecha_salida as fechaSalida, exp.numero_expediente as expediente,
+                    u2.emergencia as emergencia, u2.planta as planta, CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, s.nombre_sala as sala, c.nombre_clinica as nombr_clinica,
+                    h.numero_habitacion as habitacion, cam.numero_camilla as camilla
+                    FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p WHERE
+                    i.expediente_id    =exp.id          AND
+                    exp.usuario_id     =u.id            AND
+                    i.camilla_id       =cam.id          AND
+                    cam.habitacion_id  =h.id            AND
+                    h.sala_id          =s.id            AND
+                    s.clinica_id       =c.id            AND
+                    u.persona_id       =p.id            AND
+                    i.fecha_salida IS NULL              AND
+                    u2.id              =i.usuario_id    AND
+                    i.id = :idIngregado                 AND
+                    c.id = :ClinicaUsuario
+                    ';
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(array('idIngregado' => $ingresado->getId(), 'ClinicaUsuario' => $AuthUser->getUser()->getClinica()->getId() ));
+                $result= $stmt->fetchAll();
+
+            }
             return $this->render('ingresado/show.html.twig', [
-                'ingresado' => $ingresado,
+                'ingresado' => $result,
             ]);
         }else{
             $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta informacion por que el paciente no esta habilitado');

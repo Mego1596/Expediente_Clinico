@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            Pacientes Ingresados 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -29,8 +29,9 @@
                                     <thead>
                                         <tr>
                                             <!--<th id="relevante" class="all">Descripcion</th>-->
+                                            <th id="relevante" class="all">Paciente</th>
+                                            <th id="relevante" class="all">Sala</th>
                                             <th id="relevante" class="all">Fecha de Entrada</th>
-                                            <th id="relevante" class="all">Fecha de Salida</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
@@ -38,9 +39,9 @@
                                     {% for ingresado in ingresados %}
                                         <tr>
                                             
-                                            <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d H:i:s') : '' }}</td>
-                                            <td>{{ ingresado.fechaSalida ? ingresado.fechaSalida|date('Y-m-d H:i:s') : ''}}</td>
-
+                                            <td>{{ ingresado.nombre_completo ? ingresado.nombre_completo : '' }}</td>
+                                            <td>{{ ingresado.sala ? ingresado.sala : '' }}</td>
+                                            <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d') : '' }}</td>
                                             <td>
                                                 {% if (is_granted('ROLE_PERMISSION_EDIT_INGRESADO')) %}
                                                     <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#ModalIngreso">
