@@ -20,7 +20,6 @@ class Camilla
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Habitacion", inversedBy="camillas")
-     * @ORM\JoinColumn(name="habitacion_id", referencedColumnName="id",nullable=true)
      */
     private $habitacion;
 
