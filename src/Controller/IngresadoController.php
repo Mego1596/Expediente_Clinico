@@ -27,6 +27,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/", name="ingresado_index", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_INGRESADO')")
      */
     public function index(IngresadoRepository $ingresadoRepository, Security $AuthUser): Response
@@ -81,6 +82,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="ingresado_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_INGRESADO')")
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -123,6 +125,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}/", name="ingresado_show", methods={"GET"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_INGRESADO')")
      */
     public function show(IngresadoRepository $ingresadoRepository, Ingresado $ingresado, Security $AuthUser): Response
@@ -194,6 +197,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ingresado_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_INGRESADO')")
      */
     public function darDeAlta(Request $request, Ingresado $ingresado, Security $AuthUser): Response
@@ -227,6 +231,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}", name="ingresado_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_INGRESADO')")
      */
     public function delete(Request $request, Ingresado $ingresado, Security $AuthUser): Response
