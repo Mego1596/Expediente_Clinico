@@ -21,7 +21,7 @@ class ExamenHecesQuimicoController extends AbstractController
     /**
      * @Route("/{examen_solicitado}", name="examen_heces_quimico_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(ExamenHecesQuimicoRepository $examenHecesQuimicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -44,7 +44,7 @@ class ExamenHecesQuimicoController extends AbstractController
                     ]);
 
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -67,7 +67,7 @@ class ExamenHecesQuimicoController extends AbstractController
                 'examen_solicitado'             => $examen_solicitado,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -76,7 +76,7 @@ class ExamenHecesQuimicoController extends AbstractController
     /**
      * @Route("/new/{examen_solicitado}", name="examen_heces_quimico_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -110,7 +110,7 @@ class ExamenHecesQuimicoController extends AbstractController
 
                                         }
                                     else{
-                                        $this->addFlash('fail', 'Error, la sangre oculta no puede ir vacio');
+                                        $this->addFlash('fail', 'Error, la sangre oculta no puede ir vacío');
                                         return $this->render('examen_heces_quimico/new.html.twig', [
                                             'examen_heces_quimico' => $examenHecesQuimico,
                                             'examen_solicitado' => $examen_solicitado,
@@ -119,7 +119,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio');
+                                    $this->addFlash('fail', 'Error, azúcares reductores no puede ir vacío');
                                     return $this->render('examen_heces_quimico/new.html.twig', [
                                         'examen_heces_quimico' => $examenHecesQuimico,
                                         'examen_solicitado' => $examen_solicitado,
@@ -128,7 +128,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, el ph no puede ir vacio y tampoco debe ser un numero negativo');
+                                $this->addFlash('fail', 'Error, el pH no puede ir vacío y tampoco debe ser un numero negativo');
                                 return $this->render('examen_heces_quimico/new.html.twig', [
                                     'examen_heces_quimico' => $examenHecesQuimico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -136,7 +136,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                         }
                     }else{
@@ -151,7 +151,7 @@ class ExamenHecesQuimicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -189,7 +189,7 @@ class ExamenHecesQuimicoController extends AbstractController
 
                                 }
                             else{
-                                $this->addFlash('fail', 'Error, la sangre oculta no puede ir vacio');
+                                $this->addFlash('fail', 'Error, la sangre oculta no puede ir vacío');
                                 return $this->render('examen_heces_quimico/new.html.twig', [
                                     'examen_heces_quimico' => $examenHecesQuimico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -198,7 +198,7 @@ class ExamenHecesQuimicoController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, azucares reductores no puede ir vacio');
+                            $this->addFlash('fail', 'Error, azúcares reductores no puede ir vacío');
                             return $this->render('examen_heces_quimico/new.html.twig', [
                                 'examen_heces_quimico' => $examenHecesQuimico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -207,7 +207,7 @@ class ExamenHecesQuimicoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, el ph no puede ir vacio y tampoco debe ser un numero negativo');
+                        $this->addFlash('fail', 'Error, el pH no puede ir vacío y tampoco debe ser un numero negativo');
                         return $this->render('examen_heces_quimico/new.html.twig', [
                             'examen_heces_quimico' => $examenHecesQuimico,
                             'examen_solicitado' => $examen_solicitado,
@@ -215,7 +215,7 @@ class ExamenHecesQuimicoController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success', 'Examen añadido con exito');
+                    $this->addFlash('success', 'Examen añadido con éxito');
                     return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
@@ -230,7 +230,7 @@ class ExamenHecesQuimicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -238,7 +238,7 @@ class ExamenHecesQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_quimico_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -251,7 +251,7 @@ class ExamenHecesQuimicoController extends AbstractController
                         'examen_solicitado' => $examen_solicitado,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -268,7 +268,7 @@ class ExamenHecesQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_heces_quimico_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -282,7 +282,7 @@ class ExamenHecesQuimicoController extends AbstractController
                     
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con exito');
+                        $this->addFlash('success', 'Examen modificado con éxito');
                         return $this->redirectToRoute('examen_heces_quimico_index', [
                             'id' => $examenHecesQuimico->getId(),
                             'examen_solicitado' => $examen_solicitado->getId(),
@@ -296,7 +296,7 @@ class ExamenHecesQuimicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -312,7 +312,7 @@ class ExamenHecesQuimicoController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Examen modificado con exito');
+                $this->addFlash('success', 'Examen modificado con éxito');
                 return $this->redirectToRoute('examen_heces_quimico_index', [
                     'id' => $examenHecesQuimico->getId(),
                     'examen_solicitado' => $examen_solicitado->getId(),
@@ -325,7 +325,7 @@ class ExamenHecesQuimicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -333,7 +333,7 @@ class ExamenHecesQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_quimico_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, ExamenHecesQuimico $examenHecesQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -346,10 +346,10 @@ class ExamenHecesQuimicoController extends AbstractController
                         $entityManager->remove($examenHecesQuimico);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Examen eliminado con exito');
+                    $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -364,10 +364,10 @@ class ExamenHecesQuimicoController extends AbstractController
                 $entityManager->remove($examenHecesQuimico);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Examen eliminado con exito');
+            $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_heces_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

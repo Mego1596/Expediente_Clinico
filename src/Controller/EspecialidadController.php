@@ -21,7 +21,7 @@ class EspecialidadController extends AbstractController
     /**
      * @Route("/", name="especialidad_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_ESPECIALIDAD')")
      */
     public function index(EspecialidadRepository $especialidadRepository, Security $AuthUser): Response
@@ -35,7 +35,7 @@ class EspecialidadController extends AbstractController
     /**
      * @Route("/new", name="especialidad_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_ESPECIALIDAD')")
      */
     public function new(Request $request): Response
@@ -73,7 +73,7 @@ class EspecialidadController extends AbstractController
     /**
      * @Route("/{id}", name="especialidad_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_ESPECIALIDAD')")
      */
     public function show(Especialidad $especialidad): Response
@@ -89,7 +89,7 @@ class EspecialidadController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="especialidad_edit", methods={"GET","POST"})
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_ESPECIALIDAD')")
      */
     public function edit(Request $request, Especialidad $especialidad): Response
@@ -115,7 +115,7 @@ class EspecialidadController extends AbstractController
     /**
      * @Route("/{id}", name="especialidad_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_ESPECIALIDAD')")
      */
     public function delete(Request $request, Especialidad $especialidad): Response

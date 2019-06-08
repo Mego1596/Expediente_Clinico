@@ -22,7 +22,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
     /**
      * @Route("/{examen_solicitado}", name="examen_orina_cristaluria_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
 
@@ -46,7 +46,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                     ]);
 
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -69,7 +69,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                 'examen_solicitado'             => $examen_solicitado,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -78,7 +78,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
     /**
      * @Route("/new/{examen_solicitado}", name="examen_orina_cristaluria_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -114,7 +114,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                         $entityManager->flush();
                                                         //FIN DE PROCESAMIENTO DE DATOS
                                                     }else{
-                                                        $this->addFlash('fail', 'Error, el riesgo litogenico no puede ir vacio');
+                                                        $this->addFlash('fail', 'Error, el riesgo litogénico no puede ir vacío');
                                                         return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                             'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                             'examen_solicitado' => $examen_solicitado,
@@ -123,7 +123,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                         ]);
                                                     }
                                                 }else{
-                                                    $this->addFlash('fail', 'Error, los fosfatos amonicos no pueden ir vacios');
+                                                    $this->addFlash('fail', 'Error, los fosfatos amónicos no pueden ir vacíos');
                                                     return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                         'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                         'examen_solicitado' => $examen_solicitado,
@@ -132,7 +132,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                     ]);
                                                 }
                                             }else{
-                                                $this->addFlash('fail', 'Error, los fosfatos calcicos no pueden ir vacios');
+                                                $this->addFlash('fail', 'Error, los fosfatos cálcicos no pueden ir vacíos');
                                                 return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                     'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                     'examen_solicitado' => $examen_solicitado,
@@ -141,7 +141,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                 ]);
                                             }
                                         }else{
-                                            $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacios');
+                                            $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacíos');
                                             return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                 'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                 'examen_solicitado' => $examen_solicitado,
@@ -150,7 +150,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, los oxalatos calcicos no pueden ir vacios');
+                                        $this->addFlash('fail', 'Error, los oxalatos cálcicos no pueden ir vacíos');
                                         return $this->render('examen_orina_cristaluria/new.html.twig', [
                                             'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                             'examen_solicitado' => $examen_solicitado,
@@ -159,7 +159,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, el acido urico no puede ir vacio');
+                                    $this->addFlash('fail', 'Error, el ácido úrico no puede ir vacío');
                                     return $this->render('examen_orina_cristaluria/new.html.twig', [
                                         'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                         'examen_solicitado' => $examen_solicitado,
@@ -168,7 +168,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacios');
+                                $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacíos');
                                 return $this->render('examen_orina_cristaluria/new.html.twig', [
                                     'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                     'examen_solicitado' => $examen_solicitado,
@@ -176,11 +176,11 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
                         return $this->redirectToRoute('examen_orina_cristaluria_index', ['examen_solicitado' => $examen_solicitado->getId()]);
                     }
 
@@ -191,7 +191,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -228,7 +228,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                 $entityManager->flush();
                                                 //FIN DE PROCESAMIENTO DE DATOS
                                             }else{
-                                                $this->addFlash('fail', 'Error, el riesgo litogenico no puede ir vacio');
+                                                $this->addFlash('fail', 'Error, el riesgo litogénico no puede ir vacío');
                                                 return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                     'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                     'examen_solicitado' => $examen_solicitado,
@@ -237,7 +237,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                 ]);
                                             }
                                         }else{
-                                            $this->addFlash('fail', 'Error, los fosfatos amonicos no pueden ir vacios');
+                                            $this->addFlash('fail', 'Error, los fosfatos amónicos no pueden ir vacíos');
                                             return $this->render('examen_orina_cristaluria/new.html.twig', [
                                                 'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                                 'examen_solicitado' => $examen_solicitado,
@@ -246,7 +246,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, los fosfatos calcicos no pueden ir vacios');
+                                        $this->addFlash('fail', 'Error, los fosfatos cálcicos no pueden ir vacíos');
                                         return $this->render('examen_orina_cristaluria/new.html.twig', [
                                             'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                             'examen_solicitado' => $examen_solicitado,
@@ -255,7 +255,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacios');
+                                    $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacíos');
                                     return $this->render('examen_orina_cristaluria/new.html.twig', [
                                         'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                         'examen_solicitado' => $examen_solicitado,
@@ -264,7 +264,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, los oxalatos calcicos no pueden ir vacios');
+                                $this->addFlash('fail', 'Error, los oxalatos cálcicos no pueden ir vacíos');
                                 return $this->render('examen_orina_cristaluria/new.html.twig', [
                                     'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                     'examen_solicitado' => $examen_solicitado,
@@ -273,7 +273,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, el acido urico no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el ácido úrico no puede ir vacío');
                             return $this->render('examen_orina_cristaluria/new.html.twig', [
                                 'examen_orina_cristaluria' => $examenOrinaCristaluria,
                                 'examen_solicitado' => $examen_solicitado,
@@ -282,7 +282,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacios');
+                        $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacíos');
                         return $this->render('examen_orina_cristaluria/new.html.twig', [
                             'examen_orina_cristaluria' => $examenOrinaCristaluria,
                             'examen_solicitado' => $examen_solicitado,
@@ -290,11 +290,11 @@ class ExamenOrinaCristaluriaController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success', 'Examen añadido con exito');
+                    $this->addFlash('success', 'Examen añadido con éxito');
                     return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
                 return $this->redirectToRoute('examen_orina_cristaluria_index', ['examen_solicitado' => $examen_solicitado->getId()]);
             }
 
@@ -305,7 +305,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -313,7 +313,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_cristaluria_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenOrinaCristaluria $examenOrinaCristaluria,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -326,7 +326,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                         'examen_solicitado' => $examen_solicitado,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -343,7 +343,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_orina_cristaluria_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, ExamenOrinaCristaluria $examenOrinaCristaluria,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -358,7 +358,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con exito');
+                        $this->addFlash('success', 'Examen modificado con éxito');
                         return $this->redirectToRoute('examen_orina_cristaluria_index', [
                             'id' => $examenOrinaCristaluria->getId(),
                             'examen_solicitado' => $examen_solicitado->getId(),
@@ -371,7 +371,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -387,7 +387,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Examen modificado con exito');
+                $this->addFlash('success', 'Examen modificado con éxito');
                 return $this->redirectToRoute('examen_orina_cristaluria_index', [
                     'id' => $examenOrinaCristaluria->getId(),
                     'examen_solicitado' => $examen_solicitado->getId(),
@@ -400,7 +400,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -408,7 +408,7 @@ class ExamenOrinaCristaluriaController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_cristaluria_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     
@@ -422,10 +422,10 @@ class ExamenOrinaCristaluriaController extends AbstractController
                         $entityManager->remove($examenOrinaCristaluria);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Examen eliminado con exito');
+                    $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -440,10 +440,10 @@ class ExamenOrinaCristaluriaController extends AbstractController
                 $entityManager->remove($examenOrinaCristaluria);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Examen eliminado con exito');
+            $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

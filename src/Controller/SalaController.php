@@ -21,7 +21,7 @@ class SalaController extends AbstractController
     /**
      * @Route("/{clinica}", name="sala_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_SALA')")
      */
     public function index(SalaRepository $salaRepository,Clinica $clinica,Security $AuthUser): Response
@@ -59,7 +59,7 @@ class SalaController extends AbstractController
     /**
      * @Route("/new/{clinica}", name="sala_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_SALA')")
      */
     public function new(Request $request,Clinica $clinica,Security $AuthUser): Response
@@ -88,7 +88,7 @@ class SalaController extends AbstractController
                         ]);
                     }
                     
-                    $this->addFlash('success','Sala añadida con exito');
+                    $this->addFlash('success','Sala añadida con éxito');
                     return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
                 }
 
@@ -125,7 +125,7 @@ class SalaController extends AbstractController
                 ]);
             }
             
-            $this->addFlash('success','Sala añadida con exito');
+            $this->addFlash('success','Sala añadida con éxito');
             return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }
 
@@ -140,7 +140,7 @@ class SalaController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="sala_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_SALA')")
      */
     public function show(Sala $sala,Clinica $clinica, Security $AuthUser): Response
@@ -166,7 +166,7 @@ class SalaController extends AbstractController
     /**
      * @Route("/{id}/{clinica}/edit/", name="sala_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_SALA')")
      */
     public function edit(Request $request, Sala $sala,Clinica $clinica, Security $AuthUser): Response
@@ -181,7 +181,7 @@ class SalaController extends AbstractController
 
                 if ($form->isSubmitted() && $form->isValid()) {
                     $this->getDoctrine()->getManager()->flush();
-                    $this->addFlash('success','Sala modificada con exito');
+                    $this->addFlash('success','Sala modificada con éxito');
                     return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
                 }
                 return $this->render('sala/edit.html.twig', [
@@ -202,7 +202,7 @@ class SalaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success','Sala modificada con exito');
+            $this->addFlash('success','Sala modificada con éxito');
             return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }
 
@@ -218,7 +218,7 @@ class SalaController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="sala_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_SALA')")
      */
     public function delete(Request $request, Sala $sala,Clinica $clinica,Security $AuthUser): Response

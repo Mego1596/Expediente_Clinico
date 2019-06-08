@@ -28,7 +28,7 @@ class CamillaController extends AbstractController
     /**
      * @Route("/{habitacion}", name="camilla_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_CAMILLA')")
      */
     public function index(CamillaRepository $camillaRepository,Security $AuthUser, Habitacion $habitacion): Response
@@ -68,7 +68,7 @@ class CamillaController extends AbstractController
     /**
      * @Route("/new/{habitacion}", name="camilla_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_CAMILLA')")
      */
     public function new(Request $request,Habitacion $habitacion,Security $AuthUser): Response
@@ -100,7 +100,7 @@ class CamillaController extends AbstractController
                         if($form["numeroCamilla"]->getData() != ""){
                             $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
                         }else{
-                            $this->addFlash('fail','Error, el numero de camilla no puede estar vacio, por favor ingrese el numero de camilla');
+                            $this->addFlash('fail','Error, el número de camilla no puede estar vacío, por favor ingrese el número de camilla');
                             return $this->render('camilla/new.html.twig', [
                                 'camilla' => $camilla,
                                 'habitacion'    => $habitacion,
@@ -109,7 +109,7 @@ class CamillaController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail','Error, esta camilla ya esta asignada por favor ingrese una nueva camilla');
+                        $this->addFlash('fail','Error, esta camilla ya está asignada por favor ingrese una nueva camilla');
                         return $this->render('camilla/new.html.twig', [
                             'camilla' => $camilla,
                             'habitacion'    => $habitacion,
@@ -161,7 +161,7 @@ class CamillaController extends AbstractController
                 if($form["numeroCamilla"]->getData() != ""){
                     $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
                 }else{
-                    $this->addFlash('fail','Error, el numero de camilla no puede estar vacio, por favor ingrese el numero de camilla');
+                    $this->addFlash('fail','Error, el número de camilla no puede estar vacío, por favor ingrese el número de camilla');
                     return $this->render('camilla/new.html.twig', [
                         'camilla' => $camilla,
                         'habitacion'    => $habitacion,
@@ -170,7 +170,7 @@ class CamillaController extends AbstractController
                     ]);
                 }
             }else{
-                $this->addFlash('fail','Error, esta camilla ya esta asignada por favor ingrese una nueva camilla');
+                $this->addFlash('fail','Error, esta camilla ya está asignada por favor ingrese una nueva camilla');
                 return $this->render('camilla/new.html.twig', [
                     'camilla' => $camilla,
                     'habitacion'    => $habitacion,
@@ -198,7 +198,7 @@ class CamillaController extends AbstractController
     /**
      * @Route("/{id}/{habitacion}", name="camilla_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_CAMILLA')")
      */
     public function show(Camilla $camilla, Habitacion $habitacion,Security $AuthUser): Response
@@ -224,7 +224,7 @@ class CamillaController extends AbstractController
     /**
      * @Route("/{id}/{habitacion}/edit", name="camilla_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_CAMILLA')")
      */
     public function edit(Request $request, Camilla $camilla, Habitacion $habitacion, Security $AuthUser): Response
@@ -358,7 +358,7 @@ class CamillaController extends AbstractController
     /**
      * @Route("/{id}/{habitacion}", name="camilla_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CAMILLA')")
      */
     public function delete(Request $request, Camilla $camilla, Habitacion $habitacion, Security $AuthUser): Response

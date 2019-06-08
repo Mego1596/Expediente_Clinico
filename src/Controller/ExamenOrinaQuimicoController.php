@@ -22,7 +22,7 @@ class ExamenOrinaQuimicoController extends AbstractController
     /**
      * @Route("/{examen_solicitado}", name="examen_orina_quimico_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(examenOrinaQuimicoRepository $examenOrinaQuimicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -45,7 +45,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                     ]);
 
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -68,7 +68,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                 'examen_solicitado'             => $examen_solicitado,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -77,7 +77,7 @@ class ExamenOrinaQuimicoController extends AbstractController
     /**
      * @Route("/new/{examen_solicitado}", name="examen_orina_quimico_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -124,7 +124,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                                                                 ]); 
                                                             }
                                                         }else{
-                                                           $this->addFlash('fail', 'Error, Urobilinogeno no puede ir vacio');
+                                                           $this->addFlash('fail', 'Error, Urobilinógeno no puede ir vacio');
                                                             return $this->render('examen_orina_quimico/new.html.twig', [
                                                                 'examen_orina_quimico' => $examenOrinaQuimico,
                                                                 'examen_solicitado' => $examen_solicitado,
@@ -160,7 +160,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                                                 ]);
                                             }
                                         }else{
-                                            $this->addFlash('fail', 'Error,las  proteinas no pueden ir vacias');
+                                            $this->addFlash('fail', 'Error,las proteinas no pueden ir vacias');
                                             return $this->render('examen_orina_quimico/new.html.twig', [
                                                 'examen_orina_quimico' => $examenOrinaQuimico,
                                                 'examen_solicitado' => $examen_solicitado,
@@ -178,7 +178,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, el ph no puede ir vacio');
+                                    $this->addFlash('fail', 'Error, el pH no puede ir vacio');
                                     return $this->render('examen_orina_quimico/new.html.twig', [
                                         'examen_orina_quimico' => $examenOrinaQuimico,
                                         'examen_solicitado' => $examen_solicitado,
@@ -195,11 +195,11 @@ class ExamenOrinaQuimicoController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_orina_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
                         return $this->redirectToRoute('examen_orina_quimico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
                     }
 
@@ -210,7 +210,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -258,7 +258,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                                                         ]); 
                                                     }
                                                 }else{
-                                                   $this->addFlash('fail', 'Error, Urobilinogeno no puede ir vacio');
+                                                   $this->addFlash('fail', 'Error, Urobilinógeno no puede ir vacio');
                                                     return $this->render('examen_orina_quimico/new.html.twig', [
                                                         'examen_orina_quimico' => $examenOrinaQuimico,
                                                         'examen_solicitado' => $examen_solicitado,
@@ -312,7 +312,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, el ph no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el pH no puede ir vacio');
                             return $this->render('examen_orina_quimico/new.html.twig', [
                                 'examen_orina_quimico' => $examenOrinaQuimico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -329,11 +329,11 @@ class ExamenOrinaQuimicoController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success', 'Examen añadido con exito');
+                    $this->addFlash('success', 'Examen añadido con éxito');
                     return $this->redirectToRoute('examen_orina_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
+                $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
                 return $this->redirectToRoute('examen_orina_quimico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
             }
 
@@ -344,7 +344,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -354,7 +354,7 @@ class ExamenOrinaQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_quimico_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(examenOrinaQuimico $examenOrinaQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -367,7 +367,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                         'examen_solicitado' => $examen_solicitado,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -383,7 +383,7 @@ class ExamenOrinaQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_orina_quimico_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, examenOrinaQuimico $examenOrinaQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -398,7 +398,7 @@ class ExamenOrinaQuimicoController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con exito');
+                        $this->addFlash('success', 'Examen modificado con éxito');
                         return $this->redirectToRoute('examen_orina_quimico_index', [
                             'id' => $examenOrinaQuimico->getId(),
                             'examen_solicitado' => $examen_solicitado->getId(),
@@ -411,7 +411,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -427,7 +427,7 @@ class ExamenOrinaQuimicoController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Examen modificado con exito');
+                $this->addFlash('success', 'Examen modificado con éxito');
                 return $this->redirectToRoute('examen_orina_quimico_index', [
                     'id' => $examenOrinaQuimico->getId(),
                     'examen_solicitado' => $examen_solicitado->getId(),
@@ -440,7 +440,7 @@ class ExamenOrinaQuimicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -448,7 +448,7 @@ class ExamenOrinaQuimicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_orina_quimico_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, examenOrinaQuimico $examenOrinaQuimico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -461,10 +461,10 @@ class ExamenOrinaQuimicoController extends AbstractController
                         $entityManager->remove($examenOrinaQuimico);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Examen eliminado con exito');
+                    $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_orina_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -479,10 +479,10 @@ class ExamenOrinaQuimicoController extends AbstractController
                 $entityManager->remove($examenOrinaQuimico);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Examen eliminado con exito');
+            $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_orina_quimico_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

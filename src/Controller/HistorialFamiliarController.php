@@ -22,7 +22,7 @@ class HistorialFamiliarController extends AbstractController
     /**
      * @Route("/{familiar}", name="historial_familiar_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_FAMILIAR')")
      */
     public function index(HistorialFamiliarRepository $historialFamiliarRepository, Familiar $familiar,Security $AuthUser): Response
@@ -41,7 +41,7 @@ class HistorialFamiliarController extends AbstractController
                         'familiar'          => $familiar,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -62,7 +62,7 @@ class HistorialFamiliarController extends AbstractController
                 'familiar'          => $familiar,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -70,7 +70,7 @@ class HistorialFamiliarController extends AbstractController
     /**
      * @Route("/new/{familiar}", name="historial_familiar_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIAL_FAMILIAR')")
      */
     public function new(Request $request, Familiar $familiar, Security $AuthUser): Response
@@ -99,7 +99,7 @@ class HistorialFamiliarController extends AbstractController
                                 'form'              => $form->createView(),
                             ]);
                         }
-                        $this->addFlash('success', 'Historial añadido con exito');
+                        $this->addFlash('success', 'Historial añadido con éxito');
                         return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
                     }
 
@@ -110,7 +110,7 @@ class HistorialFamiliarController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -141,7 +141,7 @@ class HistorialFamiliarController extends AbstractController
                         'form'              => $form->createView(),
                     ]);
                 }
-                $this->addFlash('success', 'Historial añadido con exito');
+                $this->addFlash('success', 'Historial añadido con éxito');
                 return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
             }
 
@@ -152,7 +152,7 @@ class HistorialFamiliarController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -161,7 +161,7 @@ class HistorialFamiliarController extends AbstractController
     /**
      * @Route("/{id}/{familiar}", name="historial_familiar_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_HISTORIAL_FAMILIAR')")
      */
     public function show(HistorialFamiliar $historialFamiliar, Familiar $familiar): Response
@@ -175,7 +175,7 @@ class HistorialFamiliarController extends AbstractController
     /**
      * @Route("/{id}/{familiar}/edit", name="historial_familiar_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_FAMILIAR')")
      */
     public function edit(Request $request, HistorialFamiliar $historialFamiliar, Familiar $familiar): Response
@@ -186,7 +186,7 @@ class HistorialFamiliarController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Historial modificado con exito');
+            $this->addFlash('success', 'Historial modificado con éxito');
             return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
         }
 
@@ -201,7 +201,7 @@ class HistorialFamiliarController extends AbstractController
     /**
      * @Route("/{id}/{familiar}", name="historial_familiar_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HISTORIAL_FAMILIAR')")
      */
     public function delete(Request $request, HistorialFamiliar $historialFamiliar, Familiar $familiar): Response
@@ -211,7 +211,7 @@ class HistorialFamiliarController extends AbstractController
             $entityManager->remove($historialFamiliar);
             $entityManager->flush();
         }
-        $this->addFlash('success', 'Historial eliminado con exito');
+        $this->addFlash('success', 'Historial eliminado con éxito');
         return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
     }
 }

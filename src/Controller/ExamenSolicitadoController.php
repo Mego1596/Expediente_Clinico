@@ -26,7 +26,7 @@ class ExamenSolicitadoController extends AbstractController
     /**
      * @Route("/{cita}", name="examen_solicitado_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')")
      */
     public function index(ExamenSolicitadoRepository $examenSolicitadoRepository, Cita $cita, Security $AuthUser): Response
@@ -47,7 +47,7 @@ class ExamenSolicitadoController extends AbstractController
                         'cita'           => $cita,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -70,7 +70,7 @@ class ExamenSolicitadoController extends AbstractController
                 'cita'           => $cita,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -78,7 +78,7 @@ class ExamenSolicitadoController extends AbstractController
     /**
      * @Route("/new/{cita}", name="examen_solicitado_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMEN_SOLICITADO')")
      */
     public function new(Request $request, Cita $cita, Security $AuthUser): Response
@@ -167,7 +167,7 @@ class ExamenSolicitadoController extends AbstractController
                                             return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                         }
                                     }
-                                    $this->addFlash('success', 'Examen añadido con exito');
+                                    $this->addFlash('success', 'Examen añadido con éxito');
                                     return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
                                 }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
@@ -224,7 +224,7 @@ class ExamenSolicitadoController extends AbstractController
                                         $examenSolicitado->setCita($cita);
                                         $entityManager->persist($examenSolicitado);
                                         $entityManager->flush();
-                                        $this->addFlash('success', 'Examen añadido con exito');
+                                        $this->addFlash('success', 'Examen añadido con éxito');
                                         return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                                 }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
                                         $entityManager = $this->getDoctrine()->getManager();
@@ -262,7 +262,7 @@ class ExamenSolicitadoController extends AbstractController
                                                 return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                             }
                                         }
-                                        $this->addFlash('success', 'Examen añadido con exito');
+                                        $this->addFlash('success', 'Examen añadido con éxito');
                                         return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                                 }else{
                                     if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
@@ -296,7 +296,7 @@ class ExamenSolicitadoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -387,7 +387,7 @@ class ExamenSolicitadoController extends AbstractController
                                     return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                 }
                             }
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
                         }elseif(($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == 3) ){
@@ -444,7 +444,7 @@ class ExamenSolicitadoController extends AbstractController
                                 $examenSolicitado->setCita($cita);
                                 $entityManager->persist($examenSolicitado);
                                 $entityManager->flush();
-                                $this->addFlash('success', 'Examen añadido con exito');
+                                $this->addFlash('success', 'Examen añadido con éxito');
                                 return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                         }elseif( ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == "" ) ){
                                 $entityManager = $this->getDoctrine()->getManager();
@@ -482,7 +482,7 @@ class ExamenSolicitadoController extends AbstractController
                                         return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                     }
                                 }
-                                $this->addFlash('success', 'Examen añadido con exito');
+                                $this->addFlash('success', 'Examen añadido con éxito');
                                 return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                         }else{
                             if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
@@ -516,7 +516,7 @@ class ExamenSolicitadoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         } 
 
@@ -537,7 +537,7 @@ class ExamenSolicitadoController extends AbstractController
                         'examen_solicitado' => $examenSolicitado,
                     ]);  
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -584,7 +584,7 @@ class ExamenSolicitadoController extends AbstractController
                                 }
                                 $entityManager->persist($examenSolicitado);
                                 $entityManager->flush();
-                                $this->addFlash('success', 'Examen añadido con exito');
+                                $this->addFlash('success', 'Examen añadido con éxito');
                                 return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
                             }elseif(($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') == 2) || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') == 3) )){
@@ -601,7 +601,7 @@ class ExamenSolicitadoController extends AbstractController
                                     }
                                     $entityManager->persist($examenSolicitado);
                                     $entityManager->flush();
-                                    $this->addFlash('success', 'Examen añadido con exito');
+                                    $this->addFlash('success', 'Examen añadido con éxito');
                                     return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                             }elseif( ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == "" ) || ($request->request->get('examen_solicitado_tipoExamen') == 4 && $request->request->get('examen_solicitado_categoria') == "" ) ){
                                     $entityManager = $this->getDoctrine()->getManager();
@@ -613,7 +613,7 @@ class ExamenSolicitadoController extends AbstractController
                                     }
                                     $entityManager->persist($examenSolicitado);
                                     $entityManager->flush();
-                                    $this->addFlash('success', 'Examen modificado con exito');
+                                    $this->addFlash('success', 'Examen modificado con éxito');
                                     return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                             }else{
                                 if(($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 1) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 2) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 3) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 4) ){
@@ -669,7 +669,7 @@ class ExamenSolicitadoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -703,7 +703,7 @@ class ExamenSolicitadoController extends AbstractController
                         }
                         $entityManager->persist($examenSolicitado);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Examen añadido con exito');
+                        $this->addFlash('success', 'Examen añadido con éxito');
                         return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
                     }elseif(($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') == 2) || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $request->request->get('examen_solicitado_categoria') == 3) )){
@@ -720,7 +720,7 @@ class ExamenSolicitadoController extends AbstractController
                             }
                             $entityManager->persist($examenSolicitado);
                             $entityManager->flush();
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                     }elseif( ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == "" ) || ($request->request->get('examen_solicitado_tipoExamen') == 4 && $request->request->get('examen_solicitado_categoria') == "" ) ){
                             $entityManager = $this->getDoctrine()->getManager();
@@ -732,7 +732,7 @@ class ExamenSolicitadoController extends AbstractController
                             }
                             $entityManager->persist($examenSolicitado);
                             $entityManager->flush();
-                            $this->addFlash('success', 'Examen añadido con exito');
+                            $this->addFlash('success', 'Examen añadido con éxito');
                             return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                     }else{
                         if(($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 1) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 2) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 3) || ($request->request->get('examen_solicitado_tipoExamen') == 3 && $request->request->get('examen_solicitado_categoria') == 4) ){
@@ -788,7 +788,7 @@ class ExamenSolicitadoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -797,7 +797,7 @@ class ExamenSolicitadoController extends AbstractController
     /**
      * @Route("/{id}/{cita}", name="examen_solicitado_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMEN_SOLICITADO')")
      */
     public function delete(Request $request, ExamenSolicitado $examenSolicitado, Cita $cita, Security $AuthUser): Response
@@ -811,11 +811,11 @@ class ExamenSolicitadoController extends AbstractController
                         $entityManager->remove($examenSolicitado);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Examen eliminado con exito');
+                    $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -831,11 +831,11 @@ class ExamenSolicitadoController extends AbstractController
                 $entityManager->remove($examenSolicitado);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Examen eliminado con exito');
+            $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
 
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

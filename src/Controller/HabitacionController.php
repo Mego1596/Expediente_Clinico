@@ -30,7 +30,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{clinica}", name="habitacion_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HABITACION')")
      */
     public function index(HabitacionRepository $habitacionRepository,Security $AuthUser, Clinica $clinica): Response
@@ -72,7 +72,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/new/{clinica}", name="habitacion_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HABITACION')")
      */
     public function new(Request $request, Clinica $clinica, Security $AuthUser): Response
@@ -120,7 +120,7 @@ class HabitacionController extends AbstractController
                                         $entityManager->flush();
                                         //FIN DE PROCESO DE DATOS
                                     }else{
-                                        $this->addFlash('fail', 'Error, el numero de habitacion no puede estar vacio');
+                                        $this->addFlash('fail', 'Error, el número de habitación no puede estar vacio');
                                         return $this->render('habitacion/new.html.twig', [
                                             'habitacion' => $habitacion,
                                             'editar'    => $editar,
@@ -129,7 +129,7 @@ class HabitacionController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, por favor elija un tipo de habitacion, no puede estar vacio');
+                                    $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacio');
                                     return $this->render('habitacion/new.html.twig', [
                                         'habitacion' => $habitacion,
                                         'editar'    => $editar,
@@ -146,11 +146,11 @@ class HabitacionController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success','Habitacion añadida con exito');
+                            $this->addFlash('success','Habitación añadida con éxito');
                             return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
 
                         }else{
-                            $this->addFlash('fail', 'Error, el numero de habitacion en esta sala ya esta registrado, por favor ingrese un numero diferente de habitacion');
+                            $this->addFlash('fail', 'Error, el número de habitación en esta sala ya está registrado, por favor ingrese un número diferente de habitación');
                             return $this->render('habitacion/new.html.twig', [
                                 'habitacion' => $habitacion,
                                 'editar'    => $editar,
@@ -159,7 +159,7 @@ class HabitacionController extends AbstractController
                             ]);
                         }
                         
-                        $this->addFlash('success','Habitacion añadida con exito');
+                        $this->addFlash('success','Habitación añadida con éxito');
                         return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
                     }else{
                         $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
@@ -224,7 +224,7 @@ class HabitacionController extends AbstractController
                                 $entityManager->flush();
                                 //FIN DE PROCESO DE DATOS
                             }else{
-                                $this->addFlash('fail', 'Error, el numero de habitacion no puede estar vacio');
+                                $this->addFlash('fail', 'Error, el número de habitación no puede estar vacio');
                                 return $this->render('habitacion/new.html.twig', [
                                     'habitacion' => $habitacion,
                                     'editar'    => $editar,
@@ -233,7 +233,7 @@ class HabitacionController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, por favor elija un tipo de habitacion, no puede estar vacio');
+                            $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacio');
                             return $this->render('habitacion/new.html.twig', [
                                 'habitacion' => $habitacion,
                                 'editar'    => $editar,
@@ -250,11 +250,11 @@ class HabitacionController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success','Habitacion añadida con exito');
+                    $this->addFlash('success','Habitación añadida con éxito');
                     return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
 
                 }else{
-                    $this->addFlash('fail', 'Error, el numero de habitacion en esta sala ya esta registrado, por favor ingrese un numero diferente de habitacion');
+                    $this->addFlash('fail', 'Error, el número de habitación en esta sala ya está registrado, por favor ingrese un número diferente de habitación');
                     return $this->render('habitacion/new.html.twig', [
                         'habitacion' => $habitacion,
                         'editar'    => $editar,
@@ -263,7 +263,7 @@ class HabitacionController extends AbstractController
                     ]);
                 }
                 
-                $this->addFlash('success','Habitacion añadida con exito');
+                $this->addFlash('success','Habitación añadida con éxito');
                 return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
             }else{
                 $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
@@ -288,7 +288,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="habitacion_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_HABITACION')")
      */
     public function show(Habitacion $habitacion, Clinica $clinica, Security $AuthUser): Response
@@ -314,7 +314,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}/edit", name="habitacion_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HABITACION')")
      */
     public function edit(Request $request, Habitacion $habitacion, Clinica $clinica,Security $AuthUser): Response
@@ -351,7 +351,7 @@ class HabitacionController extends AbstractController
                             }
                         }else{
                             if($habitacion->getId() != $result[0]['id']){
-                                $this->addFlash('fail','Error, ya existe una habitacion en la sala seleccionada');
+                                $this->addFlash('fail','Error, ya existe una habitación en la sala seleccionada');
                                 return $this->render('habitacion/edit.html.twig', [
                                     'habitacion' => $habitacion,
                                     'editar'    => $editar,
@@ -363,7 +363,7 @@ class HabitacionController extends AbstractController
                         }
 
                         
-                        $this->addFlash('success','Habitacion modificada con exito');
+                        $this->addFlash('success','Habitación modificada con éxito');
                         return $this->redirectToRoute('habitacion_index', [
                             'clinica' => $clinica->getId(),
                         ]);
@@ -410,7 +410,7 @@ class HabitacionController extends AbstractController
                 }
             }else{
                 if($habitacion->getId() != $result[0]['id']){
-                    $this->addFlash('fail','Error, ya existe una habitacion en la sala seleccionada');
+                    $this->addFlash('fail','Error, ya existe una habitación en la sala seleccionada');
                     return $this->render('habitacion/edit.html.twig', [
                         'habitacion' => $habitacion,
                         'editar'    => $editar,
@@ -422,7 +422,7 @@ class HabitacionController extends AbstractController
             }
 
             
-            $this->addFlash('success','Habitacion modificada con exito');
+            $this->addFlash('success','Habitación modificada con éxito');
             return $this->redirectToRoute('habitacion_index', [
                 'clinica' => $clinica->getId(),
             ]);
@@ -440,7 +440,7 @@ class HabitacionController extends AbstractController
     /**
      * @Route("/{id}/{clinica}", name="habitacion_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HABITACION')")
      */
     public function delete(Request $request, Habitacion $habitacion, Clinica $clinica, Security $AuthUser): Response
@@ -453,7 +453,7 @@ class HabitacionController extends AbstractController
                     $entityManager->remove($habitacion);
                     $entityManager->flush();
                 }
-                $this->addFlash('success','Habitacion eliminada con exito');
+                $this->addFlash('success','Habitación eliminada con éxito');
                 return $this->redirectToRoute('habitacion_index',[
                     'clinica' => $clinica->getId(),
                 ]);
@@ -467,7 +467,7 @@ class HabitacionController extends AbstractController
             $entityManager->remove($habitacion);
             $entityManager->flush();
         }
-        $this->addFlash('success','Habitacion eliminada con exito');
+        $this->addFlash('success','Habitación eliminada con éxito');
         return $this->redirectToRoute('habitacion_index',[
             'clinica' => $clinica->getId(),
         ]);

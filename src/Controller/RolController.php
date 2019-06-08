@@ -27,7 +27,7 @@ class RolController extends AbstractController
     /**
      * @Route("/", name="rol_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_ROL')")
      */
     public function index(RolRepository $rolRepository, Security $AuthUser): Response
@@ -47,7 +47,7 @@ class RolController extends AbstractController
     /**
      * @Route("/new", name="rol_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_ROL')")
      */
     public function new(Request $request): Response
@@ -102,7 +102,7 @@ class RolController extends AbstractController
                 ]);
             }
             
-            $this->addFlash('success', 'Rol creado con exito');
+            $this->addFlash('success', 'Rol creado con éxito');
             return $this->redirectToRoute('rol_index');
         }
 
@@ -115,7 +115,7 @@ class RolController extends AbstractController
     /**
      * @Route("/{id}", name="rol_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_ROL')")
      */
     public function show(Rol $rol): Response
@@ -128,7 +128,7 @@ class RolController extends AbstractController
     /**
      * @Route("/{id}/edit", name="rol_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_ROL')")
      */
     public function edit(Request $request, Rol $rol): Response
@@ -163,7 +163,7 @@ class RolController extends AbstractController
             $entityManager->persist($rol);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Rol modificado con exito');
+            $this->addFlash('success', 'Rol modificado con éxito');
             return $this->redirectToRoute('rol_index');
         }
 
@@ -176,7 +176,7 @@ class RolController extends AbstractController
     /**
      * @Route("/{id}", name="rol_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_ROL')")
      */
     public function delete(Request $request, Rol $rol): Response
@@ -192,7 +192,7 @@ class RolController extends AbstractController
             }
         }
 
-        $this->addFlash('success', 'Rol eliminado con exito');
+        $this->addFlash('success', 'Rol eliminado con éxito');
         return $this->redirectToRoute('rol_index');
     }
 }

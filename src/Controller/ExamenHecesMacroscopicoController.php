@@ -22,7 +22,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     /**
      * @Route("/{examen_solicitado}", name="examen_heces_macroscopico_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_EXAMENES')")
      */
     public function index(ExamenHecesMacroscopicoRepository $examenHecesMacroscopicoRepository,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -45,7 +45,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                     ]);
 
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -68,7 +68,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                 'examen_solicitado'             => $examen_solicitado,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -77,7 +77,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     /**
      * @Route("/new/{examen_solicitado}", name="examen_heces_macroscopico_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_EXAMENES')")
      */
     public function new(Request $request,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -110,7 +110,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                             //FIN DE PROCESAMIENTO DE DATOS
 
                                         }else{
-                                            $this->addFlash('fail', 'Error, aspecto no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                                            $this->addFlash('fail', 'Error, aspecto no puede ir vacío, si no hay resultados que asignar por favor asigne " * " ');
                                             return $this->render('examen_heces_macroscopico/new.html.twig', [
                                                 'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                                 'examen_solicitado' => $examen_solicitado,
@@ -119,7 +119,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, consistencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                        $this->addFlash('fail', 'Error, consistencia no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                                         return $this->render('examen_heces_macroscopico/new.html.twig', [
                                             'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                             'examen_solicitado' => $examen_solicitado,
@@ -128,7 +128,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, color no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                    $this->addFlash('fail', 'Error, color no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                                     return $this->render('examen_heces_macroscopico/new.html.twig', [
                                         'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                         'examen_solicitado' => $examen_solicitado,
@@ -137,7 +137,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, olor no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                $this->addFlash('fail', 'Error, olor no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                                 return $this->render('examen_heces_macroscopico/new.html.twig', [
                                     'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -160,7 +160,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -197,7 +197,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                     //FIN DE PROCESAMIENTO DE DATOS
 
                                 }else{
-                                    $this->addFlash('fail', 'Error, aspecto no puede ir vacio, si no hay resultados que asignar por favor asigne " * " ');
+                                    $this->addFlash('fail', 'Error, aspecto no puede ir vacío, si no hay resultados que asignar por favor asigne " * " ');
                                     return $this->render('examen_heces_macroscopico/new.html.twig', [
                                         'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                         'examen_solicitado' => $examen_solicitado,
@@ -206,7 +206,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, consistencia no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                                $this->addFlash('fail', 'Error, consistencia no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                                 return $this->render('examen_heces_macroscopico/new.html.twig', [
                                     'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                     'examen_solicitado' => $examen_solicitado,
@@ -215,7 +215,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, color no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                            $this->addFlash('fail', 'Error, color no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                             return $this->render('examen_heces_macroscopico/new.html.twig', [
                                 'examen_heces_macroscopico' => $examenHecesMacroscopico,
                                 'examen_solicitado' => $examen_solicitado,
@@ -224,7 +224,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, olor no puede ir vacio, si no hay resultados que asignar por favor asigne " * "');
+                        $this->addFlash('fail', 'Error, olor no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
                         return $this->render('examen_heces_macroscopico/new.html.twig', [
                             'examen_heces_macroscopico' => $examenHecesMacroscopico,
                             'examen_solicitado' => $examen_solicitado,
@@ -247,7 +247,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 }
@@ -255,7 +255,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_macroscopico_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXAMENES')")
      */
     public function show(ExamenHecesMacroscopico $examenHecesMacroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -268,7 +268,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                         'examen_solicitado' => $examen_solicitado,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -286,7 +286,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}/edit", name="examen_heces_macroscopico_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_EXAMENES')")
      */
     public function edit(Request $request, ExamenHecesMacroscopico $examenHecesMacroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -314,7 +314,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -343,7 +343,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }
@@ -351,7 +351,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_macroscopico_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_EXAMENES')")
      */
     public function delete(Request $request, ExamenHecesMacroscopico $examenHecesMacroscopico,ExamenSolicitado $examen_solicitado, Security $AuthUser): Response
@@ -367,7 +367,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
                     $this->addFlash('success', 'Examen eliminado con éxito');
                     return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -385,7 +385,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
             $this->addFlash('success', 'Examen eliminado con éxito');
             return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

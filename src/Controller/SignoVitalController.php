@@ -22,7 +22,7 @@ class SignoVitalController extends AbstractController
     /**
      * @Route("/{cita}", name="signo_vital_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')")
      */
     public function index(SignoVitalRepository $signoVitalRepository, Security $AuthUser, Cita $cita): Response
@@ -42,7 +42,7 @@ class SignoVitalController extends AbstractController
                         'cita'           => $cita,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -64,7 +64,7 @@ class SignoVitalController extends AbstractController
                 'cita'           => $cita,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         } 
         
@@ -73,7 +73,7 @@ class SignoVitalController extends AbstractController
     /**
      * @Route("/new/{cita}", name="signo_vital_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_SIGNO_VITAL')")
      */
     public function new(Request $request, Cita $cita, Security $AuthUser): Response
@@ -150,7 +150,7 @@ class SignoVitalController extends AbstractController
                                     'form' => $form->createView(),
                                 ]);
                             }
-                            $this->addFlash('success', 'Signos Vitales añadidos con exito');
+                            $this->addFlash('success', 'Signos Vitales añadidos con éxito');
                             return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                         }
                     }else{
@@ -165,7 +165,7 @@ class SignoVitalController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -244,7 +244,7 @@ class SignoVitalController extends AbstractController
                             'form' => $form->createView(),
                         ]);
                     }
-                    $this->addFlash('success', 'Signos Vitales añadidos con exito');
+                    $this->addFlash('success', 'Signos Vitales añadidos con éxito');
                     return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                 }
             }else{
@@ -259,7 +259,7 @@ class SignoVitalController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -269,7 +269,7 @@ class SignoVitalController extends AbstractController
     /**
      * @Route("/{id}/{cita}", name="signo_vital_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_SIGNO_VITAL')")
      */
     public function show(SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
@@ -282,7 +282,7 @@ class SignoVitalController extends AbstractController
                         'cita'           => $cita,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -297,7 +297,7 @@ class SignoVitalController extends AbstractController
                 'cita'           => $cita,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -306,7 +306,7 @@ class SignoVitalController extends AbstractController
     /**
      * @Route("/{id}/{cita}/edit", name="signo_vital_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL')")
      */
     public function edit(Request $request, SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
@@ -320,7 +320,7 @@ class SignoVitalController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Signos Vitales modificados con exito');
+                        $this->addFlash('success', 'Signos Vitales modificados con éxito');
                         return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                     }
 
@@ -331,7 +331,7 @@ class SignoVitalController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -347,7 +347,7 @@ class SignoVitalController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Signos Vitales modificados con exito');
+                $this->addFlash('success', 'Signos Vitales modificados con éxito');
                 return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
             }
 
@@ -358,7 +358,7 @@ class SignoVitalController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -367,7 +367,7 @@ class SignoVitalController extends AbstractController
     /**
      * @Route("/{id}/{cita}", name="signo_vital_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_SIGNO_VITAL')")
      */
     public function delete(Request $request, SignoVital $signoVital, Cita $cita, Security $AuthUser): Response
@@ -380,10 +380,10 @@ class SignoVitalController extends AbstractController
                         $entityManager->remove($signoVital);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Signos Vitales eliminados con exito');
+                    $this->addFlash('success', 'Signos Vitales eliminados con éxito');
                     return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -397,10 +397,10 @@ class SignoVitalController extends AbstractController
                 $entityManager->remove($signoVital);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Signos Vitales eliminados con exito');
+            $this->addFlash('success', 'Signos Vitales eliminados con éxito');
             return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
 

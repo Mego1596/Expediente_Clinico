@@ -21,7 +21,7 @@ class HistorialPropioController extends AbstractController
     /**
      * @Route("/{expediente}", name="historial_propio_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')")
      */
     public function index(HistorialPropioRepository $historialPropioRepository, Expediente $expediente,Security $AuthUser): Response
@@ -36,7 +36,7 @@ class HistorialPropioController extends AbstractController
                     $statement->execute();
                     $result = $statement->fetchAll();           
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
                 return $this->render('historial_propio/index.html.twig', [
@@ -56,7 +56,7 @@ class HistorialPropioController extends AbstractController
             $statement->execute();
             $result = $statement->fetchAll();           
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         return $this->render('historial_propio/index.html.twig', [
@@ -69,7 +69,7 @@ class HistorialPropioController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="historial_propio_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIAL_PROPIO')")
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -100,7 +100,7 @@ class HistorialPropioController extends AbstractController
                                 'form' => $form->createView(),
                             ]);
                         }
-                        $this->addFlash('success', 'Historial añadido con exito');
+                        $this->addFlash('success', 'Historial añadido con éxito');
                         return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
                     }
 
@@ -111,7 +111,7 @@ class HistorialPropioController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -141,11 +141,11 @@ class HistorialPropioController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }
-                $this->addFlash('success', 'Historial añadido con exito');
+                $this->addFlash('success', 'Historial añadido con éxito');
                 return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
             }
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
 
@@ -160,7 +160,7 @@ class HistorialPropioController extends AbstractController
     /**
      * @Route("/{id}/{expediente}", name="historial_propio_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_HISTORIAL_PROPIO')")
      */
     public function show(HistorialPropio $historialPropio, Expediente $expediente, Security $AuthUser): Response
@@ -173,7 +173,7 @@ class HistorialPropioController extends AbstractController
                     'expediente'       => $expediente,
                 ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -187,7 +187,7 @@ class HistorialPropioController extends AbstractController
                 'expediente'       => $expediente,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -195,7 +195,7 @@ class HistorialPropioController extends AbstractController
     /**
      * @Route("/{id}/{expediente}/edit", name="historial_propio_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HISTORIAL_PROPIO')")
      */
     public function edit(Request $request, HistorialPropio $historialPropio, Expediente $expediente, Security $AuthUser): Response
@@ -210,7 +210,7 @@ class HistorialPropioController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Historial modificado con exito');
+                        $this->addFlash('success', 'Historial modificado con éxito');
                         return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
                     }
 
@@ -221,7 +221,7 @@ class HistorialPropioController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -236,7 +236,7 @@ class HistorialPropioController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Historial modificado con exito');
+                $this->addFlash('success', 'Historial modificado con éxito');
                 return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
             }
 
@@ -247,7 +247,7 @@ class HistorialPropioController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
     }
@@ -255,7 +255,7 @@ class HistorialPropioController extends AbstractController
     /**
      * @Route("/{id}/{expediente}", name="historial_propio_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HISTORIAL_PROPIO')")
      */
     public function delete(Request $request, HistorialPropio $historialPropio, Expediente $expediente, Security $AuthUser): Response
@@ -269,10 +269,10 @@ class HistorialPropioController extends AbstractController
                         $entityManager->remove($historialPropio);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Historial eliminado con exito');
+                    $this->addFlash('success', 'Historial eliminado con éxito');
                     return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -285,7 +285,7 @@ class HistorialPropioController extends AbstractController
             $entityManager->remove($historialPropio);
             $entityManager->flush();
         }
-        $this->addFlash('success', 'Historial eliminado con exito');
+        $this->addFlash('success', 'Historial eliminado con éxito');
         return $this->redirectToRoute('historial_propio_index',['expediente' => $expediente->getId()]);
     }
 }

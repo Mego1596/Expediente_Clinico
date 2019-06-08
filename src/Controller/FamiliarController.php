@@ -24,7 +24,7 @@ class FamiliarController extends AbstractController
     /**
      * @Route("/{expediente}", name="familiar_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')")
      */
     public function index(FamiliarRepository $familiarRepository, Expediente $expediente,Security $AuthUser): Response
@@ -45,7 +45,7 @@ class FamiliarController extends AbstractController
                         'user'       => $AuthUser,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -66,7 +66,7 @@ class FamiliarController extends AbstractController
                 'user'       => $AuthUser,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
 
@@ -75,7 +75,7 @@ class FamiliarController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="familiar_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_FAMILIAR')")
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -170,7 +170,7 @@ class FamiliarController extends AbstractController
                                 'form' => $form->createView(),
                             ]);
                         }
-                        $this->addFlash('success', 'Familiar añadido con exito');
+                        $this->addFlash('success', 'Familiar añadido con éxito');
                         return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
                     }
 
@@ -181,7 +181,7 @@ class FamiliarController extends AbstractController
                         'form' => $form->createView(),
                     ]);    
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -275,7 +275,7 @@ class FamiliarController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }
-                $this->addFlash('success', 'Familiar añadido con exito');
+                $this->addFlash('success', 'Familiar añadido con éxito');
                 return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
             }
 
@@ -286,7 +286,7 @@ class FamiliarController extends AbstractController
                 'form' => $form->createView(),
             ]);    
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -295,7 +295,7 @@ class FamiliarController extends AbstractController
     /**
      * @Route("/{id}/{expediente}", name="familiar_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_FAMILIAR')")
      */
     public function show(Familiar $familiar, Expediente $expediente, Security $AuthUser): Response
@@ -309,7 +309,7 @@ class FamiliarController extends AbstractController
                         'expediente' => $expediente,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -323,7 +323,7 @@ class FamiliarController extends AbstractController
                 'expediente' => $expediente,
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -332,7 +332,7 @@ class FamiliarController extends AbstractController
     /**
      * @Route("/{id}/{expediente}/edit", name="familiar_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_FAMILIAR')")
      */
     public function edit(Request $request, Familiar $familiar, Expediente $expediente,Security $AuthUser): Response
@@ -359,7 +359,7 @@ class FamiliarController extends AbstractController
                         $entityManager->persist($familiaresExpediente);
                         $entityManager->flush();
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Familiar modificado con exito');
+                        $this->addFlash('success', 'Familiar modificado con éxito');
                         return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
                     }
 
@@ -371,7 +371,7 @@ class FamiliarController extends AbstractController
                         'form'       => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -400,7 +400,7 @@ class FamiliarController extends AbstractController
                 $entityManager->persist($familiaresExpediente);
                 $entityManager->flush();
                 $this->getDoctrine()->getManager()->flush();
-                $this->addFlash('success', 'Familiar modificado con exito');
+                $this->addFlash('success', 'Familiar modificado con éxito');
                 return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
             }
 
@@ -412,7 +412,7 @@ class FamiliarController extends AbstractController
                 'form'       => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         
@@ -421,7 +421,7 @@ class FamiliarController extends AbstractController
     /**
      * @Route("/{id}/{expediente}", name="familiar_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_FAMILIAR')")
      */
     public function delete(Request $request, Familiar $familiar, Expediente $expediente, Security $AuthUser): Response
@@ -436,10 +436,10 @@ class FamiliarController extends AbstractController
                         $entityManager->remove($this->getDoctrine()->getRepository(FamiliaresExpediente::class)->find($familiar->getId()));
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Familiar eliminado con exito');
+                    $this->addFlash('success', 'Familiar eliminado con éxito');
                     return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
                 }
             }else{
@@ -456,10 +456,10 @@ class FamiliarController extends AbstractController
                 $entityManager->remove($this->getDoctrine()->getRepository(FamiliaresExpediente::class)->find($familiar->getId()));
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Familiar eliminado con exito');
+            $this->addFlash('success', 'Familiar eliminado con éxito');
             return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
         

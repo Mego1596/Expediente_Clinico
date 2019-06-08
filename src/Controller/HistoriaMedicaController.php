@@ -22,7 +22,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{citum}", name="historia_medica_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')")
      */
     public function index(HistoriaMedicaRepository $historiaMedicaRepository, Cita $citum, Security $AuthUser): Response
@@ -42,7 +42,7 @@ class HistoriaMedicaController extends AbstractController
                         'cita'           => $citum,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -67,7 +67,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/new/{citum}", name="historia_medica_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_HISTORIA_MEDICA')")
      */
     public function new(Request $request, Cita $citum, Security $AuthUser): Response
@@ -164,7 +164,7 @@ class HistoriaMedicaController extends AbstractController
                                     ]);
                             }
 
-                            $this->addFlash('success', 'Historia Medica añadida con exito');
+                            $this->addFlash('success', 'Historia Medica añadida con éxito');
                             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                         }
                     }else{
@@ -179,7 +179,7 @@ class HistoriaMedicaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -264,7 +264,7 @@ class HistoriaMedicaController extends AbstractController
                         ]);
                 }
 
-                $this->addFlash('success', 'Historia Medica añadida con exito');
+                $this->addFlash('success', 'Historia Medica añadida con éxito');
                 return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
             }
         }else{
@@ -283,7 +283,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{id}/{citum}/edit", name="historia_medica_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_HISTORIA_MEDICA')")
      */
     public function edit(Request $request, HistoriaMedica $historiaMedica, Cita $citum, Security $AuthUser): Response
@@ -297,7 +297,7 @@ class HistoriaMedicaController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Historia Medica modificada con exito');
+                        $this->addFlash('success', 'Historia Medica modificada con éxito');
                         return $this->redirectToRoute('historia_medica_index', [
                             'citum' => $citum->getId(),
                         ]);
@@ -310,7 +310,7 @@ class HistoriaMedicaController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -325,7 +325,7 @@ class HistoriaMedicaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Historia Medica modificada con exito');
+            $this->addFlash('success', 'Historia Medica modificada con éxito');
             return $this->redirectToRoute('historia_medica_index', [
                 'citum' => $citum->getId(),
             ]);
@@ -342,7 +342,7 @@ class HistoriaMedicaController extends AbstractController
     /**
      * @Route("/{id}/{citum}", name="historia_medica_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_HISTORIA_MEDICA')")
      */
     public function delete(Request $request, HistoriaMedica $historiaMedica, Cita $citum, Security $AuthUser): Response
@@ -355,10 +355,10 @@ class HistoriaMedicaController extends AbstractController
                         $entityManager->remove($historiaMedica);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Historia Medica eliminada con exito');
+                    $this->addFlash('success', 'Historia Medica eliminada con éxito');
                     return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -372,10 +372,10 @@ class HistoriaMedicaController extends AbstractController
                 $entityManager->remove($historiaMedica);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Historia Medica eliminada con exito');
+            $this->addFlash('success', 'Historia Medica eliminada con éxito');
             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

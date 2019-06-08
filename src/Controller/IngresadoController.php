@@ -27,7 +27,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/", name="ingresado_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_INGRESADO')")
      */
     public function index(IngresadoRepository $ingresadoRepository, Security $AuthUser): Response
@@ -82,7 +82,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="ingresado_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_INGRESADO')")
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
@@ -103,7 +103,7 @@ class IngresadoController extends AbstractController
                         $ingresado->setFechaIngreso(date_create());
                         $entityManager->persist($ingresado);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Paciente ingresado con exito');
+                        $this->addFlash('success', 'Paciente ingresado con éxito');
                         return $this->redirectToRoute('ingresado_index');    
                     }else{
                         return $this->redirectToRoute('expediente_show',['id' => $expediente->getId()]);  
@@ -125,7 +125,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}/", name="ingresado_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_INGRESADO')")
      */
     public function show(IngresadoRepository $ingresadoRepository, Ingresado $ingresado, Security $AuthUser): Response
@@ -189,7 +189,7 @@ class IngresadoController extends AbstractController
                 'ingresado' => $result,
             ]);
         }else{
-            $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta informacion por que el paciente no esta habilitado');
+            $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta información por que el paciente no está habilitado');
             return $this->redirectToRoute('ingresado_index');
         }
     }
@@ -197,7 +197,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}/edit", name="ingresado_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_INGRESADO')")
      */
     public function darDeAlta(Request $request, Ingresado $ingresado, Security $AuthUser): Response
@@ -211,14 +211,14 @@ class IngresadoController extends AbstractController
                     $ingresado->setFechaSalida(date_create());
                     $entityManager->persist($ingresado);
                     $entityManager->flush();
-                    $this->addFlash('success', 'Paciente dado de alta con exito');
+                    $this->addFlash('success', 'Paciente dado de alta con éxito');
                     return $this->redirectToRoute('ingresado_index'); 
                 }else{
                     $this->addFlash('fail', 'Ups, algo ha salido mal intentalo de nuevo');
                     return $this->redirectToRoute('ingresado_index'); 
                 }
             }else{
-                $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta informacion por que el paciente no esta habilitado');
+                $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta información por que el paciente no está habilitado');
                 return $this->redirectToRoute('ingresado_index'); 
             }
         }else{
@@ -231,7 +231,7 @@ class IngresadoController extends AbstractController
     /**
      * @Route("/{id}", name="ingresado_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_INGRESADO')")
      */
     public function delete(Request $request, Ingresado $ingresado, Security $AuthUser): Response
@@ -244,7 +244,7 @@ class IngresadoController extends AbstractController
             }
             return $this->redirectToRoute('ingresado_index');
         }else{ 
-            $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta informacion por que el paciente no esta habilitado');
+            $this->addFlash('fail', 'Lo sentimos mucho, no se puede acceder a esta información por que el paciente no está habilitado');
             return $this->redirectToRoute('ingresado_index');   
         }
     }

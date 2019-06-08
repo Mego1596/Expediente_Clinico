@@ -21,7 +21,7 @@ class GeneroController extends AbstractController
     /**
      * @Route("/", name="genero_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_GENERO')")
      */
     public function index(GeneroRepository $generoRepository, Security $AuthUser): Response
@@ -35,7 +35,7 @@ class GeneroController extends AbstractController
     /**
      * @Route("/new", name="genero_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_GENERO')")
      */
     public function new(Request $request): Response
@@ -51,7 +51,7 @@ class GeneroController extends AbstractController
                 $entityManager->persist($genero);
                 $entityManager->flush();
             }else{
-                $this->addFlash('fail', 'El nombre del genero no puede estar vacio');
+                $this->addFlash('fail', 'El nombre del género no puede estar vacio');
                 return $this->render('genero/new.html.twig', [
                     'especialidad' => $genero,
                     'editar' => $editar,
@@ -59,7 +59,7 @@ class GeneroController extends AbstractController
                 ]);
             }
 
-            $this->addFlash('success', 'Genero agregado con exito');
+            $this->addFlash('success', 'Género agregado con éxito');
             return $this->redirectToRoute('genero_index');
         }
 
@@ -73,7 +73,7 @@ class GeneroController extends AbstractController
     /**
      * @Route("/{id}", name="genero_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_GENERO')")
      */
     public function show(Genero $genero): Response
@@ -90,7 +90,7 @@ class GeneroController extends AbstractController
     /**
      * @Route("/{id}/edit", name="genero_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_GENERO')")
      */
     public function edit(Request $request, Genero $genero): Response
@@ -102,7 +102,7 @@ class GeneroController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            $this->addFlash('success', 'Genero modificado con exito');
+            $this->addFlash('success', 'Género modificado con éxito');
             return $this->redirectToRoute('genero_index', [
                 'id' => $genero->getId(),
             ]);
@@ -118,7 +118,7 @@ class GeneroController extends AbstractController
     /**
      * @Route("/{id}", name="genero_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_GENERO')")
      */
     public function delete(Request $request, Genero $genero): Response
@@ -129,7 +129,7 @@ class GeneroController extends AbstractController
             $entityManager->flush();
         }
 
-        $this->addFlash('success', 'Genero eliminado con exito');
+        $this->addFlash('success', 'Género eliminado con éxito');
         return $this->redirectToRoute('genero_index');
     }
 }

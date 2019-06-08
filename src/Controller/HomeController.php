@@ -32,7 +32,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/home", name="home")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      */
     public function home(Security $AuthUser)
     {   
@@ -44,7 +44,7 @@ class HomeController extends AbstractController
 
     /**
      * @Route("/agenda", name="calendario_trabajo")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      */
     public function calendarioTrabajo(Security $AuthUser)
     {   
@@ -56,7 +56,7 @@ class HomeController extends AbstractController
     /**
      * @Route("/cambioContrasena", name="app_cambio")
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      */
     public function cambio_contrasena(Request $request,Security $AuthUser): Response
     {   
@@ -76,7 +76,7 @@ class HomeController extends AbstractController
                         $entityManager = $this->getDoctrine()->getEntityManager();
                         $entityManager->persist($user);
                         $entityManager->flush();
-                        $this->addFlash('success', 'Contraseña modificada con exito');
+                        $this->addFlash('success', 'Contraseña modificada con éxito');
                         return $this->redirectToRoute('home');
                     }else{
                         $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmacion de contraseña');

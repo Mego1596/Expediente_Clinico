@@ -22,7 +22,7 @@ class PlanTratamientoController extends AbstractController
     /**
      * @Route("/{historiaMedica}", name="plan_tratamiento_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_PLAN_TRATAMIENTO')")
      */
     public function index(PlanTratamientoRepository $planTratamientoRepository, Security $AuthUser, HistoriaMedica $historiaMedica): Response
@@ -36,7 +36,7 @@ class PlanTratamientoController extends AbstractController
                         'historia_medica'   => $historiaMedica,
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -54,7 +54,7 @@ class PlanTratamientoController extends AbstractController
     /**
      * @Route("/new/{historiaMedica}", name="plan_tratamiento_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_PLAN_TRATAMIENTO')")
      */
     public function new(Request $request, Security $AuthUser, HistoriaMedica $historiaMedica): Response
@@ -77,7 +77,7 @@ class PlanTratamientoController extends AbstractController
                                         $planTratamiento->setHistoriaMedica($historiaMedica);
                                         $entityManager->persist($planTratamiento);
                                         $entityManager->flush();
-                                        $this->addFlash('success', 'Medicamento añadido con exito');
+                                        $this->addFlash('success', 'Medicamento añadido con éxito');
                                         return $this->redirectToRoute('plan_tratamiento_index', ['historiaMedica' => $historiaMedica->getId()]);
                                     }else{
                                         $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacio');
@@ -124,7 +124,7 @@ class PlanTratamientoController extends AbstractController
                         'form' => $form->createView(),
                     ]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
                 //HASTA AQUI
@@ -149,7 +149,7 @@ class PlanTratamientoController extends AbstractController
                                 $planTratamiento->setHistoriaMedica($historiaMedica);
                                 $entityManager->persist($planTratamiento);
                                 $entityManager->flush();
-                                $this->addFlash('success', 'Medicamento añadido con exito');
+                                $this->addFlash('success', 'Medicamento añadido con éxito');
                                 return $this->redirectToRoute('plan_tratamiento_index', ['historiaMedica' => $historiaMedica->getId()]);
                             }else{
                                 $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacio');
@@ -197,7 +197,7 @@ class PlanTratamientoController extends AbstractController
                 'form' => $form->createView(),
             ]);
         }else{
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
 
@@ -206,7 +206,7 @@ class PlanTratamientoController extends AbstractController
     /**
      * @Route("/{id}/{historiaMedica}/edit", name="plan_tratamiento_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_PLAN_TRATAMIENTO')")
      */
     public function edit(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
@@ -223,7 +223,7 @@ class PlanTratamientoController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Medicamento modificado con exito');
+                        $this->addFlash('success', 'Medicamento modificado con éxito');
                         return $this->redirectToRoute('plan_tratamiento_index', [
                             'historiaMedica'    => $historiaMedica->getId(),
                         ]);
@@ -238,7 +238,7 @@ class PlanTratamientoController extends AbstractController
 
                     //HASTA AQUI
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -254,7 +254,7 @@ class PlanTratamientoController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Medicamento modificado con exito');
+            $this->addFlash('success', 'Medicamento modificado con éxito');
             return $this->redirectToRoute('plan_tratamiento_index', [
                 'historiaMedica'    => $historiaMedica->getId(),
             ]);
@@ -271,7 +271,7 @@ class PlanTratamientoController extends AbstractController
     /**
      * @Route("/{id}/{historiaMedica}", name="plan_tratamiento_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_PLAN_TRATAMIENTO')")
      */
     public function delete(Request $request, PlanTratamiento $planTratamiento, Security $AuthUser, HistoriaMedica $historiaMedica): Response
@@ -284,10 +284,10 @@ class PlanTratamientoController extends AbstractController
                         $entityManager->remove($planTratamiento);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Medicamento eliminado con exito');
+                    $this->addFlash('success', 'Medicamento eliminado con éxito');
                     return $this->redirectToRoute('plan_tratamiento_index',['historiaMedica' => $historiaMedica->getId()]);
                 }else{
-                    $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
                 }
             }else{
@@ -302,9 +302,9 @@ class PlanTratamientoController extends AbstractController
                 $entityManager->remove($planTratamiento);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Medicamento eliminado con exito');
+            $this->addFlash('success', 'Medicamento eliminado con éxito');
             return $this->redirectToRoute('plan_tratamiento_index',['historiaMedica' => $historiaMedica->getId()]);
-            $this->addFlash('fail','Este paciente no esta habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
     }

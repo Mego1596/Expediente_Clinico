@@ -26,7 +26,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}", name="cita_index", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_INDEX_CITA')")
      */
     public function index(CitaRepository $citaRepository,Expediente $expediente,Security $AuthUser): Response
@@ -48,7 +48,7 @@ class CitaController extends AbstractController
                             'user'       => $AuthUser,
                         ]);
                     }else{
-                        $this->addFlash('fail','No esta autorizado para ver esta pagina');
+                        $this->addFlash('fail','No está autorizado para ver esta página');
                         return $this->redirectToRoute('home');
                     }
                 }else{
@@ -88,7 +88,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/new/{expediente}", name="cita_new", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_CITA')")
      */
     public function new(Request $request,Expediente $expediente,Security $AuthUser): Response
@@ -320,7 +320,7 @@ class CitaController extends AbstractController
                                     ]);
 
                                 }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
-                                    $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
+                                    $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
                                     return $this->render('cita/new.html.twig', [
                                         'citum' => $citum,
                                         'editar' => $editar,
@@ -444,7 +444,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/calendar/{expediente}", name="cita_calendar", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      */
     public function calendar(Expediente $expediente, Security $AuthUser): Response
     {   
@@ -491,7 +491,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/", name="cita_show", methods={"GET"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_CITA')")
      */
     public function show(Cita $citum,Expediente $expediente,Security $AuthUser): Response
@@ -534,7 +534,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}/edit", name="cita_edit", methods={"GET","POST"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_EDIT_CITA')")
      */
     public function edit(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
@@ -593,7 +593,7 @@ class CitaController extends AbstractController
                                     ]);
 
                                 }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
-                                    $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
+                                    $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
                                     return $this->render('cita/edit.html.twig', [
                                         'citum' => $citum,
                                         'editar' => $editar,
@@ -735,7 +735,7 @@ class CitaController extends AbstractController
                         ]);
 
                     }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
-                        $this->addFlash('fail','Error, la hora ingresada no es valida, ingrese una hora puntual u hora y media');
+                        $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
                         return $this->render('cita/edit.html.twig', [
                             'citum' => $citum,
                             'editar' => $editar,
@@ -834,7 +834,7 @@ class CitaController extends AbstractController
     /**
      * @Route("/{expediente}/{id}", name="cita_delete", methods={"DELETE"})
      * @Security2("is_authenticated()")
-     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta esta inactiva")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_DELETE_CITA')")
      */
     public function delete(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
