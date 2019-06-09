@@ -301,6 +301,19 @@ class ExpedienteController extends AbstractController
                                         }
                                         $entityManager->persist($expediente);
                                         $entityManager->flush();
+
+                                        //GENERACION DE VISTA AL CREAR UN PACIENTE CON EXITO PARA EL SHOW
+                                        $conn = $entityManager->getConnection();
+                                        $sql='CREATE VIEW expediente_paciente_'.$expediente->getId().' AS
+                                        SELECT ex.id as id_expediente,DATE(ex.fecha_nacimiento) as fecha_nacimiento_expediente, ( SELECT getEdad('.$expediente->getId().') ) as edad_expediente, ex.direccion as direccion_expediente,ex.estado_civil as estado_civil_expediete,ex.apellido_casada as apellido_casada_expediente, ex.numero_expediente as numero_expediente,ex.telefono as telefono_expediente, gen.descripcion as genero, u.email as correo_electronico, CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido, " ") ) as nombre_completo
+                                        FROM expediente as ex,genero as gen, user as u, persona as p
+                                        WHERE 
+                                        ex.genero_id = gen.id       AND
+                                        ex.usuario_id = u.id        AND
+                                        u.persona_id = p.id         AND
+                                        ex.id='.$expediente->getId().';';
+                                        $view = $conn->prepare($sql);
+                                        $view->execute();
                                         //FIN PROCESO DE DATOS
                                     }else{
                                         $this->addFlash('fail', 'Error el género del paciente no puede estar vacío');
