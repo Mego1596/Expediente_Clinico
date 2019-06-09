@@ -165,6 +165,131 @@ final class Version20190607030751 extends AbstractMigration
         //FUNCTION GET EDAD
 
         $this->addSql('CREATE DEFINER=`root`@`localhost` FUNCTION `getEdad`(`paciente` INT UNSIGNED) RETURNS INT(3) DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DECLARE salida INT DEFAULT 0; SET salida =(SELECT TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad from expediente WHERE id = paciente) ; RETURN salida; END');
+
+        //CREACION DE DISPARADORES
+        //CLINICA
+        $this->addSql('CREATE TRIGGER `llenarClinica` BEFORE INSERT ON `clinica` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarClinica` BEFORE UPDATE ON `clinica` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+        
+        //SALA
+        $this->addSql('CREATE TRIGGER `llenarSala` BEFORE INSERT ON `sala` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarSala` BEFORE UPDATE ON `sala` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //TIPO_HABITACION
+        $this->addSql('CREATE TRIGGER `llenarTipoHabitacion` BEFORE INSERT ON `tipo_habitacion` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarTipoHabitacion` BEFORE UPDATE ON `tipo_habitacion` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //HABITACION
+        $this->addSql('CREATE TRIGGER `llenarHabitacion` BEFORE INSERT ON `habitacion` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarHabitacion` BEFORE UPDATE ON `habitacion` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //CAMILLA
+        $this->addSql('CREATE TRIGGER `llenarCamilla` BEFORE INSERT ON `camilla` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarCamilla` BEFORE UPDATE ON `camilla` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //INGRESADO
+        $this->addSql('CREATE TRIGGER `llenarIngresado` BEFORE INSERT ON `ingresado` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarIngresado` BEFORE UPDATE ON `ingresado` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //ROL
+        $this->addSql('CREATE TRIGGER `llenarRol` BEFORE INSERT ON `rol` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarRol` BEFORE UPDATE ON `rol` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //PERMISO
+        $this->addSql('CREATE TRIGGER `llenarPermiso` BEFORE INSERT ON `permiso` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarPermiso` BEFORE UPDATE ON `permiso` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //ESPECIALIDAD
+        $this->addSql('CREATE TRIGGER `llenarEspecialidad` BEFORE INSERT ON `especialidad` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarEspecialidad` BEFORE UPDATE ON `especialidad` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXPEDIENTE
+        $this->addSql('CREATE TRIGGER `llenarExpediente` BEFORE INSERT ON `expediente` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExpediente` BEFORE UPDATE ON `expediente` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //HISTORIAL_PROPIO
+        $this->addSql('CREATE TRIGGER `llenarHistorialPropio` BEFORE INSERT ON `historial_propio` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarHistorialPropio` BEFORE UPDATE ON `historial_propio` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //FAMILIARES_EXPEDIENTE
+        $this->addSql('CREATE TRIGGER `llenarFamiliaresExpediente` BEFORE INSERT ON `familiares_expediente` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarFamiliaresExpediente` BEFORE UPDATE ON `familiares_expediente` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //FAMILIAR
+        $this->addSql('CREATE TRIGGER `llenarFamiliar` BEFORE INSERT ON `familiar` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarFamiliar` BEFORE UPDATE ON `familiar` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //HISTORIAL_FAMILIAR
+        $this->addSql('CREATE TRIGGER `llenarHistorialFamiliar` BEFORE INSERT ON `historial_familiar` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarHistorialFamiliar` BEFORE UPDATE ON `historial_familiar` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //CITA
+        $this->addSql('CREATE TRIGGER `llenarCita` BEFORE INSERT ON `cita` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarCita` BEFORE UPDATE ON `cita` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //SIGNO_VITAL
+        $this->addSql('CREATE TRIGGER `llenarSignoVital` BEFORE INSERT ON `signo_vital` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarSignoVital` BEFORE UPDATE ON `signo_vital` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //HISTORIA_MEDICA
+        $this->addSql('CREATE TRIGGER `llenarHistoriaMedica` BEFORE INSERT ON `historia_medica` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarHistoriaMedica` BEFORE UPDATE ON `historia_medica` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //PLAN_TRATAMIENTO
+        $this->addSql('CREATE TRIGGER `llenarPlanTratamiento` BEFORE INSERT ON `plan_tratamiento` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarPlanTratamiento` BEFORE UPDATE ON `plan_tratamiento` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //GENERO
+        $this->addSql('CREATE TRIGGER `llenarGenero` BEFORE INSERT ON `genero` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarGenero` BEFORE UPDATE ON `genero` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //DIAGNOSTICO
+        $this->addSql('CREATE TRIGGER `llenarDiagnostico` BEFORE INSERT ON `diagnostico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarDiagnostico` BEFORE UPDATE ON `diagnostico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_SOLICITADO
+        $this->addSql('CREATE TRIGGER `llenarExamenSolicitado` BEFORE INSERT ON `examen_solicitado` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenSolicitado` BEFORE UPDATE ON `examen_solicitado` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //ANEXO
+        $this->addSql('CREATE TRIGGER `llenarAnexo` BEFORE INSERT ON `anexo` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarAnexo` BEFORE UPDATE ON `anexo` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_HEMATOLOGICO
+        $this->addSql('CREATE TRIGGER `llenarExamenHematologico` BEFORE INSERT ON `examen_hematologico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenHematologico` BEFORE UPDATE ON `examen_hematologico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_QUIMICA_SANGUINEA
+        $this->addSql('CREATE TRIGGER `llenarExamenQuimicaSanguinea` BEFORE INSERT ON `examen_quimica_sanguinea` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenQuimicaSanguinea` BEFORE UPDATE ON `examen_quimica_sanguinea` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_HECES_MICROSCOPICO
+        $this->addSql('CREATE TRIGGER `llenarExamenHecesMicroscopico` BEFORE INSERT ON `examen_heces_microscopico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenHecesMicroscopico` BEFORE UPDATE ON `examen_heces_microscopico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_HECES_MACROSCOPICO
+        $this->addSql('CREATE TRIGGER `llenarExamenHecesMacroscopico` BEFORE INSERT ON `examen_heces_macroscopico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenHecesMacroscopico` BEFORE UPDATE ON `examen_heces_macroscopico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_HECES_QUIMICO
+        $this->addSql('CREATE TRIGGER `llenarExamenHecesQuimico` BEFORE INSERT ON `examen_heces_quimico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarExamenHecesQuimico` BEFORE UPDATE ON `examen_heces_quimico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_ORINA_CRISTALURIA
+        $this->addSql('CREATE TRIGGER `llenarOrinaCristaluria` BEFORE INSERT ON `examen_orina_cristaluria` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarOrinaCristaluria` BEFORE UPDATE ON `examen_orina_cristaluria` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_ORINA_QUIMICO
+        $this->addSql('CREATE TRIGGER `llenarOrinaQuimico` BEFORE INSERT ON `examen_orina_quimico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarOrinaQuimico` BEFORE UPDATE ON `examen_orina_quimico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_ORINA_MICROSCOPICO
+        $this->addSql('CREATE TRIGGER `llenarOrinaMicroscopico` BEFORE INSERT ON `examen_orina_microscopico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarOrinaMicroscopico` BEFORE UPDATE ON `examen_orina_microscopico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
+        //EXAMEN_ORINA_MACROSCOPICO
+        $this->addSql('CREATE TRIGGER `llenarOrinaMacroscopico` BEFORE INSERT ON `examen_orina_macroscopico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarOrinaMacroscopico` BEFORE UPDATE ON `examen_orina_macroscopico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
     }
 
     public function down(Schema $schema) : void
