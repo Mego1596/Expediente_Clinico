@@ -266,13 +266,13 @@ class ExamenSolicitadoController extends AbstractController
                                         return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                                 }else{
                                     if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
-                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoría pruebe quitando la categoría o elija otro tipo de examen');
                                         return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                     }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
-                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                        $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoría pruebe quitando la categoría o elija otro tipo de examen');
                                         return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                     }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
-                                        $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                                        $this->addFlash('fail', 'Error este tipo de examen posee categoría no puede ir vacía por favor seleccione una categoría.');
                                         return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                                     }else{
                                         $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
@@ -280,7 +280,7 @@ class ExamenSolicitadoController extends AbstractController
                                     }
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                                $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacío');
                                 return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                             }
                         }
@@ -486,13 +486,13 @@ class ExamenSolicitadoController extends AbstractController
                                 return $this->redirectToRoute('examen_solicitado_index',['cita' => $cita->getId()]);
                         }else{
                             if(($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 3 && $form["categoria"]->getData() == 4) ){
-                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoría pruebe quitando la categoría o elija otro tipo de examen');
                                 return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                             }elseif(($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 1) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 2) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 3) || ($form["tipoExamen"]->getData() == 4 && $form["categoria"]->getData() == 4)  ){
-                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoria pruebe quitando la categoria o elija otro tipo de examen');
+                                $this->addFlash('fail', 'Error este tipo de examen no posee ninguna categoría pruebe quitando la categoría o elija otro tipo de examen');
                                 return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                             }elseif( ($form["tipoExamen"]->getData() == 1 && $form["categoria"]->getData() == "" ) || ($form["tipoExamen"]->getData() == 2 && $form["categoria"]->getData() == "" ) ){
-                                $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                                $this->addFlash('fail', 'Error este tipo de examen posee categoría no puede ir vacía por favor seleccione una categoría.');
                                 return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                             }else{
                                 $this->addFlash('fail', 'Error este tipo de examen no posee examen de cristaluria');
@@ -500,7 +500,7 @@ class ExamenSolicitadoController extends AbstractController
                             }
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                        $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacío');
                         return $this->redirectToRoute('examen_solicitado_new',['cita' => $cita->getId()]);   
                     }
                 }
@@ -633,7 +633,7 @@ class ExamenSolicitadoController extends AbstractController
                                         'form' => $form->createView(),
                                     ]);
                                 }elseif( ($request->request->get('examen_solicitado_tipoExamen') == 1 && $form["categoria"]->getData() == "" ) || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $form["categoria"]->getData() == "" ) ){
-                                    $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                                    $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacía por favor seleccione una categoria.');
                                     return $this->render('examen_solicitado/edit.html.twig', [
                                         'examen_solicitado' => $examenSolicitado,
                                         'cita' => $cita,
@@ -652,7 +652,7 @@ class ExamenSolicitadoController extends AbstractController
                             }
                             
                         }else{
-                            $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                            $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacío');
                             return $this->render('examen_solicitado/edit.html.twig', [
                                 'examen_solicitado' => $examenSolicitado,
                                 'cita' => $cita,
@@ -752,7 +752,7 @@ class ExamenSolicitadoController extends AbstractController
                                 'form' => $form->createView(),
                             ]);
                         }elseif( ($request->request->get('examen_solicitado_tipoExamen') == 1 && $form["categoria"]->getData() == "" ) || ($request->request->get('examen_solicitado_tipoExamen') == 2 && $form["categoria"]->getData() == "" ) ){
-                            $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacia por favor seleccione una categoria.');
+                            $this->addFlash('fail', 'Error este tipo de examen posee categoria no puede ir vacía por favor seleccione una categoria.');
                             return $this->render('examen_solicitado/edit.html.twig', [
                                 'examen_solicitado' => $examenSolicitado,
                                 'cita' => $cita,
@@ -771,7 +771,7 @@ class ExamenSolicitadoController extends AbstractController
                     }
                     
                 }else{
-                    $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacio');
+                    $this->addFlash('fail', 'Error, el tipo de examen no puede ir vacío');
                     return $this->render('examen_solicitado/edit.html.twig', [
                         'examen_solicitado' => $examenSolicitado,
                         'cita' => $cita,

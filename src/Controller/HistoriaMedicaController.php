@@ -107,7 +107,7 @@ class HistoriaMedicaController extends AbstractController
                                                     /*if($form["diagnostico"]->getData()->getCodigoCategoria()[0] == $form["codigoEspecifico"]->getData()[0] && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) >=0 && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) <= 99 ){
                                                         
                                                     }elseif($form["diagnostico"]->getData()->getCodigoCategoria()[4] == $form["codigoEspecifico"]->getData()[0]){
-                                                        $this->addFlash('fail', 'El codigo seleccionado no es valido para la categoria elegida');
+                                                        $this->addFlash('fail', 'El código seleccionado no es valido para la categoria elegida');
                                                         return $this->render('historia_medica/new.html.twig', [
                                                             'historia_medica' => $historiaMedica,
                                                             'editar'          => $editar,
@@ -119,7 +119,7 @@ class HistoriaMedicaController extends AbstractController
                                                     $entityManager->persist($historiaMedica);
                                                     $entityManager->flush();
                                             }else{
-                                                $this->addFlash('fail', 'Error,el codigo del diagnostico especifico no puede ir vacio');
+                                                $this->addFlash('fail', 'Error,el código del diagnostico específico no puede ir vacío');
                                                 return $this->render('historia_medica/new.html.twig', [
                                                     'historia_medica' => $historiaMedica,
                                                     'editar'          => $editar,
@@ -128,7 +128,7 @@ class HistoriaMedicaController extends AbstractController
                                                 ]);
                                             }
                                         }else{
-                                            $this->addFlash('fail', 'Error, el diagnostico no puede ir vacio');
+                                            $this->addFlash('fail', 'Error, el diagnostico no puede ir vacío');
                                             return $this->render('historia_medica/new.html.twig', [
                                                 'historia_medica' => $historiaMedica,
                                                 'editar'          => $editar,
@@ -137,7 +137,7 @@ class HistoriaMedicaController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, los sintomas no pueden ir vacios');
+                                        $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
                                         return $this->render('historia_medica/new.html.twig', [
                                             'historia_medica' => $historiaMedica,
                                             'editar'          => $editar,
@@ -146,7 +146,7 @@ class HistoriaMedicaController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, los signos no pueden ir vacios');
+                                    $this->addFlash('fail', 'Error, los signos no pueden ir vacíos');
                                     return $this->render('historia_medica/new.html.twig', [
                                         'historia_medica' => $historiaMedica,
                                         'editar'          => $editar,
@@ -155,7 +155,7 @@ class HistoriaMedicaController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacio');
+                                $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacío');
                                  return $this->render('historia_medica/new.html.twig', [
                                         'historia_medica' => $historiaMedica,
                                         'editar'          => $editar,
@@ -164,11 +164,11 @@ class HistoriaMedicaController extends AbstractController
                                     ]);
                             }
 
-                            $this->addFlash('success', 'Historia Medica añadida con éxito');
+                            $this->addFlash('success', 'Historia Médica añadida con éxito');
                             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, no se puede registrar historias medicas diferentes por favor modifique el registro ya ingresado');
+                        $this->addFlash('fail', 'Error, no se puede registrar historias médicas diferentes por favor modifique el registro ya ingresado');
                         return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                     }
                     
@@ -218,7 +218,7 @@ class HistoriaMedicaController extends AbstractController
                                         $entityManager->persist($historiaMedica);
                                         $entityManager->flush();
                                 }else{
-                                    $this->addFlash('fail', 'Error,el codigo del diagnostico especifico no puede ir vacio');
+                                    $this->addFlash('fail', 'Error,el código del diagnostico específico no puede ir vacío');
                                     return $this->render('historia_medica/new.html.twig', [
                                         'historia_medica' => $historiaMedica,
                                         'editar'          => $editar,
@@ -227,7 +227,7 @@ class HistoriaMedicaController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, el diagnostico no puede ir vacio');
+                                $this->addFlash('fail', 'Error, el diagnostico no puede ir vacío');
                                 return $this->render('historia_medica/new.html.twig', [
                                     'historia_medica' => $historiaMedica,
                                     'editar'          => $editar,
@@ -236,7 +236,7 @@ class HistoriaMedicaController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, los sintomas no pueden ir vacios');
+                            $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
                             return $this->render('historia_medica/new.html.twig', [
                                 'historia_medica' => $historiaMedica,
                                 'editar'          => $editar,
@@ -245,7 +245,7 @@ class HistoriaMedicaController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, los signos no pueden ir vacios');
+                        $this->addFlash('fail', 'Error, los signos no pueden ir vacíos');
                         return $this->render('historia_medica/new.html.twig', [
                             'historia_medica' => $historiaMedica,
                             'editar'          => $editar,
@@ -254,7 +254,7 @@ class HistoriaMedicaController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacio');
+                    $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacío');
                      return $this->render('historia_medica/new.html.twig', [
                             'historia_medica' => $historiaMedica,
                             'editar'          => $editar,
@@ -263,11 +263,11 @@ class HistoriaMedicaController extends AbstractController
                         ]);
                 }
 
-                $this->addFlash('success', 'Historia Medica añadida con éxito');
+                $this->addFlash('success', 'Historia Médica añadida con éxito');
                 return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
             }
         }else{
-            $this->addFlash('fail', 'Error, no se puede registrar historias medicas diferentes por favor modifique el registro ya ingresado');
+            $this->addFlash('fail', 'Error, no se puede registrar historias médicas diferentes por favor modifique el registro ya ingresado');
             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
         }
         
@@ -296,7 +296,7 @@ class HistoriaMedicaController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Historia Medica modificada con éxito');
+                        $this->addFlash('success', 'Historia Médica modificada con éxito');
                         return $this->redirectToRoute('historia_medica_index', [
                             'citum' => $citum->getId(),
                         ]);
@@ -324,7 +324,7 @@ class HistoriaMedicaController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Historia Medica modificada con éxito');
+            $this->addFlash('success', 'Historia Médica modificada con éxito');
             return $this->redirectToRoute('historia_medica_index', [
                 'citum' => $citum->getId(),
             ]);
@@ -354,7 +354,7 @@ class HistoriaMedicaController extends AbstractController
                         $entityManager->remove($historiaMedica);
                         $entityManager->flush();
                     }
-                    $this->addFlash('success', 'Historia Medica eliminada con éxito');
+                    $this->addFlash('success', 'Historia Médica eliminada con éxito');
                     return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
                 }else{
                     $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -371,7 +371,7 @@ class HistoriaMedicaController extends AbstractController
                 $entityManager->remove($historiaMedica);
                 $entityManager->flush();
             }
-            $this->addFlash('success', 'Historia Medica eliminada con éxito');
+            $this->addFlash('success', 'Historia Médica eliminada con éxito');
             return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
         }else{
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
