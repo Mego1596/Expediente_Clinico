@@ -3,143 +3,172 @@
 {% block title %}Expediente{% endblock %}
 
 {% block body %}
-    <h1>Detalles del expediente</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ expediente.id }}</td>
-            </tr>
-            <tr>
-                <th>NumeroExpediente</th>
-                <td>{{ expediente.numeroExpediente }}</td>
-            </tr>
-            <tr>
-                <th>FechaNacimiento</th>
-                <td>{{ expediente.fechaNacimiento ? expediente.fechaNacimiento|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Direccion</th>
-                <td>{{ expediente.direccion }}</td>
-            </tr>
-            <tr>
-                <th>Telefono</th>
-                <td>{{ expediente.telefono }}</td>
-            </tr>
-            <tr>
-                <th>ApellidoCasada</th>
-                <td>{{ expediente.apellidoCasada }}</td>
-            </tr>
-            <tr>
-                <th>EstadoCivil</th>
-                <td>{{ expediente.estadoCivil }}</td>
-            </tr>
-            <tr>
-                <td>CARGAR LOS HISTORIALES CLINICOS DE LA PERSONA AQUI</td>
-                <td>CARGAR EL FAMILIAR RESPONSABLE SI LO TIENE AQUI</td>
-            </tr>
-            
-        </tbody>
-    </table>
-
-{%if (is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')) %}
-    <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
-{% endif %}
-{% if(is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')) %}
-<a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id}) }}">Editar</a>
-{% endif %}
-{% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
-<a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id}) }}">Ver / Crear Cita</a>
-{% endif %}
-{% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
-<a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id}) }}">Registrar Historial</a>
-{% endif %}
-{% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
-<a class="btn btn-success" href="{{ path('familiar_index', {'expediente': expediente.id}) }}">Registrar Familiar</a>
-{% endif %}
-{% if ingresado == null %}
-    {% if (is_granted('ROLE_PERMISSION_NEW_INGRESADO')) %}
-        <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#ModalIngreso" onclick="autocargado('{{expediente.id}}')">
-          Ingresar
-        </button>
-        <div class="modal fade" id="ModalIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-fw fa-procedures"></i>Ingresar expediente</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <form method="POST" action="{{path('ingresado_new',{'expediente': expediente.id})}}">
-                        <div class="modal-body" align="center">
-                        expediente:
-                        {{expediente.getUsuario().getPersona().getPrimerNombre()}} {{expediente.getUsuario().getPersona().getSegundoNombre()}} {{expediente.getUsuario().getPersona().getPrimerApellido()}} {{expediente.getUsuario().getPersona().getSegundoApellido()}}
-                        <br/>
-                         {# the argument of csrf_token() is an arbitrary string used to generate the token #}
-                            <input type="hidden" name="_token" value="{{ csrf_token('create-item') }}"/>
-                            <div class="row" style="text-align: center;color: black">
-                                <div class="" id="mensaje" style="width: 100%">
-                                    <p id="paragraph"></p>
-                                </div>
-                                <div class="" id="mensaje2" style="width: 100%">
-                                    <p id="paragraph2"></p>
-                                </div>
-                                <div class="" id="mensaje3" style="width: 100%">
-                                    <p id="paragraph3"></p>
-                                </div>
-                                <div class="" id="mensaje4" style="width: 100%">
-                                    <p id="paragraph4"></p>
-                                </div>
-                                <div class="" id="mensaje5" style="width: 100%">
-                                    <p id="paragraph5"></p>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="sala"  id="labelSala">Salas:</label>
-                                    <select id="sala" name="sala" class="form-control">
-                                        <option value="">Seleccione una sala</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="habitacion" id="labelHabitacion" style="display: none">Habitaciones Disponibles:</label>
-                                    <select id="habitacion" name="habitacion" class="form-control" style="display: none">
-                                        <option value="">Seleccione una habitacion</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="camilla" id="labelCamilla" style="display: none">Camillas Disponibles:</label>
-                                    <select id="camilla" name="camilla" class="form-control" style="display: none">
-                                        <option value="">Seleccione una camilla</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="emergencia" id="labelEmergencia" style="display: none">Emergencia:</label>
-                                    <select id="emergencia" name="emergencia" class="form-control" style="display: none">
-                                        <option value="">Seleccione un estado</option>
-                                        <option value="1">Si</option>
-                                        <option value="0">No</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-12">
-                                    <label for="user" id="labelDoctor" style="display: none">Doctores Disponibles:</label>
-                                    <select id="user" name="user" class="form-control" style="display: none">
-                                        <option value="">Seleccione un doctor</option>
-                                    </select>
+  
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles del expediente del paciente: {{ expediente.nombre_completo }}</h4> 
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" id="limpiar" class="btn btn-secondary" data-dismiss="modal" onclick="limpiarModal()">Cancelar</button>
-                            <button type="submit" class="btn btn-outline-success">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
-    {% endif %}
-{% endif %}
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+
+                            <tr>
+                                <th>Numero de expediente</th>
+                                <td>{{ expediente.numero_expediente }}</td>
+                            </tr>
+                            <tr>
+                                <th>Edad</th>
+                                <td>{{ expediente.edad_expediente}}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de Nacimiento (Año-Mes-Dia)</th>
+                                <td>{{ expediente.fecha_nacimiento_expediente ? expediente.fecha_nacimiento_expediente|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Direccion</th>
+                                <td>{{ expediente.direccion_expediente }}</td>
+                            </tr>
+                            <tr>
+                                <th>Telefono</th>
+                                <td>{{ expediente.telefono_expediente }}</td>
+                            </tr>
+                            <tr>
+                                <th>Apellido de Casada</th>
+                                <td>{{ expediente.apellido_casada_expediente }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estado Civil</th>
+                                <td>{{ expediente.estado_civil_expediete }}</td>
+                            </tr>
+                            <tr>
+                                <th>Historial propio del paciente</th>
+                                <td>{% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
+                                    <a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id_expediente}) }}">Ver</a>
+                                    {% endif %}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Familiares del paciente</th>
+                                <td>
+                                    {% if(is_granted('ROLE_PERMISSION_INDEX_FAMILIAR')) %}
+                                        <a class="btn btn-success" href="{{ path('familiar_index', {'expediente': expediente.id_expediente}) }}">Ver</a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+            </div>
+                    
+            {%if (is_granted('ROLE_PERMISSION_INDEX_EXPEDIENTE')) %}
+                <a class="btn btn-secondary" href="{{ path('expediente_index') }}">Atras</a>
+            {% endif %}
+            {% if(is_granted('ROLE_PERMISSION_EDIT_EXPEDIENTE')) %}
+            <a class="btn btn-primary" href="{{ path('expediente_edit', {'id': expediente.id_expediente}) }}">Editar</a>
+            {% endif %}
+            {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
+            <a class="btn btn-success" href="{{ path('cita_index', {'expediente': expediente.id_expediente}) }}">Ver / Crear Cita</a>
+            {% endif %}
+            {% if user.getUser().getRol().getNombreRol() != 'ROLE_PACIENTE' %}
+                {% if is_granted('ROLE_PERMISSION_NEW_HISTORIAL_PROPIO') %}
+                    <a class="btn btn-success" href="{{path('historial_propio_new',{'expediente': expediente.id_expediente})}}">Registrar Historial</a>
+                {% endif %}
+            {% endif %}
+            {% if user.getUser().getRol().getNombreRol() != 'ROLE_PACIENTE' %}
+                {% if is_granted('ROLE_PERMISSION_NEW_FAMILIAR') %}
+                    <a class="btn btn-success" href="{{path('familiar_new',{'expediente': expediente.id_expediente})}}"> Registrar Familiar</a>
+                {% endif %}
+            {% endif %}
+
+            {% if ingresado == null %}
+                {% if (is_granted('ROLE_PERMISSION_NEW_INGRESADO')) %}
+                    <button type="button" class="btn btn-secondary bg-dark" data-toggle="modal" data-target="#ModalIngreso" onclick="autocargado('{{expediente.id_expediente}}')">
+                      Ingresar
+                    </button>
+                    <div class="modal fade" id="ModalIngreso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel"><i class="fas fa-fw fa-procedures"></i>Ingresar Paciente</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form method="POST" action="{{path('ingresado_new',{'expediente': expediente.id_expediente})}}">
+                                    <div class="modal-body" align="center">
+                                    Expediente del paciente:
+                                    {{expediente.nombre_completo}}
+                                    <br/>
+                                     {# the argument of csrf_token() is an arbitrary string used to generate the token #}
+                                        <input type="hidden" name="_token" value="{{ csrf_token('create-item') }}"/>
+                                        <div class="row" style="text-align: center;color: black">
+                                            <div class="" id="mensaje" style="width: 100%">
+                                                <p id="paragraph"></p>
+                                            </div>
+                                            <div class="" id="mensaje2" style="width: 100%">
+                                                <p id="paragraph2"></p>
+                                            </div>
+                                            <div class="" id="mensaje3" style="width: 100%">
+                                                <p id="paragraph3"></p>
+                                            </div>
+                                            <div class="" id="mensaje4" style="width: 100%">
+                                                <p id="paragraph4"></p>
+                                            </div>
+                                            <div class="" id="mensaje5" style="width: 100%">
+                                                <p id="paragraph5"></p>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="sala"  id="labelSala">Salas:</label>
+                                                <select id="sala" name="sala" class="form-control">
+                                                    <option value="">Seleccione una sala</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="habitacion" id="labelHabitacion" style="display: none">Habitaciones Disponibles:</label>
+                                                <select id="habitacion" name="habitacion" class="form-control" style="display: none">
+                                                    <option value="">Seleccione una habitacion</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="camilla" id="labelCamilla" style="display: none">Camillas Disponibles:</label>
+                                                <select id="camilla" name="camilla" class="form-control" style="display: none">
+                                                    <option value="">Seleccione una camilla</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="emergencia" id="labelEmergencia" style="display: none">Emergencia:</label>
+                                                <select id="emergencia" name="emergencia" class="form-control" style="display: none">
+                                                    <option value="">Seleccione un estado</option>
+                                                    <option value="1">Si</option>
+                                                    <option value="0">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="user" id="labelDoctor" style="display: none">Doctores Disponibles:</label>
+                                                <select id="user" name="user" class="form-control" style="display: none">
+                                                    <option value="">Seleccione un doctor</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" id="limpiar" class="btn btn-secondary" data-dismiss="modal" onclick="limpiarModal()">Cancelar</button>
+                                        <button type="submit" class="btn btn-outline-success">Guardar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+</div>
 {% endblock %}
+
 
 {% block javascripts %}
 <!-- ESTE SCRIPT ES QUE CARGA LAS SALAS DE LA CLINICA A LA QUE PERTENECE EL PACIENTE -->

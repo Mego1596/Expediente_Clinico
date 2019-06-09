@@ -95,6 +95,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                            {%if (is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')) %}
+                                <a class="btn btn-secondary" href="{{ path('expediente_show', {'id':expediente.getId()} ) }}">Atras</a>
+                            {% endif %}  
                         </div>
                     </div>
                 </div>
