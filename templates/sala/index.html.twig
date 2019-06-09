@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Salas
+                            <h4>Salas de la Clinica: {{clinica.getnombreClinica}}</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -82,6 +82,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if(is_granted('ROLE_PERMISSION_SHOW_CLINICA')) %}
+                                <a class="btn btn-secondary" href="{{ path('clinica_show', {'id': clinica.id} )}}">Atrás</a>
+                                {% endif %}
                         </div>
                     </div>
                 </div>

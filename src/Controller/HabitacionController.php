@@ -39,7 +39,7 @@ class HabitacionController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
                 $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY = "SELECT h.*, s.nombre_sala FROM habitacion as h, sala as s, clinica as c WHERE
+                $RAW_QUERY = "SELECT h.*, s.nombre_sala as nombre_sala FROM habitacion as h, sala as s, clinica as c WHERE
                 h.sala_id = s.id AND s.clinica_id = c.id AND 
                 c.id = ".$clinica->getId().";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);

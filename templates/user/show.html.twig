@@ -1,30 +1,45 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Detalles del Usuario:{% endblock %}
+{% block title %}Detalles del Usuario{% endblock %}
 
 {% block body %}
-<h4>Detalles del Usuario: {{persona.nombre_completo}} </h4>
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Rol</th>
-                <td>{{ persona.nombre_rol }}</td>
-            </tr>
 
-            <tr>
-                <th>Clinica</th>
-                <td>{{ persona.nombre_clinica }}</td>
-            </tr>
-        </tbody>
-    </table>
-    {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
-    <a class="btn btn-secondary" href="{{ path('user_index') }}">Atrás</a>
-    {% endif %}
-    {% if(is_granted('ROLE_PERMISSION_EDIT_USER')) %}
-    <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">Editar</a>
-    {% endif %}
+    <div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles del Usuario: {{persona.nombre_completo}} </h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Email</th>
+                                <td>{{ user.email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Rol</th>
+                                <td>{{ persona.nombre_rol }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Clinica</th>
+                                <td>{{ persona.nombre_clinica }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+                    {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
+                    <a class="btn btn-secondary" href="{{ path('user_index') }}">Atrás</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_USER')) %}
+                    <a class="btn btn-primary" href="{{ path('user_edit', {'id': user.id}) }}">Editar</a>
+                    {% endif %}
+        </div>
+
+    </div>
+    
 {% endblock %}
