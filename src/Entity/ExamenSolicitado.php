@@ -84,12 +84,12 @@ class ExamenSolicitado
     private $cita;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ExamenHematologico", mappedBy="examen_solicitado")
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenHematologico", mappedBy="examen_solicitado",orphanRemoval=true)
      */
     private $examenHematologicos;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ExamenQuimicaSanguinea", mappedBy="examen_solicitado")
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenQuimicaSanguinea", mappedBy="examen_solicitado", orphanRemoval=true)
      */
     private $examenQuimicaSanguineas;
 

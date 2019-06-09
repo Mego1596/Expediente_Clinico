@@ -98,7 +98,7 @@ final class Version20190607030751 extends AbstractMigration
         
         $this->addSql('ALTER TABLE examen_heces_quimico ADD CONSTRAINT FK_EXAMEN_SOLICITADO_4 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
         
-        $this->addSql('ALTER TABLE examen_hematologico ADD CONSTRAINT FK_EXAMEN_SOLICITADO_5 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
+        $this->addSql('ALTER TABLE examen_hematologico ADD CONSTRAINT FK_EXAMEN_SOLICITADO_5 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id) ON DELETE CASCADE');
         
         $this->addSql('ALTER TABLE examen_orina_cristaluria ADD CONSTRAINT FK_EXAMEN_SOLICITADO_6 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
         
@@ -108,7 +108,7 @@ final class Version20190607030751 extends AbstractMigration
         
         $this->addSql('ALTER TABLE examen_orina_quimico ADD CONSTRAINT FK_EXAMEN_SOLICITADO_9 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
         
-        $this->addSql('ALTER TABLE examen_quimica_sanguinea ADD CONSTRAINT FK_EXAMEN_SOLICITADO_10 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
+        $this->addSql('ALTER TABLE examen_quimica_sanguinea ADD CONSTRAINT FK_EXAMEN_SOLICITADO_10 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id) ON DELETE CASCADE');
 
         $this->addSql('ALTER TABLE camilla ADD CONSTRAINT FK_HABITACION_1 FOREIGN KEY (habitacion_id) REFERENCES habitacion (id)');
 
@@ -137,7 +137,7 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('ALTER TABLE historial_propio ADD CONSTRAINT FK_EXPEDIENTE_3 FOREIGN KEY (expediente_id) REFERENCES expediente (id)');
         $this->addSql('ALTER TABLE ingresado ADD CONSTRAINT FK_EXPEDIENTE_4 FOREIGN KEY (expediente_id) REFERENCES expediente (id)');
 
-        $this->addSql('ALTER TABLE examen_solicitado ADD CONSTRAINT FK_CITA_1 FOREIGN KEY (cita_id) REFERENCES cita (id)');
+        $this->addSql('ALTER TABLE examen_solicitado ADD CONSTRAINT FK_CITA_1 FOREIGN KEY (cita_id) REFERENCES cita (id) ON DELETE CASCADE');
         
         $this->addSql('ALTER TABLE historia_medica ADD CONSTRAINT FK_CITA_2 FOREIGN KEY (cita_id) REFERENCES cita (id)');
 

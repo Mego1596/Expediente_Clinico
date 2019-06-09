@@ -214,7 +214,6 @@ class HistoriaMedicaController extends AbstractController
                                         $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
                                         $historiaMedica->setSignos($form["signos"]->getData());
                                         $historiaMedica->setSintomas($form["sintomas"]->getData());
-                                        dd($form["diagnostico"]->getData()->getCodigoCategoria());
                                         $historiaMedica->setCodigoEspecifico($form["codigoEspecifico"]->getData());
                                         $entityManager->persist($historiaMedica);
                                         $entityManager->flush();

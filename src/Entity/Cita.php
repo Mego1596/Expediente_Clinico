@@ -66,7 +66,7 @@ class Cita
     private $fechaFin=null;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\ExamenSolicitado", mappedBy="cita")
+     * @ORM\OneToMany(targetEntity="App\Entity\ExamenSolicitado", mappedBy="cita",cascade={"persist", "remove"})
      */
     private $examenes;
 
