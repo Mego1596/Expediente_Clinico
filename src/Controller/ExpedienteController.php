@@ -40,10 +40,10 @@ class ExpedienteController extends AbstractController
     {
         $em = $this->getDoctrine()->getManager();
         if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND p.id = u.persona_id;';
+            $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id as id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND p.id = u.persona_id;';
 
         }else{
-             $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c, `persona` as p WHERE u.id = e.usuario_id AND p.id = u.persona_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
+             $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id as id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c, `persona` as p WHERE u.id = e.usuario_id AND p.id = u.persona_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
         }
        
 
@@ -305,7 +305,7 @@ class ExpedienteController extends AbstractController
                                         //GENERACION DE VISTA AL CREAR UN PACIENTE CON EXITO PARA EL SHOW
                                         $conn = $entityManager->getConnection();
                                         $sql='CREATE VIEW expediente_paciente_'.$expediente->getId().' AS
-                                        SELECT ex.id as id_expediente,DATE(ex.fecha_nacimiento) as fecha_nacimiento_expediente, ( SELECT getEdad('.$expediente->getId().') ) as edad_expediente, ex.direccion as direccion_expediente,ex.estado_civil as estado_civil_expediete,ex.apellido_casada as apellido_casada_expediente, ex.numero_expediente as numero_expediente,ex.telefono as telefono_expediente, gen.descripcion as genero, u.email as correo_electronico, CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido, " ") ) as nombre_completo
+                                        SELECT ex.id as id_expediente,DATE(ex.fecha_nacimiento) as fecha_nacimiento_expediente, ( SELECT getEdad('.$expediente->getId().') ) as edad_expediente, ex.direccion as direccion_expediente,ex.estado_civil as estado_civil_expediete,ex.apellido_casada as apellido_casada_expediente, ex.creado_en as creado, ex.actualizado_en as actualizado, ex.numero_expediente as numero_expediente,ex.telefono as telefono_expediente, gen.descripcion as genero, u.email as correo_electronico, CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido, " ") ) as nombre_completo
                                         FROM expediente as ex,genero as gen, user as u, persona as p
                                         WHERE 
                                         ex.genero_id = gen.id       AND
@@ -500,14 +500,34 @@ class ExpedienteController extends AbstractController
                                 if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                                     $entityManager = $this->getDoctrine()->getManager();
                                     $user = $expediente->getUsuario();
+
+
+                                    $persona->setPrimerNombre('primerNombre');
+                                    $persona->setSegundoNombre('segundoNombre');
+                                    $entityManager->persist($persona);
+                                    $entityManager->flush();
+
                                     $persona->setPrimerNombre($request->request->get('primerNombre'));
                                     $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                                    $user->setEmail('correo');
+                                    $entityManager->persist($user);
+                                    $entityManager->flush();
+
                                     $user->setEmail($form["email"]->getData());
                                     $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
                                     $entityManager->persist($persona);
                                     $entityManager->flush();
                                     $entityManager->persist($user);
                                     $entityManager->flush();
+
+                                    $expediente->setDireccion("santaana");
+                                    $entityManager->persist($expediente);
+                                    $entityManager->flush();
+
                                     $expediente->setGenero($form["genero"]->getData());
                                     $expediente->setDireccion($form["direccion"]->getData());
                                     $expediente->setTelefono($form["telefono"]->getData());
@@ -529,13 +549,34 @@ class ExpedienteController extends AbstractController
                             }else{
                                 $entityManager = $this->getDoctrine()->getManager();
                                 $user = $expediente->getUsuario();
+
+
+                                $persona->setPrimerNombre('primerNombre');
+                                $persona->setSegundoNombre('segundoNombre');
+                                $entityManager->persist($persona);
+                                $entityManager->flush();
+
                                 $persona->setPrimerNombre($request->request->get('primerNombre'));
                                 $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                                $user->setEmail('correo');
+                                $entityManager->persist($user);
+                                $entityManager->flush();
+
                                 $user->setEmail($form["email"]->getData());
+                                $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
                                 $entityManager->persist($persona);
                                 $entityManager->flush();
                                 $entityManager->persist($user);
                                 $entityManager->flush();
+
+                                $expediente->setDireccion("santaana");
+                                $entityManager->persist($expediente);
+                                $entityManager->flush();
+
                                 $expediente->setGenero($form["genero"]->getData());
                                 $expediente->setDireccion($form["direccion"]->getData());
                                 $expediente->setTelefono($form["telefono"]->getData());
@@ -598,13 +639,31 @@ class ExpedienteController extends AbstractController
                         if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                             $entityManager = $this->getDoctrine()->getManager();
                             $user = $expediente->getUsuario();
+
+                            $persona->setPrimerNombre('primerNombre');
+                            $persona->setSegundoNombre('segundoNombre');
+                            $entityManager->persist($persona);
+                            $entityManager->flush();
+
                             $persona->setPrimerNombre($request->request->get('primerNombre'));
                             $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                            $user->setEmail('correo');
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+
                             $user->setEmail($form["email"]->getData());
                             $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
                             $entityManager->persist($persona);
                             $entityManager->flush();
                             $entityManager->persist($user);
+                            $entityManager->flush();
+
+                            $expediente->setDireccion("santaana");
+                            $entityManager->persist($expediente);
                             $entityManager->flush();
 
                             $expediente->setGenero($form["genero"]->getData());
@@ -628,13 +687,33 @@ class ExpedienteController extends AbstractController
                     }else{
                         $entityManager = $this->getDoctrine()->getManager();
                         $user = $expediente->getUsuario();
+
+                        $persona->setPrimerNombre('primerNombre');
+                        $persona->setSegundoNombre('segundoNombre');
+                        $entityManager->persist($persona);
+                        $entityManager->flush();
+
                         $persona->setPrimerNombre($request->request->get('primerNombre'));
                         $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                        $user->setEmail('correo');
+                        $entityManager->persist($user);
+                        $entityManager->flush();
+
                         $user->setEmail($form["email"]->getData());
+                        $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
                         $entityManager->persist($persona);
                         $entityManager->flush();
                         $entityManager->persist($user);
                         $entityManager->flush();
+
+                        $expediente->setDireccion("santaana");
+                        $entityManager->persist($expediente);
+                        $entityManager->flush();
+
                         $expediente->setGenero($form["genero"]->getData());
                         $expediente->setDireccion($form["direccion"]->getData());
                         $expediente->setTelefono($form["telefono"]->getData());

@@ -46,6 +46,15 @@
                                 <td>{{ expediente.estado_civil_expediete }}</td>
                             </tr>
                             <tr>
+                                <th>Expediente creado:</th>
+                                <td>{{ expediente.creado }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ultima Actualizacion:</th>
+                                <td>{{ expediente.actualizado}}</td>
+                            </tr>
+
+                            <tr>
                                 <th>Historial propio del paciente</th>
                                 <td>{% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
                                     <a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id_expediente}) }}">Ver</a>
