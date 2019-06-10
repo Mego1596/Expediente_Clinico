@@ -51,7 +51,7 @@ class GeneroController extends AbstractController
                 $entityManager->persist($genero);
                 $entityManager->flush();
             }else{
-                $this->addFlash('fail', 'El nombre del género no puede estar vacio');
+                $this->addFlash('fail', 'El nombre del género no puede estar vacío');
                 return $this->render('genero/new.html.twig', [
                     'especialidad' => $genero,
                     'editar' => $editar,

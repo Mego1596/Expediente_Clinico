@@ -91,7 +91,7 @@ class HistorialFamiliarController extends AbstractController
                             $entityManager->persist($historialFamiliar);
                             $entityManager->flush();
                         }else{
-                            $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                            $this->addFlash('fail', 'Error, el campo de la descripción no puede ir vacía');
                             return $this->render('historial_familiar/new.html.twig', [
                                 'historial_familiar'  => $historialFamiliar,
                                 'familiar'          => $familiar,
@@ -133,7 +133,7 @@ class HistorialFamiliarController extends AbstractController
                     $entityManager->persist($historialFamiliar);
                     $entityManager->flush();
                 }else{
-                    $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                    $this->addFlash('fail', 'Error, el campo de la descripción no puede ir vacía');
                     return $this->render('historial_familiar/new.html.twig', [
                         'historial_familiar'  => $historialFamiliar,
                         'familiar'          => $familiar,

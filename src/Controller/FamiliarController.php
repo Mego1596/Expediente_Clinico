@@ -126,7 +126,7 @@ class FamiliarController extends AbstractController
                                                 $entityManager->flush();
                                             }
                                         }else{
-                                            $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacio');
+                                            $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacío');
                                             return $this->render('familiar/new.html.twig', [
                                                 'familiar' => $familiar,
                                                 'expediente' => $expediente,
@@ -135,7 +135,7 @@ class FamiliarController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacio');
+                                        $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacío');
                                         return $this->render('familiar/new.html.twig', [
                                             'familiar' => $familiar,
                                             'expediente' => $expediente,
@@ -144,7 +144,7 @@ class FamiliarController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacio');
+                                    $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacío');
                                     return $this->render('familiar/new.html.twig', [
                                         'familiar' => $familiar,
                                         'expediente' => $expediente,
@@ -153,7 +153,7 @@ class FamiliarController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacios');
+                                $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacíos');
                                 return $this->render('familiar/new.html.twig', [
                                     'familiar' => $familiar,
                                     'expediente' => $expediente,
@@ -162,7 +162,7 @@ class FamiliarController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacios');
+                            $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacíos');
                             return $this->render('familiar/new.html.twig', [
                                 'familiar' => $familiar,
                                 'expediente' => $expediente,
@@ -231,7 +231,7 @@ class FamiliarController extends AbstractController
                                         $entityManager->flush();
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacio');
+                                    $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacío');
                                     return $this->render('familiar/new.html.twig', [
                                         'familiar' => $familiar,
                                         'expediente' => $expediente,
@@ -240,7 +240,7 @@ class FamiliarController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacio');
+                                $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacío');
                                 return $this->render('familiar/new.html.twig', [
                                     'familiar' => $familiar,
                                     'expediente' => $expediente,
@@ -249,7 +249,7 @@ class FamiliarController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacio');
+                            $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacío');
                             return $this->render('familiar/new.html.twig', [
                                 'familiar' => $familiar,
                                 'expediente' => $expediente,
@@ -258,7 +258,7 @@ class FamiliarController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacios');
+                        $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacíos');
                         return $this->render('familiar/new.html.twig', [
                             'familiar' => $familiar,
                             'expediente' => $expediente,
@@ -267,7 +267,7 @@ class FamiliarController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacios');
+                    $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacíos');
                     return $this->render('familiar/new.html.twig', [
                         'familiar' => $familiar,
                         'expediente' => $expediente,

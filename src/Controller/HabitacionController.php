@@ -120,7 +120,7 @@ class HabitacionController extends AbstractController
                                         $entityManager->flush();
                                         //FIN DE PROCESO DE DATOS
                                     }else{
-                                        $this->addFlash('fail', 'Error, el número de habitación no puede estar vacio');
+                                        $this->addFlash('fail', 'Error, el número de habitación no puede estar vacío');
                                         return $this->render('habitacion/new.html.twig', [
                                             'habitacion' => $habitacion,
                                             'editar'    => $editar,
@@ -129,7 +129,7 @@ class HabitacionController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacio');
+                                    $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacío');
                                     return $this->render('habitacion/new.html.twig', [
                                         'habitacion' => $habitacion,
                                         'editar'    => $editar,
@@ -138,7 +138,7 @@ class HabitacionController extends AbstractController
                                     ]); 
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
+                                $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacía');
                                 return $this->render('habitacion/new.html.twig', [
                                     'habitacion' => $habitacion,
                                     'editar'    => $editar,
@@ -162,7 +162,7 @@ class HabitacionController extends AbstractController
                         $this->addFlash('success','Habitación añadida con éxito');
                         return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
                     }else{
-                        $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
+                        $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacía');
                         return $this->render('habitacion/new.html.twig', [
                             'habitacion' => $habitacion,
                             'editar'    => $editar,
@@ -224,7 +224,7 @@ class HabitacionController extends AbstractController
                                 $entityManager->flush();
                                 //FIN DE PROCESO DE DATOS
                             }else{
-                                $this->addFlash('fail', 'Error, el número de habitación no puede estar vacio');
+                                $this->addFlash('fail', 'Error, el número de habitación no puede estar vacío');
                                 return $this->render('habitacion/new.html.twig', [
                                     'habitacion' => $habitacion,
                                     'editar'    => $editar,
@@ -233,7 +233,7 @@ class HabitacionController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacio');
+                            $this->addFlash('fail', 'Error, por favor elija un tipo de habitación, no puede estar vacío');
                             return $this->render('habitacion/new.html.twig', [
                                 'habitacion' => $habitacion,
                                 'editar'    => $editar,
@@ -242,7 +242,7 @@ class HabitacionController extends AbstractController
                             ]); 
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
+                        $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacía');
                         return $this->render('habitacion/new.html.twig', [
                             'habitacion' => $habitacion,
                             'editar'    => $editar,
@@ -266,7 +266,7 @@ class HabitacionController extends AbstractController
                 $this->addFlash('success','Habitación añadida con éxito');
                 return $this->redirectToRoute('habitacion_index',['clinica' => $clinica->getId()]);
             }else{
-                $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacia');
+                $this->addFlash('fail', 'Error, por favor elija una sala, no puede estar vacía');
                 return $this->render('habitacion/new.html.twig', [
                     'habitacion' => $habitacion,
                     'editar'    => $editar,

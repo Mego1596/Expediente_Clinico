@@ -92,7 +92,7 @@ class HistorialPropioController extends AbstractController
                             $entityManager->persist($historialPropio);
                             $entityManager->flush();
                         }else{
-                            $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                            $this->addFlash('fail', 'Error, el campo de la descripción no puede ir vacía');
                             return $this->render('historial_propio/new.html.twig', [
                                 'historial_propio' => $historialPropio,
                                 'expediente' => $expediente,
@@ -133,7 +133,7 @@ class HistorialPropioController extends AbstractController
                     $entityManager->persist($historialPropio);
                     $entityManager->flush();
                 }else{
-                    $this->addFlash('fail', 'Error, el campo de la descripcion no puede ir vacia');
+                    $this->addFlash('fail', 'Error, el campo de la descripción no puede ir vacía');
                     return $this->render('historial_propio/new.html.twig', [
                         'historial_propio' => $historialPropio,
                         'expediente' => $expediente,
