@@ -293,11 +293,24 @@ class HabitacionController extends AbstractController
      */
     public function show(Habitacion $habitacion, Clinica $clinica, Security $AuthUser): Response
     {
+
+        $conn = $this->getDoctrine()->getManager()->getConnection();           
+        $sql = 'SELECT h.*, s.nombre_sala as nombre_sala, tp.tipo_habitacion as tipo_habitacion FROM habitacion as h, sala as s, clinica as c, tipo_habitacion as tp WHERE
+                h.sala_id = s.id                AND 
+                s.clinica_id = c.id             AND
+                tp.id = h.tipo_habitacion_id    AND
+                c.id =  :expediente             AND
+                h.id =  :habitacion';
+        $stmt = $conn->prepare($sql); 
+        $stmt->execute(array('expediente' => $clinica->getId(), 'habitacion' => $habitacion->getId()));
+        $result= $stmt->fetch();
+        
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() ){
+
                 return $this->render('habitacion/show.html.twig', [
-                    'habitacion' => $habitacion,
+                    'habitacion' => $result,
                     'clinica'   =>$clinica,
                 ]);       
             }else{
@@ -306,7 +319,7 @@ class HabitacionController extends AbstractController
             }
         }
         return $this->render('habitacion/show.html.twig', [
-            'habitacion' => $habitacion,
+            'habitacion' => $result,
             'clinica'   =>$clinica,
         ]);  
     }

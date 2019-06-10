@@ -3,28 +3,61 @@
 {% block title %}Habitacion{% endblock %}
 
 {% block body %}
-    <h1>Habitacion</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ habitacion.id }}</td>
-            </tr>
-            <tr>
-                <th>NumeroHabitacion</th>
-                <td>{{ habitacion.numeroHabitacion }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles de la Habitacion</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Numero de Habitacion:</th>
+                            <td>{{ habitacion.numero_habitacion}}</td>
+                            
+                        </tr>
+                        <tr>
+                            <th>Sala:</th>
+                            <td>{{ habitacion.nombre_sala}}</td>
+                        </tr>
+                        <tr>
+                            <th>Tipo de habitacion:</th>
+                            <td>{{ habitacion.tipo_habitacion}}</td>
+                        </tr>
+                        <tr>
+                            <th>Clinica:</th>
+                            <td>{{ clinica.nombreClinica}}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de creacion:</th>
+                            <td>{{ habitacion.creado_en}}</td>
+                        </tr>
+                        <tr>
+                            <th>Ultima Actualizacion:</th>
+                            <td>{{ habitacion.actualizado_en}}</td>
+                        </tr>
 
-    {%if (is_granted('ROLE_PERMISSION_INDEX_HABITACION')) %}
-      <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
-    {% endif %}
-    {% if(is_granted('ROLE_PERMISSION_EDIT_HABITACION')) %}
-        <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
-    {% endif %}
-    {% if is_granted('ROLE_PERMISSION_INDEX_CAMILLA')%}
-        <a class="btn btn-success" href="{{path('camilla_index', {'habitacion':habitacion.id} )}}">Asignar Camillas</a>
-    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+                    {%if (is_granted('ROLE_PERMISSION_INDEX_HABITACION')) %}
+                        <a class="btn btn-secondary" href="{{ path('habitacion_index',{'clinica':clinica.id}) }}">Atras</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_HABITACION')) %}
+                        <a class="btn btn-primary" href="{{ path('habitacion_edit', {'id': habitacion.id,'clinica':clinica.id}) }}">Editar</a>
+                    {% endif %}
+                    {% if is_granted('ROLE_PERMISSION_INDEX_CAMILLA')%}
+                        <a class="btn btn-success" href="{{path('camilla_index', {'habitacion':habitacion.id} )}}">Asignar Camillas</a>
+                    {% endif %}
+        </div>
+
+</div>
+
+
+    
 {% endblock %}

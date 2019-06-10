@@ -3,32 +3,51 @@
 {% block title %}Sala{% endblock %}
 
 {% block body %}
-    <h1>Sala</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ sala.id }}</td>
-            </tr>
-            <tr>
-                <th>NombreSala</th>
-                <td>{{ sala.nombreSala }}</td>
-            </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ sala.creadoEn ? sala.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ sala.actualizadoEn ? sala.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-{%if (is_granted('ROLE_PERMISSION_INDEX_SALA')) %}
-    <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
-{% endif %}
-{% if(is_granted('ROLE_PERMISSION_EDIT_SALA')) %}
-    <a class="btn btn-primary" href="{{ path('sala_edit', {'id':sala.id,'clinica': clinica.id}) }}">Editar</a>
-{% endif %}
+
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles de la Sala</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Nombre de Sala:</th>
+                                <td>{{ sala.nombreSala }}</td>
+                            </tr>
+                            <tr>
+                                <th>Clinica:</th>
+                                <td>{{ clinica.nombreClinica }}</td>
+                            </tr>
+                            <tr>
+                                <th>Expediente creado: (Año-Mes-Dia) </th>
+                                <td>{{ sala.creadoEn ? sala.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ultima Actualizacion: (Año-Mes-Dia)</th>
+                                <td>{{ sala.actualizadoEn ? sala.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+                    {%if (is_granted('ROLE_PERMISSION_INDEX_SALA')) %}
+                        <a class="btn btn-secondary" href="{{ path('sala_index',{'clinica':clinica.id}) }}">Atras</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_SALA')) %}
+                        <a class="btn btn-primary" href="{{ path('sala_edit', {'id':sala.id,'clinica': clinica.id}) }}">Editar</a>
+                    {% endif %}
+        </div>
+
+</div>
+
+
+
+    
+
 {% endblock %}

@@ -36,6 +36,7 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId()){
+                
                 $em = $this->getDoctrine()->getManager();
                 $RAW_QUERY = "SELECT * FROM camilla WHERE habitacion_id = ".$habitacion->getId().";";
                 $statement = $em->getConnection()->prepare($RAW_QUERY);
@@ -52,6 +53,7 @@ class CamillaController extends AbstractController
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
         }
+        
         $em = $this->getDoctrine()->getManager();
         $RAW_QUERY = "SELECT * FROM camilla WHERE habitacion_id = ".$habitacion->getId().";";
         $statement = $em->getConnection()->prepare($RAW_QUERY);
@@ -203,12 +205,22 @@ class CamillaController extends AbstractController
      */
     public function show(Camilla $camilla, Habitacion $habitacion,Security $AuthUser): Response
     {
+        
+        $conn = $this->getDoctrine()->getManager()->getConnection();           
+        $sql = 'SELECT ca.habitacion_id as habitacion_id, c.nombre_clinica as nombre_clinica, s.nombre_sala as nombre_sala, h.numero_habitacion as numero_habitacion FROM camilla as ca, habitacion as h, sala as s, clinica as c
+                WHERE ca.habitacion_id = h.id AND
+                h.sala_id = s.id              AND
+                s.clinica_id = c.id           AND
+                h.id =  :habitacion';
+        $stmt = $conn->prepare($sql); 
+        $stmt->execute(array('habitacion' => $habitacion->getId()));
+        $result= $stmt->fetch();
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
                 return $this->render('camilla/show.html.twig', [
                     'camilla' => $camilla,
-                    'habitacion'    => $habitacion,
+                    'habitacion'    => $result,
                 ]);   
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
@@ -217,7 +229,7 @@ class CamillaController extends AbstractController
         }
         return $this->render('camilla/show.html.twig', [
             'camilla' => $camilla,
-            'habitacion'    => $habitacion,
+            'habitacion'    => $result,
         ]);
     }
 
