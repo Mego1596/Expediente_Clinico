@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                           Camillas   
+                           <h4>Camillas de la habitacion: {{habitacion.numeroHabitacion}}</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -82,7 +82,10 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                            
+                            {%if (is_granted('ROLE_PERMISSION_SHOW_HABITACION')) %}
+                                <a class="btn btn-secondary" href="{{ path('habitacion_show', {'clinica':habitacion.getSala().getClinica().getId(), 'id':habitacion.getId()} ) }}">Atras</a>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>
