@@ -88,14 +88,14 @@ class RolController extends AbstractController
                     $entityManager->flush();
                     //FIN PROCESO DE DATOS
                 }else{
-                    $this->addFlash('fail', 'Error, la descripcion del rol no puede estar vacia');
+                    $this->addFlash('fail', 'Error, la descripción del rol no puede estar vacía');
                     return $this->render('rol/new.html.twig', [
                         'rol' => $rol,
                         'form' => $form->createView(),
                     ]);
                 }
             }else{
-                $this->addFlash('fail', 'Error, el nombre del rol no puede estar vacio');
+                $this->addFlash('fail', 'Error, el nombre del rol no puede estar vacío');
                 return $this->render('rol/new.html.twig', [
                     'rol' => $rol,
                     'form' => $form->createView(),

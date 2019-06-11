@@ -79,7 +79,7 @@ class SalaController extends AbstractController
                         $entityManager->persist($sala);
                         $entityManager->flush();
                     }else{
-                        $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacio');
+                        $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacío');
                         return $this->render('sala/new.html.twig', [
                             'sala' => $sala,
                             'editar' =>$editar,
@@ -116,7 +116,7 @@ class SalaController extends AbstractController
                 $entityManager->persist($sala);
                 $entityManager->flush();
             }else{
-                $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacio');
+                $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacío');
                 return $this->render('sala/new.html.twig', [
                     'sala' => $sala,
                     'editar' =>$editar,

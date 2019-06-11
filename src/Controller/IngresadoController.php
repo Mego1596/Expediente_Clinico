@@ -109,15 +109,15 @@ class IngresadoController extends AbstractController
                         return $this->redirectToRoute('expediente_show',['id' => $expediente->getId()]);  
                     }
                 }else{
-                    $this->addFlash('fail', 'Error, los datos no coinciden con la clinica');
+                    $this->addFlash('fail', 'Error, los datos no coinciden con la clínica');
                     return $this->redirectToRoute('expediente_show',['id' => $expediente->getId()]);  
                 }
             }else{
-                $this->addFlash('fail', 'Error, no se selecciono ningun camilla');
+                $this->addFlash('fail', 'Error, no se seleccionó ninguna camilla');
                 return $this->redirectToRoute('expediente_show',['id' => $expediente->getId()]);  
             }
         }else{
-            $this->addFlash('fail', 'Error, no se selecciono ninguna doctor');
+            $this->addFlash('fail', 'Error, no se seleccionó ningún doctor');
             return $this->redirectToRoute('expediente_show',['id' => $expediente->getId()]);  
         }       
     }
@@ -218,7 +218,7 @@ class IngresadoController extends AbstractController
                     $this->addFlash('success', 'Paciente dado de alta con éxito');
                     return $this->redirectToRoute('ingresado_index'); 
                 }else{
-                    $this->addFlash('fail', 'Ups, algo ha salido mal intentalo de nuevo');
+                    $this->addFlash('fail', 'Ups, algo ha salido mal inténtelo de nuevo');
                     return $this->redirectToRoute('ingresado_index'); 
                 }
             }else{

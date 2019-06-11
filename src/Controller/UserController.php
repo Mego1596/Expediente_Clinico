@@ -176,7 +176,7 @@ class UserController extends AbstractController
                                 }
                                 //FIN PROCESAMIENTO DE DATOS
                             }else{
-                                $this->addFlash('fail','Error, el rol de usuario no puede ir vacio');
+                                $this->addFlash('fail','Error, el rol de usuario no puede ir vacío');
                                 return $this->render('user/new.html.twig', [
                                     'user' => $user,
                                     'clinicas'   => $clinicas,
@@ -185,7 +185,7 @@ class UserController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail','Error, la contraseña de usuario no puede ir vacia');
+                            $this->addFlash('fail','Error, la contraseña de usuario no puede ir vacía');
                             return $this->render('user/new.html.twig', [
                                 'user' => $user,
                                 'clinicas'   => $clinicas,
@@ -194,7 +194,7 @@ class UserController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail','Error, el email de usuario no puede ir vacio');
+                        $this->addFlash('fail','Error, el email de usuario no puede ir vacío');
                         return $this->render('user/new.html.twig', [
                             'user' => $user,
                             'clinicas'   => $clinicas,

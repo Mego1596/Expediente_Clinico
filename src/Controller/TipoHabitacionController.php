@@ -51,14 +51,14 @@ class TipoHabitacionController extends AbstractController
                 $entityManager->persist($tipoHabitacion);
                 $entityManager->flush();
             }else{
-                $this->addFlash('fail','Error, el tipo de habitacion no puede estar vacio');
+                $this->addFlash('fail','Error, el tipo de habitación no puede estar vacio');
                 return $this->render('tipo_habitacion/new.html.twig', [
                     'tipo_habitacion' => $tipoHabitacion,
                     'editar' => $editar,
                     'form' => $form->createView(),
                 ]);
             }
-            $this->addFlash('success','Tipo de Habitacion añadido con éxito');
+            $this->addFlash('success','Tipo de Habitación añadido con éxito');
             return $this->redirectToRoute('tipo_habitacion_index');
         }
 
@@ -96,7 +96,7 @@ class TipoHabitacionController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success','Tipo de Habitacion modificado con éxito');
+            $this->addFlash('success','Tipo de Habitación modificado con éxito');
             return $this->redirectToRoute('tipo_habitacion_index', [
                 'id' => $tipoHabitacion->getId(),
             ]);
@@ -126,7 +126,7 @@ class TipoHabitacionController extends AbstractController
         $validacionBloqueoEliminar = $statement->fetchAll();
 
         if($validacionBloqueoEliminar > 1){
-            $this->addFlash('notice','Para borrar el tipo de habitacion verifique que este no tenga habitaciones asociadas a el');
+            $this->addFlash('notice','Para borrar el tipo de habitación verifique que este no tenga habitaciones asociadas a el');
             return $this->redirectToRoute('tipo_habitacion_index');
         }else{
             if ($this->isCsrfTokenValid('delete'.$tipoHabitacion->getId(), $request->request->get('_token'))) {
@@ -134,7 +134,7 @@ class TipoHabitacionController extends AbstractController
                 $entityManager->remove($tipoHabitacion);
                 $entityManager->flush();
             }
-            $this->addFlash('success','Tipo de Habitacion eliminado con éxito');
+            $this->addFlash('success','Tipo de Habitación eliminado con éxito');
             return $this->redirectToRoute('tipo_habitacion_index');
         }
     }

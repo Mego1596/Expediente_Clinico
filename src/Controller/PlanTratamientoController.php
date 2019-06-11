@@ -80,7 +80,7 @@ class PlanTratamientoController extends AbstractController
                                         $this->addFlash('success', 'Medicamento añadido con éxito');
                                         return $this->redirectToRoute('plan_tratamiento_index', ['historiaMedica' => $historiaMedica->getId()]);
                                     }else{
-                                        $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacio');
+                                        $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacío');
                                         return $this->render('plan_tratamiento/new.html.twig', [
                                             'plan_tratamiento' => $planTratamiento,
                                             'historia_medica'  => $historiaMedica,
@@ -90,7 +90,7 @@ class PlanTratamientoController extends AbstractController
 
                                     }
                                 }else{
-                                    $this->addFlash('fail','Error,la frecuencia del consumo del medicamento no puede ir vacia');
+                                    $this->addFlash('fail','Error,la frecuencia del consumo del medicamento no puede ir vacía');
                                     return $this->render('plan_tratamiento/new.html.twig', [
                                         'plan_tratamiento' => $planTratamiento,
                                         'historia_medica'  => $historiaMedica,
@@ -99,7 +99,7 @@ class PlanTratamientoController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail','Error, la dosis del medicamento no puede ir vacia');
+                                $this->addFlash('fail','Error, la dosis del medicamento no puede ir vacía');
                                 return $this->render('plan_tratamiento/new.html.twig', [
                                     'plan_tratamiento' => $planTratamiento,
                                     'historia_medica'  => $historiaMedica,
@@ -108,7 +108,7 @@ class PlanTratamientoController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail','Error,asigne un medicamento no puede ir vacio');
+                            $this->addFlash('fail','Error,asigne un medicamento no puede ir vacío');
                             return $this->render('plan_tratamiento/new.html.twig', [
                                 'plan_tratamiento' => $planTratamiento,
                                 'historia_medica'  => $historiaMedica,
@@ -152,7 +152,7 @@ class PlanTratamientoController extends AbstractController
                                 $this->addFlash('success', 'Medicamento añadido con éxito');
                                 return $this->redirectToRoute('plan_tratamiento_index', ['historiaMedica' => $historiaMedica->getId()]);
                             }else{
-                                $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacio');
+                                $this->addFlash('fail','Error, el tipo de medicamento asignado no puede ir vacío');
                                 return $this->render('plan_tratamiento/new.html.twig', [
                                     'plan_tratamiento' => $planTratamiento,
                                     'historia_medica'  => $historiaMedica,
@@ -162,7 +162,7 @@ class PlanTratamientoController extends AbstractController
 
                             }
                         }else{
-                            $this->addFlash('fail','Error,la frecuencia del consumo del medicamento no puede ir vacia');
+                            $this->addFlash('fail','Error,la frecuencia del consumo del medicamento no puede ir vacía');
                             return $this->render('plan_tratamiento/new.html.twig', [
                                 'plan_tratamiento' => $planTratamiento,
                                 'historia_medica'  => $historiaMedica,
@@ -171,7 +171,7 @@ class PlanTratamientoController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail','Error, la dosis del medicamento no puede ir vacia');
+                        $this->addFlash('fail','Error, la dosis del medicamento no puede ir vacía');
                         return $this->render('plan_tratamiento/new.html.twig', [
                             'plan_tratamiento' => $planTratamiento,
                             'historia_medica'  => $historiaMedica,
@@ -180,7 +180,7 @@ class PlanTratamientoController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail','Error, asigne un medicamento no puede ir vacio');
+                    $this->addFlash('fail','Error, asigne un medicamento no puede ir vacío');
                     return $this->render('plan_tratamiento/new.html.twig', [
                         'plan_tratamiento' => $planTratamiento,
                         'historia_medica'  => $historiaMedica,

@@ -106,7 +106,7 @@ class SignoVitalController extends AbstractController
                                                 $entityManager->flush();
                                                 //FIN DE PROCESO DE DATOS
                                             }else{
-                                               $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacio');
+                                               $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacío');
                                                 return $this->render('signo_vital/new.html.twig', [
                                                     'signo_vital' => $signoVital,
                                                     'cita'           => $cita,
@@ -115,7 +115,7 @@ class SignoVitalController extends AbstractController
                                                 ]);
                                             }
                                         }else{
-                                           $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacia');
+                                           $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacía');
                                             return $this->render('signo_vital/new.html.twig', [
                                                 'signo_vital' => $signoVital,
                                                 'cita'           => $cita,
@@ -124,7 +124,7 @@ class SignoVitalController extends AbstractController
                                             ]);
                                         }
                                     }else{
-                                        $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacia');
+                                        $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacía');
                                         return $this->render('signo_vital/new.html.twig', [
                                             'signo_vital' => $signoVital,
                                             'cita'           => $cita,
@@ -133,7 +133,7 @@ class SignoVitalController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                    $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacia');
+                                    $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacía');
                                     return $this->render('signo_vital/new.html.twig', [
                                         'signo_vital' => $signoVital,
                                         'cita'           => $cita,
@@ -142,7 +142,7 @@ class SignoVitalController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacio');
+                                $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacío');
                                 return $this->render('signo_vital/new.html.twig', [
                                     'signo_vital' => $signoVital,
                                     'cita'           => $cita,
@@ -200,7 +200,7 @@ class SignoVitalController extends AbstractController
                                         $entityManager->flush();
                                         //FIN DE PROCESO DE DATOS
                                     }else{
-                                       $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacio');
+                                       $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacío');
                                         return $this->render('signo_vital/new.html.twig', [
                                             'signo_vital' => $signoVital,
                                             'cita'           => $cita,
@@ -209,7 +209,7 @@ class SignoVitalController extends AbstractController
                                         ]);
                                     }
                                 }else{
-                                   $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacia');
+                                   $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacía');
                                     return $this->render('signo_vital/new.html.twig', [
                                         'signo_vital' => $signoVital,
                                         'cita'           => $cita,
@@ -218,7 +218,7 @@ class SignoVitalController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacia');
+                                $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacía');
                                 return $this->render('signo_vital/new.html.twig', [
                                     'signo_vital' => $signoVital,
                                     'cita'           => $cita,
@@ -227,7 +227,7 @@ class SignoVitalController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacia');
+                            $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacía');
                             return $this->render('signo_vital/new.html.twig', [
                                 'signo_vital' => $signoVital,
                                 'cita'           => $cita,
@@ -236,7 +236,7 @@ class SignoVitalController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacio');
+                        $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacío');
                         return $this->render('signo_vital/new.html.twig', [
                             'signo_vital' => $signoVital,
                             'cita'           => $cita,

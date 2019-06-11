@@ -79,7 +79,7 @@ class HomeController extends AbstractController
                         $this->addFlash('success', 'Contraseña modificada con éxito');
                         return $this->redirectToRoute('home');
                     }else{
-                        $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmacion de contraseña');
+                        $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmaciÓn de contraseña');
                     }
                 }else{
                     $this->addFlash('fail', 'Un problema ha ocurrido, compruebe que la contraseña actual sea correcta');
@@ -136,7 +136,7 @@ class HomeController extends AbstractController
             $result = $statement->fetchAll();
             return $this->json($result);
         }else{
-            $this->addFlash('fail','Error, este expediente no es valido');
+            $this->addFlash('fail','Error, este expediente no es válido');
             $this->redirectToRoute('expediente_index');
         }
         
@@ -171,7 +171,7 @@ class HomeController extends AbstractController
             $result = $statement->fetchAll();
             return $this->json($result);
         }else{
-            $this->addFlash('fail','Error, este expediente no es valido');
+            $this->addFlash('fail','Error, este expediente no es válido');
             $this->redirectToRoute('expediente_index');
         }
         
@@ -220,7 +220,7 @@ class HomeController extends AbstractController
                             }
                         }
                         else{
-                            $this->addFlash('fail','Error, el estado del ingreso no puede estar vacio');
+                            $this->addFlash('fail','Error, el estado del ingreso no puede estar vacío');
                             $this->redirectToRoute('expediente_index');
 
                         }
@@ -228,22 +228,22 @@ class HomeController extends AbstractController
 
 
                     }else{
-                        $this->addFlash('fail','Error, este expediente no es valido');
+                        $this->addFlash('fail','Error, este expediente no es válido');
                         $this->redirectToRoute('expediente_index');
                     }
 
                 }else{
-                    $this->addFlash('fail', 'Error, no se selecciono ningun expediente');
+                    $this->addFlash('fail', 'Error, no se seleccionó ningún expediente');
                     $this->redirectToRoute('expediente_index');
                 }
 
             }else{
-                $this->addFlash('fail', 'Error, no se selecciono ninguna habitacion');
+                $this->addFlash('fail', 'Error, no se seleccionó ninguna habitación');
                 $this->redirectToRoute('expediente_index');
             }
 
         }else{
-            $this->addFlash('fail', 'Error, no se selecciono ninguna sala');
+            $this->addFlash('fail', 'Error, no se seleccionó ninguna sala');
             $this->redirectToRoute('expediente_index');
         }     
 
