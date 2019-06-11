@@ -1,51 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SignoVital{% endblock %}
+{% block title %}Signos Vitales{% endblock %}
 
 {% block body %}
-    <h1>SignoVital</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ signo_vital.id }}</td>
-            </tr>
-            <tr>
-                <th>Peso</th>
-                <td>{{ signo_vital.peso }}</td>
-            </tr>
-            <tr>
-                <th>Temperatura</th>
-                <td>{{ signo_vital.temperatura }}</td>
-            </tr>
-            <tr>
-                <th>Estatura</th>
-                <td>{{ signo_vital.estatura }}</td>
-            </tr>
-            <tr>
-                <th>PresionArterial</th>
-                <td>{{ signo_vital.presionArterial }}</td>
-            </tr>
-            <tr>
-                <th>RitmoCardiaco</th>
-                <td>{{ signo_vital.ritmoCardiaco }}</td>
-            </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ signo_vital.creadoEn ? signo_vital.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ signo_vital.actualizadoEn ? signo_vital.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalle de los Signos Vitales de la cita</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Peso (lbs):</th>
+                                <td>{{ signo_vital.peso }}</td>
+                            </tr>
+                            <tr>
+                                <th>Temperatura (°C):</th>
+                                <td>{{ signo_vital.temperatura }}</td>
+                            </tr>
+                            <tr>
+                                <th>Estatura (metros):</th>
+                                <td>{{ signo_vital.estatura }}</td>
+                            </tr>
+                            <tr>
+                                <th>Presion Arterial (mm de mercurio):</th>
+                                <td>{{ signo_vital.presionArterial }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ritmo Cardiaco (latidos por minuto):</th>
+                                <td>{{ signo_vital.ritmoCardiaco }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de creacion (Año-Mes-Dia):</th>
+                                <td>{{ signo_vital.creadoEn ? signo_vital.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ultima Actualizacion (Año-Mes-Dia):</th>
+                                <td>{{ signo_vital.actualizadoEn ? signo_vital.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
+                        <a class="btn btn-secondary" href="{{ path('signo_vital_index',{'cita': cita.id }) }}">Atras</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL')) %}
+                        <a class="btn btn-primary" href="{{ path('signo_vital_edit',{'id': signo_vital.id,'cita': cita.id }) }}">Editar</a>
+                    {% endif %}
+            </div>
+                    
+        </div>
 
-    {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
-        <a class="btn btn-secondary" href="{{ path('signo_vital_index',{'cita': cita.id }) }}">Atras</a>
-    {% endif %}
-    {% if(is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL')) %}
-        <a class="btn btn-primary" href="{{ path('signo_vital_edit',{'id': signo_vital.id,'cita': cita.id }) }}">Editar</a>
-    {% endif %}
+</div>
+
+
 {% endblock %}

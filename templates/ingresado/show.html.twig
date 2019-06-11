@@ -3,62 +3,82 @@
 {% block title %}Ingresado{% endblock %}
 
 {% block body %}
-    <h2>Paciente Ingresado: {{ingresado.nombre_completo}}</h2>
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Doctor Asignado:</th>
-                <td>{{ingresado.nombre_completoD ? ingresado.nombre_completoD : '' }}</td>
-            </tr>
-            <tr>
-                <th>Clinica:</th>
-                <td>{{ingresado.nombr_clinica ? ingresado.nombr_clinica : '' }}</td>
-            </tr>
-            <tr>
-                <th>Sala:</th>
-                <td>{{ingresado.sala ? ingresado.sala : '' }}</td>
-            </tr>
-            <tr>
-                <th>Habitacion:</th>
-                <td>{{ingresado.habitacion ? ingresado.habitacion : '' }}</td>
-            </tr>
-            <tr>
-                <th>Camilla Asignada:</th>
-                <td>{{ingresado.camilla ? ingresado.camilla : '' }}</td>
-            </tr>
-            <tr>
-                <th>Tipo de ingreso:</th>
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Paciente Ingresado: {{ingresado.nombre_completo}}</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Numero de expediente:</th>
+                                <td>{{ingresado.expediente ? ingresado.expediente: ''}}</td>
+                            </tr>
+                            <tr>
+                                <th>Doctor Asignado:</th>
+                                <td>{{ingresado.nombre_completoD ? ingresado.nombre_completoD : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Clinica:</th>
+                                <td>{{ingresado.nombr_clinica ? ingresado.nombr_clinica : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sala:</th>
+                                <td>{{ingresado.sala ? ingresado.sala : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Habitacion:</th>
+                                <td>{{ingresado.habitacion ? ingresado.habitacion : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Camilla Asignada:</th>
+                                <td>{{ingresado.camilla ? ingresado.camilla : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tipo de ingreso:</th>
+                                
+                                {% if(ingresado.emergencia)%}
+                                <td>Emergencia</td>
+                                {% else %}
+                                <td>Normal (De Planta)</td>
+                                {% endif %}
+
+                            </tr>
+                            <tr>
+                                <th>Fecha de ingreso:</th>
+                                <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de salida:</th>
+                                <td>{{ ingresado.fechaSalida ? ingresado.fechaSalida|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de creacion:</th>
+                                <td>{{ ingresado.creadoEn ? ingresado.creadoEn|date('Y-m-d') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Actualizado por ultima vez:</th>
+                                <td>{{ ingresado.actualizadoEn ? ingresado.actualizadoEn|date('Y-m-d') : '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
                 
-                {% if(ingresado.emergencia)%}
-                <td>Emergencia</td>
-                {% else %}
-                <td>Normal (De Planta)</td>
+                {% if is_granted('ROLE_PERMISSION_INDEX_INGRESADO') %}
+                    <a class="btn btn-secondary" href="{{ path('ingresado_index') }}">Atras</a>
                 {% endif %}
+                {% if is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE') %}
+                    <a href="{{ path('expediente_show', {'id': ingresado.idExpediente}) }}" class="btn btn-info">Ver Expediente del ingresado</a>
+                {% endif %}
+        </div>
 
-            </tr>
-            <tr>
-                <th>Fecha de ingreso:</th>
-                <td>{{ ingresado.fechaIngreso ? ingresado.fechaIngreso|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Fecha de salida:</th>
-                <td>{{ ingresado.fechaSalida ? ingresado.fechaSalida|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Fecha de creacion:</th>
-                <td>{{ ingresado.creadoEn ? ingresado.creadoEn|date('Y-m-d') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado por ultima vez:</th>
-                <td>{{ ingresado.actualizadoEn ? ingresado.actualizadoEn|date('Y-m-d') : '' }}</td>
-            </tr>
+</div>
 
-
-        </tbody>
-    </table>
-
-    <a class="btn btn-secondary" href="{{ path('ingresado_index') }}">Atras</a>
 
 {% endblock %}

@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Signos Vitales
+                            <h4>Signos vitales de la cita</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -33,22 +33,18 @@
                                 <table id="example" class="display table-striped" style="width:100%">
                                     <thead>
                                         <tr>
-                                            <th id="relevante" class="all">Peso</th>
-                                            <th id="relevante" class="all">Temperatura</th>
-                                            <th id="relevante" class="all">Estatura</th>
-                                            <th id="relevante" class="all">Presion Arterial</th>
-                                            <th id="relevante" class="all">Ritmo Cardiaco</th>
+                                            <th id="relevante" class="all">Peso (lbs)</th>
+                                            <th id="relevante" class="all">Temperatura (°C)</th>
+                                            <th id="relevante" class="all">Estatura (metros)</th>
                                             <th  class="all">Acciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {% for signo_vital in signos_vitales %}
                                         <tr>
-                                            <td>{{signo_vital.peso}}</td>
+                                            <td>{{signo_vital.peso}} </td>
                                             <td>{{signo_vital.temperatura}}</td>
                                             <td>{{signo_vital.estatura}}</td>
-                                            <td>{{signo_vital.presionArterial}}</td>
-                                            <td>{{signo_vital.ritmoCardiaco}}</td>
                                             <td>
                                                 {% if is_granted('ROLE_PERMISSION_SHOW_SIGNO_VITAL') %}
                                                 <a href="{{ path('signo_vital_show', {'id': signo_vital.id,'cita': cita.id}) }}" class="btn btn-info">Mostrar</a>
@@ -57,7 +53,7 @@
                                                 {% if is_granted('ROLE_PERMISSION_EDIT_SIGNO_VITAL') %}
                                                 <a href="{{ path('signo_vital_edit', {'id': signo_vital.id,'cita': cita.id}) }}" class="btn btn-success">Modificar</a>
                                                 {% endif %}
-
+                                           
                                                 {% if is_granted('ROLE_PERMISSION_DELETE_SIGNO_VITAL') %}
                                                     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ signo_vital.id}}">
                                                         Eliminar
@@ -92,6 +88,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
+                                <a class="btn btn-secondary" href="{{ path('cita_show', {'expediente':cita.getExpediente().getId(), 'id':cita.getId()} ) }}">Atras</a>
+                                {% endif %}
                         </div>
                     </div>
                 </div>

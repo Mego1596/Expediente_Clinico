@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            <h4>Examanes Registrados</h4> 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -86,6 +86,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                            {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
+                                <a class="btn btn-secondary" href="{{ path('cita_show', {'expediente':cita.getExpediente().getId(), 'id':cita.getId()} ) }}">Atras</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

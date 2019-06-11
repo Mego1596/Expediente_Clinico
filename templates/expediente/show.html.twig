@@ -55,6 +55,14 @@
                             </tr>
 
                             <tr>
+                                {% if ingresado != null %}
+                                    <th>Paciente Ingresado</th>
+                                    <td>{% if is_granted('ROLE_PERMISSION_SHOW_INGRESADO') %}
+                                                    <a href="{{ path('ingresado_show', {id: ingresado.id}) }}" class="btn btn-success">Ver</a>
+                                        {% endif %}</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
                                 <th>Historial propio del paciente</th>
                                 <td>{% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIAL_PROPIO')) %}
                                     <a class="btn btn-success" href="{{ path('historial_propio_index', {'expediente': expediente.id_expediente}) }}">Ver</a>
@@ -69,6 +77,7 @@
                                     {% endif %}
                                 </td>
                             </tr>
+
                             
                         </tbody>
                     </table>

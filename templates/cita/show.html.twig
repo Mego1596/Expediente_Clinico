@@ -3,72 +3,98 @@
 {% block title %}Detalles de la Cita{% endblock %}
 
 {% block body %}
-    <h1>Detalles de la Cita</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ citum.id }}</td>
-            </tr>
-            <tr>
-                <th>Fecha Inicio</th>
-                <td>{{ citum.fechaReservacion ? citum.fechaReservacion|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Fecha Fin</th>
-                <td>{{ citum.fechaFin ? citum.fechaFin|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Descripción</th>
-                <td>{{ citum.consultaPor }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <table>
-        <tr>
-            {% if(user.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
-                <td>
-                    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atrás</a>
-                </td>
-                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
-                <td>
-                    <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
-                </td>
-                {% endif %}
-                {% if(is_granted('ROLE_PERMISSION_DELETE_CITA')) %}
-                    <td>
-                        {{ include('cita/_delete_form.html.twig') }}    
-                    </td>
-                {% endif %}
-            {% else %}
-                {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
-                    <td>
-                        <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atrás</a>
-                    </td>
-                {% endif %}
-                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
-                    <td>
-                        <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
-                    </td>
-                {% endif %}
-                {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
-                    <td>
-                        <a class="btn btn-success" href="{{ path('signo_vital_index', {'cita': citum.id}) }}">Registrar Signos Vitales</a>
-                    </td>
-                {% endif %}
-                {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
-                    <td>
-                        <a class="btn btn-success" href="{{ path('historia_medica_index', {'citum': citum.id}) }}">Registrar Historia Clínica</a>
-                    </td>
-                {% endif %}
-                {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
-                    <td>
-                        <a class="btn btn-success" href="{{ path('examen_solicitado_index', {'cita': citum.getId()}) }}">Registrar Exámenes</a>
-                    </td>
-                {% endif %}
 
-            {% endif %}
-        </tr>
-    </table>
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles de la Cita del paciente: {{nombres.nombre_completoP}}</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Doctor Asignado a la cita:</th>
+                                <td>{{ nombres.nombre_completoD }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha y hora de inicio de cita (Año-Mes-Dia):</th>
+                                <td>{{ citum.fechaReservacion ? citum.fechaReservacion|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha y hora de fin de cita (Año-Mes-Dia):</th>
+                                <td>{{ citum.fechaFin ? citum.fechaFin|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripción:</th>
+                                <td>{{ citum.consultaPor }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha y hora de creacion (Año-Mes-Dia):</th>
+                                <td>{{ citum.creadoEn ? citum.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ultima Actualizacion (Año-Mes-Dia):</th>
+                                <td>{{ citum.actualizadoEn ? citum.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+            <div class="table table-responsive">
+                    <table>
+                        <tr>
+                            {% if(user.getUser().getRol().getNombreRol() == 'ROLE_PACIENTE' ) %}
+                                <td>
+                                    <a class="btn btn-secondary" href="{{ path('cita_calendar',{'expediente': expediente.getId()}) }}">Atrás</a>
+                                </td>
+                                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
+                                </td>
+                                {% endif %}
+                                {% if(is_granted('ROLE_PERMISSION_DELETE_CITA')) %}
+                                    <td>
+                                        {{ include('cita/_delete_form.html.twig') }}    
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}
+                                    <td>
+                                        <a class="btn btn-secondary" href="{{ path('cita_index',{'expediente': expediente.getId()}) }}">Atrás</a>
+                                    </td>
+                                {% endif %}
+                                {% if(is_granted('ROLE_PERMISSION_EDIT_CITA')) %}
+                                    <td>
+                                        <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
+                                    </td>
+                                {% endif %}
+                                {% if(is_granted('ROLE_PERMISSION_INDEX_SIGNO_VITAL')) %}
+                                    <td>
+                                        <a class="btn btn-success" href="{{ path('signo_vital_index', {'cita': citum.id}) }}">Registrar Signos Vitales</a>
+                                    </td>
+                                {% endif %}
+                                {% if(is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
+                                    <td>
+                                        <a class="btn btn-success" href="{{ path('historia_medica_index', {'citum': citum.id}) }}">Registrar Historia Clínica</a>
+                                    </td>
+                                {% endif %}
+                                {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+                                    <td>
+                                        <a class="btn btn-success" href="{{ path('examen_solicitado_index', {'cita': citum.getId()}) }}">Registrar Exámenes</a>
+                                    </td>
+                                {% endif %}
+
+                            {% endif %}
+                        </tr>
+                    </table>
+                </div>
+        </div>
+
+</div>
+
+    
 {% endblock %}

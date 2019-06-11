@@ -411,7 +411,7 @@ class ExpedienteController extends AbstractController
         $RAW_QUERY="SELECT * FROM `ingresado` WHERE fecha_salida IS NULL AND expediente_id =".$expediente->getId().";";
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
-        $ingresoActual = $statement->fetchAll();
+        $ingresoActual = $statement->fetch();
 
         //USO DE VIEW
         $conn = $this->getDoctrine()->getManager()->getConnection();
