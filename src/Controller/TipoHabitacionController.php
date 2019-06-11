@@ -117,12 +117,25 @@ class TipoHabitacionController extends AbstractController
      */
     public function delete(Request $request, TipoHabitacion $tipoHabitacion): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tipoHabitacion->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($tipoHabitacion);
-            $entityManager->flush();
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT COUNT(*) FROM habitacion as h, tipo_habitacion as th WHERE 
+        h.tipo_habitacion_id = th.id AND
+        th.id = ".$tipoHabitacion->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $validacionBloqueoEliminar = $statement->fetchAll();
+
+        if($validacionBloqueoEliminar > 1){
+            $this->addFlash('notice','Para borrar el tipo de habitacion verifique que este no tenga habitaciones asociadas a el');
+            return $this->redirectToRoute('tipo_habitacion_index');
+        }else{
+            if ($this->isCsrfTokenValid('delete'.$tipoHabitacion->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($tipoHabitacion);
+                $entityManager->flush();
+            }
+            $this->addFlash('success','Tipo de Habitacion eliminado con éxito');
+            return $this->redirectToRoute('tipo_habitacion_index');
         }
-        $this->addFlash('success','Tipo de Habitacion eliminado con éxito');
-        return $this->redirectToRoute('tipo_habitacion_index');
     }
 }
