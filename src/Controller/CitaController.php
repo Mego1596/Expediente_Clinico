@@ -113,12 +113,12 @@ class CitaController extends AbstractController
     {   
         //VALIDACION PARA SABER SI EL PACIENTE ESTA INGRESADO
         $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT COUNT(*) FROM ingresado WHERE fecha_salida IS NULL AND
+        $RAW_QUERY = "SELECT COUNT(*) as cuenta FROM ingresado WHERE fecha_salida IS NULL AND
                       expediente_id=".$expediente->getId().";";
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
-        $validacionNoCrearCita = $statement->fetchAll();
-        if(count($validacionNoCrearCita) > 0){
+        $validacionNoCrearCita = $statement->fetch();
+        if($validacionNoCrearCita['cuenta'] > 0){
             $this->addFlash('fail', 'El Paciente se encuentra ingresado, por favor espera a que se le de alta para poder crear una cita');
             return $this->redirectToRoute('cita_calendar', ['expediente' => $expediente->getId()]);
         }

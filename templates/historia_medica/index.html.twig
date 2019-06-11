@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            <h4>Historial medica de la consulta</h4> 
+                            <h4>Historia medica de la consulta</h4> 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -25,7 +25,7 @@
                             <a href="{{ path('historia_medica_new',{'citum':cita.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-fw fa-id-card"></i> Registrar Historia Medica</a>
                         {% else %}
                             {% if is_granted('ROLE_PERMISSION_INDEX_PLAN_TRATAMIENTO') %}
-                                <a href="{{ path('plan_tratamiento_index', {'historiaMedica': historia_medicas[0].id}) }}" class="btn btn-outline-primary" style="color: black; width: 100%"><i class="fas fa-fw fa-book-medical"></i> Registrar Plan de Tratamiento</a>
+                                <a href="{{ path('plan_tratamiento_index', {'historiaMedica': historia_medicas[0].id}) }}" class="btn btn-outline-primary" style="color: black; width: 100%"><i class="fas fa-fw fa-book-medical"></i> Registrar/Ver Plan de Tratamiento</a>
                             {% endif %}
                         {% endif %}
                     {% endif %}
@@ -157,10 +157,12 @@
                                 {% endfor %}
                                 </tbody>
                             </table>
+                        </div>
+                        <table>
                             {%if (is_granted('ROLE_PERMISSION_SHOW_CITA')) %}
                                 <a class="btn btn-secondary" href="{{ path('cita_show', {'expediente':cita.getExpediente().getId(), 'id':cita.getId()} ) }}">Atras</a>
                             {% endif %}
-                        </div>
+                        </table>
                     </div>
                 </div>
             </div>

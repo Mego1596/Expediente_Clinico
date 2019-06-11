@@ -63,7 +63,7 @@ class CalendarListener
         foreach ($citas as $cita) {
             // this create the events with your data (here booking data) to fill calendar
             $citaEvent = new Event(
-                $cita->getExpediente()->getUsuario()->getNombres()." ".$cita->getExpediente()->getUsuario()->getApellidos(),
+                $cita->getExpediente()->getUsuario()->getPersona()->getPrimerNombre()." ".$cita->getExpediente()->getUsuario()->getPersona()->getPrimerApellido(),
                 $cita->getFechaReservacion(),
                 $cita->getFechaFin() // If the end date is null or not defined, a all day event is created.
             );

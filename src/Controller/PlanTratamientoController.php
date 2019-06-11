@@ -31,7 +31,7 @@ class PlanTratamientoController extends AbstractController
             if($AuthUser->getUser()->getClinica()->getId() == $historiaMedica->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($historiaMedica->getCita()->getExpediente()->getHabilitado()){
                     return $this->render('plan_tratamiento/index.html.twig', [
-                        'plan_tratamientos' => $planTratamientoRepository->findAll(),
+                        'plan_tratamientos' => $planTratamientoRepository->findBy(['historiaMedica' => $historiaMedica->getId()]),
                         'user'  =>$AuthUser,
                         'historia_medica'   => $historiaMedica,
                     ]);
@@ -45,7 +45,7 @@ class PlanTratamientoController extends AbstractController
             }  
         } 
         return $this->render('plan_tratamiento/index.html.twig', [
-            'plan_tratamientos' => $planTratamientoRepository->findAll(),
+            'plan_tratamientos' => $planTratamientoRepository->findBy(['historiaMedica' => $historiaMedica->getId()]),
             'user'  =>$AuthUser,
             'historia_medica'   => $historiaMedica,
         ]);

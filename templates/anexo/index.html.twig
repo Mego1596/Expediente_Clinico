@@ -80,6 +80,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {%if (is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+                                <a class="btn btn-secondary" href="{{ path('examen_solicitado_index', {'cita':examen_solicitado.getCita().getId()} ) }}">Atras</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

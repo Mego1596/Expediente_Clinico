@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Plan de tratamiento.
+                            <h4>Plan de tratamiento.</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -85,6 +85,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {%if (is_granted('ROLE_PERMISSION_INDEX_HISTORIA_MEDICA')) %}
+                                <a class="btn btn-secondary" href="{{ path('historia_medica_index', {'citum':historia_medica.getCita().getId()} ) }}">Atras</a>
+                                {% endif %}
                         </div>
                     </div>
                 </div>
