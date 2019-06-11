@@ -140,9 +140,9 @@ class IngresadoController extends AbstractController
             $sql = '
                 SELECT i.id as id, i.creado_en as creadoEn, i.actualizado_en as actualizadoEn,
                 i.fecha_ingreso as fechaIngreso, i.fecha_salida as fechaSalida, exp.numero_expediente as expediente,
-                u2.emergencia as emergencia, u2.planta as planta, CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, s.nombre_sala as sala, c.nombre_clinica as nombr_clinica,
+                u2.emergencia as emergencia, u2.planta as planta, CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, CONCAT(p2.primer_nombre," " ,IFNULL(p2.segundo_nombre," ")," " ,p2.primer_apellido," ",IFNULL(p2.segundo_apellido," ")) as nombre_completoD, s.nombre_sala as sala, c.nombre_clinica as nombr_clinica,
                 h.numero_habitacion as habitacion, cam.numero_camilla as camilla
-                FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p WHERE
+                FROM `ingresado` as i,`expediente` as exp, `camilla` as cam, `habitacion` as h, `sala` as s, `clinica` as c, `user` as u,`user` as u2, `persona` as p, `persona` as p2 WHERE
                 i.expediente_id    =exp.id          AND
                 exp.usuario_id     =u.id            AND
                 i.camilla_id       =cam.id          AND
@@ -152,6 +152,7 @@ class IngresadoController extends AbstractController
                 u.persona_id       =p.id            AND
                 i.fecha_salida IS NULL              AND
                 u2.id              =i.usuario_id    AND
+                u2.id              =p2.id           AND
                 i.id = :idIngregado
                 ';
             $stmt = $conn->prepare($sql);
