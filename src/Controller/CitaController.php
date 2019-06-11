@@ -97,7 +97,16 @@ class CitaController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if ($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE') {
                 if ( $AuthUser->getUser()->getExpediente()->getId() == $expediente->getId() ) {
-                    
+                    $em = $this->getDoctrine()->getManager();
+                    $RAW_QUERY = "SELECT COUNT(*) FROM ingresado WHERE fecha_salida IS NULL AND
+                                  expediente_id=".$expediente->getId().";";
+                    $statement = $em->getConnection()->prepare($RAW_QUERY);
+                    $statement->execute();
+                    $validacionNoCrearCita = $statement->fetchAll();
+                    if(count($validacionNoCrearCita) > 0){
+                        $this->addFlash('fail', 'Estas ingresado por favor espera a que te den de alta para poder crear una cita');
+                        return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                    }
                 }else{
                     $this->addFlash('fail', 'Error, estos datos personales no le pertenecen.');
                     return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
