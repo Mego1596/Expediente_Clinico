@@ -92,15 +92,17 @@ class FamiliarController extends AbstractController
 
                     if ($form->isSubmitted() && $form->isValid()) {
                         $entityManager = $this->getDoctrine()->getManager();
-                        if($form["nombres"]->getData() != ""){
-                            if($form["apellidos"]->getData() != ""){
+                        if($form["primerNombre"]->getData() != ""){
+                            if($form["primerApellido"]->getData() != ""){
                                 if($form["fechaNacimiento"]->getData() != ""){
                                     if($form["telefono"]->getData() != ""){
                                         if($form["descripcion"]->getData() != ""){
                                             if($request->request->get('responsable') != ""){
                                                 //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
-                                                $familiar->setNombres($form["nombres"]->getData());
-                                                $familiar->setApellidos($form["apellidos"]->getData());
+                                                $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                                                $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                                                $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                                                $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                                                 $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                                                 $familiar->setTelefono($form["telefono"]->getData());
                                                 $familiar->setDescripcion($form["descripcion"]->getData());
@@ -112,8 +114,10 @@ class FamiliarController extends AbstractController
                                                 $entityManager->persist($familiaresExpediente);
                                                 $entityManager->flush();
                                             }else{
-                                                $familiar->setNombres($form["nombres"]->getData());
-                                                $familiar->setApellidos($form["apellidos"]->getData());
+                                                $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                                                $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                                                $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                                                $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                                                 $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                                                 $familiar->setTelefono($form["telefono"]->getData());
                                                 $familiar->setDescripcion($form["descripcion"]->getData());
@@ -153,7 +157,7 @@ class FamiliarController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacíos');
+                                $this->addFlash('fail', 'el primer apellido del pariente del paciente no puede estar vacío');
                                 return $this->render('familiar/new.html.twig', [
                                     'familiar' => $familiar,
                                     'expediente' => $expediente,
@@ -162,7 +166,7 @@ class FamiliarController extends AbstractController
                                 ]);
                             }
                         }else{
-                            $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacíos');
+                            $this->addFlash('fail','el primer nombre del pariente del paciente no puede estar vacío');
                             return $this->render('familiar/new.html.twig', [
                                 'familiar' => $familiar,
                                 'expediente' => $expediente,
@@ -197,15 +201,17 @@ class FamiliarController extends AbstractController
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                if($form["nombres"]->getData() != ""){
-                    if($form["apellidos"]->getData() != ""){
+                if($form["primerNombre"]->getData() != ""){
+                    if($form["primerApellido"]->getData() != ""){
                         if($form["fechaNacimiento"]->getData() != ""){
                             if($form["telefono"]->getData() != ""){
                                 if($form["descripcion"]->getData() != ""){
                                     if($request->request->get('responsable') != ""){
                                         //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
-                                        $familiar->setNombres($form["nombres"]->getData());
-                                        $familiar->setApellidos($form["apellidos"]->getData());
+                                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                                         $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                                         $familiar->setTelefono($form["telefono"]->getData());
                                         $familiar->setDescripcion($form["descripcion"]->getData());
@@ -217,8 +223,10 @@ class FamiliarController extends AbstractController
                                         $entityManager->persist($familiaresExpediente);
                                         $entityManager->flush();
                                     }else{
-                                        $familiar->setNombres($form["nombres"]->getData());
-                                        $familiar->setApellidos($form["apellidos"]->getData());
+                                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                                         $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                                         $familiar->setTelefono($form["telefono"]->getData());
                                         $familiar->setDescripcion($form["descripcion"]->getData());
@@ -258,7 +266,7 @@ class FamiliarController extends AbstractController
                             ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'Los apellidos del pariente del paciente no pueden estar vacíos');
+                        $this->addFlash('fail', 'el apellido del pariente del paciente no puede estar vacío');
                         return $this->render('familiar/new.html.twig', [
                             'familiar' => $familiar,
                             'expediente' => $expediente,
@@ -267,7 +275,7 @@ class FamiliarController extends AbstractController
                         ]);
                     }
                 }else{
-                    $this->addFlash('fail','Los nombres del pariente del paciente no pueden estar vacíos');
+                    $this->addFlash('fail','el nombre del pariente del paciente no puede estar vacío');
                     return $this->render('familiar/new.html.twig', [
                         'familiar' => $familiar,
                         'expediente' => $expediente,
@@ -347,8 +355,10 @@ class FamiliarController extends AbstractController
                     $form->handleRequest($request);
                     if ($form->isSubmitted() && $form->isValid()) {
                         $entityManager = $this->getDoctrine()->getManager();
-                        $familiar->setNombres($form["nombres"]->getData());
-                        $familiar->setApellidos($form["apellidos"]->getData());
+                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                         $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                         $familiar->setTelefono($form["telefono"]->getData());
                         $familiar->setDescripcion($form["descripcion"]->getData());
@@ -388,8 +398,10 @@ class FamiliarController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $entityManager = $this->getDoctrine()->getManager();
-                $familiar->setNombres($form["nombres"]->getData());
-                $familiar->setApellidos($form["apellidos"]->getData());
+                $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                $familiar->setSegundoApellido($form["segundoApellido"]->getData());
                 $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
                 $familiar->setTelefono($form["telefono"]->getData());
                 $familiar->setDescripcion($form["descripcion"]->getData());

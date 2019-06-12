@@ -43,7 +43,7 @@
                                     <tbody>
                                     {% for familiar in familiares %}
                                         <tr>
-                                            <td>{{ familiar.nombres}} {{familiar.apellidos}}</td>
+                                            <td>{{ familiar.primer_nombre}} {{ familiar.segundo_nombre}} {{familiar.primer_apellido}} {{familiar.segundo_apellido}} </td>
                                             <td>{{ familiar.descripcion }}</td>
                                             <td>{{ familiar.telefono }}</td>
                                             {% if(familiar.responsable == true) %}

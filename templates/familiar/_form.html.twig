@@ -14,12 +14,20 @@
           <input type="hidden" name="token" value="{{ csrf_token('create-item') }}"/>
           <div class="row" style="text-align: center">
             <div class="col-md-4">
-              {{ form_label(form.nombres) }}
-              {{ form_widget(form.nombres) }}
+              {{ form_label(form.primerNombre) }}
+              {{ form_widget(form.primerNombre) }}
             </div>
             <div class="col-md-4">
-              {{ form_label(form.apellidos) }}
-              {{ form_widget(form.apellidos) }}
+              {{ form_label(form.segundoNombre) }}
+              {{ form_widget(form.segundoNombre) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.primerApellido) }}
+              {{ form_widget(form.primerApellido) }}
+            </div>
+            <div class="col-md-4">
+              {{ form_label(form.segundoApellido) }}
+              {{ form_widget(form.segundoApellido) }}
             </div>
             <div class="col-md-4">
               {{ form_label(form.fechaNacimiento) }}

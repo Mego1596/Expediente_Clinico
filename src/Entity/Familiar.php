@@ -19,16 +19,6 @@ class Familiar
     private $id;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $nombres;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $apellidos;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $fechaNacimiento;
@@ -63,6 +53,26 @@ class Familiar
      */
     private $historialFamiliars;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $primerNombre;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $segundoNombre;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $primerApellido;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $segundoApellido;
+
     public function __construct()
     {
         $this->familiaresExpedientes = new ArrayCollection();
@@ -72,30 +82,6 @@ class Familiar
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNombres(): ?string
-    {
-        return $this->nombres;
-    }
-
-    public function setNombres(string $nombres): self
-    {
-        $this->nombres = $nombres;
-
-        return $this;
-    }
-
-    public function getApellidos(): ?string
-    {
-        return $this->apellidos;
-    }
-
-    public function setApellidos(string $apellidos): self
-    {
-        $this->apellidos = $apellidos;
-
-        return $this;
     }
 
     public function getFechaNacimiento(): ?\DateTimeInterface
@@ -192,7 +178,7 @@ class Familiar
     /**
      * @return Collection|HistorialFamiliar[]
      */
-    public function getHistorialFamiliars(): Collection
+    public function getHistorialFamiliares(): Collection
     {
         return $this->historialFamiliars;
     }
@@ -216,6 +202,54 @@ class Familiar
                 $historialFamiliar->setFamiliar(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrimerNombre(): ?string
+    {
+        return $this->primerNombre;
+    }
+
+    public function setPrimerNombre(string $primerNombre): self
+    {
+        $this->primerNombre = $primerNombre;
+
+        return $this;
+    }
+
+    public function getSegundoNombre(): ?string
+    {
+        return $this->segundoNombre;
+    }
+
+    public function setSegundoNombre(?string $segundoNombre): self
+    {
+        $this->segundoNombre = $segundoNombre;
+
+        return $this;
+    }
+
+    public function getPrimerApellido(): ?string
+    {
+        return $this->primerApellido;
+    }
+
+    public function setPrimerApellido(string $primerApellido): self
+    {
+        $this->primerApellido = $primerApellido;
+
+        return $this;
+    }
+
+    public function getSegundoApellido(): ?string
+    {
+        return $this->segundoApellido;
+    }
+
+    public function setSegundoApellido(?string $segundoApellido): self
+    {
+        $this->segundoApellido = $segundoApellido;
 
         return $this;
     }

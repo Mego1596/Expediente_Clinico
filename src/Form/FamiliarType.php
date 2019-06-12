@@ -18,8 +18,10 @@ class FamiliarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombres', TextType::class,array('attr'=> array('class' => 'form-control')))
-            ->add('apellidos', TextType::class,array('attr'=> array('class' => 'form-control')))
+            ->add('primerNombre', TextType::class,array('attr'=> array('class' => 'form-control')))
+            ->add('segundoNombre', TextType::class,array('attr'=> array('class' => 'form-control')))
+            ->add('primerApellido', TextType::class,array('attr'=> array('class' => 'form-control')))
+            ->add('segundoApellido', TextType::class,array('attr'=> array('class' => 'form-control')))
             ->add('fechaNacimiento', DateType::class,['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
             ->add('telefono', TextType::class,array('attr'=> array('class' => 'form-control')))
             ->add('descripcion', TextType::class,array('attr'=> array('class' => 'form-control')))
