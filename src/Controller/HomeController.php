@@ -323,101 +323,13 @@ class HomeController extends AbstractController
      */
     public function cupos(Security $AuthUser, Request $request)
     { 
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY="SELECT r2.id as id , r2.intervalo as intervalo,r2.cantidad as cantidad,
-                        (CASE
-                            WHEN r2.cantidad >= 1 THEN 'No'
-                            ELSE 'Si'
-                        END) as disponibilidad FROM 
-                        (SELECT r.id, r.intervalo, sum(r.cantidad) as cantidad FROM (
-                            SELECT 0 as id,'00:00:00-00:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 0 as id,'00:30:00-01:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 1 as id,'01:00:00-01:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 1 as id,'01:30:00-02:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 2 as id,'02:00:00-02:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 2 as id,'02:30:00-03:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 3 as id,'03:00:00-03:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 3 as id,'03:30:00-04:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 4 as id,'04:00:00-04:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 4 as id,'04:30:00-05:00:00' AS intervalo, 0 as cantidad UNION
-                            
-                            SELECT 5 as id,'05:00:00-05:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 5 as id,'05:30:00-06:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 6 as id,'06:00:00-06:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 6 as id,'06:30:00-07:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 7 as id,'07:00:00-07:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 7 as id,'07:30:00-08:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 8 as id,'08:00:00-08:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 8 as id,'08:30:00-09:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 9 as id,'09:00:00-09:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 9 as id,'09:30:00-10:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 10 as id,'10:00:00-10:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 10 as id,'10:30:00-11:00:00' AS intervalo, 0 as cantidad UNION 
-                              
-                            SELECT 11 as id,'11:00:00-11:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 11 as id,'11:30:00-12:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 12 as id,'12:00:00-12:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 12 as id,'12:30:00-13:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 13 as id,'13:00:00-13:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 13 as id,'13:30:00-14:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 14 as id,'14:00:00-14:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 14 as id,'14:30:00-15:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 15 as id,'15:00:00-15:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 15 as id,'15:30:00-16:00:00' AS intervalo, 0 as cantidad UNION
-                            
-                            SELECT 16 as id,'16:00:00-16:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 16 as id,'16:30:00-17:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 17 as id,'17:00:00-17:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 17 as id,'17:30:00-18:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 18 as id,'18:00:00-18:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 18 as id,'18:30:00-19:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 19 as id,'19:00:00-19:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 19 as id,'19:30:00-20:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 20 as id,'20:00:00-20:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 20 as id,'20:30:00-21:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 21 as id,'21:00:00-21:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 21 as id,'21:30:00-22:00:00' AS intervalo, 0 as cantidad UNION
-                              
-                            SELECT 22 as id,'22:00:00-22:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 22 as id,'22:30:00-23:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT 23 as id,'23:00:00-23:30:00' AS intervalo, 0 as cantidad UNION
-                            SELECT 23 as id,'23:30:00-00:00:00' AS intervalo, 0 as cantidad UNION
-                             
-                            SELECT HOUR(fecha_reservacion) as id ,
-                                (
-									CASE
-									WHEN MINUTE(TIME(fecha_reservacion)) BETWEEN  0 AND 29 THEN
-										CONCAT(LPAD(HOUR(TIME(fecha_reservacion)),2,'0'), ':00:00-', LPAD(HOUR(TIME(fecha_reservacion)),2,'0'), ':30:00')
-									ELSE
-										CONCAT(LPAD(HOUR(TIME(fecha_reservacion)),2,'0'), ':30:00-', LPAD(HOUR(TIME(fecha_reservacion))+1,2,'0'), ':00:00')
-									END
-								) 
-                            as intervalo, count(*) FROM `cita` WHERE usuario_id=".$request->request->get('user')
-                            ." AND fecha_reservacion BETWEEN '".$request->request->get('cita')["fechaReservacion"]." 00:00:00' AND '"
-                            .$request->request->get('cita')["fechaReservacion"]." 23:59:59' GROUP BY intervalo) as r GROUP BY r.intervalo) 
-                            as r2 GROUP BY r2.intervalo;";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
+        //$em = $this->getDoctrine()->getManager();
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+
+        $sql= 'CALL calcular_horario_disponible(:idUsuario, :fechaReservacion)';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array('idUsuario' => $request->request->get('user') , 'fechaReservacion' => $request->request->get('cita')["fechaReservacion"] ));
+        $result= $stmt->fetchAll();
         return $this->json($result);
     }
 
