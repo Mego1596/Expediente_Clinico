@@ -26,15 +26,35 @@ class HistorialPropioController extends AbstractController
      */
     public function index(HistorialPropioRepository $historialPropioRepository, Expediente $expediente,Security $AuthUser): Response
     {
+        //OBTENCION DEL NOMBRE DEL PACIENTE
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $sql = '
+            SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
+            FROM historial_propio as historial, expediente as exp, user as u, persona as p 
+            WHERE historial.expediente_id= :idExpediente AND
+            exp.id=historial.expediente_id AND
+            exp.usuario_id = u.id          AND
+            u.persona_id   = p.id 
+            LIMIT 1
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array('idExpediente' => $expediente->getId()));
+        $nombre= $stmt->fetch();
+
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
                if($expediente->getHabilitado()){
+
+                    
+                    //OBTENCION DE LAS HISTORIAS PROPIAS DEL PACIENTE    
                     $em = $this->getDoctrine()->getManager();
                     $RAW_QUERY = "SELECT historial.* FROM historial_propio as historial, expediente as exp WHERE exp.id=historial.expediente_id AND expediente_id=".$expediente->getId().";";
                     $statement = $em->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
-                    $result = $statement->fetchAll();           
+                    $result = $statement->fetchAll(); 
+
+
                 }else{
                     $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('expediente_index');
@@ -43,6 +63,7 @@ class HistorialPropioController extends AbstractController
                     'historial_propios' => $result,
                     'user'              => $AuthUser,
                     'expediente'        => $expediente,
+                    'nombre'            => $nombre,
                 ]);
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
@@ -63,6 +84,7 @@ class HistorialPropioController extends AbstractController
             'historial_propios' => $result,
             'user'              => $AuthUser,
             'expediente'        => $expediente,
+            'nombre'            => $nombre,
         ]);
     }
 
