@@ -77,7 +77,7 @@ class ExpedienteController extends AbstractController
         $form = $this->createFormBuilder($expediente)
             ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
             ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control']])
+            ->add('fechaNacimiento', DateType::class, ['widget' => 'single_text','html5' => true,'attr' => ['class' => 'form-control', 'max' => date_add(date_create(),date_interval_create_from_date_string("-1 years"))->format('Y-m-d') ]])
             ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
             ->add('apellidoCasada',TextType::class, array( 'required' => false,'attr' => array('class' => 'form-control')))
             ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
