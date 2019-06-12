@@ -1,8 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Lista de Salas{% endblock %}
-
 {% block body %}
+{% for message in app.flashes('notice') %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{ message }}
+    </div>
+{% endfor %}
 <div class="row">
         <div class="col-md-12">
             <div class="card">

@@ -223,26 +223,44 @@ class SalaController extends AbstractController
      */
     public function delete(Request $request, Sala $sala,Clinica $clinica,Security $AuthUser): Response
     {
-        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
-        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId() && $AuthUser->getUser()->getClinica()->getId() == $sala->getClinica()->getId() ){
-                if ($this->isCsrfTokenValid('delete'.$sala->getId(), $request->request->get('_token'))) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->remove($sala);
-                    $entityManager->flush();
-                }
+        $em = $this->getDoctrine()->getManager();
+        $RAW_QUERY = "SELECT COUNT(*) as cuenta FROM habitacion as h, sala as s WHERE 
+        h.sala_id = s.id AND
+        s.id = ".$sala->getId().";";
+        $statement = $em->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $validacionBloqueoEliminar = $statement->fetchAll();
+        if((int) $validacionBloqueoEliminar[0]["cuenta"] >= 1){
+            $this->addFlash('notice','Para borrar la sala verifique que este no tenga habitaciones asociadas a el');
+            if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
                 return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
             }else{
-                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
+                return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));  
+            }
+            
+        }else{
+            //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+            if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+                if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId() && $AuthUser->getUser()->getClinica()->getId() == $sala->getClinica()->getId() ){
+                    if ($this->isCsrfTokenValid('delete'.$sala->getId(), $request->request->get('_token'))) {
+                        $entityManager = $this->getDoctrine()->getManager();
+                        $entityManager->remove($sala);
+                        $entityManager->flush();
+                    }
+                    $this->addFlash('success', 'Sala eliminada con exito');
+                    return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
+                }else{
+                    $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                    return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
+                }
+            }
+            if ($this->isCsrfTokenValid('delete'.$sala->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($sala);
+                $entityManager->flush();
             }
         }
-        if ($this->isCsrfTokenValid('delete'.$sala->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($sala);
-            $entityManager->flush();
-        }
-
+        $this->addFlash('success', 'Sala eliminada con exito');
         return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
     }
 }

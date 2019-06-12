@@ -118,14 +118,14 @@ class TipoHabitacionController extends AbstractController
     public function delete(Request $request, TipoHabitacion $tipoHabitacion): Response
     {
         $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT COUNT(*) FROM habitacion as h, tipo_habitacion as th WHERE 
+        $RAW_QUERY = "SELECT COUNT(*) as cuenta FROM habitacion as h, tipo_habitacion as th WHERE 
         h.tipo_habitacion_id = th.id AND
         th.id = ".$tipoHabitacion->getId().";";
         $statement = $em->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
         $validacionBloqueoEliminar = $statement->fetchAll();
 
-        if($validacionBloqueoEliminar > 1){
+        if((int) $validacionBloqueoEliminar[0]["cuenta"] >= 1){
             $this->addFlash('notice','Para borrar el tipo de habitación verifique que este no tenga habitaciones asociadas a el');
             return $this->redirectToRoute('tipo_habitacion_index');
         }else{
