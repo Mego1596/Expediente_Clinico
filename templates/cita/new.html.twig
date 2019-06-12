@@ -75,13 +75,11 @@ $(document).ready(function(){
             document.getElementById('parrafoInicial').style.visibility = "hidden";
             document.getElementById('reporte').style.visibility = "hidden";
             $("#table-scroll").css('overflow','hidden');
-            $("#hora").empty();
             $("#reporte-info").empty();
           }else{
             document.getElementById('parrafoInicial').style.visibility = "hidden";
             document.getElementById('reporte').style.visibility = "hidden";
             $("#table-scroll").css('overflow','hidden');
-            $("#hora").empty();
             $("#reporte-info").empty();
             $.each(result,function(i,value){
               html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
@@ -165,13 +163,11 @@ $(document).ready(function(){
           document.getElementById('parrafoInicial').style.visibility = "hidden";
           document.getElementById('reporte').style.visibility = "hidden";
           $("#table-scroll").css('overflow','hidden');
-          $("#hora").empty();
           $("#reporte-info").empty();
         }else{
           document.getElementById('parrafoInicial').style.visibility = "hidden";
           document.getElementById('reporte').style.visibility = "hidden";
           $("#table-scroll").css('overflow','hidden');
-          $("#hora").empty();
           $("#reporte-info").empty();
           $.each(result,function(i,value){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
@@ -204,13 +200,11 @@ $(document).ready(function(){
           document.getElementById('parrafoInicial').style.visibility = "hidden";
           document.getElementById('reporte').style.visibility = "hidden";
           $("#table-scroll").css('overflow','hidden');
-          $("#hora").empty();
           $("#reporte-info").empty();
         }else{
           document.getElementById('parrafoInicial').style.visibility = "hidden";
           document.getElementById('reporte').style.visibility = "hidden";
           $("#table-scroll").css('overflow','hidden');
-          $("#hora").empty();
           $("#reporte-info").empty();
           $.each(result,function(i,value){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
@@ -245,11 +239,9 @@ $(document).ready(function(){
         		if(data == ""){
         			document.getElementById('reporte').style.visibility = "hidden";
               $("#table-scroll").css('overflow','hidden');
-              $("#hora").empty();
               $("#reporte-info").empty();
         		}else{
         			$("#reporte-info").empty();
-              $("#hora").empty();
         			document.getElementById('reporte').style.visibility = "visible";
               $("#table-scroll").css('overflow','auto');
         			$.each(data,function(i,value){
@@ -261,6 +253,7 @@ $(document).ready(function(){
                       "<tr>"+
                       "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
                       "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "<td style='background-color:#1cc88a;color:black'><input type='radio' id='time2' name='time2' value='"+value.intervalo.substring(0,5)+"'> "+
                       "</tr>"
                     );
                     }
@@ -269,18 +262,12 @@ $(document).ready(function(){
                       "<tr>"+
                       "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
                       "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "<td style='background-color:#1cc88a;color:black'><input type='radio' id='time2' name='time2'"+value.intervalo.substring(0,5)+" value='"+value.intervalo.substring(0,5)+"'> "+
                       "</tr>"
                     );
                   }
                 }
               });
-        		  $("#hora").append(
-              "<br/>"+
-              "<label for='time' id='time'>Ingrese la hora de la cita (Ej. 10:00 AM ó 04:30 PM)</label>"+
-              "<br/>"+
-              "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
-              );
-
             }
         	}});
       }else{
@@ -291,7 +278,6 @@ $(document).ready(function(){
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         document.getElementById('reporte').style.visibility = "hidden"; 
         $("#table-scroll").css('overflow','hidden');
-        $("#hora").empty();
         $("#reporte-info").empty();
       }
     }else{
@@ -302,7 +288,6 @@ $(document).ready(function(){
       $('html, body').animate({ scrollTop: 0 }, 'fast');
       document.getElementById('reporte').style.visibility = "hidden";  
       $("#table-scroll").css('overflow','hidden');
-      $("#hora").empty(); 
       $("#reporte-info").empty();
     }
   });
@@ -330,7 +315,6 @@ $(document).ready(function(){
             if(data == ""){
               document.getElementById('reporte').style.visibility = "hidden";
               $("#table-scroll").css('overflow','hidden');
-              $("#hora").empty();
               $("#reporte-info").empty();
             }else{
               $("#reporte-info").empty();
@@ -346,6 +330,7 @@ $(document).ready(function(){
                       "<tr>"+
                       "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
                       "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "<td style='background-color:#1cc88a;color:black'><input type='radio' id='time2' name='time2'"+value.intervalo.substring(0,5)+" value='"+value.intervalo.substring(0,5)+"'> "+
                       "</tr>"
                     );
                     }
@@ -354,19 +339,13 @@ $(document).ready(function(){
                       "<tr>"+
                       "<td style='background-color:#1cc88a;color:black'>"+value.intervalo+"</td>"+
                       "<td style='background-color:#1cc88a;color:black'>Disponible</td>"+
+                      "<td style='background-color:#1cc88a;color:black'><input type='radio' id='time2' name='time2'"+value.intervalo.substring(0,5)+" value='"+value.intervalo.substring(0,5)+"'> "+
                       "</tr>"
                     );
                   }
                 }
               });
-              $("#hora").append(
-                "<br/>"+
-                "<label for='time' id='time'>Ingrese la hora de la cita (Ej. 10:00 AM ó 04:30 PM)</label>"+
-                "<br/>"+
-                "<input type='time' onchange='horaValida()' id='time2' name='time2' placeholder='Hora' class='form-control' required='true'>"
-              );
             }
-              
           }});
       }else{
         $("#mensaje").attr('class','alert alert-warning alert-dismissible fade show');
@@ -376,7 +355,6 @@ $(document).ready(function(){
         $('html, body').animate({ scrollTop: 0 }, 'fast');
         document.getElementById('reporte').style.visibility = "hidden";  
         $("#table-scroll").css('overflow','hidden'); 
-        $("#hora").empty();
         $("#reporte-info").empty();        
       }
     }else{
@@ -387,7 +365,6 @@ $(document).ready(function(){
       $('html, body').animate({ scrollTop: 0 }, 'fast');
       document.getElementById('reporte').style.visibility = "hidden"; 
       $("#table-scroll").css('overflow','hidden');
-      $("#hora").empty();
       $("#reporte-info").empty();
     }
   });
