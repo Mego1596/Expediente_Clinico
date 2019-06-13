@@ -29,7 +29,21 @@ class FamiliarController extends AbstractController
      */
     public function index(FamiliarRepository $familiarRepository, Expediente $expediente,Security $AuthUser): Response
     {
-        
+        //OBTENCION NOMBRE DEL PACIENTE
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $sql ='
+                SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
+                FROM familiares_expediente as fex, expediente as exp, user as u, persona as p
+                WHERE fex.expediente_id   =:idExpediente     AND 
+                exp.id              = fex.expediente_id      AND
+                exp.usuario_id       = u.id                   AND
+                u.persona_id        =p.id           
+
+        ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array('idExpediente' => $expediente->getId()));
+        $nombreP= $stmt->fetch();
+
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
@@ -43,6 +57,7 @@ class FamiliarController extends AbstractController
                         'familiares' => $result,
                         'expediente' => $expediente,
                         'user'       => $AuthUser,
+                        'nombreP'    => $nombreP,
                     ]);
                 }else{
                     $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -64,6 +79,7 @@ class FamiliarController extends AbstractController
                 'familiares' => $result,
                 'expediente' => $expediente,
                 'user'       => $AuthUser,
+                'nombreP'    => $nombreP,
             ]);
         }else{
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -308,12 +324,13 @@ class FamiliarController extends AbstractController
      */
     public function show(Familiar $familiar, Expediente $expediente, Security $AuthUser): Response
     {
+
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getId() == $expediente->getId() ){
                 if($expediente->getHabilitado()){
                     return $this->render('familiar/show.html.twig', [
-                        'familiar' => $familiar,
+                        'familiar'   => $familiar,
                         'expediente' => $expediente,
                     ]);
                 }else{
