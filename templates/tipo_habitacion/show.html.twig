@@ -3,32 +3,44 @@
 {% block title %}Tipo de Habitacion{% endblock %}
 
 {% block body %}
-    <h1>TipoHabitacion</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ tipo_habitacion.id }}</td>
-            </tr>
-            <tr>
-                <th>TipoHabitacion</th>
-                <td>{{ tipo_habitacion.tipoHabitacion }}</td>
-            </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ tipo_habitacion.creadoEn ? tipo_habitacion.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ tipo_habitacion.actualizadoEn ? tipo_habitacion.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-    {%if (is_granted('ROLE_PERMISSION_INDEX_TIPO_HABITACION')) %}
-        <a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
-    {% endif %}
-    {% if(is_granted('ROLE_PERMISSION_EDIT_TIPO_HABITACION')) %}
-        <a class="btn btn-primary" href="{{ path('tipo_habitacion_edit', {'id': tipo_habitacion.id}) }}">Editar</a>
-    {% endif %}
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles del Tipo de habitacion </h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Tipo de Habitacion:</th>
+                            <td>{{ tipo_habitacion.tipoHabitacion }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fecha de creacion (Año-Mes-Dia):</th>
+                            <td>{{ tipo_habitacion.creadoEn ? tipo_habitacion.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Ultima Actualizacion (Año-Mes-Dia):</th>
+                            <td>{{ tipo_habitacion.actualizadoEn ? tipo_habitacion.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+                    {%if (is_granted('ROLE_PERMISSION_INDEX_TIPO_HABITACION')) %}
+                        <a class="btn btn-secondary" href="{{ path('tipo_habitacion_index') }}">Atras</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_TIPO_HABITACION')) %}
+                        <a class="btn btn-primary" href="{{ path('tipo_habitacion_edit', {'id': tipo_habitacion.id}) }}">Editar</a>
+                    {% endif %}
+        </div>
+
+</div>
+
+    
+    
 {% endblock %}

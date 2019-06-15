@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Pacientes Ingresados 
+                            <h4>Pacientes Ingresados</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -109,6 +109,7 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                            <a class="btn btn-secondary" href="{{path('home')}}">Atrás</a>
                         </div>
                     </div>
                 </div>
