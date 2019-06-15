@@ -31,6 +31,8 @@ class User implements UserInterface,\Serializable
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * 
+     * @Assert\Regex("^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$")
      */
     private $password;
 
@@ -56,13 +58,13 @@ class User implements UserInterface,\Serializable
      */
     private $citas;
 
-    /**
-     * @Assert\Blank
+     /**
+     * @Assert\Regex("^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$")
      */
     private $nuevo_password;
 
-    /**
-     * @Assert\Blank
+     /**
+     * @Assert\Regex("^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$")
      */
     private $repetir_nuevo_password;
 
