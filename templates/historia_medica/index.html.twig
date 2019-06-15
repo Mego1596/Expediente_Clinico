@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="pull-right" align="center">
+                    <div class="pull-center" align="center">
                     {% if is_granted('ROLE_PERMISSION_NEW_HISTORIA_MEDICA') %}
                         {% if(historia_medicas == null ) %}
                             <a href="{{ path('historia_medica_new',{'citum':cita.id}) }}" class="btn btn-success" style="color: black; width: 100%"><i class="fas fa-fw fa-id-card"></i> Registrar Historia Medica</a>
@@ -33,6 +33,7 @@
                     <br/>
                     <br/>
                     <div class="pull-bottom">
+                        {% for historia_medica in historia_medicas %}
                         <div class="table table-responsive">
                             <table id="example" class="display table-striped" style="width:100%">
                                 <thead>
@@ -41,11 +42,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for historia_medica in historia_medicas %}
                                     <tr>
-                                        <td style="word-break: break-word">{{historia_medica.consulta_por}}</td>
+                                        <td style="word-break: break-word">{{historia_medica.consultaPor}}</td>
                                     </tr>
-                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -57,11 +56,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for historia_medica in historia_medicas %}
                                     <tr>
                                         <td style="word-break: break-word">{{historia_medica.signos}}</td>
                                     </tr>
-                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -73,50 +70,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for historia_medica in historia_medicas %}
                                     <tr>
                                         <td style="word-break: break-word">{{historia_medica.sintomas}}</td>
                                     </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table table-responsive">
-                            <table id="example" class="display table-striped" style="width:100%">
-                                <thead>
-                                    <tr style="text-align: center">
-                                        <th id="relevante" class="all">Diagnostico</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for historia_medica in historia_medicas %}
-                                    <tr>
-                                        <td style="word-break: break-word">{{historia_medica.codigo}} {{historia_medica.descripcion}}</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="table table-responsive">
-                            <table id="example" class="display table-striped" style="width:100%">
-                                <thead>
-                                    <tr style="text-align: center">
-                                        <th id="relevante" class="all"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for historia_medica in historia_medicas %}
-                                    <tr>
-                                        <td style="word-break: break-word">{{historia_medica.codigo_especifico}}</td>
-                                    </tr>
-                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div class="table table-responsive">
                             <table id="example" class="display table-striped" style="width:100%">
                                 <tbody>
-                                {% for historia_medica in historia_medicas %}
                                     <tr>
                                         <td>
                                             {% if is_granted('ROLE_PERMISSION_EDIT_HISTORIA_MEDICA') %}
@@ -154,7 +116,6 @@
                                             {% endif %}
                                         </td>
                                     </tr>
-                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>
@@ -163,6 +124,7 @@
                                 <a class="btn btn-secondary" href="{{ path('cita_show', {'expediente':cita.getExpediente().getId(), 'id':cita.getId()} ) }}">Atras</a>
                             {% endif %}
                         </table>
+                    {% endfor %}
                     </div>
                 </div>
             </div>

@@ -30,12 +30,8 @@ class HistoriaMedicaController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($citum->getExpediente()->getHabilitado()){
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT h.*, d.codigo_categoria as codigo,d.descripcion as descripcion FROM `historia_medica` as h, `diagnostico` as d WHERE h.diagnostico_id = d.id AND cita_id =".$citum->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
+                    $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita_id' => $citum->getId()]);
+                    dd($result);
                     return $this->render('historia_medica/index.html.twig', [
                         'historia_medicas' => $result,
                         'user'           => $AuthUser,
@@ -50,13 +46,8 @@ class HistoriaMedicaController extends AbstractController
                 return $this->redirectToRoute('home');
             }  
         }
-
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT h.*, d.codigo_categoria as codigo,d.descripcion as descripcion FROM `historia_medica` as h, `diagnostico` as d WHERE h.diagnostico_id = d.id AND cita_id =".$citum->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-
+        $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita' => $citum->getId()]);
+        //dd($result);
         return $this->render('historia_medica/index.html.twig', [
             'historia_medicas' => $result,
             'user'           => $AuthUser,
@@ -92,50 +83,31 @@ class HistoriaMedicaController extends AbstractController
                             if($form["consultaPor"]->getData() != ""){
                                 if($form["signos"]->getData() != ""){
                                     if($form["sintomas"]->getData() != ""){
-                                        if($form["diagnostico"]->getData() != ""){
-                                            if($form["codigoEspecifico"]->getData() != ""){
-                                                    //INICIO PROCESAMIENTO DE DATOS
-                                                    $entityManager = $this->getDoctrine()->getManager();
-                                                    $historiaMedica->setCita($citum);
-                                                    $historiaMedica->setDiagnostico($form["diagnostico"]->getData());
-                                                    $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
-                                                    $historiaMedica->setSignos($form["signos"]->getData());
-                                                    $historiaMedica->setSintomas($form["sintomas"]->getData());
-                                                    //$form["diagnostico"]->getData()->getCodigoCategoria()[0]
-                                                    //$form["codigoEspecifico"]->getData()[0]
-                                                    //$form["diagnostico"]->getData()->getCodigoCategoria()[4];
-                                                    /*if($form["diagnostico"]->getData()->getCodigoCategoria()[0] == $form["codigoEspecifico"]->getData()[0] && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) >=0 && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) <= 99 ){
-                                                        
-                                                    }elseif($form["diagnostico"]->getData()->getCodigoCategoria()[4] == $form["codigoEspecifico"]->getData()[0]){
-                                                        $this->addFlash('fail', 'El código seleccionado no es valido para la categoria elegida');
-                                                        return $this->render('historia_medica/new.html.twig', [
-                                                            'historia_medica' => $historiaMedica,
-                                                            'editar'          => $editar,
-                                                            'cita'            => $citum,
-                                                            'form' => $form->createView(),
-                                                        ]);
-                                                    }*/
-                                                    $historiaMedica->setCodigoEspecifico($form["codigoEspecifico"]->getData());
-                                                    $entityManager->persist($historiaMedica);
-                                                    $entityManager->flush();
-                                            }else{
-                                                $this->addFlash('fail', 'Error,el código del diagnostico específico no puede ir vacío');
-                                                return $this->render('historia_medica/new.html.twig', [
-                                                    'historia_medica' => $historiaMedica,
-                                                    'editar'          => $editar,
-                                                    'cita'            => $citum,
-                                                    'form' => $form->createView(),
-                                                ]);
-                                            }
-                                        }else{
-                                            $this->addFlash('fail', 'Error, el diagnostico no puede ir vacío');
+                                        $entityManager = $this->getDoctrine()->getManager();
+                                        $historiaMedica->setCita($citum);
+                                        $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
+                                        $historiaMedica->setSignos($form["signos"]->getData());
+                                        $historiaMedica->setSintomas($form["sintomas"]->getData());
+                                        foreach ($form["id10"]->getData() as $codigo) {
+                                            $historiaMedica->addId10($codigo);    
+                                        }
+                                        //$form["diagnostico"]->getData()->getCodigoCategoria()[0]
+                                        //$form["codigoEspecifico"]->getData()[0]
+                                        //$form["diagnostico"]->getData()->getCodigoCategoria()[4];
+                                        /*if($form["diagnostico"]->getData()->getCodigoCategoria()[0] == $form["codigoEspecifico"]->getData()[0] && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) >=0 && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) <= 99 ){
+                                            
+                                        }elseif($form["diagnostico"]->getData()->getCodigoCategoria()[4] == $form["codigoEspecifico"]->getData()[0]){
+                                            $this->addFlash('fail', 'El código seleccionado no es valido para la categoria elegida');
                                             return $this->render('historia_medica/new.html.twig', [
                                                 'historia_medica' => $historiaMedica,
                                                 'editar'          => $editar,
                                                 'cita'            => $citum,
                                                 'form' => $form->createView(),
                                             ]);
-                                        }
+                                        }*/
+                                        //$historiaMedica->setCodigoEspecifico($form["codigoEspecifico"]->getData());
+                                        $entityManager->persist($historiaMedica);
+                                        $entityManager->flush();
                                     }else{
                                         $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
                                         return $this->render('historia_medica/new.html.twig', [
@@ -205,36 +177,17 @@ class HistoriaMedicaController extends AbstractController
                 if($form["consultaPor"]->getData() != ""){
                     if($form["signos"]->getData() != ""){
                         if($form["sintomas"]->getData() != ""){
-                            if($form["diagnostico"]->getData() != ""){
-                                if($form["codigoEspecifico"]->getData() != ""){
-                                        //INICIO PROCESAMIENTO DE DATOS
-                                        $entityManager = $this->getDoctrine()->getManager();
-                                        $historiaMedica->setCita($citum);
-                                        $historiaMedica->setDiagnostico($form["diagnostico"]->getData());
-                                        $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
-                                        $historiaMedica->setSignos($form["signos"]->getData());
-                                        $historiaMedica->setSintomas($form["sintomas"]->getData());
-                                        $historiaMedica->setCodigoEspecifico($form["codigoEspecifico"]->getData());
-                                        $entityManager->persist($historiaMedica);
-                                        $entityManager->flush();
-                                }else{
-                                    $this->addFlash('fail', 'Error,el código del diagnostico específico no puede ir vacío');
-                                    return $this->render('historia_medica/new.html.twig', [
-                                        'historia_medica' => $historiaMedica,
-                                        'editar'          => $editar,
-                                        'cita'            => $citum,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'Error, el diagnostico no puede ir vacío');
-                                return $this->render('historia_medica/new.html.twig', [
-                                    'historia_medica' => $historiaMedica,
-                                    'editar'          => $editar,
-                                    'cita'            => $citum,
-                                    'form' => $form->createView(),
-                                ]);
+                            //INICIO PROCESAMIENTO DE DATOS
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $historiaMedica->setCita($citum);
+                            $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
+                            $historiaMedica->setSignos($form["signos"]->getData());
+                            $historiaMedica->setSintomas($form["sintomas"]->getData());
+                            foreach ($form["id10"]->getData() as $codigo) {
+                                $historiaMedica->addId10($codigo);    
                             }
+                            $entityManager->persist($historiaMedica);
+                            $entityManager->flush();
                         }else{
                             $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
                             return $this->render('historia_medica/new.html.twig', [

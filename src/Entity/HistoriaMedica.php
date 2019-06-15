@@ -25,12 +25,6 @@ class HistoriaMedica
     private $cita;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Diagnostico", inversedBy="historiaMedica")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $diagnostico;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $consultaPor;
@@ -56,18 +50,19 @@ class HistoriaMedica
     private $actualizado_en;
 
     /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $codigoEspecifico;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\PlanTratamiento", mappedBy="historiaMedica", orphanRemoval=true)
      */
     private $planTratamientos;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\CodigoInternacional", inversedBy="historiaMedicas")
+     */
+    private $id10;
+
     public function __construct()
     {
         $this->planTratamientos = new ArrayCollection();
+        $this->id10 = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -83,18 +78,6 @@ class HistoriaMedica
     public function setCita(Cita $cita): self
     {
         $this->cita = $cita;
-
-        return $this;
-    }
-
-    public function getDiagnostico(): ?Diagnostico
-    {
-        return $this->diagnostico;
-    }
-
-    public function setDiagnostico(Diagnostico $diagnostico): self
-    {
-        $this->diagnostico = $diagnostico;
 
         return $this;
     }
@@ -159,18 +142,6 @@ class HistoriaMedica
         return $this;
     }
 
-    public function getCodigoEspecifico(): ?string
-    {
-        return $this->codigoEspecifico;
-    }
-
-    public function setCodigoEspecifico(string $codigoEspecifico): self
-    {
-        $this->codigoEspecifico = $codigoEspecifico;
-
-        return $this;
-    }
-
     /**
      * @return Collection|PlanTratamiento[]
      */
@@ -197,6 +168,32 @@ class HistoriaMedica
             if ($planTratamiento->getHistoriaMedica() === $this) {
                 $planTratamiento->setHistoriaMedica(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CodigoInternacional[]
+     */
+    public function getId10(): Collection
+    {
+        return $this->id10;
+    }
+
+    public function addId10(CodigoInternacional $id10): self
+    {
+        if (!$this->id10->contains($id10)) {
+            $this->id10[] = $id10;
+        }
+
+        return $this;
+    }
+
+    public function removeId10(CodigoInternacional $id10): self
+    {
+        if ($this->id10->contains($id10)) {
+            $this->id10->removeElement($id10);
         }
 
         return $this;

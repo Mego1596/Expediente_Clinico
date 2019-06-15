@@ -25,14 +25,11 @@
               {{ form_label(form.sintomas) }}
               {{ form_widget(form.sintomas) }}
             </div>
-            <div class="col-md-12">
-              {{ form_label(form.diagnostico) }}
-              {{ form_widget(form.diagnostico) }}
+            <div class="col-md-12" style="height: 650px">
+              {{ form_label(form.id10, "Seleccione los posibles diagnosticos:(Presione la tecla ctrl + click para seleccionar varios) ") }}
+              {{ form_widget(form.id10) }}
             </div>
-            <div class="col-md-12">
-              {{ form_label(form.codigoEspecifico) }}
-              {{ form_widget(form.codigoEspecifico) }}
-            </div>
+
           </div>
           <div class="container" style="margin-top: 1%">
             <div class="row" style="text-align: center;">

@@ -68,7 +68,10 @@ final class Version20190607030751 extends AbstractMigration
 
         $this->addSql('CREATE TABLE historial_propio (id INT AUTO_INCREMENT NOT NULL, expediente_id INT NOT NULL, descripcion LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_EXPEDIENTE_3 (expediente_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
-        $this->addSql('CREATE TABLE historia_medica (id INT AUTO_INCREMENT NOT NULL, cita_id INT NOT NULL, diagnostico_id INT NOT NULL, consulta_por LONGTEXT NOT NULL, signos LONGTEXT NOT NULL, sintomas LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, codigo_especifico VARCHAR(50) NOT NULL, UNIQUE INDEX UNIQ_CITA_2 (cita_id), UNIQUE INDEX UNIQ_DIAGNOSTICO_1 (diagnostico_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE historia_medica (id INT AUTO_INCREMENT NOT NULL, cita_id INT NOT NULL, consulta_por LONGTEXT NOT NULL, signos LONGTEXT NOT NULL, sintomas LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_CITA_2 (cita_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+
+        $this->addSql('CREATE TABLE historia_medica_codigo_internacional (historia_medica_id INT NOT NULL, codigo_internacional_id INT NOT NULL, INDEX IDX_HISTORIA_MEDICA_2 (historia_medica_id), INDEX IDX_CIE10 (codigo_internacional_id), PRIMARY KEY(historia_medica_id, codigo_internacional_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+
 
         $this->addSql('CREATE TABLE ingresado (id INT AUTO_INCREMENT NOT NULL, camilla_id INT NOT NULL, expediente_id INT NOT NULL, usuario_id INT NOT NULL, fecha_ingreso DATETIME NOT NULL, fecha_salida DATETIME DEFAULT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, INDEX IDX_CAMILLA_1 (camilla_id), INDEX IDX_EXPEDIENTE_4 (expediente_id), INDEX IDX_USUARIO_3 (usuario_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
@@ -89,6 +92,8 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('CREATE TABLE tipo_habitacion (id INT AUTO_INCREMENT NOT NULL, tipo_habitacion LONGTEXT NOT NULL, creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
         $this->addSql('CREATE TABLE user (id INT AUTO_INCREMENT NOT NULL, rol_id INT NOT NULL, clinica_id INT DEFAULT NULL, usuario_especialidades_id INT DEFAULT NULL, persona_id INT NOT NULL, email VARCHAR(180) NOT NULL, password VARCHAR(255) NOT NULL, is_active TINYINT(1) NOT NULL, emergencia TINYINT(1) DEFAULT NULL, planta TINYINT(1) DEFAULT NULL, UNIQUE INDEX UNIQ_EMAIL_1 (email), INDEX IDX_ROL_2 (rol_id), INDEX IDX_CLINICA_2 (clinica_id), INDEX IDX_ESPECIALIDAD_1 (usuario_especialidades_id), UNIQUE INDEX UNIQ_PERSONA_1 (persona_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+
+        $this->addSql('CREATE TABLE codigo_internacional (id INT AUTO_INCREMENT NOT NULL,id10 VARCHAR(10) NOT NULL, dec10 VARCHAR(400) DEFAULT NULL, grp10 VARCHAR(200) DEFAULT NULL,creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
         $this->addSql('ALTER TABLE anexo ADD CONSTRAINT FK_EXAMEN_SOLICITADO_1 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
 
@@ -112,7 +117,9 @@ final class Version20190607030751 extends AbstractMigration
 
         $this->addSql('ALTER TABLE camilla ADD CONSTRAINT FK_HABITACION_1 FOREIGN KEY (habitacion_id) REFERENCES habitacion (id)');
 
-        $this->addSql('ALTER TABLE historia_medica ADD CONSTRAINT FK_DIAGNOSTICO_1 FOREIGN KEY (diagnostico_id) REFERENCES diagnostico (id)');
+        $this->addSql('ALTER TABLE historia_medica_codigo_internacional ADD CONSTRAINT FK_HISTORIA_MEDICA_2 FOREIGN KEY (historia_medica_id) REFERENCES historia_medica (id) ON DELETE CASCADE');
+
+        $this->addSql('ALTER TABLE historia_medica_codigo_internacional ADD CONSTRAINT FK_CIE10 FOREIGN KEY (codigo_internacional_id) REFERENCES codigo_internacional (id) ON DELETE CASCADE');
 
         $this->addSql('ALTER TABLE habitacion ADD CONSTRAINT FK_SALA_1 FOREIGN KEY (sala_id) REFERENCES sala (id)');
 
@@ -273,6 +280,10 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('CREATE TRIGGER `llenarSala` BEFORE INSERT ON `sala` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
         $this->addSql('CREATE TRIGGER `actualizarSala` BEFORE UPDATE ON `sala` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
 
+        //CIE10
+        $this->addSql('CREATE TRIGGER `llenarCIE10` BEFORE INSERT ON `codigo_internacional` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
+        $this->addSql('CREATE TRIGGER `actualizarCIE10` BEFORE UPDATE ON `codigo_internacional` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
+
         //TIPO_HABITACION
         $this->addSql('CREATE TRIGGER `llenarTipoHabitacion` BEFORE INSERT ON `tipo_habitacion` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
         $this->addSql('CREATE TRIGGER `actualizarTipoHabitacion` BEFORE UPDATE ON `tipo_habitacion` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
@@ -341,10 +352,6 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('CREATE TRIGGER `llenarGenero` BEFORE INSERT ON `genero` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
         $this->addSql('CREATE TRIGGER `actualizarGenero` BEFORE UPDATE ON `genero` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
 
-        //DIAGNOSTICO
-        $this->addSql('CREATE TRIGGER `llenarDiagnostico` BEFORE INSERT ON `diagnostico` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
-        $this->addSql('CREATE TRIGGER `actualizarDiagnostico` BEFORE UPDATE ON `diagnostico` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
-
         //EXAMEN_SOLICITADO
         $this->addSql('CREATE TRIGGER `llenarExamenSolicitado` BEFORE INSERT ON `examen_solicitado` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
         $this->addSql('CREATE TRIGGER `actualizarExamenSolicitado` BEFORE UPDATE ON `examen_solicitado` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
@@ -397,7 +404,8 @@ final class Version20190607030751 extends AbstractMigration
 
         $this->addSql('ALTER TABLE ingresado DROP FOREIGN KEY FK_CAMILLA_1');
         $this->addSql('ALTER TABLE examen_solicitado DROP FOREIGN KEY FK_CITA_1');
-        $this->addSql('ALTER TABLE historia_medica DROP FOREIGN KEY FK_DIAGNOSTICO_1');
+        $this->addSql('ALTER TABLE historia_medica_codigo_internacional DROP FOREIGN KEY FK_CIE10');
+        $this->addSql('ALTER TABLE historia_medica_codigo_internacional DROP FOREIGN KEY FK_HISTORIA_MEDICA_2');
         $this->addSql('ALTER TABLE signo_vital DROP FOREIGN KEY FK_CITA_3');
         $this->addSql('ALTER TABLE sala DROP FOREIGN KEY FK_CLINICA_1');
         $this->addSql('ALTER TABLE user DROP FOREIGN KEY FK_CLINICA_2');
@@ -435,7 +443,7 @@ final class Version20190607030751 extends AbstractMigration
         $this->addSql('DROP TABLE camilla');
         $this->addSql('DROP TABLE cita');
         $this->addSql('DROP TABLE clinica');
-        $this->addSql('DROP TABLE diagnostico');
+        $this->addSql('DROP TABLE codigo_internacional');
         $this->addSql('DROP TABLE especialidad');
         $this->addSql('DROP TABLE examen_heces_macroscopico');
         $this->addSql('DROP TABLE examen_heces_microscopico');
