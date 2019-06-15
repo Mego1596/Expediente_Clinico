@@ -3,29 +3,41 @@
 {% block title %}Detalles del Rol{% endblock %}
 
 {% block body %}
-    <h1>Detalles del Rol</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ rol.id }}</td>
-            </tr>
-            <tr>
-                <th>NombreRol</th>
-                <td>{{ rol.nombreRol }}</td>
-            </tr>
-            <tr>
-                <th>Descripcion</th>
-                <td>{{ rol.descripcion }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles del Rol</h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>NombreRol</th>
+                                <td>{{ rol.nombreRol }}</td>
+                            </tr>
+                            <tr>
+                                <th>Descripcion</th>
+                                <td>{{ rol.descripcion }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+                    {%if (is_granted('ROLE_PERMISSION_INDEX_ROL')) %}
+                      <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
+                    {% endif %}
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_ROL')) %}
+                        <a class="btn btn-primary"href="{{ path('rol_edit', {'id': rol.id}) }}">Editar</a>
+                    {% endif %}
+        </div>
 
-    {%if (is_granted('ROLE_PERMISSION_INDEX_ROL')) %}
-      <a class="btn btn-secondary" href="{{ path('rol_index') }}">Atras</a>
-    {% endif %}
-    {% if(is_granted('ROLE_PERMISSION_EDIT_ROL')) %}
-        <a class="btn btn-primary"href="{{ path('rol_edit', {'id': rol.id}) }}">Editar</a>
-    {% endif %}
+</div>
+
+    
+
+    
 {% endblock %}
