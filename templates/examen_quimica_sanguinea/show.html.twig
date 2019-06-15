@@ -1,51 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}ExamenQuimicaSanguinea{% endblock %}
+{% block title %}Detalles del Examen de Quimica Sanguinea{% endblock %}
 
 {% block body %}
-    <h1>Examen de Quimica Sanguinea</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ examen_quimica_sanguinea.id }}</td>
-            </tr>
-            <tr>
-                <th>Parametro</th>
-                <td>{{ examen_quimica_sanguinea.parametro }}</td>
-            </tr>
-            <tr>
-                <th>Resultado</th>
-                <td>{{ examen_quimica_sanguinea.resultado }}</td>
-            </tr>
-            <tr>
-                <th>Comentario</th>
-                <td>{{ examen_quimica_sanguinea.comentario }}</td>
-            </tr>
-            <tr>
-                <th>Unidades</th>
-                <td>{{ examen_quimica_sanguinea.unidades }}</td>
-            </tr>
-            <tr>
-                <th>Rango</th>
-                <td>{{ examen_quimica_sanguinea.rango }}</td>
-            </tr>
-            <tr>
-                <th>Creado_en</th>
-                <td>{{ examen_quimica_sanguinea.creadoEn ? examen_quimica_sanguinea.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Actualizado_en</th>
-                <td>{{ examen_quimica_sanguinea.actualizadoEn ? examen_quimica_sanguinea.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
 
-    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
-        <a class="btn btn-secondary" href="{{ path('examen_quimica_sanguinea_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
-    {% endif %}
-    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
-        <a class="btn btn-primary" href="{{ path('examen_quimica_sanguinea_edit', {'id': examen_quimica_sanguinea.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
-    {% endif %}
+<div class="card">
+        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12" style="color: black">
+                                    <h4>Detalles del Examen de Quimica Sanguinea </h4> 
+                                </div>
+                            </div>
+        </div>
+         <div class="card-body">
+            <div class="table table-responsive">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th>Parametro:</th>
+                                <td>{{ examen_quimica_sanguinea.parametro }}</td>
+                            </tr>
+                            <tr>
+                                <th>Resultado:</th>
+                                <td>{{ examen_quimica_sanguinea.resultado }}</td>
+                            </tr>
+                            <tr>
+                                <th>Comentario:</th>
+                                <td>{{ examen_quimica_sanguinea.comentario }}</td>
+                            </tr>
+                            <tr>
+                                <th>Unidades:</th>
+                                <td>{{ examen_quimica_sanguinea.unidades }}</td>
+                            </tr>
+                            <tr>
+                                <th>Rango:</th>
+                                <td>{{ examen_quimica_sanguinea.rango }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de creacion (Año-Mes-Dia):</th>
+                                <td>{{ examen_quimica_sanguinea.creadoEn ? examen_quimica_sanguinea.creadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                            <tr>
+                                <th>Ultima Actualizacion (Año-Mes-Dia):</th>
+                                <td>{{ examen_quimica_sanguinea.actualizadoEn ? examen_quimica_sanguinea.actualizadoEn|date('Y-m-d H:i:s') : '' }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+            </div>
+                    {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
+                        <a class="btn btn-secondary" href="{{ path('examen_quimica_sanguinea_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+                    {% endif %}
+                    {% if (is_granted('ROLE_PERMISSION_EDIT_EXAMENES')) %}
+                        <a class="btn btn-primary" href="{{ path('examen_quimica_sanguinea_edit', {'id': examen_quimica_sanguinea.id,'examen_solicitado': examen_solicitado.getId()}) }}">Editar</a> 
+                    {% endif %}
+        </div>
+
+</div>
+
 {% endblock %}

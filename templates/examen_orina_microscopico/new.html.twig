@@ -5,6 +5,6 @@
 {% block body %}
     {{ include('examen_orina_microscopico/_form.html.twig') }}
     {% if (is_granted('ROLE_PERMISSION_INDEX_EXAMENES')) %}
-    	<a class="btn btn-secondary" href="{{ path('examen_heces_microscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
+    	<a class="btn btn-secondary" href="{{ path('examen_orina_microscopico_index',{'examen_solicitado': examen_solicitado.getId()}) }}">Atras</a>
     {% endif %}
 {% endblock %}

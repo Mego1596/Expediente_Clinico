@@ -27,6 +27,17 @@ class HistorialFamiliarController extends AbstractController
      */
     public function index(HistorialFamiliarRepository $historialFamiliarRepository, Familiar $familiar,Security $AuthUser): Response
     {
+        //OBTENIENDO EL ID DEL EXPEDIENTE
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $sql = 'SELECT fex.expediente_id as idExpediente
+        FROM familiar as fam, familiares_expediente as fex 
+        WHERE fam.id= :idFamiliar AND 
+              fam.id=fex.familiar_id
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array('idFamiliar' => $familiar->getId()));
+        $expediente= $stmt->fetch();
+
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($familiar->getFamiliaresExpedientes()[0]->getExpediente()->getHabilitado()){
@@ -39,6 +50,7 @@ class HistorialFamiliarController extends AbstractController
                         'historial_familiares' => $result,
                         'user'              => $AuthUser,
                         'familiar'          => $familiar,
+                        'expediente'        => $expediente
                     ]);
                 }else{
                     $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -60,6 +72,7 @@ class HistorialFamiliarController extends AbstractController
                 'historial_familiares' => $result,
                 'user'              => $AuthUser,
                 'familiar'          => $familiar,
+                'expediente'        => $expediente
             ]);
         }else{
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Examenes de Heces Microscopicos{% endblock %}
+{% block title %}Examenes de Orina Microscopicos{% endblock %}
 
 {% block body %}
 <div class="row">
@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                            <h4>Examenes de Orina Macroscopico</h4> 
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -87,6 +87,10 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+
+                                {% if(is_granted('ROLE_PERMISSION_INDEX_EXAMEN_SOLICITADO')) %}
+                                    <a class="btn btn-secondary" href="{{ path('examen_solicitado_index',{'cita': examen_solicitado.getCita().getId()}) }}">Atras</a>
+                                {% endif %}
                         </div>
                     </div>
                 </div>

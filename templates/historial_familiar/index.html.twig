@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                            Bienvenido al Sistema Informatico de la Clinica Hospitalaria 
+                             <h4>Historiales del familiar: {{ familiar.primerNombre }} {{ familiar.segundoNombre }} {{ familiar.primerApellido }} {{ familiar.segundoApellido }}</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
@@ -84,6 +84,9 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
+                                {% if(is_granted('ROLE_PERMISSION_SHOW_FAMILIAR')) %}
+                                <a class="btn btn-secondary" href="{{ path('familiar_show', {'id': familiar.id, 'expediente': expediente.idExpediente} )  }}">Atrás</a>
+                                {% endif %}
                         </div>
                     </div>
                 </div>
