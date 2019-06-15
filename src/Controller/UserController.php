@@ -178,7 +178,7 @@ class UserController extends AbstractController
                             }else{
                                 $this->addFlash('fail','Error, el rol de usuario no puede ir vacío');
                                 return $this->render('user/new.html.twig', [
-                                    'user' => $user,
+                                    'usuario' => $user,
                                     'clinicas'   => $clinicas,
                                     'pertenece'  => $clinicaPerteneciente,
                                     'form' => $form->createView(),
@@ -187,7 +187,7 @@ class UserController extends AbstractController
                         }else{
                             $this->addFlash('fail','Error, la contraseña de usuario no puede ir vacía');
                             return $this->render('user/new.html.twig', [
-                                'user' => $user,
+                                'usuario' => $user,
                                 'clinicas'   => $clinicas,
                                 'pertenece'  => $clinicaPerteneciente,
                                 'form' => $form->createView(),
@@ -196,7 +196,7 @@ class UserController extends AbstractController
                     }else{
                         $this->addFlash('fail','Error, el email de usuario no puede ir vacío');
                         return $this->render('user/new.html.twig', [
-                            'user' => $user,
+                            'usuario' => $user,
                             'clinicas'   => $clinicas,
                             'pertenece'  => $clinicaPerteneciente,
                             'form' => $form->createView(),
@@ -205,7 +205,7 @@ class UserController extends AbstractController
                 }else{
                     $this->addFlash('fail','Error, los apellidos de usuario no pueden ir vacios');
                     return $this->render('user/new.html.twig', [
-                        'user' => $user,
+                        'usuario' => $user,
                         'clinicas'   => $clinicas,
                         'pertenece'  => $clinicaPerteneciente,
                         'form' => $form->createView(),
@@ -214,7 +214,7 @@ class UserController extends AbstractController
             }else{
                 $this->addFlash('fail','Error, los nombres de usuario no pueden ir vacios');
                 return $this->render('user/new.html.twig', [
-                    'user' => $user,
+                    'usuario' => $user,
                     'clinicas'   => $clinicas,
                     'pertenece'  => $clinicaPerteneciente,
                     'form' => $form->createView(),
@@ -227,7 +227,7 @@ class UserController extends AbstractController
 
       
         return $this->render('user/new.html.twig', [
-            'user' => $user,
+            'usuario' => $user,
             'clinicas'   => $clinicas,
             'pertenece'  => $clinicaPerteneciente,
             'form' => $form->createView(),
@@ -483,7 +483,7 @@ class UserController extends AbstractController
                     }
 
                     return $this->render('user/edit.html.twig', [
-                        'user' => $user,
+                        'usuario' => $user,
                         'persona' => $persona,
                         'userAuth' => $AuthUser,
                         'form' => $form->createView(),
@@ -693,7 +693,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/edit.html.twig', [
-            'user' => $user,
+            'usuario' => $user,
             'persona' => $persona,
             'userAuth' => $AuthUser,
             'form' => $form->createView(),

@@ -8,7 +8,7 @@
     <div class="card">
       <h5 class="card-header">Modificar Usuario</h5>
       <div class="card-body">
-        {{ form_start(form, {'action': path('user_edit', {'id': user.id})}) }}
+        {{ form_start(form, {'action': path('user_edit', {'id': usuario.id})}) }}
 
           {# the argument of csrf_token() is an arbitrary string used to generate the token #}
           <input type="hidden" name="token" value="{{ csrf_token('edit-item') }}"/>
