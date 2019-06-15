@@ -96,6 +96,8 @@ class FamiliarController extends AbstractController
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
     {
+        date_default_timezone_set("America/El_Salvador");
+        $date = date_add(date_create(),date_interval_create_from_date_string("-1 years"));
 
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
@@ -114,6 +116,15 @@ class FamiliarController extends AbstractController
                                     if($form["telefono"]->getData() != ""){
                                         if($form["descripcion"]->getData() != ""){
                                             if($request->request->get('responsable') != ""){
+                                                if ($date <= $form["fechaNacimiento"]->getData() ) {
+                                                $this->addFlash('fail', 'La fecha de nacimiento debe ser al menos un año menor a la fecha actual');
+                                                return $this->render('familiar/new.html.twig', [
+                                                        'familiar' => $familiar,
+                                                        'expediente' => $expediente,
+                                                        'editar'     => $editar,
+                                                        'form' => $form->createView(),
+                                                    ]);
+                                                }
                                                 //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
                                                 $familiar->setPrimerNombre($form["primerNombre"]->getData());
                                                 $familiar->setSegundoNombre($form["segundoNombre"]->getData());
@@ -223,6 +234,15 @@ class FamiliarController extends AbstractController
                             if($form["telefono"]->getData() != ""){
                                 if($form["descripcion"]->getData() != ""){
                                     if($request->request->get('responsable') != ""){
+                                        if ($date <= $form["fechaNacimiento"]->getData() ) {
+                                            $this->addFlash('fail', 'La fecha de nacimiento debe ser al menos un año menor a la fecha actual');
+                                            return $this->render('familiar/new.html.twig', [
+                                                    'familiar' => $familiar,
+                                                    'expediente' => $expediente,
+                                                    'editar'     => $editar,
+                                                    'form' => $form->createView(),
+                                                ]);
+                                        }
                                         //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
                                         $familiar->setPrimerNombre($form["primerNombre"]->getData());
                                         $familiar->setSegundoNombre($form["segundoNombre"]->getData());

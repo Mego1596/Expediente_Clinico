@@ -31,6 +31,12 @@ class User implements UserInterface,\Serializable
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * 
+     * @Assert\Regex( 
+     * pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito,
+     *  al menos una minúscula,
+     *  al menos una mayúscula y al menos un caracter no alfanumérico.")
      */
     private $password;
 
@@ -56,13 +62,21 @@ class User implements UserInterface,\Serializable
      */
     private $citas;
 
-    /**
-     * @Assert\Blank
+     /**
+     * @Assert\Regex( 
+     * pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, 
+     *  al menos una minúscula,
+     *  al menos una mayúscula y al menos un caracter no alfanumérico.")
      */
     private $nuevo_password;
 
-    /**
-     * @Assert\Blank
+     /**
+       * @Assert\Regex( 
+     *  pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, 
+     *  al menos una minúscula,
+     *  al menos una mayúscula y al menos un caracter no alfanumérico.")
      */
     private $repetir_nuevo_password;
 
