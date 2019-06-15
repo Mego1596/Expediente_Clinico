@@ -259,7 +259,7 @@ class UserController extends AbstractController
             if($user->getRol()->getNombreRol() != 'ROLE_SA'){
                 if($AuthUser->getUser()->getClinica()->getId() == $user->getClinica()->getId()){
                     return $this->render('user/show.html.twig', [
-                        'user' => $user,
+                        'usuario' => $user,
                         'persona'=>$result,
 
                     ]);
@@ -273,7 +273,7 @@ class UserController extends AbstractController
             }
         }
         return $this->render('user/show.html.twig', [
-            'user' => $user,
+            'usuario' => $user,
             'persona'=>$result,
         ]);
     }
