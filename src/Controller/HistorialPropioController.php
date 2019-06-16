@@ -30,12 +30,10 @@ class HistorialPropioController extends AbstractController
         $conn = $this->getDoctrine()->getManager()->getConnection();
         $sql = '
             SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
-            FROM historial_propio as historial, expediente as exp, user as u, persona as p 
-            WHERE historial.expediente_id= :idExpediente AND
-            exp.id=historial.expediente_id AND
+            FROM expediente as exp, user as u, persona as p 
+            WHERE exp.id   = :idExpediente AND
             exp.usuario_id = u.id          AND
             u.persona_id   = p.id 
-            LIMIT 1
             ';
         $stmt = $conn->prepare($sql);
         $stmt->execute(array('idExpediente' => $expediente->getId()));
