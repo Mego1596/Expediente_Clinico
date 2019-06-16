@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-06-2019 a las 21:38:39
+-- Tiempo de generación: 17-06-2019 a las 00:50:58
 -- Versión del servidor: 10.1.38-MariaDB
 -- Versión de PHP: 7.3.3
 
@@ -15483,6 +15483,16 @@ CREATE TABLE `ingresado` (
 --
 DELIMITER $$
 CREATE TRIGGER `actualizarIngresado` BEFORE UPDATE ON `ingresado` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `llenadoHistorial` AFTER UPDATE ON `ingresado` FOR EACH ROW BEGIN
+        IF NEW.fecha_salida IS NOT NULL THEN 
+                    INSERT INTO `historial_ingresado`(expediente_id, usuario_id, fecha_entrada, fecha_salida)
+                    VALUES(NEW.expediente_id, NEW.usuario_id, NEW.`fecha_ingreso`, NEW.fecha_salida);
+
+         END IF;
+ END
 $$
 DELIMITER ;
 DELIMITER $$
