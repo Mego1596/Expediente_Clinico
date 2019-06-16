@@ -93,6 +93,10 @@ final class Version20190607030751 extends AbstractMigration
 
         $this->addSql('CREATE TABLE codigo_internacional (id INT AUTO_INCREMENT NOT NULL,id10 VARCHAR(10) NOT NULL, dec10 VARCHAR(400) DEFAULT NULL, grp10 VARCHAR(200) DEFAULT NULL,creado_en DATETIME DEFAULT NULL, actualizado_en DATETIME DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
 
+        $this->addSql('CREATE TABLE historial_ingresado (id INT AUTO_INCREMENT NOT NULL, expediente_id INT NOT NULL, nombre_sala VARCHAR(255) NOT NULL, numero_habitacion INT NOT NULL, numero_camilla INT NOT NULL, doctor_asignado VARCHAR(255) NOT NULL, fecha_entrada DATETIME NOT NULL, fecha_salida DATETIME NOT NULL, INDEX IDX_EXPEDIENTE_5 (expediente_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+
+        $this->addSql('ALTER TABLE historial_ingresado ADD CONSTRAINT FK_EXPEDIENTE_5 FOREIGN KEY (expediente_id) REFERENCES expediente (id)');
+
         $this->addSql('ALTER TABLE anexo ADD CONSTRAINT FK_EXAMEN_SOLICITADO_1 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');
 
         $this->addSql('ALTER TABLE examen_heces_macroscopico ADD CONSTRAINT FK_EXAMEN_SOLICITADO_2 FOREIGN KEY (examen_solicitado_id) REFERENCES examen_solicitado (id)');

@@ -102,12 +102,18 @@ class Expediente
      */
     private $habilitado;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\HistorialIngresado", mappedBy="expediente", orphanRemoval=true)
+     */
+    private $historialIngresados;
+
     public function __construct()
     {
         $this->familiaresExpedientes = new ArrayCollection();
         $this->ingresados = new ArrayCollection();
         $this->historialPropios = new ArrayCollection();
         $this->citas = new ArrayCollection();
+        $this->historialIngresados = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -375,6 +381,37 @@ class Expediente
     public function setHabilitado(bool $habilitado): self
     {
         $this->habilitado = $habilitado;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HistorialIngresado[]
+     */
+    public function getHistorialIngresados(): Collection
+    {
+        return $this->historialIngresados;
+    }
+
+    public function addHistorialIngresado(HistorialIngresado $historialIngresado): self
+    {
+        if (!$this->historialIngresados->contains($historialIngresado)) {
+            $this->historialIngresados[] = $historialIngresado;
+            $historialIngresado->setExpediente($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistorialIngresado(HistorialIngresado $historialIngresado): self
+    {
+        if ($this->historialIngresados->contains($historialIngresado)) {
+            $this->historialIngresados->removeElement($historialIngresado);
+            // set the owning side to null (unless already changed)
+            if ($historialIngresado->getExpediente() === $this) {
+                $historialIngresado->setExpediente(null);
+            }
+        }
 
         return $this;
     }
