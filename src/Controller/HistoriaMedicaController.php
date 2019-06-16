@@ -27,13 +27,24 @@ class HistoriaMedicaController extends AbstractController
      */
     public function index(HistoriaMedicaRepository $historiaMedicaRepository, Cita $citum, Security $AuthUser): Response
     {
+        $diagnostico=null;
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($citum->getExpediente()->getHabilitado()){
                     $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita_id' => $citum->getId()]);
-                    dd($result);
+                    if(count($result) > 0){
+                        $em = $this->getDoctrine()->getManager();
+                        $RAW_QUERY = "SELECT id10 as codigo, dec10 as descripcion FROM historia_medica_codigo_internacional as h_c_i, 
+                                      codigo_internacional as c_i WHERE
+                                      h_c_i.codigo_internacional_id = c_i.id AND                       
+                                      h_c_i.historia_medica_id=".$result[0]->getId();
+                        $statement = $em->getConnection()->prepare($RAW_QUERY);
+                        $statement->execute();
+                        $diagnostico = $statement->fetchAll();
+                    }
                     return $this->render('historia_medica/index.html.twig', [
                         'historia_medicas' => $result,
+                        'diagnostico'    => $diagnostico,
                         'user'           => $AuthUser,
                         'cita'           => $citum,
                     ]);
@@ -47,9 +58,19 @@ class HistoriaMedicaController extends AbstractController
             }  
         }
         $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita' => $citum->getId()]);
-        //dd($result);
+        if(count($result) > 0){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT id10 as codigo, dec10 as descripcion FROM historia_medica_codigo_internacional as h_c_i, 
+                          codigo_internacional as c_i WHERE
+                          h_c_i.codigo_internacional_id = c_i.id AND                       
+                          h_c_i.historia_medica_id=".$result[0]->getId();
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $diagnostico = $statement->fetchAll();
+        }
         return $this->render('historia_medica/index.html.twig', [
             'historia_medicas' => $result,
+            'diagnostico'    => $diagnostico,
             'user'           => $AuthUser,
             'cita'           => $citum,
         ]);

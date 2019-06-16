@@ -78,6 +78,24 @@
                         </div>
                         <div class="table table-responsive">
                             <table id="example" class="display table-striped" style="width:100%">
+                                <thead>
+                                    <tr style="text-align: center">
+                                        <th id="relevante" class="all">Codigo</th>
+                                        <th id="relevante" class="all">Descripcion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for diag in diagnostico %}
+                                    <tr>
+                                        <td style="word-break: break-word">{{diag.codigo}}</td>
+                                        <td style="word-break: break-word">{{diag.descripcion}}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table table-responsive">
+                            <table id="example" class="display table-striped" style="width:100%">
                                 <tbody>
                                     <tr>
                                         <td>
