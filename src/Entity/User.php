@@ -111,11 +111,17 @@ class User implements UserInterface,\Serializable
      */
     private $persona;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\HistorialIngresado", mappedBy="usuario", orphanRemoval=true)
+     */
+    private $historialIngresados;
+
 
     public function __construct()
     {
         $this->ingresados = new ArrayCollection();
         $this->citas = new ArrayCollection();
+        $this->historialIngresados = new ArrayCollection();
     }
 
 
@@ -396,6 +402,37 @@ class User implements UserInterface,\Serializable
     public function setPersona(Persona $persona): self
     {
         $this->persona = $persona;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HistorialIngresado[]
+     */
+    public function getHistorialIngresados(): Collection
+    {
+        return $this->historialIngresados;
+    }
+
+    public function addHistorialIngresado(HistorialIngresado $historialIngresado): self
+    {
+        if (!$this->historialIngresados->contains($historialIngresado)) {
+            $this->historialIngresados[] = $historialIngresado;
+            $historialIngresado->setUsuario($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHistorialIngresado(HistorialIngresado $historialIngresado): self
+    {
+        if ($this->historialIngresados->contains($historialIngresado)) {
+            $this->historialIngresados->removeElement($historialIngresado);
+            // set the owning side to null (unless already changed)
+            if ($historialIngresado->getUsuario() === $this) {
+                $historialIngresado->setUsuario(null);
+            }
+        }
 
         return $this;
     }

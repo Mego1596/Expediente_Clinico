@@ -17,26 +17,6 @@ class HistorialIngresado
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $nombreSala;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $numeroHabitacion;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $numeroCamilla;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $doctorAsignado;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $fechaEntrada;
@@ -52,57 +32,15 @@ class HistorialIngresado
      */
     private $expediente;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="historialIngresados")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $usuario;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getNombreSala(): ?string
-    {
-        return $this->nombre_sala;
-    }
-
-    public function setNombreSala(string $nombre_sala): self
-    {
-        $this->nombre_sala = $nombre_sala;
-
-        return $this;
-    }
-
-    public function getNumeroHabitacion(): ?int
-    {
-        return $this->numero_habitacion;
-    }
-
-    public function setNumeroHabitacion(int $numero_habitacion): self
-    {
-        $this->numero_habitacion = $numero_habitacion;
-
-        return $this;
-    }
-
-    public function getNumeroCamilla(): ?int
-    {
-        return $this->numero_camilla;
-    }
-
-    public function setNumeroCamilla(int $numero_camilla): self
-    {
-        $this->numero_camilla = $numero_camilla;
-
-        return $this;
-    }
-
-    public function getDoctorAsignado(): ?string
-    {
-        return $this->doctorAsignado;
-    }
-
-    public function setDoctorAsignado(string $doctorAsignado): self
-    {
-        $this->doctorAsignado = $doctorAsignado;
-
-        return $this;
     }
 
     public function getFechaEntrada(): ?\DateTimeInterface
@@ -137,6 +75,18 @@ class HistorialIngresado
     public function setExpediente(?Expediente $expediente): self
     {
         $this->expediente = $expediente;
+
+        return $this;
+    }
+
+    public function getUsuario(): ?User
+    {
+        return $this->usuario;
+    }
+
+    public function setUsuario(?User $usuario): self
+    {
+        $this->usuario = $usuario;
 
         return $this;
     }
