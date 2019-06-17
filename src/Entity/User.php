@@ -33,7 +33,7 @@ class User implements UserInterface,\Serializable
      * @ORM\Column(type="string")
      * 
      * @Assert\Regex( 
-     * pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     * pattern="/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",
      *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito,
      *  al menos una minúscula,
      *  al menos una mayúscula y al menos un caracter no alfanumérico.")
@@ -64,7 +64,7 @@ class User implements UserInterface,\Serializable
 
      /**
      * @Assert\Regex( 
-     * pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     * pattern="/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",
      *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, 
      *  al menos una minúscula,
      *  al menos una mayúscula y al menos un caracter no alfanumérico.")
@@ -73,7 +73,7 @@ class User implements UserInterface,\Serializable
 
      /**
        * @Assert\Regex( 
-     *  pattern="^(?=.*\d)(?=.*[\u0021-\u002b\u003c-\u0040])(?=.*[A-Z])(?=.*[a-z])\S{8,16}$",
+     *  pattern="/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",
      *  message="La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, 
      *  al menos una minúscula,
      *  al menos una mayúscula y al menos un caracter no alfanumérico.")
