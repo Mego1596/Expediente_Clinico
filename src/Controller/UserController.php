@@ -267,45 +267,29 @@ class UserController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($user->getRol()->getNombreRol() != 'ROLE_SA'){
                 if($AuthUser->getUser()->getClinica()->getId() == $user->getClinica()->getId()){
+                    
+                    $form = $this->createFormBuilder($user);
+
                     if(is_null($AuthUser->getUser()->getClinica())){
-                        //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
-                        $form = $this->createFormBuilder($user)
-                        ->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')))
-                        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('u')
-                                    ->where('u.nombreRol != :val AND u.nombreRol != :super')
-                                    ->setParameter('super', "ROLE_SA")
-                                    ->setParameter('val', "ROLE_PACIENTE");
-                            },'attr' => array('class' => 'form-control')))
-                        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-                        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-                        ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-                        ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-                        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
-                        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-                        ->getForm();
-                    }else{
-                        //////////////////////////////// ZONA DE CREACION DE FORMULARIO ///////////////////////////
-                        $form = $this->createFormBuilder($user)
-                        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
-                        ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
-                            'query_builder' => function (EntityRepository $er) {
-                                return $er->createQueryBuilder('u')
-                                    ->where('u.nombreRol != :val AND u.nombreRol != :super')
-                                    ->setParameter('super', "ROLE_SA")
-                                    ->setParameter('val', "ROLE_PACIENTE");
-                            },'attr' => array('class' => 'form-control')))
-                        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-                        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-                        ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-                        ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-                        ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
-                        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-                        ->getForm();
+                        // SI ES SUPER USUARIO, AGREGAR CLINICA COMO OPCION PARA MODIFICAR
+                        $form->add('clinica', EntityType::class, array('class' => Clinica::class,'placeholder' => 'Seleccione una clinica','choice_label' => 'nombreClinica','attr' => array('class' => 'form-control')));
                     }
 
+                    $form->add('email', EmailType::class, array('attr' => array('class' => 'form-control'), 'disabled' => true))
+                    ->add('rol', EntityType::class, array('class' => Rol::class,'placeholder' => 'Seleccione un rol','choice_label' => 'descripcion',
+                        'query_builder' => function (EntityRepository $er) {
+                            return $er->createQueryBuilder('u')
+                                ->where('u.nombreRol != :val AND u.nombreRol != :super')
+                                ->setParameter('super', "ROLE_SA")
+                                ->setParameter('val', "ROLE_PACIENTE");
+                        },'attr' => array('class' => 'form-control')))
+                    ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+                    ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+                    ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+                    ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+                    ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
+                    ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')));
+                    $form = $form->getForm();
 
                     $form->handleRequest($request);
                     /////////////////////////////// ZONA DE PROCESAMIENTO /////////////////////////////////////
