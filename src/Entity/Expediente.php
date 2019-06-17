@@ -54,6 +54,9 @@ class Expediente
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Regex( 
+     * pattern="/^[0-9]{8}$/",
+     * message="El campo es un numero telefónico, digite numeros unicamente.")
      */
     private $telefono;
 
