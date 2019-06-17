@@ -67,20 +67,26 @@ class HomeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             if ( $request->request->get('password_actual') != "" && $request->request->get('nueva_password') != "" && $request->request->get('confirmar_nueva_password') != "" ) {
+
                 if(password_verify($request->request->get('password_actual'), $AuthUser->getUser()->getPassword() ) ){
-                    if($request->request->get('nueva_password') == $request->request->get('confirmar_nueva_password') ){
-                        $user = $this->getDoctrine()->getRepository(User::class)->find($AuthUser->getUser()->getId());
-                        $password = $request->request->get('nueva_password');
-                        $hash = password_hash($password, PASSWORD_DEFAULT,[15]);
-                        $user->setPassword($hash);
-                        $entityManager = $this->getDoctrine()->getEntityManager();
-                        $entityManager->persist($user);
-                        $entityManager->flush();
-                        $this->addFlash('success', 'Contraseña modificada con éxito');
-                        return $this->redirectToRoute('home');
+                    if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('confirmar_nueva_password')) ){
+                        if($request->request->get('nueva_password') == $request->request->get('confirmar_nueva_password') ){
+                            $user = $this->getDoctrine()->getRepository(User::class)->find($AuthUser->getUser()->getId());
+                            $password = $request->request->get('nueva_password');
+                            $hash = password_hash($password, PASSWORD_DEFAULT,[15]);
+                            $user->setPassword($hash);
+                            $entityManager = $this->getDoctrine()->getEntityManager();
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Contraseña modificada con éxito');
+                            return $this->redirectToRoute('home');
+                        }else{
+                            $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmacion de contraseña');
+                        }
                     }else{
-                        $this->addFlash('fail', 'Un problema ha ocurrido, la nueva contraseña debe coincidir con la confirmacion de contraseña');
+                        $this->addFlash('fail','Un problema ha ocurrido, Mensaje que va a poner palma para la expresion regular');
                     }
+
                 }else{
                     $this->addFlash('fail', 'Un problema ha ocurrido, compruebe que la contraseña actual sea correcta');
                 }

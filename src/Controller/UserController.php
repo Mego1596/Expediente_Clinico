@@ -85,8 +85,8 @@ class UserController extends AbstractController
                     ->setParameter('super', "ROLE_SA")
                     ->setParameter('val', "ROLE_PACIENTE");
             },'attr' => array('class' => 'form-control')))
-        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
+        ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Si' => true,'No' => false,]))
+        ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Si' => true,'No' => false,]))
         ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required' => false, 'attr' => array('class' => 'form-control')))
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
         ->getForm();
@@ -346,14 +346,19 @@ class UserController extends AbstractController
                             }
                             else
                             {
-                                if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
-                                {
-                                    $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
-                                }
-                                else
-                                {
-                                    $this->addFlash('fail', 'Contraseñas deben coincidir');
-                                    $exito = false;
+                                if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['nuevo_password']->getData()) && !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['repetir_nuevo_password']->getData()) ){
+                                    $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                                    $exito=false;
+                                }else{
+                                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                                    {
+                                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                                    }
+                                    else
+                                    {
+                                        $this->addFlash('fail', 'Contraseñas deben coincidir');
+                                        $exito = false;
+                                    }
                                 }
                             }
 
@@ -418,14 +423,19 @@ class UserController extends AbstractController
                             }
                             else
                             {
-                                if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
-                                {
-                                    $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
-                                }
-                                else
-                                {
-                                    $this->addFlash('fail', 'Contraseñas deben coincidir');
-                                    $exito = false;
+                                if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['nuevo_password']->getData()) && !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['repetir_nuevo_password']->getData()) ){
+                                    $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                                    $exito=false;
+                                }else{
+                                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                                    {
+                                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                                    }
+                                    else
+                                    {
+                                        $this->addFlash('fail', 'Contraseñas deben coincidir');
+                                        $exito = false;
+                                    }
                                 }
                             }
 
@@ -514,8 +524,8 @@ class UserController extends AbstractController
                 },'attr' => array('class' => 'form-control')))
             ->add('emergencia', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
             ->add('planta', ChoiceType::class, array('attr'=> array('class' => 'form-control'),'choices'  => ['Yes' => true,'No' => false,]))
-            ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
-            ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => false, 'mapped' => false))
+            ->add('nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => true, 'mapped' => false))
+            ->add('repetir_nuevo_password', PasswordType::class, array('attr' => array('class' => 'form-control'), 'required' => true, 'mapped' => false))
             ->add('usuario_especialidades', EntityType::class, array('class' => Especialidad::class,'placeholder' => 'Seleccione las especialidades','choice_label' => 'nombreEspecialidad','required'=> false,'attr' => array('class' => 'form-control')))
             ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
             ->getForm();
@@ -556,14 +566,19 @@ class UserController extends AbstractController
                 }
                 else
                 {
-                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
-                    {
-                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
-                    }
-                    else
-                    {
-                        $this->addFlash('fail', 'Contraseñas deben coincidir');
-                        $exito = false;
+                    if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['nuevo_password']->getData()) && !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['repetir_nuevo_password']->getData()) ){
+                        $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                        $exito=false;
+                    }else{
+                        if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                        {
+                            $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                        }
+                        else
+                        {
+                            $this->addFlash('fail', 'Contraseñas deben coincidir');
+                            $exito = false;
+                        }
                     }
                 }
 
@@ -628,14 +643,19 @@ class UserController extends AbstractController
                 }
                 else
                 {
-                    if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
-                    {
-                        $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
-                    }
-                    else
-                    {
-                        $this->addFlash('fail', 'Contraseñas deben coincidir');
-                        $exito = false;
+                    if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['nuevo_password']->getData()) && !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['repetir_nuevo_password']->getData()) ){
+                        $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                        $exito=false;
+                    }else{
+                        if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())
+                        {
+                            $pwd = password_hash($form["nuevo_password"]->getData(),PASSWORD_DEFAULT,[15]);
+                        }
+                        else
+                        {
+                            $this->addFlash('fail', 'Contraseñas deben coincidir');
+                            $exito = false;
+                        }
                     }
                 }
 

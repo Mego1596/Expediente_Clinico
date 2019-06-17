@@ -134,7 +134,19 @@ class ExpedienteController extends AbstractController
 	                                            $user->setEmail($form["email"]->getData());
 	                                            $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
 	                                            $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-	                                            $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+
+                                                if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $request->request->get('password'))){
+                                                    $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                                                }else{
+                                                    $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
+                                                    return $this->render('expediente/new.html.twig', [
+                                                        'expediente' => $expediente,
+                                                        'clinicas'   => $clinicas,
+                                                        'pertenece'  => $clinicaPerteneciente,
+                                                        'editar'     => $editar,
+                                                        'form'       => $form->createView(),
+                                                    ]);
+                                                }
 	                                            $user->setIsActive(true);
                                                 $entityManager->persist($persona);
                                                 $entityManager->flush();
@@ -234,7 +246,21 @@ class ExpedienteController extends AbstractController
                                             $user->setEmail($form["email"]->getData());
                                             $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
                                             $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-                                            $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+
+
+                                            if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $request->request->get('password'))){
+                                                    $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                                            }else{
+                                                $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
+                                                return $this->render('expediente/new.html.twig', [
+                                                    'expediente' => $expediente,
+                                                    'clinicas'   => $clinicas,
+                                                    'pertenece'  => $clinicaPerteneciente,
+                                                    'editar'     => $editar,
+                                                    'form'       => $form->createView(),
+                                                ]);
+                                            }
+                                            
                                             $user->setIsActive(true); 
                                             $entityManager->persist($persona);
                                             $user->setPersona($persona);
@@ -486,9 +512,13 @@ class ExpedienteController extends AbstractController
                     ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
                     ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
                     ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('apellidoCasada',TextType::class, array( 'required' => false,'attr' => array('class' => 'form-control')))
+                    ->add('apellidoCasada',TextType::class, array( 'required' => false,
+                        'attr' => array('class' => 'form-control')))
                     ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
+                    ->add('genero', EntityType::class, array('class' => Genero::class,
+                        'placeholder' => 'Seleccione el genero', 
+                        'choice_label' => 'descripcion', 
+                        'attr' => array('class' => 'form-control') ))
                     ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
                     ->getForm();
 
@@ -510,6 +540,7 @@ class ExpedienteController extends AbstractController
                                     ]);
                         }
                         if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
+                            if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_confirmPassword')) ){
                                 if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                                     $entityManager = $this->getDoctrine()->getManager();
                                     $user = $expediente->getUsuario();
@@ -560,46 +591,49 @@ class ExpedienteController extends AbstractController
                                     ]);
                                 }
                             }else{
-                                $entityManager = $this->getDoctrine()->getManager();
-                                $user = $expediente->getUsuario();
-
-
-                                $persona->setPrimerNombre('primerNombre');
-                                $persona->setSegundoNombre('segundoNombre');
-                                $entityManager->persist($persona);
-                                $entityManager->flush();
-
-                                $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                                $user->setEmail('correo');
-                                $entityManager->persist($user);
-                                $entityManager->flush();
-
-                                $user->setEmail($form["email"]->getData());
-                                $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                                $entityManager->persist($persona);
-                                $entityManager->flush();
-                                $entityManager->persist($user);
-                                $entityManager->flush();
-
-                                $expediente->setDireccion("santaana");
-                                $entityManager->persist($expediente);
-                                $entityManager->flush();
-
-                                $expediente->setGenero($form["genero"]->getData());
-                                $expediente->setDireccion($form["direccion"]->getData());
-                                $expediente->setTelefono($form["telefono"]->getData());
-                                $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                                $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                                $entityManager->persist($expediente);
-                                $entityManager->flush();
-                                $this->addFlash('success', 'Paciente modificado con éxito');
-                                return $this->redirectToRoute('expediente_index');
+                                $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
                             }
+                        }else{
+                            $entityManager = $this->getDoctrine()->getManager();
+                            $user = $expediente->getUsuario();
+
+
+                            $persona->setPrimerNombre('primerNombre');
+                            $persona->setSegundoNombre('segundoNombre');
+                            $entityManager->persist($persona);
+                            $entityManager->flush();
+
+                            $persona->setPrimerNombre($request->request->get('primerNombre'));
+                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                            $user->setEmail('correo');
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+
+                            $user->setEmail($form["email"]->getData());
+                            $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
+                            $entityManager->persist($persona);
+                            $entityManager->flush();
+                            $entityManager->persist($user);
+                            $entityManager->flush();
+
+                            $expediente->setDireccion("santaana");
+                            $entityManager->persist($expediente);
+                            $entityManager->flush();
+
+                            $expediente->setGenero($form["genero"]->getData());
+                            $expediente->setDireccion($form["direccion"]->getData());
+                            $expediente->setTelefono($form["telefono"]->getData());
+                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                            $entityManager->persist($expediente);
+                            $entityManager->flush();
+                            $this->addFlash('success', 'Paciente modificado con éxito');
+                            return $this->redirectToRoute('expediente_index');
+                        }
                     }
                     return $this->render('expediente/edit.html.twig', [
                         'expediente' => $expediente,
@@ -648,6 +682,7 @@ class ExpedienteController extends AbstractController
                             ]);
                 }
                 if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
+                    if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_confirmPassword')) ){
                         if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
                             $entityManager = $this->getDoctrine()->getManager();
                             $user = $expediente->getUsuario();
@@ -697,45 +732,48 @@ class ExpedienteController extends AbstractController
                             ]);
                         }
                     }else{
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $user = $expediente->getUsuario();
-
-                        $persona->setPrimerNombre('primerNombre');
-                        $persona->setSegundoNombre('segundoNombre');
-                        $entityManager->persist($persona);
-                        $entityManager->flush();
-
-                        $persona->setPrimerNombre($request->request->get('primerNombre'));
-                        $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                        $user->setEmail('correo');
-                        $entityManager->persist($user);
-                        $entityManager->flush();
-
-                        $user->setEmail($form["email"]->getData());
-                        $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                        $entityManager->persist($persona);
-                        $entityManager->flush();
-                        $entityManager->persist($user);
-                        $entityManager->flush();
-
-                        $expediente->setDireccion("santaana");
-                        $entityManager->persist($expediente);
-                        $entityManager->flush();
-
-                        $expediente->setGenero($form["genero"]->getData());
-                        $expediente->setDireccion($form["direccion"]->getData());
-                        $expediente->setTelefono($form["telefono"]->getData());
-                        $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                        $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                        $entityManager->persist($expediente);
-                        $entityManager->flush();
-                        $this->addFlash('success', 'Paciente modificado con éxito');
-                        return $this->redirectToRoute('expediente_index');
+                        $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
                     }
+                }else{
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $user = $expediente->getUsuario();
+
+                    $persona->setPrimerNombre('primerNombre');
+                    $persona->setSegundoNombre('segundoNombre');
+                    $entityManager->persist($persona);
+                    $entityManager->flush();
+
+                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+                    $user->setEmail('correo');
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $user->setEmail($form["email"]->getData());
+                    $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
+                    $entityManager->persist($persona);
+                    $entityManager->flush();
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+
+                    $expediente->setDireccion("santaana");
+                    $entityManager->persist($expediente);
+                    $entityManager->flush();
+
+                    $expediente->setGenero($form["genero"]->getData());
+                    $expediente->setDireccion($form["direccion"]->getData());
+                    $expediente->setTelefono($form["telefono"]->getData());
+                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                    $entityManager->persist($expediente);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Paciente modificado con éxito');
+                    return $this->redirectToRoute('expediente_index');
+                }
             }
             return $this->render('expediente/edit.html.twig', [
                 'expediente' => $expediente,
