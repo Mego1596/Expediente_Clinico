@@ -16,10 +16,16 @@
             <div class="col-md-12">
               {{ form_label(form.densidad) }}
               {{ form_widget(form.densidad) }}
+              <div class="alert-danger" role="alert">
+                {{ form_errors(form.densidad) }}
+              </div>
             </div>
             <div class="col-md-12">
               {{ form_label(form.ph) }}
               {{ form_widget(form.ph) }}
+              <div class="alert-danger" role="alert">
+                {{ form_errors(form.ph) }}
+              </div>
             </div>
             <div class="col-md-12">
               {{ form_label(form.glucosa) }}

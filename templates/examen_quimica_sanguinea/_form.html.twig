@@ -20,6 +20,9 @@
             <div class="col-md-12">
               {{ form_label(form.resultado) }}
               {{ form_widget(form.resultado) }}
+              <div class="alert-danger" role="alert">
+                {{ form_errors(form.resultado) }}
+              </div>
             </div>
             <div class="col-md-12">
               {{ form_label(form.comentario) }}

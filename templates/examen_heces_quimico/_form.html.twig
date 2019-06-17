@@ -16,6 +16,12 @@
             <div class="col-md-12">
               {{ form_label(form.ph) }}
               {{ form_widget(form.ph) }}
+              <div class="alert-danger" role="alert">
+                {{ form_errors(form.ph) }}
+                <ul>
+                  <li>Digite unicamente numeros</li>
+                </ul>
+              </div>
             </div>
             <div class="col-md-12">
               {{ form_label(form.azucares_reductores) }}
