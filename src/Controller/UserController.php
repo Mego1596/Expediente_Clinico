@@ -38,17 +38,24 @@ class UserController extends AbstractController
     public function index(UserRepository $userRepository, Security $AuthUser): Response
     {
         $em = $this->getDoctrine()->getManager();
-        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.descripcion as rol, u.is_active as activo FROM `user` as u,rol as r,clinica as c, `persona` as p
-                WHERE u.persona_id = p.id AND u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_PACIENTE";';
-        }else{
-            $RAW_QUERY = 'SELECT u.id as id,CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo,u.email as email, c.nombre_clinica as clinica, r.descripcion as rol, u.is_active as activo FROM `user` as u,rol as r,clinica as c, `persona` as p
-                WHERE u.persona_id = p.id AND u.clinica_id = c.id AND u.rol_id = r.id AND r.nombre_rol != "ROLE_SA" AND r.nombre_rol != "ROLE_PACIENTE" AND c.id= '.$AuthUser->getUser()->getClinica()->getId().'
-                AND u.id !='.$AuthUser->getUser()->getId().';';
+
+        // Obteniendo lista de usuarios
+        $ID_USUARIO_I = -1;
+        $ID_CLINICA_I = -1;
+        $sql= 'CALL obtener_lista_usuarios(:ID_USUARIO_I, :ID_CLINICA_I)';
+        if ($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA')
+        {
+            $ID_USUARIO_I = $AuthUser->getUser()->getId();
+            $ID_CLINICA_I = $AuthUser->getUser()->getClinica()->getId();
         }
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_USUARIO_I' => $ID_USUARIO_I , 
+            'ID_CLINICA_I' => $ID_CLINICA_I 
+        ));
+        $result= $stmt->fetchAll();
+        $stmt->closeCursor();
 
         return $this->render('user/index.html.twig', [
             'controller_name' => 'UserController',
