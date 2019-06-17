@@ -33,11 +33,10 @@ class FamiliarController extends AbstractController
         $conn = $this->getDoctrine()->getManager()->getConnection();
         $sql ='
                 SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
-                FROM familiares_expediente as fex, expediente as exp, user as u, persona as p
-                WHERE fex.expediente_id   =:idExpediente     AND 
-                exp.id              = fex.expediente_id      AND
-                exp.usuario_id       = u.id                   AND
-                u.persona_id        =p.id           
+                FROM expediente as exp, user as u, persona as p 
+                WHERE exp.id   = :idExpediente AND
+                exp.usuario_id = u.id          AND
+                u.persona_id   = p.id       
 
         ';
         $stmt = $conn->prepare($sql);
