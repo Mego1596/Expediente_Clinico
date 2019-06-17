@@ -108,79 +108,49 @@ class UserController extends AbstractController
                         if($form["password"]->getData() != ""){
                             if($form["rol"]->getData() != ""){
                                 //PROCESAMIENTO DE DATOS
+                                $user->setEmail($form["email"]->getData());
+                                $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
+                                $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                $persona->setSegundoApellido($request->request->get('segundoApellido'));
+                                $user->setRol($form["rol"]->getData());
+                                $user->setIsActive(true);
+
+                                if($form["rol"]->getData()->getId() != 2){
+                                    $user->setEmergencia(0);
+                                    $user->setPlanta(0);
+                                }else{
+                                    if($form["emergencia"]->getData() != ""){
+                                    $user->setEmergencia($form["emergencia"]->getData());
+                                    }else{
+                                        $user->setEmergencia(0);
+                                    }
+                                    if($form["planta"]->getData() != ""){
+                                        $user->setPlanta($form["planta"]->getData());
+                                    }else{
+                                        $user->setPlanta(0);
+                                    }
+                                    if($form["usuario_especialidades"]->getData() != ""){
+                                        $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
+                                        
+                                    }
+                                }
+                                
                                 if(is_null($AuthUser->getUser()->getClinica())){
                                     //SI EL USUARIO LOGGEADO ES EL ROLE_SA
-                                    //INICIO PROCESO DE DATOS
-                                    $user->setEmail($form["email"]->getData());
-                                    $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
-                                    $persona->setPrimerApellido($request->request->get('primerApellido'));
-                                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
-                                    $user->setRol($form["rol"]->getData());
+                                    //OBTENER CLINICA DE REQUEST   
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
-                                    $user->setIsActive(true);
-                                    if($form["rol"]->getData()->getId() != 2){
-                                        $user->setEmergencia(0);
-                                        $user->setPlanta(0);
-                                    }else{
-                                        if($form["emergencia"]->getData() != ""){
-                                        $user->setEmergencia($form["emergencia"]->getData());
-                                        }else{
-                                            $user->setEmergencia(0);
-                                        }
-                                        if($form["planta"]->getData() != ""){
-                                            $user->setPlanta($form["planta"]->getData());
-                                        }else{
-                                            $user->setPlanta(0);
-                                        }
-                                        if($form["usuario_especialidades"]->getData() != ""){
-                                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
-                                            
-                                        }
-                                    }
-                                    $entityManager->persist($persona);
-                                    $user->setPersona($persona);
-                                    $entityManager->persist($user);
-                                    $entityManager->flush();
-                                    //FIN PROCESO DE DATOS
                                 }else{
                                     //SI EL USUARIO LOGGEADO TIENE CLINICA
-                                    //INICIO PROCESO DE DATOS
-                                    $user->setEmail($form["email"]->getData());
-                                    $user->setPassword(password_hash($form["password"]->getData(),PASSWORD_DEFAULT,[15]));
-                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
-                                    $persona->setPrimerApellido($request->request->get('primerApellido'));
-                                    $persona->setSegundoApellido($request->request->get('segundoApellido'));
-                                    $user->setRol($form["rol"]->getData());
+                                    //OCUPAR ESA CLINICA PARA EL NUEVO USUARIO
                                     $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
-                                    $user->setIsActive(true);
-                                    if($form["rol"]->getData()->getId() != 2){
-                                        $user->setEmergencia(0);
-                                        $user->setPlanta(0);
-                                    }else{
-                                        if($form["emergencia"]->getData() != ""){
-                                        $user->setEmergencia($form["emergencia"]->getData());
-                                        }else{
-                                            $user->setEmergencia(0);
-                                        }
-                                        if($form["planta"]->getData() != ""){
-                                            $user->setPlanta($form["planta"]->getData());
-                                        }else{
-                                            $user->setPlanta(0);
-                                        }
-                                        if($form["usuario_especialidades"]->getData() != ""){
-                                            $user->setUsuarioEspecialidades($form["usuario_especialidades"]->getData());    
-                                            
-                                        }
-                                    }
-                                    $entityManager->persist($persona);
-                                    $user->setPersona($persona);
-                                    $entityManager->persist($user);
-                                    $entityManager->flush();
-                                    //FIN PROCESO DE DATOS
                                 }
+
+                                $entityManager->persist($persona);
+                                $user->setPersona($persona);
+                                $entityManager->persist($user);
+                                $entityManager->flush();
                                 //FIN PROCESAMIENTO DE DATOS
                             }else{
                                 $this->addFlash('fail','Error, el rol de usuario no puede ir vacío');
