@@ -6,6 +6,7 @@ use App\Entity\Expediente;
 use App\Entity\Clinica;
 use App\Entity\Genero;
 use App\Entity\Rol;
+use App\Entity\HistorialIngreso;
 use App\Entity\Persona;
 use App\Entity\User;
 use App\Repository\ExpedienteRepository;
@@ -797,5 +798,39 @@ class ExpedienteController extends AbstractController
         }
 
         return $this->redirectToRoute('expediente_index');
+    }
+
+    /**
+     * @Route("/{id}/historico", name="expediente_historial", methods={"GET","POST"})
+     * @Security2("is_authenticated()")
+     * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
+     * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
+     */
+    public function historialIngreso(Request $request, Expediente $expediente, Security $AuthUser): Response
+    {
+        //VALIDACION PARA INGRESAR SOLO A EXPEDIENTES DE LA CLINICA A EXCEPCION DE ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() != $expediente->getUsuario()->getClinica()->getId()){
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }  
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $RAW_QUERY='SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, h_i.fecha_entrada as fechaEntrada, h_i.fecha_salida as fechaSalida FROM historial_ingresado as h_i, expediente as e,user as u, persona as p WHERE
+            h_i.expediente_id = e.id    AND
+            h_i.usuario_id = u.id       AND
+            u.persona_id = p.id         AND
+            e.id='.$expediente->getId();
+
+        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
+        $statement->execute();
+        $historialIngresado = $statement->fetchAll();
+        return $this->render('expediente/historial.html.twig', [
+                'expediente' => $expediente,
+                'historiales' => $historialIngresado,
+            ]);
+
+
     }
 }

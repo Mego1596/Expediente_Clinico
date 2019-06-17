@@ -102,6 +102,9 @@
                     <a class="btn btn-success" href="{{path('familiar_new',{'expediente': expediente.id_expediente})}}"> Registrar Familiar</a>
                 {% endif %}
             {% endif %}
+            
+            <a class="btn btn-secondary bg-primary" href="{{ path('expediente_historial', {'id': expediente.id_expediente}) }}">Historial de Ingresos</a>
+            
 
             {% if ingresado == null %}
                 {% if (is_granted('ROLE_PERMISSION_NEW_INGRESADO')) %}

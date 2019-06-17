@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paciente{% endblock %}
+
+{% block body %}
+<div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12" style="color: black">
+                            <h4>Historial de Ingresos del paciente: {{expediente.getUsuario().getPersona().getPrimerNombre}} {{expediente.getUsuario().getPersona().getSegundoNombre}} {{expediente.getUsuario().getPersona().getPrimerApellido}}
+                            {{expediente.getUsuario().getPersona().getSegundoApellido}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="pull-bottom">
+                        <div class="table table-responsive">
+                                <table id="example" class="display table-striped" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th id="relevante" class="all">Doctor Asignado</th>
+                                            <th id="relevante" class="all">Fecha de Entrada</th>
+                                            <th id="relevante" class="all">Fecha de Salida</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for historial in historiales %}
+                                        <tr>
+                                            <td>{{historial.nombre_completo}}</td>
+                                            <td>{{historial.fechaEntrada}}</td>
+                                            <td>{{historial.fechaSalida}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                <a class="btn btn-secondary" href="{{path('expediente_show',{'id': expediente.id})}}">Atrás</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Button trigger modal -->
+
+
+
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready( function () {
+       var table=$('#example').DataTable({
+            "language": {
+                    "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                },
+            responsive:true,
+        });
+    } );
+</script>
+<script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+{% endblock %}
