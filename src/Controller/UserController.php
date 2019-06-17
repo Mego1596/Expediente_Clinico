@@ -219,18 +219,17 @@ class UserController extends AbstractController
      */
     public function show(User $user, Security $AuthUser): Response
     {
+        // Obteniendodatos de usuario STORED_PROC
+        $ID_USUARIO_I = $user->getId();
+        $sql= 'CALL obtener_datos_usuario(:ID_USUARIO_I)';
         $conn = $this->getDoctrine()->getManager()->getConnection();
-        $sql = '
-            SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, r.descripcion as nombre_rol, c.nombre_clinica as nombre_clinica
-            FROM `user` as u, `persona` as p,  `rol` as r, `clinica` as c  WHERE
-            u.persona_id       =p.id            AND
-            u.rol_id           =r.id            AND
-            u.clinica_id       =c.id            AND
-            u.id = :idUsuario
-            ';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array('idUsuario' => $user->getId()));
+        $stmt->execute(array(
+            'ID_USUARIO_I' => $ID_USUARIO_I
+        ));
         $result= $stmt->fetch();
+        $stmt->closeCursor();
+
         //VALIDACION DE BLOQUEO DE RUTAS EN CASO DE INTENTAR ACCEDER A REGISTROS DE OTRAS CLINICAS SI NO ES ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($user->getRol()->getNombreRol() != 'ROLE_SA'){

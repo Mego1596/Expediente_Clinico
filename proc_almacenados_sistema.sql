@@ -45,3 +45,31 @@ BEGIN
     END IF; 
 END; //
 DELIMITER ;
+
+--- Obtener datos de usuario
+DELIMITER //
+CREATE procedure obtener_datos_usuario ( IN ID_USUARIO_I INT )
+BEGIN
+    SELECT 
+        CONCAT(    p.primer_nombre,
+                " " ,
+                IFNULL(p.segundo_nombre," "),
+                " " ,
+                p.primer_apellido,
+                " ",
+                IFNULL(p.segundo_apellido," ")
+            ) as nombre_completo, 
+        r.descripcion as nombre_rol, 
+        c.nombre_clinica as nombre_clinica
+    FROM 
+        user as u, 
+        persona as p,  
+        rol as r, 
+        clinica as c  
+    WHERE
+        u.persona_id = p.id            
+        AND u.rol_id = r.id
+        AND u.clinica_id = c.id
+        AND u.id = ID_USUARIO_I;
+END; //
+DELIMITER ;
