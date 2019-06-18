@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClinicaRepository")
  */
@@ -30,6 +30,9 @@ class Clinica
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Regex( 
+     * pattern="/^[0-9]{8}$/",
+     * message="El campo es un numero telefónico, digite numeros unicamente.")
      */
     private $telefono;
 

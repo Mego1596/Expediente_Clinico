@@ -25,6 +25,9 @@
             <div class="col-md-12">
               {{ form_label(form.telefono, "Teléfono") }}
               {{ form_widget(form.telefono) }}
+              <div class="alert-danger" role="alert">
+                {{ form_errors(form.telefono) }}
+              </div>
             </div>
           </div>
           <div class="row">
