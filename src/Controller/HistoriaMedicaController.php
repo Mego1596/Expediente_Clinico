@@ -30,50 +30,33 @@ class HistoriaMedicaController extends AbstractController
         $diagnostico=null;
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($citum->getExpediente()->getHabilitado()){
-                    $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita_id' => $citum->getId()]);
-                    if(count($result) > 0){
-                        $em = $this->getDoctrine()->getManager();
-                        $RAW_QUERY = "SELECT id10 as codigo, dec10 as descripcion FROM historia_medica_codigo_internacional as h_c_i, 
-                                      codigo_internacional as c_i WHERE
-                                      h_c_i.codigo_internacional_id = c_i.id AND                       
-                                      h_c_i.historia_medica_id=".$result[0]->getId();
-                        $statement = $em->getConnection()->prepare($RAW_QUERY);
-                        $statement->execute();
-                        $diagnostico = $statement->fetchAll();
-                    }
-                    return $this->render('historia_medica/index.html.twig', [
-                        'historia_medicas' => $result,
-                        'diagnostico'    => $diagnostico,
-                        'user'           => $AuthUser,
-                        'cita'           => $citum,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-        $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita' => $citum->getId()]);
-        if(count($result) > 0){
-            $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY = "SELECT id10 as codigo, dec10 as descripcion FROM historia_medica_codigo_internacional as h_c_i, 
-                          codigo_internacional as c_i WHERE
-                          h_c_i.codigo_internacional_id = c_i.id AND                       
-                          h_c_i.historia_medica_id=".$result[0]->getId();
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $diagnostico = $statement->fetchAll();
+        if($citum->getExpediente()->getHabilitado()){
+            $result = $this->getDoctrine()->getRepository(HistoriaMedica::class)->findBy(['cita' => $citum->getId()]);
+            if(count($result) > 0){
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT id10 as codigo, dec10 as descripcion FROM historia_medica_codigo_internacional as h_c_i, 
+                              codigo_internacional as c_i WHERE
+                              h_c_i.codigo_internacional_id = c_i.id AND                       
+                              h_c_i.historia_medica_id=".$result[0]->getId();
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $diagnostico = $statement->fetchAll();
+            }
+            return $this->render('historia_medica/index.html.twig', [
+                'historia_medicas' => $result,
+                'diagnostico'    => $diagnostico,
+                'user'           => $AuthUser,
+                'cita'           => $citum,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
         }
-        return $this->render('historia_medica/index.html.twig', [
-            'historia_medicas' => $result,
-            'diagnostico'    => $diagnostico,
-            'user'           => $AuthUser,
-            'cita'           => $citum,
-        ]);
     }
 
     /**
@@ -87,170 +70,65 @@ class HistoriaMedicaController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($citum->getExpediente()->getHabilitado()){
-
-                    $editar = false;
-                    $historiaMedica = new HistoriaMedica();
-                    $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
-                    $form->handleRequest($request);
-                    //VALIDACION INICIAL PARA LA RUTA ES QUE SI LA CITA YA TIENE UN REGISTRO DE SIGNO VITAL BLOQUEARLA
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT * FROM `historia_medica` WHERE cita_id =".$citum->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    if($result == null){
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            if($form["consultaPor"]->getData() != ""){
-                                if($form["signos"]->getData() != ""){
-                                    if($form["sintomas"]->getData() != ""){
-                                        $entityManager = $this->getDoctrine()->getManager();
-                                        $historiaMedica->setCita($citum);
-                                        $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
-                                        $historiaMedica->setSignos($form["signos"]->getData());
-                                        $historiaMedica->setSintomas($form["sintomas"]->getData());
-                                        foreach ($form["id10"]->getData() as $codigo) {
-                                            $historiaMedica->addId10($codigo);    
-                                        }
-                                        //$form["diagnostico"]->getData()->getCodigoCategoria()[0]
-                                        //$form["codigoEspecifico"]->getData()[0]
-                                        //$form["diagnostico"]->getData()->getCodigoCategoria()[4];
-                                        /*if($form["diagnostico"]->getData()->getCodigoCategoria()[0] == $form["codigoEspecifico"]->getData()[0] && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) >=0 && (int) ($form["diagnostico"]->getData()->getCodigoCategoria()[1].$form["diagnostico"]->getData()->getCodigoCategoria()[2]) <= 99 ){
-                                            
-                                        }elseif($form["diagnostico"]->getData()->getCodigoCategoria()[4] == $form["codigoEspecifico"]->getData()[0]){
-                                            $this->addFlash('fail', 'El código seleccionado no es valido para la categoria elegida');
-                                            return $this->render('historia_medica/new.html.twig', [
-                                                'historia_medica' => $historiaMedica,
-                                                'editar'          => $editar,
-                                                'cita'            => $citum,
-                                                'form' => $form->createView(),
-                                            ]);
-                                        }*/
-                                        //$historiaMedica->setCodigoEspecifico($form["codigoEspecifico"]->getData());
-                                        $entityManager->persist($historiaMedica);
-                                        $entityManager->flush();
-                                    }else{
-                                        $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
-                                        return $this->render('historia_medica/new.html.twig', [
-                                            'historia_medica' => $historiaMedica,
-                                            'editar'          => $editar,
-                                            'cita'            => $citum,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }
-                                }else{
-                                    $this->addFlash('fail', 'Error, los signos no pueden ir vacíos');
-                                    return $this->render('historia_medica/new.html.twig', [
-                                        'historia_medica' => $historiaMedica,
-                                        'editar'          => $editar,
-                                        'cita'            => $citum,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacío');
-                                 return $this->render('historia_medica/new.html.twig', [
-                                        'historia_medica' => $historiaMedica,
-                                        'editar'          => $editar,
-                                        'cita'            => $citum,
-                                        'form' => $form->createView(),
-                                    ]);
-                            }
-
-                            $this->addFlash('success', 'Historia Médica añadida con éxito');
-                            return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
-                        }
-                    }else{
-                        $this->addFlash('fail', 'Error, no se puede registrar historias médicas diferentes por favor modifique el registro ya ingresado');
-                        return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
-                    }
-                    
-                    return $this->render('historia_medica/new.html.twig', [
-                        'historia_medica' => $historiaMedica,
-                        'editar'          => $editar,
-                        'cita'            => $citum,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
 
-        
-
-        $editar = false;
-        $historiaMedica = new HistoriaMedica();
-        $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
-        $form->handleRequest($request);
-        //VALIDACION INICIAL PARA LA RUTA ES QUE SI LA CITA YA TIENE UN REGISTRO DE SIGNO VITAL BLOQUEARLA
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT * FROM `historia_medica` WHERE cita_id =".$citum->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-        if($result == null){
-            if ($form->isSubmitted() && $form->isValid()) {
-                if($form["consultaPor"]->getData() != ""){
-                    if($form["signos"]->getData() != ""){
-                        if($form["sintomas"]->getData() != ""){
-                            //INICIO PROCESAMIENTO DE DATOS
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $historiaMedica->setCita($citum);
-                            $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
-                            $historiaMedica->setSignos($form["signos"]->getData());
-                            $historiaMedica->setSintomas($form["sintomas"]->getData());
-                            foreach ($form["id10"]->getData() as $codigo) {
-                                $historiaMedica->addId10($codigo);    
+        if($citum->getExpediente()->getHabilitado()){
+            $editar = false;
+            $historiaMedica = new HistoriaMedica();
+            $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
+            $form->handleRequest($request);
+            //VALIDACION INICIAL PARA LA RUTA ES QUE SI LA CITA YA TIENE UN REGISTRO DE SIGNO VITAL BLOQUEARLA
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT * FROM `historia_medica` WHERE cita_id =".$citum->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            if($result == null){
+                if ($form->isSubmitted() && $form->isValid()) {
+                    if($form["consultaPor"]->getData() != ""){
+                        if($form["signos"]->getData() != ""){
+                            if($form["sintomas"]->getData() != ""){
+                                $entityManager = $this->getDoctrine()->getManager();
+                                $historiaMedica->setCita($citum);
+                                $historiaMedica->setConsultaPor($form["consultaPor"]->getData());
+                                $historiaMedica->setSignos($form["signos"]->getData());
+                                $historiaMedica->setSintomas($form["sintomas"]->getData());
+                                foreach ($form["id10"]->getData() as $codigo) {
+                                    $historiaMedica->addId10($codigo);    
+                                }
+                                $entityManager->persist($historiaMedica);
+                                $entityManager->flush();
+                                $this->addFlash('success', 'Historia Médica añadida con éxito');
+                                return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
+                            }else{
+                                $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
                             }
-                            $entityManager->persist($historiaMedica);
-                            $entityManager->flush();
                         }else{
-                            $this->addFlash('fail', 'Error, los síntomas no pueden ir vacíos');
-                            return $this->render('historia_medica/new.html.twig', [
-                                'historia_medica' => $historiaMedica,
-                                'editar'          => $editar,
-                                'cita'            => $citum,
-                                'form' => $form->createView(),
-                            ]);
+                            $this->addFlash('fail', 'Error, los signos no pueden ir vacíos');
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, los signos no pueden ir vacíos');
-                        return $this->render('historia_medica/new.html.twig', [
-                            'historia_medica' => $historiaMedica,
-                            'editar'          => $editar,
-                            'cita'            => $citum,
-                            'form' => $form->createView(),
-                        ]);
+                        $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacío');
                     }
-                }else{
-                    $this->addFlash('fail', 'Error,el motivo de la consulta no puede ir vacío');
-                     return $this->render('historia_medica/new.html.twig', [
-                            'historia_medica' => $historiaMedica,
-                            'editar'          => $editar,
-                            'cita'            => $citum,
-                            'form' => $form->createView(),
-                        ]);
                 }
-
-                $this->addFlash('success', 'Historia Médica añadida con éxito');
+            }else{
+                $this->addFlash('fail', 'Error, no se puede registrar historias médicas diferentes por favor modifique el registro ya ingresado');
                 return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
             }
+            
+            return $this->render('historia_medica/new.html.twig', [
+                'historia_medica' => $historiaMedica,
+                'editar'          => $editar,
+                'cita'            => $citum,
+                'form' => $form->createView(),
+            ]);
         }else{
-            $this->addFlash('fail', 'Error, no se puede registrar historias médicas diferentes por favor modifique el registro ya ingresado');
-            return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
-        }
-        
-        return $this->render('historia_medica/new.html.twig', [
-            'historia_medica' => $historiaMedica,
-            'editar'          => $editar,
-            'cita'            => $citum,
-            'form' => $form->createView(),
-        ]);
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }   
     }
 
     /**
