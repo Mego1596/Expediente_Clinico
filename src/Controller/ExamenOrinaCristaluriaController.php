@@ -30,31 +30,11 @@ class ExamenOrinaCristaluriaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `examen_orina_cristaluria` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
-                    return $this->render('examen_orina_cristaluria/index.html.twig', [
-                        'examen_orina_cristalurias'    => $result,
-                        'cantidad'                      => count($result),
-                        'user'                          => $AuthUser,
-                        'examen_solicitado'             => $examen_solicitado,
-                    ]);
-
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             $em = $this->getDoctrine()->getManager();
             $RAW_QUERY = "SELECT examen.* FROM `examen_orina_cristaluria` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
@@ -72,7 +52,6 @@ class ExamenOrinaCristaluriaController extends AbstractController
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
-
     }
 
     /**
@@ -86,120 +65,11 @@ class ExamenOrinaCristaluriaController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $editar = false;
-                    $examenOrinaCristaluria = new examenOrinaCristaluria();
-                    $form = $this->createForm(examenOrinaCristaluriaType::class, $examenOrinaCristaluria);
-                    $form->handleRequest($request);
-
-                    //VALIDACION DE RUTA PARA NO INGRESAR SI YA EXISTE 1 REGISTRO 
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `examen_orina_cristaluria` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    if(count($result) < 1){
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            if($form["uratosAmorfos"]->getData() != ""){
-                                if($form["acidoUrico"]->getData() != ""){
-                                    if($form["oxalatosCalcicos"]->getData() != ""){
-                                        if($form["fosfatosAmorfos"]->getData() != ""){
-                                            if($form["fosfatosCalcicos"]->getData() != ""){
-                                                if($form["fosfatosAmonicos"]->getData() != ""){
-                                                    if($form["riesgoLitogenico"]->getData() != ""){
-                                                        //PROCESAMIENTO DE DATOS
-                                                        $entityManager = $this->getDoctrine()->getManager();
-                                                        $examenOrinaCristaluria->setExamenSolicitado($examen_solicitado);
-                                                        $entityManager->persist($examenOrinaCristaluria);
-                                                        $entityManager->flush();
-                                                        //FIN DE PROCESAMIENTO DE DATOS
-                                                    }else{
-                                                        $this->addFlash('fail', 'Error, el riesgo litogénico no puede ir vacío');
-                                                        return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                            'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                            'examen_solicitado' => $examen_solicitado,
-                                                            'editar'            => $editar,
-                                                            'form' => $form->createView(),
-                                                        ]);
-                                                    }
-                                                }else{
-                                                    $this->addFlash('fail', 'Error, los fosfatos amónicos no pueden ir vacíos');
-                                                    return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                        'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                        'examen_solicitado' => $examen_solicitado,
-                                                        'editar'            => $editar,
-                                                        'form' => $form->createView(),
-                                                    ]);
-                                                }
-                                            }else{
-                                                $this->addFlash('fail', 'Error, los fosfatos cálcicos no pueden ir vacíos');
-                                                return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                    'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                    'examen_solicitado' => $examen_solicitado,
-                                                    'editar'            => $editar,
-                                                    'form' => $form->createView(),
-                                                ]);
-                                            }
-                                        }else{
-                                            $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacíos');
-                                            return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                'examen_solicitado' => $examen_solicitado,
-                                                'editar'            => $editar,
-                                                'form' => $form->createView(),
-                                            ]);
-                                        }
-                                    }else{
-                                        $this->addFlash('fail', 'Error, los oxalatos cálcicos no pueden ir vacíos');
-                                        return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                            'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                            'examen_solicitado' => $examen_solicitado,
-                                            'editar'            => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }
-                                }else{
-                                    $this->addFlash('fail', 'Error, el ácido úrico no puede ir vacío');
-                                    return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                        'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                        'examen_solicitado' => $examen_solicitado,
-                                        'editar'            => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacíos');
-                                return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                    'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                    'examen_solicitado' => $examen_solicitado,
-                                    'editar'            => $editar,
-                                    'form' => $form->createView(),
-                                ]);
-                            }
-                            $this->addFlash('success', 'Examen añadido con éxito');
-                            return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
-                        }
-                    }else{
-                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
-                        return $this->redirectToRoute('examen_orina_cristaluria_index', ['examen_solicitado' => $examen_solicitado->getId()]);
-                    }
-
-                    return $this->render('examen_orina_cristaluria/new.html.twig', [
-                        'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             $editar = false;
             $examenOrinaCristaluria = new examenOrinaCristaluria();
@@ -226,78 +96,35 @@ class ExamenOrinaCristaluriaController extends AbstractController
                                                 $examenOrinaCristaluria->setExamenSolicitado($examen_solicitado);
                                                 $entityManager->persist($examenOrinaCristaluria);
                                                 $entityManager->flush();
+                                                $this->addFlash('success', 'Examen añadido con éxito');
+                                                return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
                                                 //FIN DE PROCESAMIENTO DE DATOS
                                             }else{
                                                 $this->addFlash('fail', 'Error, el riesgo litogénico no puede ir vacío');
-                                                return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                    'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                    'examen_solicitado' => $examen_solicitado,
-                                                    'editar'            => $editar,
-                                                    'form' => $form->createView(),
-                                                ]);
                                             }
                                         }else{
                                             $this->addFlash('fail', 'Error, los fosfatos amónicos no pueden ir vacíos');
-                                            return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                                'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                                'examen_solicitado' => $examen_solicitado,
-                                                'editar'            => $editar,
-                                                'form' => $form->createView(),
-                                            ]);
                                         }
                                     }else{
                                         $this->addFlash('fail', 'Error, los fosfatos cálcicos no pueden ir vacíos');
-                                        return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                            'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                            'examen_solicitado' => $examen_solicitado,
-                                            'editar'            => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
                                     }
                                 }else{
                                     $this->addFlash('fail', 'Error, los fosfatos amorfos no pueden ir vacíos');
-                                    return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                        'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                        'examen_solicitado' => $examen_solicitado,
-                                        'editar'            => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
                                 }
                             }else{
                                 $this->addFlash('fail', 'Error, los oxalatos cálcicos no pueden ir vacíos');
-                                return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                    'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                    'examen_solicitado' => $examen_solicitado,
-                                    'editar'            => $editar,
-                                    'form' => $form->createView(),
-                                ]);
                             }
                         }else{
                             $this->addFlash('fail', 'Error, el ácido úrico no puede ir vacío');
-                            return $this->render('examen_orina_cristaluria/new.html.twig', [
-                                'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                                'examen_solicitado' => $examen_solicitado,
-                                'editar'            => $editar,
-                                'form' => $form->createView(),
-                            ]);
                         }
                     }else{
                         $this->addFlash('fail', 'Error, los uratos amorfos no pueden ir vacíos');
-                        return $this->render('examen_orina_cristaluria/new.html.twig', [
-                            'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                            'examen_solicitado' => $examen_solicitado,
-                            'editar'            => $editar,
-                            'form' => $form->createView(),
-                        ]);
                     }
-                    $this->addFlash('success', 'Examen añadido con éxito');
-                    return $this->redirectToRoute('examen_orina_cristaluria_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
                 $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o elimínelo si desea crear uno nuevo.');
                 return $this->redirectToRoute('examen_orina_cristaluria_index', ['examen_solicitado' => $examen_solicitado->getId()]);
             }
-
             return $this->render('examen_orina_cristaluria/new.html.twig', [
                 'examen_orina_cristaluria' => $examenOrinaCristaluria,
                 'examen_solicitado' => $examen_solicitado,
@@ -320,24 +147,20 @@ class ExamenOrinaCristaluriaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenOrinaCristaluria->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    return $this->render('examen_orina_cristaluria/show.html.twig', [
-                        'examen_orina_cristaluria' => $examenOrinaCristaluria,
-                        'examen_solicitado' => $examen_solicitado,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-        return $this->render('examen_orina_cristaluria/show.html.twig', [
-            'examen_orina_cristaluria' => $examenOrinaCristaluria,
-            'examen_solicitado' => $examen_solicitado,
-        ]);
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            return $this->render('examen_orina_cristaluria/show.html.twig', [
+                'examen_orina_cristaluria' => $examenOrinaCristaluria,
+                'examen_solicitado' => $examen_solicitado,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
