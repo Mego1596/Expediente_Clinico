@@ -240,18 +240,6 @@ class ExamenOrinaMicroscopicoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenOrinaMicroscopico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$examenOrinaMicroscopico->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($examenOrinaMicroscopico);
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success', 'Examen eliminado con éxito');
-                    return $this->redirectToRoute('examen_orina_microscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
