@@ -81,3 +81,18 @@ BEGIN
     SELECT * FROM sala WHERE clinica_id = ID_CLINICA_I;
 END; //
 DELIMITER ;
+
+--- Obtener cantidad de habitaciones bajo esa sala
+DELIMITER //
+CREATE procedure cantidad_habitaciones_sala ( IN ID_SALA_I INT )
+BEGIN
+    SELECT 
+        COUNT(*) as cuenta
+    FROM 
+        habitacion as h, 
+        sala as s 
+    WHERE 
+        h.sala_id = s.id 
+        AND s.id = ID_SALA_I;
+END; //
+DELIMITER ;
