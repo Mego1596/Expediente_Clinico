@@ -29,22 +29,6 @@ class SignoVitalController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($cita->getExpediente()->getHabilitado()){
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT id, peso,temperatura,estatura,presion_arterial as presionArterial, ritmo_cardiaco as ritmoCardiaco FROM `signo_vital` WHERE cita_id =".$cita->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
-                    return $this->render('signo_vital/index.html.twig', [
-                        'signos_vitales' => $result,
-                        'user'           => $AuthUser,
-                        'cita'           => $cita,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -80,94 +64,6 @@ class SignoVitalController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($cita->getExpediente()->getHabilitado()){
-                    //VALIDACION INICIAL PARA LA RUTA ES QUE SI LA CITA YA TIENE UN REGISTRO DE SIGNO VITAL BLOQUEARLA
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT * FROM `signo_vital` WHERE cita_id =".$cita->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    if($result == null){
-                        $editar = false;
-                        $signoVital = new SignoVital();
-                        $form = $this->createForm(SignoVitalType::class, $signoVital);
-                        $form->handleRequest($request);
-
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            if($form["peso"]->getData() != ""){
-                                if($form["temperatura"]->getData() != ""){
-                                    if($form["estatura"]->getData() != ""){
-                                        if($form["presionArterial"]->getData() != ""){
-                                            if($form["ritmoCardiaco"]->getData() != ""){
-                                                //INICIO DE PROCESO DE DATOS
-                                                $entityManager = $this->getDoctrine()->getManager();
-                                                $signoVital->setCita($cita);
-                                                $entityManager->persist($signoVital);
-                                                $entityManager->flush();
-                                                //FIN DE PROCESO DE DATOS
-                                            }else{
-                                               $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacío');
-                                                return $this->render('signo_vital/new.html.twig', [
-                                                    'signo_vital' => $signoVital,
-                                                    'cita'           => $cita,
-                                                    'editar'         => $editar,
-                                                    'form' => $form->createView(),
-                                                ]);
-                                            }
-                                        }else{
-                                           $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacía');
-                                            return $this->render('signo_vital/new.html.twig', [
-                                                'signo_vital' => $signoVital,
-                                                'cita'           => $cita,
-                                                'editar'         => $editar,
-                                                'form' => $form->createView(),
-                                            ]);
-                                        }
-                                    }else{
-                                        $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacía');
-                                        return $this->render('signo_vital/new.html.twig', [
-                                            'signo_vital' => $signoVital,
-                                            'cita'           => $cita,
-                                            'editar'         => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }
-                                }else{
-                                    $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacía');
-                                    return $this->render('signo_vital/new.html.twig', [
-                                        'signo_vital' => $signoVital,
-                                        'cita'           => $cita,
-                                        'editar'         => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacío');
-                                return $this->render('signo_vital/new.html.twig', [
-                                    'signo_vital' => $signoVital,
-                                    'cita'           => $cita,
-                                    'editar'         => $editar,
-                                    'form' => $form->createView(),
-                                ]);
-                            }
-                            $this->addFlash('success', 'Signos Vitales añadidos con éxito');
-                            return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
-                        }
-                    }else{
-                        $this->addFlash('fail', 'Error, no se puede registrar signos vitales diferentes por favor modifique el registro ya ingresado');
-                        return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
-                    }
-
-                    return $this->render('signo_vital/new.html.twig', [
-                        'signo_vital' => $signoVital,
-                        'cita'           => $cita,
-                        'editar'         => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -198,54 +94,24 @@ class SignoVitalController extends AbstractController
                                         $signoVital->setCita($cita);
                                         $entityManager->persist($signoVital);
                                         $entityManager->flush();
+                                        $this->addFlash('success', 'Signos Vitales añadidos con éxito');
+                                        return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                                         //FIN DE PROCESO DE DATOS
                                     }else{
                                        $this->addFlash('fail', 'Error, el ritmo cardiaco del paciente no puede estar vacío');
-                                        return $this->render('signo_vital/new.html.twig', [
-                                            'signo_vital' => $signoVital,
-                                            'cita'           => $cita,
-                                            'editar'         => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
                                     }
                                 }else{
                                    $this->addFlash('fail', 'Error, la presion arterial del paciente no puede estar vacía');
-                                    return $this->render('signo_vital/new.html.twig', [
-                                        'signo_vital' => $signoVital,
-                                        'cita'           => $cita,
-                                        'editar'         => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
                                 }
                             }else{
                                 $this->addFlash('fail', 'Error, la estatura del paciente no puede estar vacía');
-                                return $this->render('signo_vital/new.html.twig', [
-                                    'signo_vital' => $signoVital,
-                                    'cita'           => $cita,
-                                    'editar'         => $editar,
-                                    'form' => $form->createView(),
-                                ]);
                             }
                         }else{
                             $this->addFlash('fail', 'Error, la temperatura del paciente no puede estar vacía');
-                            return $this->render('signo_vital/new.html.twig', [
-                                'signo_vital' => $signoVital,
-                                'cita'           => $cita,
-                                'editar'         => $editar,
-                                'form' => $form->createView(),
-                            ]);
                         }
                     }else{
                         $this->addFlash('fail', 'Error, el peso del paciente no puede estar vacío');
-                        return $this->render('signo_vital/new.html.twig', [
-                            'signo_vital' => $signoVital,
-                            'cita'           => $cita,
-                            'editar'         => $editar,
-                            'form' => $form->createView(),
-                        ]);
                     }
-                    $this->addFlash('success', 'Signos Vitales añadidos con éxito');
-                    return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
                 }
             }else{
                 $this->addFlash('fail', 'Error, no se puede registrar signos vitales diferentes por favor modifique el registro ya ingresado');
@@ -263,7 +129,6 @@ class SignoVitalController extends AbstractController
             return $this->redirectToRoute('expediente_index');
         }
         
-
     }
 
     /**
@@ -276,15 +141,6 @@ class SignoVitalController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $signoVital->getCita()->getId() == $cita->getId() ){
-                if($cita->getExpediente()->getHabilitado()){
-                    return $this->render('signo_vital/show.html.twig', [
-                        'signo_vital' => $signoVital,
-                        'cita'           => $cita,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -313,27 +169,6 @@ class SignoVitalController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $signoVital->getCita()->getId() == $cita->getId() ){
-                if($cita->getExpediente()->getHabilitado()){
-                    $editar = true;
-                    $form = $this->createForm(SignoVitalType::class, $signoVital);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Signos Vitales modificados con éxito');
-                        return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
-                    }
-
-                    return $this->render('signo_vital/edit.html.twig', [
-                        'signo_vital' => $signoVital,
-                        'cita'           => $cita,
-                        'editar'         => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -374,18 +209,6 @@ class SignoVitalController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $cita->getExpediente()->getUsuario()->getClinica()->getId() && $signoVital->getCita()->getId() == $cita->getId() ){
-                if($cita->getExpediente()->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$signoVital->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($signoVital);
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success', 'Signos Vitales eliminados con éxito');
-                    return $this->redirectToRoute('signo_vital_index',['cita' => $cita->getId()]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
