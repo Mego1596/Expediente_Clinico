@@ -151,55 +151,25 @@ class UserController extends AbstractController
                                 $user->setPersona($persona);
                                 $entityManager->persist($user);
                                 $entityManager->flush();
+
+                                $this->addFlash('success', 'Usuario creado con exito');
+                                return $this->redirectToRoute('user_index');
                                 //FIN PROCESAMIENTO DE DATOS
                             }else{
                                 $this->addFlash('fail','Error, el rol de usuario no puede ir vacío');
-                                return $this->render('user/new.html.twig', [
-                                    'usuario' => $user,
-                                    'clinicas'   => $clinicas,
-                                    'pertenece'  => $clinicaPerteneciente,
-                                    'form' => $form->createView(),
-                                ]);
                             }
                         }else{
                             $this->addFlash('fail','Error, la contraseña de usuario no puede ir vacía');
-                            return $this->render('user/new.html.twig', [
-                                'usuario' => $user,
-                                'clinicas'   => $clinicas,
-                                'pertenece'  => $clinicaPerteneciente,
-                                'form' => $form->createView(),
-                            ]);
                         }
                     }else{
                         $this->addFlash('fail','Error, el email de usuario no puede ir vacío');
-                        return $this->render('user/new.html.twig', [
-                            'usuario' => $user,
-                            'clinicas'   => $clinicas,
-                            'pertenece'  => $clinicaPerteneciente,
-                            'form' => $form->createView(),
-                        ]);
                     }
                 }else{
                     $this->addFlash('fail','Error, los apellidos de usuario no pueden ir vacios');
-                    return $this->render('user/new.html.twig', [
-                        'usuario' => $user,
-                        'clinicas'   => $clinicas,
-                        'pertenece'  => $clinicaPerteneciente,
-                        'form' => $form->createView(),
-                    ]);
                 }
             }else{
                 $this->addFlash('fail','Error, los nombres de usuario no pueden ir vacios');
-                return $this->render('user/new.html.twig', [
-                    'usuario' => $user,
-                    'clinicas'   => $clinicas,
-                    'pertenece'  => $clinicaPerteneciente,
-                    'form' => $form->createView(),
-                ]);
             }
-            
-            $this->addFlash('success', 'Usuario creado con exito');
-            return $this->redirectToRoute('user_index');
         }
 
       
@@ -233,13 +203,7 @@ class UserController extends AbstractController
         //VALIDACION DE BLOQUEO DE RUTAS EN CASO DE INTENTAR ACCEDER A REGISTROS DE OTRAS CLINICAS SI NO ES ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($user->getRol()->getNombreRol() != 'ROLE_SA'){
-                if($AuthUser->getUser()->getClinica()->getId() == $user->getClinica()->getId()){
-                    return $this->render('user/show.html.twig', [
-                        'usuario' => $user,
-                        'persona'=>$result,
-
-                    ]);
-                }else{
+                if($AuthUser->getUser()->getClinica()->getId() != $user->getClinica()->getId()){
                     $this->addFlash('fail', 'Error, este registro puede que no exista o no le pertenece');
                     return $this->redirectToRoute('user_index');
                 }
@@ -248,6 +212,7 @@ class UserController extends AbstractController
                 return $this->redirectToRoute('user_index');
             }
         }
+
         return $this->render('user/show.html.twig', [
             'usuario' => $user,
             'persona'=>$result,
