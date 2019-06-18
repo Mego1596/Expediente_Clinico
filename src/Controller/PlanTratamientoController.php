@@ -44,11 +44,17 @@ class PlanTratamientoController extends AbstractController
                 return $this->redirectToRoute('home');
             }  
         } 
-        return $this->render('plan_tratamiento/index.html.twig', [
-            'plan_tratamientos' => $planTratamientoRepository->findBy(['historiaMedica' => $historiaMedica->getId()]),
-            'user'  =>$AuthUser,
-            'historia_medica'   => $historiaMedica,
-        ]);
+        
+        if($historiaMedica->getCita()->getExpediente()->getHabilitado()){
+            return $this->render('plan_tratamiento/index.html.twig', [
+                'plan_tratamientos' => $planTratamientoRepository->findBy(['historiaMedica' => $historiaMedica->getId()]),
+                'user'  =>$AuthUser,
+                'historia_medica'   => $historiaMedica,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
