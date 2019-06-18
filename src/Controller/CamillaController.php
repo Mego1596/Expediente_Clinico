@@ -160,13 +160,13 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
-                
+
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
         }
-        
+
         $editar=true;
         $form = $this->createFormBuilder($camilla)
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
@@ -238,13 +238,7 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
-                    if ($this->isCsrfTokenValid('delete'.$camilla->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($camilla);
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success','Camilla eliminada con éxito');
-                    return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
+
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
