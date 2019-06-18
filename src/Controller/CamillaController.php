@@ -137,7 +137,7 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
-                
+
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
@@ -160,69 +160,13 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
-                $editar=true;
-                $form = $this->createFormBuilder($camilla)
-                ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-                ->getForm();
-                $form->handleRequest($request);
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    if($request->request->get('numeroCambio') != ""){
-                        //VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-                        $em = $this->getDoctrine()->getManager();
-                        $RAW_QUERY = "SELECT c.* FROM camilla as c, habitacion as h, sala as s, clinica as cli 
-                        WHERE c.habitacion_id=h.id AND h.sala_id=s.id AND s.clinica_id = cli.id 
-                        AND cli.id =".$habitacion->getSala()->getClinica()->getId().
-                        " AND numero_camilla = ".$request->request->get('numeroCambio').";";
-                        $statement = $em->getConnection()->prepare($RAW_QUERY);
-                        $statement->execute();
-                        $result = $statement->fetchAll();
-                        if($result != null){
-                            //VERIFICACION PARA OBTENER LA CAMILLA QUE SE VA A TRANSFERIR A LA HABITACION ACTUAL
-                                $RAW_QUERY = "SELECT c.* FROM camilla as c, habitacion as h, sala as s, clinica as cli 
-                                WHERE c.habitacion_id=h.id AND h.sala_id=s.id AND s.clinica_id = cli.id 
-                                AND cli.id =".$habitacion->getSala()->getClinica()->getId().
-                                " AND numero_camilla = ".$request->request->get('numeroCambio').";";
-                                $statement = $em->getConnection()->prepare($RAW_QUERY);
-                                $statement->execute();
-                                $result = $statement->fetchAll();
-                                $camillaIntercambio = $this->getDoctrine()->getRepository(Camilla::class)->find($result[0]['id']);
-                                $camillaIntercambio->setNumeroCamilla($camilla->getNumeroCamilla());
-                                $camilla->setNumeroCamilla($result[0]['numero_camilla']);
-                                $entityManager->persist($camilla);
-                                $entityManager->flush();
-                                $mensaje = 'Camilla Modificada con éxito, se intercambiaron camillas entre la habitacion: '.$camillaIntercambio->getHabitacion()->getNumeroHabitacion().' de la sala: '.$camillaIntercambio->getHabitacion()->getSala()->getNombreSala().' con la habitacion: '.$camilla->getHabitacion()->getNumeroHabitacion().' de la sala :'.$camilla->getHabitacion()->getSala()->getNombreSala();
-                                $this->addFlash('success',$mensaje);
-                                return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
-                                //FIN VERIFICACION PARA OBTENER LA CAMILLA QUE SE VA A TRANSFERIR A LA HABITACION ACTUAL
-                        }else{
-                            $this->addFlash('fail','Error, esta camilla no existe porfavor escoja una camilla existente.');
-                            return $this->render('camilla/edit.html.twig', [
-                                'camilla' => $camilla,
-                                'habitacion'    => $habitacion,
-                                'editar'        => $editar,
-                                'form' => $form->createView(),
-                            ]);
-                        }
-                        //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-                    }else{
-                        $this->addFlash('success','Camilla Modificada con éxito');
-                        return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
-                    }
-                    
-                }
-
-                return $this->render('camilla/edit.html.twig', [
-                    'camilla' => $camilla,
-                    'habitacion'    => $habitacion,
-                    'editar'        => $editar,
-                    'form' => $form->createView(),
-                ]);
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
         }
+        
         $editar=true;
         $form = $this->createFormBuilder($camilla)
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
