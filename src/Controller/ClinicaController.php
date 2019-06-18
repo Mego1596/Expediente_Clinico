@@ -43,8 +43,14 @@ class ClinicaController extends AbstractController
      * @Security2("user.getIsActive()", statusCode=412, message="Su cuenta está inactiva")
      * @Security2("is_granted('ROLE_PERMISSION_NEW_CLINICA')")
      */
-    public function new(Request $request): Response
+    public function new(Request $request, Security $AuthUser): Response
     {
+        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
+
+        }else{
+            $this->addFlash('fail', 'Usted no tiene acceso a esta funcion.');
+            return $this->redirectToRoute('clinica_index');
+        }
         $editar = false;
         $clinica = new Clinica();
         $form = $this->createForm(ClinicaType::class, $clinica);

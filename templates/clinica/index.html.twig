@@ -19,6 +19,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+                {% if(user.getUser().getRol().getNombreRol() == 'ROLE_SA' ) %}
                     <div class="pull-right" align="center">
                         {% if is_granted('ROLE_PERMISSION_NEW_CLINICA') %}
                             <a href="{{ path('clinica_new') }}" class="btn btn-success" style="color: black; width: 100%"><i class="fa fa-hospital-o"></i> Registrar Nueva Clínica</a>
@@ -26,6 +27,7 @@
                     </div>
                     <br/>
                     <br/>
+                {% endif %}
                     <div class="pull-bottom">
                         <div class="table table-responsive">
                                 <table id="example" class="display table-striped" style="width:100%">
