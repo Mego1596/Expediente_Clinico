@@ -206,12 +206,4 @@ class ExamenHematologicoController extends AbstractController
             return $this->redirectToRoute('home');
         }
     }
-
-
-
-
-
-
-
-
 }
