@@ -271,7 +271,6 @@ class ExpedienteController extends AbstractController
                                         $entityManager->persist($expediente);
                                         $entityManager->flush();
                                         $this->addFlash('success', 'Paciente añadido con éxito');
-                                        return $this->redirectToRoute('expediente_index');
                                         //GENERACION DE VISTA AL CREAR UN PACIENTE CON EXITO PARA EL SHOW
                                         $conn = $entityManager->getConnection();
                                         $sql='CREATE VIEW expediente_paciente_'.$expediente->getId().' AS
@@ -284,6 +283,7 @@ class ExpedienteController extends AbstractController
                                         ex.id='.$expediente->getId().';';
                                         $view = $conn->prepare($sql);
                                         $view->execute();
+                                        return $this->redirectToRoute('expediente_index');
                                         //FIN PROCESO DE DATOS
                                     }else{
                                         $this->addFlash('fail', 'Error el género del paciente no puede estar vacío');
