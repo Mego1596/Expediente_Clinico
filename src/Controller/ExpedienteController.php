@@ -210,32 +210,30 @@ class ExpedienteController extends AbstractController
                                         $stmt->closeCursor();
 
                                         $validador = '';
-                                        $calculo = '';
-                                        if(count($result) != 0){
-                                            foreach ($result as $value) {
-                                                $correlativo = (int) substr($value["expediente"],2,4)+1;
-                                                
-                                                if( $correlativo <= 9 )
-                                                {
-                                                    $calculo="000".strval($correlativo)."-";
-                                                }
-                                                elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
-                                                {
-                                                    $calculo="00".strval($correlativo)."-";
-                                                }
-                                                elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
-                                                {
-                                                    $calculo="0".strval($correlativo)."-";
-                                                }
-                                                else{
-                                                    $calculo=strval($correlativo)."-";
-                                                }
-                                            }
+                                        $calculo = "0001-";
 
-                                            $validador = $iniciales.$calculo.date("Y");
-                                        }else{
-                                            $validador = $iniciales."0001-".date("Y");
+                                        foreach ($result as $value) {
+                                            $correlativo = (int) substr($value["expediente"],2,4)+1;
+                                            
+                                            if( $correlativo <= 9 )
+                                            {
+                                                $calculo="000".strval($correlativo)."-";
+                                            }
+                                            elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
+                                            {
+                                                $calculo="00".strval($correlativo)."-";
+                                            }
+                                            elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
+                                            {
+                                                $calculo="0".strval($correlativo)."-";
+                                            }
+                                            else{
+                                                $calculo=strval($correlativo)."-";
+                                            }
                                         }
+
+                                        $validador = $iniciales.$calculo.date("Y");
+                                        
 
                                         $NUM_EXPEDIENTE = $validador;
                                         $ID_CLINICA_I = -1;
