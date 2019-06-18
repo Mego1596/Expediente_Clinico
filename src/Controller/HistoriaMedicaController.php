@@ -182,18 +182,6 @@ class HistoriaMedicaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $historiaMedica->getCita()->getId() == $citum->getId() ){
-                if($citum->getExpediente()->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$historiaMedica->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($historiaMedica);
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success', 'Historia Médica eliminada con éxito');
-                    return $this->redirectToRoute('historia_medica_index',['citum' => $citum->getId()]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
