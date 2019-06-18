@@ -146,29 +146,6 @@ class ExamenHematologicoController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $examenHematologico->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $editar = true;
-                    $form = $this->createForm(ExamenHematologicoType::class, $examenHematologico);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con éxito');
-                        return $this->redirectToRoute('examen_hematologico_index', [
-                            'id' => $examenHematologico->getId(),
-                            'examen_solicitado' => $examen_solicitado->getId(),
-                        ]);
-                    }
-                    return $this->render('examen_hematologico/edit.html.twig', [
-                        'examen_hematologico' => $examenHematologico,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
