@@ -62,39 +62,7 @@ class SalaController extends AbstractController
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
-                $editar=false;
-                $sala = new Sala();
-                $form = $this->createForm(SalaType::class, $sala);
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    if($form["nombreSala"]->getData() != ""){
-                        $sala->setClinica($clinica);
-                        $entityManager->persist($sala);
-                        $entityManager->flush();
-                    }else{
-                        $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacío');
-                        return $this->render('sala/new.html.twig', [
-                            'sala' => $sala,
-                            'editar' =>$editar,
-                            'clinica'=>$clinica,
-                            'form' => $form->createView(),
-                        ]);
-                    }
-                    
-                    $this->addFlash('success','Sala añadida con éxito');
-                    return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
-                }
-
-                return $this->render('sala/new.html.twig', [
-                    'sala' => $sala,
-                    'editar' =>$editar,
-                    'clinica'=>$clinica,
-                    'form' => $form->createView(),
-                ]);
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $clinica->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
@@ -111,18 +79,12 @@ class SalaController extends AbstractController
                 $sala->setClinica($clinica);
                 $entityManager->persist($sala);
                 $entityManager->flush();
+
+                $this->addFlash('success','Sala añadida con éxito');
+                return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
             }else{
                 $this->addFlash('fail', 'Error, el nombre de la sala no puede estar vacío');
-                return $this->render('sala/new.html.twig', [
-                    'sala' => $sala,
-                    'editar' =>$editar,
-                    'clinica'=>$clinica,
-                    'form' => $form->createView(),
-                ]);
             }
-            
-            $this->addFlash('success','Sala añadida con éxito');
-            return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
         }
 
         return $this->render('sala/new.html.twig', [
@@ -170,23 +132,7 @@ class SalaController extends AbstractController
 
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId() && $AuthUser->getUser()->getClinica()->getId() == $sala->getClinica()->getId()){
-                $editar=true;
-                $form = $this->createForm(SalaType::class, $sala);
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $this->getDoctrine()->getManager()->flush();
-                    $this->addFlash('success','Sala modificada con éxito');
-                    return $this->redirectToRoute('sala_index',array('clinica'=>$clinica->getId()));
-                }
-                return $this->render('sala/edit.html.twig', [
-                    'sala' => $sala,
-                    'editar' =>$editar,
-                    'clinica'=>$clinica,
-                    'form' => $form->createView(),
-                ]);
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $clinica->getId() || $AuthUser->getUser()->getClinica()->getId() != $sala->getClinica()->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
