@@ -327,6 +327,13 @@
   {% block javascripts %}{% endblock %}
   <script type="text/javascript">
     $( document ).ready(function() {
+      $("form").submit(function(){
+        $("button.btn.btn-outline-success").attr('disabled', true);
+      });
+    });
+  </script>
+  <script type="text/javascript">
+    $( document ).ready(function() {
         $("#sidebarToggleTop").click();
     });
   </script>
