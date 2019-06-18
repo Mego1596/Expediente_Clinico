@@ -150,3 +150,32 @@ BEGIN
     END IF; 
 END; //
 DELIMITER ;
+
+--- Procedimiento para obtener el expediente maximo para una letra y anio
+DELIMITER //
+CREATE procedure obtener_ultimo_num_expediente ( IN ID_CLINICA_I INT, IN INICIO_I VARCHAR(200))
+BEGIN
+    SET @query = '
+        SELECT 
+            e.numero_expediente as expediente 
+        FROM 
+            expediente as e 
+        WHERE 
+            e.id 
+            IN (
+                SELECT 
+                    MAX(exp.id) 
+                FROM 
+                    expediente as exp, 
+                    user as u 
+                WHERE 
+                    u.id = exp.usuario_id 
+        ';
+
+    SET @query = CONCAT(@query, " AND u.clinica_id = ", ID_CLINICA_I);
+    SET @query = CONCAT(@query, " AND exp.numero_expediente LIKE '", INICIO_I, "');");
+
+    PREPARE stmt1 FROM @query;
+    EXECUTE stmt1;
+END; //
+DELIMITER ;

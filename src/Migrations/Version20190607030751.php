@@ -414,6 +414,19 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure obtener_ultimo_num_expediente ( IN ID_CLINICA_I INT, IN INICIO_I VARCHAR(200))
+            BEGIN
+                SET @query = \'SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id IN (SELECT MAX(exp.id) FROM expediente as exp, user as u WHERE u.id = exp.usuario_id\';
+                SET @query = CONCAT(@query, " AND u.clinica_id = ", ID_CLINICA_I);
+                SET @query = CONCAT(@query, " AND exp.numero_expediente LIKE \'", INICIO_I, "\');");
+            
+                PREPARE stmt1 FROM @query;
+                EXECUTE stmt1;
+            END
+        ');
+
+
+
         //FUNCTION GET EDAD
 
         $this->addSql('CREATE DEFINER=`root`@`localhost` FUNCTION `getEdad`(`paciente` INT UNSIGNED) RETURNS INT(3) DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DECLARE salida INT DEFAULT 0; SET salida =(SELECT TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad from expediente WHERE id = paciente) ; RETURN salida; END');
