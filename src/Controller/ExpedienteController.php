@@ -329,13 +329,16 @@ class ExpedienteController extends AbstractController
         $statement->execute();
         $ingresoActual = $statement->fetch();
 
-        //USO DE VIEW
+        //OBTENER VIEW DE EXPEDIENTE
+        $ID_EXPEDIENTE_I = $expediente->getId();
+        $sql= 'CALL obtener_vista_expediente(:ID_EXPEDIENTE_I)';
         $conn = $this->getDoctrine()->getManager()->getConnection();
-        $sql = 'SELECT * FROM expediente_paciente_'.$expediente->getId()
-            ;
         $stmt = $conn->prepare($sql);
-        $stmt->execute();
+        $stmt->execute(array(
+            'ID_EXPEDIENTE_I' => $ID_EXPEDIENTE_I 
+        ));
         $result= $stmt->fetch();
+        $stmt->closeCursor();
 
         //VALIDACION PARA SABER SI EL EXPEDIENTE PERTENECE A LA CLINICA DEL USUARIO, EN EL CASO QUE NO SEA SUPER ADMIN
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){

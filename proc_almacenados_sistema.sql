@@ -209,3 +209,14 @@ BEGIN
     EXECUTE stmt1;
 END; //
 DELIMITER ;
+
+--- Procedimiento para obtener vista de paciente
+DELIMITER //
+CREATE procedure obtener_vista_expediente ( IN ID_EXPEDIENTE_I INT)
+BEGIN
+    SET @query = CONCAT('SELECT * FROM expediente_paciente_', ID_EXPEDIENTE_I);
+
+    PREPARE stmt1 FROM @query;
+    EXECUTE stmt1;
+END; //
+DELIMITER ;
