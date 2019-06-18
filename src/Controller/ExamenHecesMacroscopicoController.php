@@ -29,25 +29,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
 
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `examen_heces_macroscopico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
-                    return $this->render('examen_heces_macroscopico/index.html.twig', [
-                        'examen_heces_macroscopicos'    => $result,
-                        'cantidad'                      => count($result),
-                        'user'                          => $AuthUser,
-                        'examen_solicitado'             => $examen_solicitado,
-                    ]);
-
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
@@ -84,92 +66,12 @@ class ExamenHecesMacroscopicoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $editar = false;
-                    $examenHecesMacroscopico = new ExamenHecesMacroscopico();
-                    $form = $this->createForm(ExamenHecesMacroscopicoType::class, $examenHecesMacroscopico);
-                    $form->handleRequest($request);
-
-                    //VALIDACION DE RUTA PARA NO INGRESAR SI YA EXISTE 1 REGISTRO 
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `examen_heces_macroscopico` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    if(count($result) < 1){
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            if($form["aspecto"]->getData() != ""){
-                                if($form["consistencia"]->getData() != ""){
-                                    if($form["color"]->getData() != ""){
-                                        if($form["olor"]->getData() != ""){
-                                            //PROCESAMIENTO DE DATOS
-                                            $entityManager = $this->getDoctrine()->getManager();
-                                            $examenHecesMacroscopico->setExamenSolicitado($examen_solicitado);
-                                            $entityManager->persist($examenHecesMacroscopico);
-                                            $entityManager->flush();
-                                            //FIN DE PROCESAMIENTO DE DATOS
-
-                                        }else{
-                                            $this->addFlash('fail', 'Error, aspecto no puede ir vacío, si no hay resultados que asignar por favor asigne " * " ');
-                                            return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                                'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                                'examen_solicitado' => $examen_solicitado,
-                                                'editar'            => $editar,
-                                                'form' => $form->createView(),
-                                            ]);
-                                        }
-                                    }else{
-                                        $this->addFlash('fail', 'Error, consistencia no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                                        return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                            'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                            'examen_solicitado' => $examen_solicitado,
-                                            'editar'            => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }
-                                }else{
-                                    $this->addFlash('fail', 'Error, color no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                                    return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                        'examen_solicitado' => $examen_solicitado,
-                                        'editar'            => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'Error, olor no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                                return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                    'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                    'examen_solicitado' => $examen_solicitado,
-                                    'editar'            => $editar,
-                                    'form' => $form->createView(),
-                                ]);
-                            }
-                            $this->addFlash('success', 'Examen añadido con éxito');
-                            return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
-                        }
-                    }else{
-                        $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
-                        return $this->redirectToRoute('examen_heces_macroscopico_index', ['examen_solicitado' => $examen_solicitado->getId()]);
-                    }
-
-                    return $this->render('examen_heces_macroscopico/new.html.twig', [
-                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-
-
 
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             $editar = false;
@@ -194,46 +96,22 @@ class ExamenHecesMacroscopicoController extends AbstractController
                                     $examenHecesMacroscopico->setExamenSolicitado($examen_solicitado);
                                     $entityManager->persist($examenHecesMacroscopico);
                                     $entityManager->flush();
+                                    $this->addFlash('success', 'Examen añadido con éxito');
+                                    return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                                     //FIN DE PROCESAMIENTO DE DATOS
 
                                 }else{
-                                    $this->addFlash('fail', 'Error, aspecto no puede ir vacío, si no hay resultados que asignar por favor asigne " * " ');
-                                    return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                        'examen_solicitado' => $examen_solicitado,
-                                        'editar'            => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
+                                    $this->addFlash('fail', 'Error, aspecto no puede ir vacío');
                                 }
                             }else{
-                                $this->addFlash('fail', 'Error, consistencia no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                                return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                    'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                    'examen_solicitado' => $examen_solicitado,
-                                    'editar'            => $editar,
-                                    'form' => $form->createView(),
-                                ]);
+                                $this->addFlash('fail', 'Error, consistencia no puede ir vacío');
                             }
                         }else{
-                            $this->addFlash('fail', 'Error, color no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                            return $this->render('examen_heces_macroscopico/new.html.twig', [
-                                'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                                'examen_solicitado' => $examen_solicitado,
-                                'editar'            => $editar,
-                                'form' => $form->createView(),
-                            ]);
+                            $this->addFlash('fail', 'Error, color no puede ir vacío');
                         }
                     }else{
-                        $this->addFlash('fail', 'Error, olor no puede ir vacío, si no hay resultados que asignar por favor asigne " * "');
-                        return $this->render('examen_heces_macroscopico/new.html.twig', [
-                            'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                            'examen_solicitado' => $examen_solicitado,
-                            'editar'            => $editar,
-                            'form' => $form->createView(),
-                        ]);
+                        $this->addFlash('fail', 'Error, olor no puede ir vacío');
                     }
-                    $this->addFlash('success', 'Examen añadido con éxito');
-                    return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
                 }
             }else{
                 $this->addFlash('fail', 'Error, ya se ha registrado un examen de este tipo por favor modifique el examen existente o eliminelo si desea crear uno nuevo.');
@@ -250,7 +128,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
-}
+    }
 
     /**
      * @Route("/{id}/{examen_solicitado}", name="examen_heces_macroscopico_show", methods={"GET"})
@@ -262,25 +140,21 @@ class ExamenHecesMacroscopicoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    return $this->render('examen_heces_macroscopico/show.html.twig', [
-                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                        'examen_solicitado' => $examen_solicitado,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-        
-        return $this->render('examen_heces_macroscopico/show.html.twig', [
-            'examen_heces_macroscopico' => $examenHecesMacroscopico,
-            'examen_solicitado' => $examen_solicitado,
-        ]);
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            return $this->render('examen_heces_macroscopico/show.html.twig', [
+                'examen_heces_macroscopico' => $examenHecesMacroscopico,
+                'examen_solicitado' => $examen_solicitado,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
