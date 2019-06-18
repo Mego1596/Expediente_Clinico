@@ -87,6 +87,14 @@ class IngresadoController extends AbstractController
      */
     public function new(Request $request, Expediente $expediente, Security $AuthUser): Response
     {   
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() ){
+
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('ingresado_index');
+            }
+        }
         if($request->request->get('user') != ""){
             if($request->request->get('camilla') != ""){
                 $clinicaDoctor     = $this->getDoctrine()->getRepository(User::class)->find($request->request->get('user'));
@@ -130,8 +138,15 @@ class IngresadoController extends AbstractController
      */
     public function show(IngresadoRepository $ingresadoRepository, Ingresado $ingresado, Security $AuthUser): Response
     {   
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $ingresado->getExpediente()->getUsuario()->getClinica()->getId() ){
 
-    
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('ingresado_index');
+            }
+        }
+        
         if($ingresado->getExpediente()->getHabilitado()){
                 //UBICAR SOLO LOS DE MI CLINICA
             if(empty($AuthUser->getUser()->getClinica())){
@@ -206,6 +221,14 @@ class IngresadoController extends AbstractController
      */
     public function darDeAlta(Request $request, Ingresado $ingresado, Security $AuthUser): Response
     {
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $ingresado->getExpediente()->getUsuario()->getClinica()->getId() ){
+
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('ingresado_index');
+            }
+        }
         
         if($ingresado->getFechaSalida() == null){
             if($ingresado->getExpediente()->getHabilitado()){
@@ -240,6 +263,15 @@ class IngresadoController extends AbstractController
      */
     public function delete(Request $request, Ingresado $ingresado, Security $AuthUser): Response
     {
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $ingresado->getExpediente()->getUsuario()->getClinica()->getId() ){
+
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('ingresado_index');
+            }
+        }
+
         if($ingresado->getExpediente()->getHabilitado()){
             if ($this->isCsrfTokenValid('delete'.$ingresado->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
