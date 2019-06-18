@@ -141,53 +141,35 @@ class HistoriaMedicaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $historiaMedica->getCita()->getId() == $citum->getId() ){
-                if($citum->getExpediente()->getHabilitado()){
-                    $editar=true;        
-                    $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Historia Médica modificada con éxito');
-                        return $this->redirectToRoute('historia_medica_index', [
-                            'citum' => $citum->getId(),
-                        ]);
-                    }
-
-                    return $this->render('historia_medica/edit.html.twig', [
-                        'historia_medica' => $historiaMedica,
-                        'editar'          => $editar,
-                        'cita'            => $citum,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
 
-        $editar=true;        
-        $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
-        $form->handleRequest($request);
+        if($citum->getExpediente()->getHabilitado()){
+            $editar=true;        
+            $form = $this->createForm(HistoriaMedicaType::class, $historiaMedica);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-            $this->addFlash('success', 'Historia Médica modificada con éxito');
-            return $this->redirectToRoute('historia_medica_index', [
-                'citum' => $citum->getId(),
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+                $this->addFlash('success', 'Historia Médica modificada con éxito');
+                return $this->redirectToRoute('historia_medica_index', [
+                    'citum' => $citum->getId(),
+                ]);
+            }
+
+            return $this->render('historia_medica/edit.html.twig', [
+                'historia_medica' => $historiaMedica,
+                'editar'          => $editar,
+                'cita'            => $citum,
+                'form' => $form->createView(),
             ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
         }
-
-        return $this->render('historia_medica/edit.html.twig', [
-            'historia_medica' => $historiaMedica,
-            'editar'          => $editar,
-            'cita'            => $citum,
-            'form' => $form->createView(),
-        ]);
     }
 
     /**
