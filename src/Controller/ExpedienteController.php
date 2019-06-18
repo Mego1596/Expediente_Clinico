@@ -382,287 +382,120 @@ class ExpedienteController extends AbstractController
         $persona = $this->getDoctrine()->getRepository(Persona::class)->find($expediente->getUsuario()->getPersona()->getId());
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
-                if($expediente->getHabilitado()){
-                    $editar = true;
-                    $expediente->email = $expediente->getUsuario()->getEmail();
-                    $form = $this->createFormBuilder($expediente)
-                    ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('apellidoCasada',TextType::class, array( 'required' => false,
-                        'attr' => array('class' => 'form-control')))
-                    ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
-                    ->add('genero', EntityType::class, array('class' => Genero::class,
-                        'placeholder' => 'Seleccione el genero', 
-                        'choice_label' => 'descripcion', 
-                        'attr' => array('class' => 'form-control') ))
-                    ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-                    ->getForm();
-
-                    $form->handleRequest($request);
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
-                        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                        $statement->execute();
-                        $usuario = $statement->fetchAll();
-                        if (count($usuario) > 0)
-                        {
-                            $this->addFlash('fail', 'Usuario con este email ya existe');
-                            return $this->render('expediente/edit.html.twig',[
-                                    'expediente' => $expediente,
-                                    'form' => $form->createView(),
-                                    'editar' => $editar,
-                                    'persona'    => $persona,
-                                    ]);
-                        }
-                        if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
-                            if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_confirmPassword')) ){
-                                if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
-                                    $entityManager = $this->getDoctrine()->getManager();
-                                    $user = $expediente->getUsuario();
-
-
-                                    $persona->setPrimerNombre('primerNombre');
-                                    $persona->setSegundoNombre('segundoNombre');
-                                    $entityManager->persist($persona);
-                                    $entityManager->flush();
-
-                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                                    $user->setEmail('correo');
-                                    $entityManager->persist($user);
-                                    $entityManager->flush();
-
-                                    $user->setEmail($form["email"]->getData());
-                                    $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                                    $entityManager->persist($persona);
-                                    $entityManager->flush();
-                                    $entityManager->persist($user);
-                                    $entityManager->flush();
-
-                                    $expediente->setDireccion("santaana");
-                                    $entityManager->persist($expediente);
-                                    $entityManager->flush();
-
-                                    $expediente->setGenero($form["genero"]->getData());
-                                    $expediente->setDireccion($form["direccion"]->getData());
-                                    $expediente->setTelefono($form["telefono"]->getData());
-                                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                                    $entityManager->persist($expediente);
-                                    $entityManager->flush();
-                                    $this->addFlash('success', 'Paciente modificado con éxito');
-                                    return $this->redirectToRoute('expediente_index');
-                                }else{
-                                    $this->addFlash('fail', 'ambas contraseñas deben coincidir');
-                                    return $this->render('expediente/edit.html.twig',[
-                                    'expediente' => $expediente,
-                                    'form' => $form->createView(),
-                                    'persona'    => $persona,
-                                    'editar' => $editar,
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
-                            }
-                        }else{
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $user = $expediente->getUsuario();
-
-
-                            $persona->setPrimerNombre('primerNombre');
-                            $persona->setSegundoNombre('segundoNombre');
-                            $entityManager->persist($persona);
-                            $entityManager->flush();
-
-                            $persona->setPrimerNombre($request->request->get('primerNombre'));
-                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                            $user->setEmail('correo');
-                            $entityManager->persist($user);
-                            $entityManager->flush();
-
-                            $user->setEmail($form["email"]->getData());
-                            $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                            $entityManager->persist($persona);
-                            $entityManager->flush();
-                            $entityManager->persist($user);
-                            $entityManager->flush();
-
-                            $expediente->setDireccion("santaana");
-                            $entityManager->persist($expediente);
-                            $entityManager->flush();
-
-                            $expediente->setGenero($form["genero"]->getData());
-                            $expediente->setDireccion($form["direccion"]->getData());
-                            $expediente->setTelefono($form["telefono"]->getData());
-                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                            $entityManager->persist($expediente);
-                            $entityManager->flush();
-                            $this->addFlash('success', 'Paciente modificado con éxito');
-                            return $this->redirectToRoute('expediente_index');
-                        }
-                    }
-                    return $this->render('expediente/edit.html.twig', [
-                        'expediente' => $expediente,
-                        'editar'     => $editar,
-                        'persona'    => $persona,
-
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $expediente->getUsuario()->getClinica()->getId()){
                 $this->addFlash('fail', 'Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
             }
         }
-        if($expediente->getHabilitado()){
-            $editar = true;
-            $expediente->email = $expediente->getUsuario()->getEmail();
-            $form = $this->createFormBuilder($expediente)
-            ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
-            ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('apellidoCasada',TextType::class, array( 'required' => false,'attr' => array('class' => 'form-control')))
-            ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
-            ->add('genero', EntityType::class, array('class' => Genero::class, 'placeholder' => 'Seleccione el genero', 'choice_label' => 'descripcion', 'attr' => array('class' => 'form-control') ))
-            ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-            ->getForm();
 
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
-                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                $statement->execute();
-                $usuario = $statement->fetchAll();
-                if (count($usuario) > 0)
-                {
-                    $this->addFlash('fail', 'Usuario con este Email ya existe');
-                    return $this->render('expediente/edit.html.twig',[
-                            'expediente' => $expediente,
-                            'form' => $form->createView(),
-                            'editar' => $editar,
-                            'persona'    => $persona,
-                            ]);
-                }
-                if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
-                    if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_confirmPassword')) ){
-                        if ($request->request->get('nueva_password') == $request->request->get('nueva_confirmPassword') ) {
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $user = $expediente->getUsuario();
-
-                            $persona->setPrimerNombre('primerNombre');
-                            $persona->setSegundoNombre('segundoNombre');
-                            $entityManager->persist($persona);
-                            $entityManager->flush();
-
-                            $persona->setPrimerNombre($request->request->get('primerNombre'));
-                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                            $user->setEmail('correo');
-                            $entityManager->persist($user);
-                            $entityManager->flush();
-
-                            $user->setEmail($form["email"]->getData());
-                            $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                            $entityManager->persist($persona);
-                            $entityManager->flush();
-                            $entityManager->persist($user);
-                            $entityManager->flush();
-
-                            $expediente->setDireccion("santaana");
-                            $entityManager->persist($expediente);
-                            $entityManager->flush();
-
-                            $expediente->setGenero($form["genero"]->getData());
-                            $expediente->setDireccion($form["direccion"]->getData());
-                            $expediente->setTelefono($form["telefono"]->getData());
-                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                            $entityManager->persist($expediente);
-                            $entityManager->flush();
-                            $this->addFlash('success', 'Paciente modificado con éxito');
-                            return $this->redirectToRoute('expediente_index');
-                        }else{
-                            $this->addFlash('fail', 'ambas contraseñas deben coincidir');
-                            return $this->render('expediente/edit.html.twig',[
-                            'expediente' => $expediente,
-                            'form' => $form->createView(),
-                            'editar' => $editar,
-                            'persona'    => $persona,
-                            ]);
-                        }
-                    }else{
-                        $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
-                    }
-                }else{
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $user = $expediente->getUsuario();
-
-                    $persona->setPrimerNombre('primerNombre');
-                    $persona->setSegundoNombre('segundoNombre');
-                    $entityManager->persist($persona);
-                    $entityManager->flush();
-
-                    $persona->setPrimerNombre($request->request->get('primerNombre'));
-                    $persona->setSegundoNombre($request->request->get('segundoNombre'));
-
-
-                    $user->setEmail('correo');
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    $user->setEmail($form["email"]->getData());
-                    $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
-
-
-                    $entityManager->persist($persona);
-                    $entityManager->flush();
-                    $entityManager->persist($user);
-                    $entityManager->flush();
-
-                    $expediente->setDireccion("santaana");
-                    $entityManager->persist($expediente);
-                    $entityManager->flush();
-
-                    $expediente->setGenero($form["genero"]->getData());
-                    $expediente->setDireccion($form["direccion"]->getData());
-                    $expediente->setTelefono($form["telefono"]->getData());
-                    $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                    $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                    $entityManager->persist($expediente);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Paciente modificado con éxito');
-                    return $this->redirectToRoute('expediente_index');
-                }
-            }
-            return $this->render('expediente/edit.html.twig', [
-                'expediente' => $expediente,
-                'persona' => $persona,
-                'editar'     => $editar,
-                'form' => $form->createView(),
-            ]);
-        }else{
+        if (!$expediente->getHabilitado()){
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('expediente_index');
         }
+
+        $editar = true;
+        $expediente->email = $expediente->getUsuario()->getEmail();
+        $form = $this->createFormBuilder($expediente)
+        ->add('email', EmailType::class, array('attr' => array('class' => 'form-control')))
+        ->add('direccion',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('telefono',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('apellidoCasada',TextType::class, array( 'required' => false, 'attr' => array('class' => 'form-control')))
+        ->add('estadoCivil',TextType::class, array('attr' => array('class' => 'form-control')))
+        ->add('genero', EntityType::class, array('class' => Genero::class,
+            'placeholder' => 'Seleccione el genero', 
+            'choice_label' => 'descripcion', 
+            'attr' => array('class' => 'form-control') ))
+        ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
+        ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
+            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $usuario = $statement->fetchAll();
+            
+            if (count($usuario) > 0)
+            {
+                $this->addFlash('fail', 'Usuario con este email ya existe');
+                return $this->render('expediente/edit.html.twig',[
+                        'expediente' => $expediente,
+                        'form' => $form->createView(),
+                        'editar' => $editar,
+                        'persona'    => $persona,
+                        ]);
+            }
+
+            if(!empty($request->request->get('nueva_password')) || !empty($request->request->get('nueva_confirmPassword'))){
+                if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_password')) && preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/",$request->request->get('nueva_confirmPassword')) ){
+                    if ($request->request->get('nueva_password') != $request->request->get('nueva_confirmPassword') ) {
+                        $this->addFlash('fail', 'ambas contraseñas deben coincidir');
+                        return $this->render('expediente/edit.html.twig',[
+                            'expediente' => $expediente,
+                            'form' => $form->createView(),
+                            'persona'    => $persona,
+                            'editar' => $editar,
+                            ]);
+                    }
+                }else{
+                    $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                    return $this->render('expediente/edit.html.twig',[
+                        'expediente' => $expediente,
+                        'form' => $form->createView(),
+                        'persona'    => $persona,
+                        'editar' => $editar,
+                        ]);
+                }
+            }
+            
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $expediente->getUsuario();
+
+
+            $persona->setPrimerNombre('primerNombre');
+            $persona->setSegundoNombre('segundoNombre');
+            $entityManager->persist($persona);
+            $entityManager->flush();
+
+            $persona->setPrimerNombre($request->request->get('primerNombre'));
+            $persona->setSegundoNombre($request->request->get('segundoNombre'));
+
+
+            $user->setEmail('correo');
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $user->setEmail($form["email"]->getData());
+            $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+
+
+            $entityManager->persist($persona);
+            $entityManager->flush();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $expediente->setDireccion("santaana");
+            $entityManager->persist($expediente);
+            $entityManager->flush();
+
+            $expediente->setGenero($form["genero"]->getData());
+            $expediente->setDireccion($form["direccion"]->getData());
+            $expediente->setTelefono($form["telefono"]->getData());
+            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+            $entityManager->persist($expediente);
+            $entityManager->flush();
+            $this->addFlash('success', 'Paciente modificado con éxito');
+            return $this->redirectToRoute('expediente_index');
+        }
+        
+        return $this->render('expediente/edit.html.twig', [
+            'expediente' => $expediente,
+            'editar'     => $editar,
+            'persona'    => $persona,
+            'form' => $form->createView(),
+        ]);
     }
 
     /**
