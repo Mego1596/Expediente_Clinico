@@ -37,17 +37,6 @@ class CamillaController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId()){
                 
-                $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY = "SELECT * FROM camilla WHERE habitacion_id = ".$habitacion->getId().";";
-                $statement = $em->getConnection()->prepare($RAW_QUERY);
-                $statement->execute();
-                $result = $statement->fetchAll();
-
-                return $this->render('camilla/index.html.twig', [
-                    'camillas' => $result,
-                    'user'      => $AuthUser,
-                    'habitacion' => $habitacion,
-                ]);
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
@@ -78,67 +67,12 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId()){
-                $editar=false;
-                $camilla = new Camilla();
-                $form = $this->createFormBuilder($camilla)
-                ->add('numeroCamilla', IntegerType::class, array('attr' => array('class' => 'form-control','min'=>1)))
-                ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')))
-                ->getForm();
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    //VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT c.* FROM camilla as c, habitacion as h, sala as s, clinica as cli 
-                    WHERE c.habitacion_id=h.id AND h.sala_id=s.id AND s.clinica_id = cli.id 
-                    AND cli.id =".$habitacion->getSala()->getClinica()->getId().
-                    " AND numero_camilla = ".$form["numeroCamilla"]->getData().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
-                    if($result == null){
-                        if($form["numeroCamilla"]->getData() != ""){
-                            $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
-                        }else{
-                            $this->addFlash('fail','Error, el número de camilla no puede estar vacío, por favor ingrese el número de camilla');
-                            return $this->render('camilla/new.html.twig', [
-                                'camilla' => $camilla,
-                                'habitacion'    => $habitacion,
-                                'editar'        => $editar,
-                                'form' => $form->createView(),
-                            ]);
-                        }
-                    }else{
-                        $this->addFlash('fail','Error, esta camilla ya está asignada por favor ingrese una nueva camilla');
-                        return $this->render('camilla/new.html.twig', [
-                            'camilla' => $camilla,
-                            'habitacion'    => $habitacion,
-                            'editar'        => $editar,
-                            'form' => $form->createView(),
-                        ]);
-                    }
-                    //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-                    $this->addFlash('success','Camilla añadida con éxito');
-                    $camilla->setHabitacion($habitacion);
-                    $entityManager->persist($camilla);
-                    $entityManager->flush();
-
-                    return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
-                }
-
-                return $this->render('camilla/new.html.twig', [
-                    'camilla' => $camilla,
-                    'habitacion'    => $habitacion,
-                    'editar'        => $editar,
-                    'form' => $form->createView(),
-                ]);
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
         }
+
         $editar=false;
         $camilla = new Camilla();
         $form = $this->createFormBuilder($camilla)
@@ -148,47 +82,32 @@ class CamillaController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            //VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-            $em = $this->getDoctrine()->getManager();
-            $RAW_QUERY = "SELECT c.* FROM camilla as c, habitacion as h, sala as s, clinica as cli 
-            WHERE c.habitacion_id=h.id AND h.sala_id=s.id AND s.clinica_id = cli.id 
-            AND cli.id =".$habitacion->getSala()->getClinica()->getId().
-            " AND numero_camilla = ".$form["numeroCamilla"]->getData().";";
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $result = $statement->fetchAll();
-
-            if($result == null){
-                if($form["numeroCamilla"]->getData() != ""){
+            if($form["numeroCamilla"]->getData() != ""){
+                $entityManager = $this->getDoctrine()->getManager();
+                //VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT c.* FROM camilla as c, habitacion as h, sala as s, clinica as cli 
+                WHERE c.habitacion_id=h.id AND h.sala_id=s.id AND s.clinica_id = cli.id 
+                AND cli.id =".$habitacion->getSala()->getClinica()->getId().
+                " AND numero_camilla = ".$form["numeroCamilla"]->getData().";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $result = $statement->fetchAll();
+                if($result == null){
                     $camilla->setNumeroCamilla($form["numeroCamilla"]->getData());
+                    $this->addFlash('success','Camilla añadida con éxito');
+                    $camilla->setHabitacion($habitacion);
+                    $entityManager->persist($camilla);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
                 }else{
-                    $this->addFlash('fail','Error, el número de camilla no puede estar vacío, por favor ingrese el número de camilla');
-                    return $this->render('camilla/new.html.twig', [
-                        'camilla' => $camilla,
-                        'habitacion'    => $habitacion,
-                        'editar'        => $editar,
-                        'form' => $form->createView(),
-                    ]);
+                    $this->addFlash('fail','Error, esta camilla ya está asignada por favor ingrese una nueva camilla');
                 }
+                //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE       
             }else{
-                $this->addFlash('fail','Error, esta camilla ya está asignada por favor ingrese una nueva camilla');
-                return $this->render('camilla/new.html.twig', [
-                    'camilla' => $camilla,
-                    'habitacion'    => $habitacion,
-                    'editar'        => $editar,
-                    'form' => $form->createView(),
-                ]);
+                $this->addFlash('fail','Error, el número de camilla no puede estar vacío, por favor ingrese el número de camilla');
             }
-            //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
-            $this->addFlash('success','Camilla añadida con éxito');
-            $camilla->setHabitacion($habitacion);
-            $entityManager->persist($camilla);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
         }
-
         return $this->render('camilla/new.html.twig', [
             'camilla' => $camilla,
             'habitacion'    => $habitacion,
@@ -218,10 +137,7 @@ class CamillaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $camilla->getHabitacion()->getSala()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $habitacion->getSala()->getClinica()->getId() && $camilla->getHabitacion()->getId() == $habitacion->getId() ){
-                return $this->render('camilla/show.html.twig', [
-                    'camilla' => $camilla,
-                    'habitacion'    => $result,
-                ]);   
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('habitacion_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
