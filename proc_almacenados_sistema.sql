@@ -96,3 +96,57 @@ BEGIN
         AND s.id = ID_SALA_I;
 END; //
 DELIMITER ;
+
+--- Procedimiento almacenado para obtener usuarios del sistema
+DELIMITER //
+CREATE procedure obtener_lista_expedientes ( IN ID_CLINICA_I INT )
+BEGIN
+    IF ID_CLINICA_I = -1 THEN
+        SELECT 
+            CONCAT(    p.primer_nombre,
+                    " ",
+                    IFNULL(p.segundo_nombre," "),
+                    " ",
+                    p.primer_apellido,
+                    " ",IFNULL(p.segundo_apellido," ")
+                ) as nombre_completo, 
+            e.numero_expediente as expediente,
+            e.id as id,
+            e.habilitado,
+            c.nombre_clinica 
+        FROM 
+            user as u,
+            expediente as e,
+            clinica c, 
+            persona as p 
+        WHERE 
+            u.id = e.usuario_id 
+            AND u.clinica_id = c.id 
+            AND p.id = u.persona_id;
+    ELSE
+        SELECT 
+            CONCAT(    p.primer_nombre,
+                    " ",
+                    IFNULL(p.segundo_nombre," "),
+                    " ",
+                    p.primer_apellido,
+                    " ",
+                    IFNULL(p.segundo_apellido," ")
+                ) as nombre_completo, 
+            e.numero_expediente as expediente,
+            e.id as id,
+            e.habilitado,
+            c.nombre_clinica 
+        FROM 
+            user as u,
+            expediente as e,
+            clinica as c, 
+            persona as p 
+        WHERE 
+            u.id = e.usuario_id 
+            AND p.id = u.persona_id 
+            AND u.clinica_id = c.id 
+            AND clinica_id = ID_CLINICA_I;
+    END IF; 
+END; //
+DELIMITER ;

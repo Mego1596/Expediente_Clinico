@@ -39,18 +39,21 @@ class ExpedienteController extends AbstractController
      */
     public function index(ExpedienteRepository $expedienteRepository,Security $AuthUser): Response
     {
-        $em = $this->getDoctrine()->getManager();
-        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_SA'){
-            $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id as id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica c, `persona` as p WHERE u.id = e.usuario_id AND u.clinica_id = c.id AND p.id = u.persona_id;';
-
-        }else{
-             $RAW_QUERY = 'SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, e.numero_expediente as expediente,e.id as id,e.habilitado,c.nombre_clinica FROM `user` as u,expediente as e,clinica as c, `persona` as p WHERE u.id = e.usuario_id AND p.id = u.persona_id AND u.clinica_id = c.id AND clinica_id='.$AuthUser->getUser()->getClinica()->getId().';'; 
+        // Obteniendo lista de expedientes
+        $ID_CLINICA_I = -1;
+        $sql= 'CALL obtener_lista_expedientes(:ID_CLINICA_I)';
+        if ($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA')
+        {
+            $ID_CLINICA_I = $AuthUser->getUser()->getClinica()->getId();
         }
-       
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_CLINICA_I' => $ID_CLINICA_I 
+        ));
+        $result= $stmt->fetchAll();
+        $stmt->closeCursor();
 
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
         return $this->render('expediente/index.html.twig', [
             'pacientes' => $result,
             'user'      => $AuthUser,
