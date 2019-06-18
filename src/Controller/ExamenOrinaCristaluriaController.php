@@ -30,31 +30,11 @@ class ExamenOrinaCristaluriaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `examen_orina_cristaluria` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-
-                    return $this->render('examen_orina_cristaluria/index.html.twig', [
-                        'examen_orina_cristalurias'    => $result,
-                        'cantidad'                      => count($result),
-                        'user'                          => $AuthUser,
-                        'examen_solicitado'             => $examen_solicitado,
-                    ]);
-
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             $em = $this->getDoctrine()->getManager();
             $RAW_QUERY = "SELECT examen.* FROM `examen_orina_cristaluria` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
@@ -72,7 +52,6 @@ class ExamenOrinaCristaluriaController extends AbstractController
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
             return $this->redirectToRoute('home');
         }
-
     }
 
     /**
