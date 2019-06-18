@@ -167,30 +167,6 @@ class ExamenHecesMacroscopicoController extends AbstractController
     { 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $editar = true;
-                    $form = $this->createForm(ExamenHecesMacroscopicoType::class, $examenHecesMacroscopico);
-                    $form->handleRequest($request);
-                    
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Examen modificado con éxito');
-                        return $this->redirectToRoute('examen_heces_macroscopico_index', [
-                            'id' => $examenHecesMacroscopico->getId(),
-                            'examen_solicitado' => $examen_solicitado->getId(),
-                        ]);
-                    }
-        
-                    return $this->render('examen_heces_macroscopico/edit.html.twig', [
-                        'examen_heces_macroscopico' => $examenHecesMacroscopico,
-                        'examen_solicitado' => $examen_solicitado,
-                        'editar'            => $editar,
-                        'form' => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
@@ -232,18 +208,7 @@ class ExamenHecesMacroscopicoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$examenHecesMacroscopico->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($examenHecesMacroscopico);
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success', 'Examen eliminado con éxito');
-                    return $this->redirectToRoute('examen_heces_macroscopico_index',['examen_solicitado' => $examen_solicitado->getId()]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
