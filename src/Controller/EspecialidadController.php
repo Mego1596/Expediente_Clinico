@@ -50,19 +50,12 @@ class EspecialidadController extends AbstractController
             if($form["nombreEspecialidad"]->getData() != ""){
                 $entityManager->persist($especialidad);
                 $entityManager->flush();
+                $this->addFlash('success', 'Especialidad agregada con éxito');
+                return $this->redirectToRoute('especialidad_index');
             }else{
                 $this->addFlash('fail', 'El nombre de la especialidad no puede estar vacío');
-                return $this->render('especialidad/new.html.twig', [
-                    'especialidad' => $especialidad,
-                    'editar' => $editar,
-                    'form' => $form->createView(),
-                ]);
             }
-
-            $this->addFlash('success', 'Especialidad agregada con éxito');
-            return $this->redirectToRoute('especialidad_index');
         }
-
         return $this->render('especialidad/new.html.twig', [
             'especialidad' => $especialidad,
             'editar' => $editar,
