@@ -321,13 +321,17 @@ class ExpedienteController extends AbstractController
      * @Security2("is_granted('ROLE_PERMISSION_SHOW_EXPEDIENTE')")
      */
     public function show(Expediente $expediente, Security $AuthUser): Response
-    {   
-        //CONOCER SI EL PACIENTE ESTA INGRESADO
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY="SELECT * FROM `ingresado` WHERE fecha_salida IS NULL AND expediente_id =".$expediente->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $ingresoActual = $statement->fetch();
+    {
+        //OBTENER SI EL PACIENTE SE ENCUENTRA INGRESADO
+        $ID_EXPEDIENTE_I = $expediente->getId();
+        $sql= 'CALL obtener_ingreso_clinica_paciente(:ID_EXPEDIENTE_I)';
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_EXPEDIENTE_I' => $ID_EXPEDIENTE_I 
+        ));
+        $ingresoActual = $stmt->fetch();
+        $stmt->closeCursor();
 
         //OBTENER VIEW DE EXPEDIENTE
         $ID_EXPEDIENTE_I = $expediente->getId();
@@ -411,13 +415,21 @@ class ExpedienteController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $RAW_QUERY="SELECT id FROM `user` WHERE id !=".$expediente->getUsuario()->getId()." AND  email='".$form["email"]->getData()."';";
-            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $usuario = $statement->fetchAll();
-            
-            if (count($usuario) > 0)
+
+            // Obteniendo lista de usuarios
+            $ID_USUARIO_I = $expediente->getUsuario()->getId();
+            $EMAIL_I = $form["email"]->getData();
+            $sql= 'SELECT email_duplicado(:ID_USUARIO_I, :EMAIL_I) AS resultado';
+            $conn = $this->getDoctrine()->getManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(
+                'ID_USUARIO_I' => $ID_USUARIO_I , 
+                'EMAIL_I' => $EMAIL_I 
+            ));
+            $result = $stmt->fetch();
+            $stmt->closeCursor();
+
+            if ($result['resultado'] == 1)
             {
                 $this->addFlash('fail', 'Usuario con este email ya existe');
                 return $this->render('expediente/edit.html.twig',[

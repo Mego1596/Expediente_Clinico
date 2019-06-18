@@ -460,6 +460,19 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE FUNCTION email_duplicado(ID_USUARIO_I INT, EMAIL_I VARCHAR(500)) RETURNS INT
+            BEGIN
+            DECLARE id_usuario INT;
+            
+            SELECT id INTO id_usuario FROM user WHERE id != ID_USUARIO_I AND  email = EMAIL_I;
+            IF id_usuario IS NULL THEN
+                RETURN 0;
+            END IF;
+            
+            RETURN 1;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD

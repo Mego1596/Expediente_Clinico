@@ -220,3 +220,25 @@ BEGIN
     EXECUTE stmt1;
 END; //
 DELIMITER ;
+
+--- Procedimiento para obtener el ingreso del paciente
+DELIMITER //
+CREATE procedure obtener_ingreso_clinica_paciente ( IN ID_EXPEDIENTE_I INT)
+BEGIN
+    SELECT * FROM ingresado WHERE fecha_salida IS NULL AND expediente_id = ID_EXPEDIENTE_I;
+END; //
+DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION email_duplicado(ID_USUARIO_I INT, EMAIL_I VARCHAR(500)) RETURNS INT
+BEGIN
+  DECLARE id_usuario INT;
+  
+  SELECT id INTO id_usuario FROM user WHERE id != ID_USUARIO_I AND  email = EMAIL_I;
+  IF id_usuario IS NULL THEN
+      RETURN 0;
+  END IF;
+
+  RETURN 1;
+END; //
+DELIMITER ;
