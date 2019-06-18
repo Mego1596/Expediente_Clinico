@@ -271,18 +271,16 @@ class ExpedienteController extends AbstractController
                                         $entityManager->persist($expediente);
                                         $entityManager->flush();
                                         $this->addFlash('success', 'Paciente añadido con éxito');
-                                        //GENERACION DE VISTA AL CREAR UN PACIENTE CON EXITO PARA EL SHOW
-                                        $conn = $entityManager->getConnection();
-                                        $sql='CREATE VIEW expediente_paciente_'.$expediente->getId().' AS
-                                        SELECT ex.id as id_expediente,DATE(ex.fecha_nacimiento) as fecha_nacimiento_expediente, ( SELECT getEdad('.$expediente->getId().') ) as edad_expediente, ex.direccion as direccion_expediente,ex.estado_civil as estado_civil_expediete,ex.apellido_casada as apellido_casada_expediente, ex.creado_en as creado, ex.actualizado_en as actualizado, ex.numero_expediente as numero_expediente,ex.telefono as telefono_expediente, gen.descripcion as genero, u.email as correo_electronico, CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido, " ") ) as nombre_completo
-                                        FROM expediente as ex,genero as gen, user as u, persona as p
-                                        WHERE 
-                                        ex.genero_id = gen.id       AND
-                                        ex.usuario_id = u.id        AND
-                                        u.persona_id = p.id         AND
-                                        ex.id='.$expediente->getId().';';
-                                        $view = $conn->prepare($sql);
-                                        $view->execute();
+
+                                        // Generando vista de expediente
+                                        $ID_EXPEDIENTE_I = $expediente->getId();
+                                        $sql= 'CALL crear_vista_expediente(:ID_EXPEDIENTE_I)';
+                                        $conn = $this->getDoctrine()->getManager()->getConnection();
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute(array(
+                                            'ID_EXPEDIENTE_I' => $ID_EXPEDIENTE_I 
+                                        ));
+                                        $stmt->closeCursor();
                                         return $this->redirectToRoute('expediente_index');
                                         //FIN PROCESO DE DATOS
                                     }else{

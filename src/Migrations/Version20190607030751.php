@@ -439,6 +439,18 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure crear_vista_expediente ( IN ID_EXPEDIENTE_I INT)
+            BEGIN
+                SET @query = CONCAT(\'CREATE VIEW expediente_paciente_\', ID_EXPEDIENTE_I, \' AS \');
+                SET @query = CONCAT(@query, \' SELECT ex.id as id_expediente,DATE(ex.fecha_nacimiento) as fecha_nacimiento_expediente, ( SELECT getEdad(\', ID_EXPEDIENTE_I ,\') ) as edad_expediente, ex.direccion as direccion_expediente,ex.estado_civil as estado_civil_expediete,ex.apellido_casada as apellido_casada_expediente, ex.creado_en as creado, ex.actualizado_en as actualizado, ex.numero_expediente as numero_expediente,ex.telefono as telefono_expediente, gen.descripcion as genero, u.email as correo_electronico, CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido, " ") ) as nombre_completo\');
+                SET @query = CONCAT(@query, \' FROM expediente as ex,genero as gen, user as u, persona as p\');
+                SET @query = CONCAT(@query, \' WHERE ex.genero_id = gen.id AND ex.usuario_id = u.id  AND u.persona_id = p.id AND ex.id=\', ID_EXPEDIENTE_I);
+                
+                PREPARE stmt1 FROM @query;
+                EXECUTE stmt1;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD
