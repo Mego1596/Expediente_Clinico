@@ -28,27 +28,23 @@ class SalaController extends AbstractController
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
-                $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY = "SELECT * FROM sala WHERE clinica_id = ".$clinica->getId().";";
-                $statement = $em->getConnection()->prepare($RAW_QUERY);
-                $statement->execute();
-                $result = $statement->fetchAll();
-                return $this->render('sala/index.html.twig', [
-                    'salas' => $result,
-                    'clinica' => $clinica,
-                    'user'  => $AuthUser,
-                ]);
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $clinica->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('sala_index',array('clinica'=>$AuthUser->getUser()->getClinica()->getId()));
             }
         }
-        $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY = "SELECT * FROM sala WHERE clinica_id = ".$clinica->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
+
+        // Obteniendo lista de salas de clinica
+        $ID_CLINICA_I = $clinica->getId();
+        $sql = 'CALL obtener_lista_salas_clinica(:ID_CLINICA_I)';
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array( 
+            'ID_CLINICA_I' => $ID_CLINICA_I 
+        ));
+        $result= $stmt->fetchAll();
+        $stmt->closeCursor();
+
         return $this->render('sala/index.html.twig', [
             'salas' => $result,
             'clinica' => $clinica,

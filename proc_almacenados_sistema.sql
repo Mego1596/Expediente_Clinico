@@ -73,3 +73,11 @@ BEGIN
         AND u.id = ID_USUARIO_I;
 END; //
 DELIMITER ;
+
+--- Obtener lista de salas 
+DELIMITER //
+CREATE procedure obtener_lista_salas_clinica ( IN ID_CLINICA_I INT )
+BEGIN
+    SELECT * FROM sala WHERE clinica_id = ID_CLINICA_I;
+END; //
+DELIMITER ;

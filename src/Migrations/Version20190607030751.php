@@ -343,6 +343,12 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure obtener_lista_salas_clinica ( IN ID_CLINICA_I INT )
+            BEGIN
+                SELECT * FROM sala WHERE clinica_id = ID_CLINICA_I;
+            END
+        ');
+
         //FUNCTION GET EDAD
 
         $this->addSql('CREATE DEFINER=`root`@`localhost` FUNCTION `getEdad`(`paciente` INT UNSIGNED) RETURNS INT(3) DETERMINISTIC NO SQL SQL SECURITY DEFINER BEGIN DECLARE salida INT DEFAULT 0; SET salida =(SELECT TIMESTAMPDIFF(YEAR, fecha_nacimiento, CURDATE()) AS edad from expediente WHERE id = paciente) ; RETURN salida; END');
