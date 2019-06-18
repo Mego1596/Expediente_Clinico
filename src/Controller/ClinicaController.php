@@ -58,40 +58,21 @@ class ClinicaController extends AbstractController
                             $entityManager = $this->getDoctrine()->getManager();
                             $entityManager->persist($clinica);
                             $entityManager->flush();
+
+                            $this->addFlash('success', 'Clínica creada con éxito');
+                            return $this->redirectToRoute('clinica_index');
                         }else{
                             $this->addFlash('fail', 'Error, el Email no puede ir vacío');
-                            return $this->render('clinica/new.html.twig', [
-                                'clinica' => $clinica,
-                                'editar' => $editar,
-                                'form' => $form->createView(),
-                            ]);
                         }
                     }else{
                         $this->addFlash('fail', 'Error, el teléfono de contacto no puede ir vacío');
-                        return $this->render('clinica/new.html.twig', [
-                            'clinica' => $clinica,
-                            'editar' => $editar,
-                            'form' => $form->createView(),
-                        ]);
                     }
                 }else{
                     $this->addFlash('fail', 'Error, la dirección no puede ir vacía');
-                    return $this->render('clinica/new.html.twig', [
-                        'clinica' => $clinica,
-                        'editar' => $editar,
-                        'form' => $form->createView(),
-                    ]);
                 }
             }else{
                 $this->addFlash('fail', 'Error, el nombre de la clínica no puede ir vacío');
-                return $this->render('clinica/new.html.twig', [
-                    'clinica' => $clinica,
-                    'editar' => $editar,
-                    'form' => $form->createView(),
-                ]);
             }
-            $this->addFlash('success', 'Clínica creada con éxito');
-            return $this->redirectToRoute('clinica_index');
         }
 
         return $this->render('clinica/new.html.twig', [
@@ -137,29 +118,9 @@ class ClinicaController extends AbstractController
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
-                $editar = true;
-                $form = $this->createForm(ClinicaType::class, $clinica);
-                $form->handleRequest($request);
-
-                if ($form->isSubmitted() && $form->isValid()) {
-                    $this->getDoctrine()->getManager()->flush();
-
-                    $this->addFlash('success', 'Clínica modificada con éxito');
-                    return $this->redirectToRoute('clinica_index', [
-                        'id' => $clinica->getId(),
-                    ]);
-                }
-                return $this->render('clinica/edit.html.twig', [
-                    'clinica' => $clinica,
-                    'editar' => $editar,
-                    'form' => $form->createView(),
-                ]);
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $clinica->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('clinica_index', [
-                    'id' => $clinica->getId(),
-                ]);
+                return $this->redirectToRoute('clinica_index');
             }
         }
         //FIN VALIDACION
@@ -171,9 +132,7 @@ class ClinicaController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Clínica modificada con éxito');
-            return $this->redirectToRoute('clinica_index', [
-                'id' => $clinica->getId(),
-            ]);
+            return $this->redirectToRoute('clinica_index');
         }
         return $this->render('clinica/edit.html.twig', [
             'clinica' => $clinica,
@@ -192,19 +151,9 @@ class ClinicaController extends AbstractController
     {
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $clinica->getId()){
-                if ($this->isCsrfTokenValid('delete'.$clinica->getId(), $request->request->get('_token'))) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $entityManager->remove($clinica);
-                    $entityManager->flush();
-                }
-                $this->addFlash('success', 'Clínica eliminada con éxito');
-                return $this->redirectToRoute('clinica_index');
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $clinica->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('clinica_index', [
-                    'id' => $clinica->getId(),
-                ]);
+                return $this->redirectToRoute('clinica_index');
             }
         }
         //FIN VALIDACION

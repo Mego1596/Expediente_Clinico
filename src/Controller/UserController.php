@@ -296,6 +296,7 @@ class UserController extends AbstractController
         ->add('guardar', SubmitType::class, array('attr' => array('class' => 'btn btn-outline-success')));
         $form = $form->getForm();
         $form->handleRequest($request);
+
         /////////////////////////////// ZONA DE PROCESAMIENTO /////////////////////////////////////
         if ($form->isSubmitted() && $form->isValid()) 
         {
@@ -448,6 +449,3 @@ class UserController extends AbstractController
     }
 
 }
-
-
-
