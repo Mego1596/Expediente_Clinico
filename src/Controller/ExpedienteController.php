@@ -209,6 +209,7 @@ class ExpedienteController extends AbstractController
                                         $result= $stmt->fetchAll();
                                         $stmt->closeCursor();
 
+                                        $validador = '';
                                         if($result != NULL){
                                             foreach ($result as $value) {
                                                 $correlativo = (int) substr($value["expediente"],2,4)+1;
@@ -231,42 +232,41 @@ class ExpedienteController extends AbstractController
                                             }
 
                                             $validador = $iniciales.$calculo.date("Y");
-                                            $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
-                                                AND numero_expediente='".$validador."';";
-                                            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                                            $statement->execute();
-                                            $result = $statement->fetchAll();
-                                            if($result == null){
-                                                $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
-                                            }else{
-                                                $this->addFlash('fail','Error el expediente ya existe');
-                                                return $this->render('expediente/new.html.twig', [
-                                                    'expediente' => $expediente,
-                                                    'clinicas'   => $clinicas,
-                                                    'pertenece'  => $clinicaPerteneciente,
-                                                    'editar'     => $editar,
-                                                    'form'       => $form->createView(),
-                                                ]);
-                                            }
                                         }else{
                                             $validador = $iniciales."0001-".date("Y");
-                                            $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
-                                                AND numero_expediente='".$validador."';";
-                                            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                                            $statement->execute();
-                                            $result = $statement->fetchAll();
-                                            if($result == null){
-                                                $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
-                                            }else{
-                                                $this->addFlash('fail','Error el expediente ya existe');
-                                                return $this->render('expediente/new.html.twig', [
-                                                    'expediente' => $expediente,
-                                                    'clinicas'   => $clinicas,
-                                                    'pertenece'  => $clinicaPerteneciente,
-                                                    'editar'     => $editar,
-                                                    'form'       => $form->createView(),
-                                                ]);
-                                            }
+                                        }
+
+                                        $NUM_EXPEDIENTE = $validador;
+                                        $ID_CLINICA_I = -1;
+                                        $sql= 'CALL comprobar_num_expediente(:ID_CLINICA_I, :NUM_EXPEDIENTE)';
+                                        if (is_null($AuthUser->getUser()->getClinica()))
+                                        {
+                                            $ID_CLINICA_I = $request->request->get('clinica');
+                                        }
+                                        else
+                                        {
+                                            $ID_CLINICA_I = $AuthUser->getUser()->getClinica()->getId();
+                                        }
+                                        $conn = $this->getDoctrine()->getManager()->getConnection();
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute(array(
+                                            'ID_CLINICA_I' => $ID_CLINICA_I,
+                                            'NUM_EXPEDIENTE' => $NUM_EXPEDIENTE
+                                        ));
+                                        $result= $stmt->fetchAll();
+                                        $stmt->closeCursor();
+
+                                        if($result == null){
+                                            $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
+                                        }else{
+                                            $this->addFlash('fail','Error el expediente ya existe');
+                                            return $this->render('expediente/new.html.twig', [
+                                                'expediente' => $expediente,
+                                                'clinicas'   => $clinicas,
+                                                'pertenece'  => $clinicaPerteneciente,
+                                                'editar'     => $editar,
+                                                'form'       => $form->createView(),
+                                            ]);
                                         }
 
                                         $entityManager->persist($expediente);

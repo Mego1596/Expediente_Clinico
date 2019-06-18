@@ -425,6 +425,20 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure comprobar_num_expediente ( IN ID_CLINICA_I INT, IN NUM_EXPEDIENTE VARCHAR(200))
+            BEGIN
+                SELECT 
+                    e.numero_expediente 
+                FROM 
+                    expediente as e,
+                    user as u 
+                WHERE 
+                    e.usuario_id = u.id 
+                    AND u.clinica_id = ID_CLINICA_I 
+                    AND numero_expediente = NUM_EXPEDIENTE;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD
