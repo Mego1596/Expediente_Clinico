@@ -29,6 +29,15 @@ class FamiliarController extends AbstractController
      */
     public function index(FamiliarRepository $familiarRepository, Expediente $expediente,Security $AuthUser): Response
     {
+        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
+        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
+            }else{
+                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                return $this->redirectToRoute('expediente_index');
+            }
+        }
+
         //OBTENCION NOMBRE DEL PACIENTE
         $conn = $this->getDoctrine()->getManager()->getConnection();
         $sql ='
@@ -42,31 +51,6 @@ class FamiliarController extends AbstractController
         $stmt = $conn->prepare($sql);
         $stmt->execute(array('idExpediente' => $expediente->getId()));
         $nombreP= $stmt->fetch();
-
-        //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
-        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
-                if($expediente->getHabilitado()){
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT f.*, fex.responsable as responsable FROM familiar as f, familiares_expediente as fex, expediente as exp WHERE exp.id = fex.expediente_id AND fex.familiar_id = f.id AND exp.id = ".$expediente->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    return $this->render('familiar/index.html.twig', [
-                        'familiares' => $result,
-                        'expediente' => $expediente,
-                        'user'       => $AuthUser,
-                        'nombreP'    => $nombreP,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
-            }else{
-                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                return $this->redirectToRoute('expediente_index');
-            }
-        }
 
         if($expediente->getHabilitado()){
             $em = $this->getDoctrine()->getManager();
@@ -101,119 +85,6 @@ class FamiliarController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
-                if($expediente->getHabilitado()){
-                    $editar=false;
-                    $familiar = new Familiar();
-                    $form = $this->createForm(FamiliarType::class, $familiar);
-                    $form->handleRequest($request);
-
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        if($form["primerNombre"]->getData() != ""){
-                            if($form["primerApellido"]->getData() != ""){
-                                if($form["fechaNacimiento"]->getData() != ""){
-                                    if($form["telefono"]->getData() != ""){
-                                        if($form["descripcion"]->getData() != ""){
-                                            if($request->request->get('responsable') != ""){
-                                                if ($date <= $form["fechaNacimiento"]->getData() ) {
-                                                $this->addFlash('fail', 'La fecha de nacimiento debe ser al menos un año menor a la fecha actual');
-                                                return $this->render('familiar/new.html.twig', [
-                                                        'familiar' => $familiar,
-                                                        'expediente' => $expediente,
-                                                        'editar'     => $editar,
-                                                        'form' => $form->createView(),
-                                                    ]);
-                                                }
-                                                //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
-                                                $familiar->setPrimerNombre($form["primerNombre"]->getData());
-                                                $familiar->setSegundoNombre($form["segundoNombre"]->getData());
-                                                $familiar->setPrimerApellido($form["primerApellido"]->getData());
-                                                $familiar->setSegundoApellido($form["segundoApellido"]->getData());
-                                                $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                                                $familiar->setTelefono($form["telefono"]->getData());
-                                                $familiar->setDescripcion($form["descripcion"]->getData());
-                                                $entityManager->persist($familiar);
-                                                $familiaresExpediente = new FamiliaresExpediente();
-                                                $familiaresExpediente->setExpediente($expediente);
-                                                $familiaresExpediente->setFamiliar($familiar);
-                                                $familiaresExpediente->setResponsable($request->request->get('responsable'));
-                                                $entityManager->persist($familiaresExpediente);
-                                                $entityManager->flush();
-                                            }else{
-                                                $familiar->setPrimerNombre($form["primerNombre"]->getData());
-                                                $familiar->setSegundoNombre($form["segundoNombre"]->getData());
-                                                $familiar->setPrimerApellido($form["primerApellido"]->getData());
-                                                $familiar->setSegundoApellido($form["segundoApellido"]->getData());
-                                                $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                                                $familiar->setTelefono($form["telefono"]->getData());
-                                                $familiar->setDescripcion($form["descripcion"]->getData());
-                                                $entityManager->persist($familiar);
-                                                $familiaresExpediente = new FamiliaresExpediente();
-                                                $familiaresExpediente->setExpediente($expediente);
-                                                $familiaresExpediente->setFamiliar($familiar);
-                                                $familiaresExpediente->setResponsable(false);
-                                                $entityManager->persist($familiaresExpediente);
-                                                $entityManager->flush();
-                                            }
-                                        }else{
-                                            $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacío');
-                                            return $this->render('familiar/new.html.twig', [
-                                                'familiar' => $familiar,
-                                                'expediente' => $expediente,
-                                                'editar'     => $editar,
-                                                'form' => $form->createView(),
-                                            ]);
-                                        }
-                                    }else{
-                                        $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacío');
-                                        return $this->render('familiar/new.html.twig', [
-                                            'familiar' => $familiar,
-                                            'expediente' => $expediente,
-                                            'editar'     => $editar,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }
-                                }else{
-                                    $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacío');
-                                    return $this->render('familiar/new.html.twig', [
-                                        'familiar' => $familiar,
-                                        'expediente' => $expediente,
-                                        'editar'     => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }
-                            }else{
-                                $this->addFlash('fail', 'el primer apellido del pariente del paciente no puede estar vacío');
-                                return $this->render('familiar/new.html.twig', [
-                                    'familiar' => $familiar,
-                                    'expediente' => $expediente,
-                                    'editar'     => $editar,
-                                    'form' => $form->createView(),
-                                ]);
-                            }
-                        }else{
-                            $this->addFlash('fail','el primer nombre del pariente del paciente no puede estar vacío');
-                            return $this->render('familiar/new.html.twig', [
-                                'familiar' => $familiar,
-                                'expediente' => $expediente,
-                                'editar'     => $editar,
-                                'form' => $form->createView(),
-                            ]);
-                        }
-                        $this->addFlash('success', 'Familiar añadido con éxito');
-                        return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
-                    }
-
-                    return $this->render('familiar/new.html.twig', [
-                        'familiar' => $familiar,
-                        'expediente' => $expediente,
-                        'editar'     => $editar,
-                        'form' => $form->createView(),
-                    ]);    
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -232,96 +103,52 @@ class FamiliarController extends AbstractController
                         if($form["fechaNacimiento"]->getData() != ""){
                             if($form["telefono"]->getData() != ""){
                                 if($form["descripcion"]->getData() != ""){
-                                    if($request->request->get('responsable') != ""){
-                                        if ($date <= $form["fechaNacimiento"]->getData() ) {
-                                            $this->addFlash('fail', 'La fecha de nacimiento debe ser al menos un año menor a la fecha actual');
-                                            return $this->render('familiar/new.html.twig', [
-                                                    'familiar' => $familiar,
-                                                    'expediente' => $expediente,
-                                                    'editar'     => $editar,
-                                                    'form' => $form->createView(),
-                                                ]);
-                                        }
-                                        //CODIGO DE ACCION PARA INGRESAR UN FAMILIAR
-                                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
-                                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
-                                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
-                                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
-                                        $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                                        $familiar->setTelefono($form["telefono"]->getData());
-                                        $familiar->setDescripcion($form["descripcion"]->getData());
-                                        $entityManager->persist($familiar);
-                                        $familiaresExpediente = new FamiliaresExpediente();
-                                        $familiaresExpediente->setExpediente($expediente);
-                                        $familiaresExpediente->setFamiliar($familiar);
-                                        $familiaresExpediente->setResponsable($request->request->get('responsable'));
-                                        $entityManager->persist($familiaresExpediente);
-                                        $entityManager->flush();
-                                    }else{
-                                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
-                                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
-                                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
-                                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
-                                        $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                                        $familiar->setTelefono($form["telefono"]->getData());
-                                        $familiar->setDescripcion($form["descripcion"]->getData());
-                                        $entityManager->persist($familiar);
-                                        $familiaresExpediente = new FamiliaresExpediente();
-                                        $familiaresExpediente->setExpediente($expediente);
-                                        $familiaresExpediente->setFamiliar($familiar);
-                                        $familiaresExpediente->setResponsable(false);
-                                        $entityManager->persist($familiaresExpediente);
-                                        $entityManager->flush();
+                                    if ($date <= $form["fechaNacimiento"]->getData() ) {
+                                        $this->addFlash('fail', 'La fecha de nacimiento debe ser al menos un año menor a la fecha actual');
+                                        return $this->render('familiar/new.html.twig', [
+                                            'familiar' => $familiar,
+                                            'expediente' => $expediente,
+                                            'editar'     => $editar,
+                                            'form' => $form->createView(),
+                                        ]);
                                     }
+                                    $familiar->setPrimerNombre($form["primerNombre"]->getData());
+                                    $familiar->setSegundoNombre($form["segundoNombre"]->getData());
+                                    $familiar->setPrimerApellido($form["primerApellido"]->getData());
+                                    $familiar->setSegundoApellido($form["segundoApellido"]->getData());
+                                    $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
+                                    $familiar->setTelefono($form["telefono"]->getData());
+                                    $familiar->setDescripcion($form["descripcion"]->getData());
+                                    $entityManager->persist($familiar);
+                                    $familiaresExpediente = new FamiliaresExpediente();
+                                    $familiaresExpediente->setExpediente($expediente);
+                                    $familiaresExpediente->setFamiliar($familiar);
+
+                                    if($request->request->get('responsable') != ""){
+                                        $familiaresExpediente->setResponsable($request->request->get('responsable'));
+                                    }else{
+                                        $familiaresExpediente->setResponsable(false);
+                                    }
+                                    $entityManager->persist($familiaresExpediente);
+                                    $entityManager->flush();
+                                    $this->addFlash('success', 'Familiar añadido con éxito');
+                                    return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
                                 }else{
                                     $this->addFlash('fail', 'El parentesco del pariente del paciente no puede estar vacío');
-                                    return $this->render('familiar/new.html.twig', [
-                                        'familiar' => $familiar,
-                                        'expediente' => $expediente,
-                                        'editar'     => $editar,
-                                        'form' => $form->createView(),
-                                    ]);
                                 }
                             }else{
                                 $this->addFlash('fail', 'el telfono de contacto del pariente del paciente no puede estar vacío');
-                                return $this->render('familiar/new.html.twig', [
-                                    'familiar' => $familiar,
-                                    'expediente' => $expediente,
-                                    'editar'     => $editar,
-                                    'form' => $form->createView(),
-                                ]);
                             }
                         }else{
                             $this->addFlash('fail', 'La fecha de nacimiento del pariente del paciente no puede estar vacío');
-                            return $this->render('familiar/new.html.twig', [
-                                'familiar' => $familiar,
-                                'expediente' => $expediente,
-                                'editar'     => $editar,
-                                'form' => $form->createView(),
-                            ]);
                         }
                     }else{
-                        $this->addFlash('fail', 'el apellido del pariente del paciente no puede estar vacío');
-                        return $this->render('familiar/new.html.twig', [
-                            'familiar' => $familiar,
-                            'expediente' => $expediente,
-                            'editar'     => $editar,
-                            'form' => $form->createView(),
-                        ]);
+                        $this->addFlash('fail', 'el primer apellido del pariente del paciente no puede estar vacío');
                     }
                 }else{
-                    $this->addFlash('fail','el nombre del pariente del paciente no puede estar vacío');
-                    return $this->render('familiar/new.html.twig', [
-                        'familiar' => $familiar,
-                        'expediente' => $expediente,
-                        'editar'     => $editar,
-                        'form' => $form->createView(),
-                    ]);
+                    $this->addFlash('fail','el primer nombre del pariente del paciente no puede estar vacío');
                 }
-                $this->addFlash('success', 'Familiar añadido con éxito');
-                return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
             }
-
             return $this->render('familiar/new.html.twig', [
                 'familiar' => $familiar,
                 'expediente' => $expediente,
@@ -347,15 +174,6 @@ class FamiliarController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
-                    return $this->render('familiar/show.html.twig', [
-                        'familiar'   => $familiar,
-                        'expediente' => $expediente,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -384,42 +202,6 @@ class FamiliarController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
-                    $editar = true;
-                    $familiaresExpediente = $this->getDoctrine()->getRepository(FamiliaresExpediente::class)->find($familiar->getId());
-                    $form = $this->createForm(FamiliarType::class, $familiar);
-                    $form->handleRequest($request);
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $familiar->setPrimerNombre($form["primerNombre"]->getData());
-                        $familiar->setSegundoNombre($form["segundoNombre"]->getData());
-                        $familiar->setPrimerApellido($form["primerApellido"]->getData());
-                        $familiar->setSegundoApellido($form["segundoApellido"]->getData());
-                        $familiar->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                        $familiar->setTelefono($form["telefono"]->getData());
-                        $familiar->setDescripcion($form["descripcion"]->getData());
-                        $entityManager->persist($familiar);
-                        $familiaresExpediente->setExpediente($expediente);
-                        $familiaresExpediente->setFamiliar($familiar);
-                        $familiaresExpediente->setResponsable($request->request->get('responsable'));
-                        $entityManager->persist($familiaresExpediente);
-                        $entityManager->flush();
-                        $this->getDoctrine()->getManager()->flush();
-                        $this->addFlash('success', 'Familiar modificado con éxito');
-                        return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
-                    }
-
-                    return $this->render('familiar/edit.html.twig', [
-                        'familiar' => $familiar,
-                        'expediente' => $expediente,
-                        'editar'     => $editar,
-                        'familiaresExpediente'   => $familiaresExpediente,
-                        'form'       => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
@@ -477,19 +259,6 @@ class FamiliarController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $familiar->getFamiliaresExpedientes()[0]->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$familiar->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($familiar);
-                        $entityManager->remove($this->getDoctrine()->getRepository(FamiliaresExpediente::class)->find($familiar->getId()));
-                        $entityManager->flush();
-                    }
-                    $this->addFlash('success', 'Familiar eliminado con éxito');
-                    return $this->redirectToRoute('familiar_index', ['expediente' => $expediente->getId()]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
