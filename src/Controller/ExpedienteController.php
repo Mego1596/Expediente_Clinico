@@ -467,8 +467,10 @@ class ExpedienteController extends AbstractController
             $entityManager->flush();
 
             $user->setEmail($form["email"]->getData());
-            $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
 
+            if(!empty($request->request->get('nueva_password'))){
+                $user->setPassword(password_hash($request->request->get('nueva_password'),PASSWORD_DEFAULT,[15]));
+            }
 
             $entityManager->persist($persona);
             $entityManager->flush();
