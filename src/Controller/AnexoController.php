@@ -34,16 +34,7 @@ class AnexoController extends AbstractController
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
                 if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY = "SELECT examen.* FROM `anexo` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                    $statement->execute();
-                    $result = $statement->fetchAll();
-                    return $this->render('anexo/index.html.twig', [
-                        'anexos' => $result,
-                        'user'                          => $AuthUser,
-                        'examen_solicitado'             => $examen_solicitado,
-                    ]);
+
                 }else{
                     $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
                     return $this->redirectToRoute('home');
@@ -76,53 +67,12 @@ class AnexoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $anexo = new Anexo();
-                    $form = $this->createForm(AnexoType::class, $anexo);
-                    $form->handleRequest($request);
 
-                    if ($form->isSubmitted() && $form->isValid()) {
-                        if($form["ruta"]->getData() != ""){
-                            $entityManager = $this->getDoctrine()->getManager();
-                            $anexo->setExamenSolicitado($examen_solicitado);
-                            $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
-
-                            /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-                            $file = $form['ruta']->getData();
-                            $filename= md5(uniqid()).'.'.$file->guessExtension();
-                            $file->move($this->getParameter('image_directory'),$filename);
-                            $anexo->setRuta($filename);
-                            $entityManager->persist($anexo);
-                            $entityManager->flush();
-
-                            return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
-                        }else{
-                            $this->addFlash('fail', 'Error, agregue un archivo.');
-                            return $this->render('anexo/new.html.twig', [
-                                'anexo'             => $anexo,
-                                'examen_solicitado' => $examen_solicitado,
-                                'form'              => $form->createView(),
-                            ]);
-                        }
-                        
-                    }
-                    return $this->render('anexo/new.html.twig', [
-                        'anexo'             => $anexo,
-                        'examen_solicitado' => $examen_solicitado,
-                        'form'              => $form->createView(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
-
-
-
 
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             $anexo = new Anexo();
@@ -130,23 +80,30 @@ class AnexoController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $anexo->setExamenSolicitado($examen_solicitado);
-                $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
-               // dd($form['ruta']->getData()->getClientOriginalName());
+                if($form["ruta"]->getData() != ""){
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $anexo->setExamenSolicitado($examen_solicitado);
+                    $anexo->setNombreArchivo($form['ruta']->getData()->getClientOriginalName());
 
+                    /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
+                    $file = $form['ruta']->getData();
+                    $filename= md5(uniqid()).'.'.$file->guessExtension();
+                    $file->move($this->getParameter('image_directory'),$filename);
+                    $anexo->setRuta($filename);
+                    $entityManager->persist($anexo);
+                    $entityManager->flush();
 
-                /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-                $file = $form['ruta']->getData();
-                $filename= md5(uniqid()).'.'.$file->guessExtension();
-                $file->move($this->getParameter('image_directory'),$filename);
-                $anexo->setRuta($filename);
-                $entityManager->persist($anexo);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                    return $this->redirectToRoute('anexo_index',['examen_solicitado' => $examen_solicitado->getId()]);
+                }else{
+                    $this->addFlash('fail', 'Error, agregue un archivo.');
+                    return $this->render('anexo/new.html.twig', [
+                        'anexo'             => $anexo,
+                        'examen_solicitado' => $examen_solicitado,
+                        'form'              => $form->createView(),
+                    ]);
+                }
+                
             }
-
             return $this->render('anexo/new.html.twig', [
                 'anexo'             => $anexo,
                 'examen_solicitado' => $examen_solicitado,
@@ -169,24 +126,7 @@ class AnexoController extends AbstractController
     {   
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $anexo->getExamenSolicitado()->getId() == $examen_solicitado->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    $displayName = $anexo->getNombreArchivo();
-                    $fileName = $anexo->getRuta();
-                    $file_with_path = $this->getParameter ( 'image_directory' ) . "/" . $fileName;
-                    $response = new BinaryFileResponse ( $file_with_path );
-                    $response->headers->set ( 'Content-Type', 'text/plain' );
-                    $response->setContentDisposition ( ResponseHeaderBag::DISPOSITION_ATTACHMENT, $displayName );
-                    return $response;
-
-
-                    return $this->render('anexo/show.html.twig', [
-                        'anexo'             => $anexo,
-                        'examen_solicitado' => $examen_solicitado,
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
@@ -253,29 +193,13 @@ class AnexoController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId() && $anexo->getExamenSolicitado()->getId() == $examen_solicitado->getId() ){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$anexo->getId(), $request->request->get('_token'))) {
-                        $filename = $this->getParameter('image_directory').'/'.$anexo->getRuta();
 
-                        $filesystem = new Filesystem();
-                        $filesystem->remove($filename);
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($anexo);
-                        $entityManager->flush();
-                    }
-
-                    return $this->redirectToRoute('anexo_index',[
-                        'examen_solicitado' => $examen_solicitado->getId(),
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
+
         if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
             if ($this->isCsrfTokenValid('delete'.$anexo->getId(), $request->request->get('_token'))) {
                 $filename = $this->getParameter('image_directory').'/'.$anexo->getRuta();
