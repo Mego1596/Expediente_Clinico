@@ -111,6 +111,8 @@ class ExpedienteController extends AbstractController
                                                     'form'       => $form->createView(),
                                                 ]);
                                         }
+
+
                                         //INICIO DE PROCESO DE DATOS
                                         $valido = true;
                                         $entityManager = $this->getDoctrine()->getManager();
@@ -127,110 +129,20 @@ class ExpedienteController extends AbstractController
                                                     'form'       => $form->createView(),
                                                 ]);
                                         }
+
+                                        $user = new User();
+	                                    $persona->setPrimerNombre($request->request->get('primerNombre'));
+                                        $persona->setSegundoNombre($request->request->get('segundoNombre'));
+                                        $persona->setPrimerApellido($request->request->get('primerApellido'));
+                                        $persona->setSegundoApellido($request->request->get('segundoApellido'));
+                                        $user->setEmail($form["email"]->getData());
+                                        $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
+
                                         if(is_null($AuthUser->getUser()->getClinica()) && $valido){
                                             if($request->request->get('clinica') != ""){
-                                            	$user = new User();
-	                                            $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                                $persona->setSegundoNombre($request->request->get('segundoNombre'));
-                                                $persona->setPrimerApellido($request->request->get('primerApellido'));
-                                                $persona->setSegundoApellido($request->request->get('segundoApellido'));
-	                                            $user->setEmail($form["email"]->getData());
-	                                            $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
-	                                            $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
-
-                                                if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $request->request->get('password'))){
-                                                    $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
-                                                }else{
-                                                    $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
-                                                    return $this->render('expediente/new.html.twig', [
-                                                        'expediente' => $expediente,
-                                                        'clinicas'   => $clinicas,
-                                                        'pertenece'  => $clinicaPerteneciente,
-                                                        'editar'     => $editar,
-                                                        'form'       => $form->createView(),
-                                                    ]);
-                                                }
-	                                            $user->setIsActive(true);
-                                                $entityManager->persist($persona);
-                                                $entityManager->flush();
-                                                $user->setPersona($persona);
-                                                $entityManager->persist($user);
-                                                $entityManager->flush();
-	                                            $expediente->setUsuario($user);
-	                                            $expediente->setGenero($form["genero"]->getData());
-	                                            $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
-	                                            $expediente->setDireccion($form["direccion"]->getData());
-	                                            $expediente->setTelefono($form["telefono"]->getData());
-	                                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-	                                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-	                                            $expediente->setHabilitado(true);   
-	                                            $inicio = strtoupper($request->request->get('primerApellido')[0])."%".date("Y");
-	                                            $iniciales = strtoupper($request->request->get('primerApellido')[0]);
-	                                            $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
-	                                            IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
-	                                            WHERE u.id = exp.usuario_id AND u.clinica_id =".$request->request->get('clinica')." AND exp.numero_expediente LIKE '".$inicio."')";
-	                                            $statement = $entityManager->getConnection()->prepare($string);
-	                                            $statement->execute();
-	                                            $result = $statement->fetchAll();
-	                                            if($result != NULL){
-	                                                foreach ($result as $value) {
-	                                                    $correlativo = (int) substr($value["expediente"],2,4)+1;
-	                                                    
-	                                                    if( $correlativo <= 9 )
-	                                                    {
-	                                                        $calculo="000".strval($correlativo)."-";
-	                                                    }
-	                                                    elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
-	                                                    {
-	                                                        $calculo="00".strval($correlativo)."-";
-	                                                    }
-	                                                    elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
-	                                                    {
-	                                                        $calculo="0".strval($correlativo)."-";
-	                                                    }
-	                                                    else{
-	                                                        $calculo=strval($correlativo)."-";
-	                                                    }
-	                                                }
-	                                                $validador = $iniciales.$calculo.date("Y");
-	                                                $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
-	                                                    AND numero_expediente='".$validador."';";
-	                                                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-	                                                $statement->execute();
-	                                                $result = $statement->fetchAll();
-	                                                if($result == null){
-	                                                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
-	                                                }else{
-	                                                    $this->addFlash('fail','Error el expediente ya existe');
-	                                                    return $this->render('expediente/new.html.twig', [
-	                                                        'expediente' => $expediente,
-	                                                        'clinicas'   => $clinicas,
-	                                                        'pertenece'  => $clinicaPerteneciente,
-	                                                        'editar'     => $editar,
-	                                                        'form'       => $form->createView(),
-	                                                    ]);
-	                                                }
-	                                            }else{
-	                                                $validador = $iniciales."0001-".date("Y");
-	                                                $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
-	                                                    AND numero_expediente='".$validador."';";
-	                                                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-	                                                $statement->execute();
-	                                                $result = $statement->fetchAll();
-	                                                if($result == null){
-	                                                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
-	                                                }else{
-	                                                    $this->addFlash('fail','Error el expediente ya existe');
-	                                                    return $this->render('expediente/new.html.twig', [
-	                                                        'expediente' => $expediente,
-	                                                        'clinicas'   => $clinicas,
-	                                                        'pertenece'  => $clinicaPerteneciente,
-	                                                        'editar'     => $editar,
-	                                                        'form'       => $form->createView(),
-	                                                    ]);
-	                                                }
-	                                            }
-                                            }else{
+                                                $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($request->request->get('clinica')));
+                                            } else{
+                                                $valido = false;
                                         		$this->addFlash('fail', 'Error, debe elegir la clínica a la cual desea asignar este paciente.');
                                         		return $this->render('expediente/new.html.twig', [
                                                     'expediente' => $expediente,
@@ -240,21 +152,94 @@ class ExpedienteController extends AbstractController
                                                     'form'       => $form->createView(),
                                                 ]);
                                             }
-                                        }elseif($valido){
-                                            $user = new User();
-                                            $persona->setPrimerNombre($request->request->get('primerNombre'));
-                                            $persona->setSegundoNombre($request->request->get('segundoNombre'));
-                                            $persona->setPrimerApellido($request->request->get('primerApellido'));
-                                            $persona->setSegundoApellido($request->request->get('segundoApellido'));
-                                            $user->setEmail($form["email"]->getData());
+                                        } elseif ($valido){
                                             $user->setClinica($this->getDoctrine()->getRepository(Clinica::class)->find($AuthUser->getUser()->getClinica()->getId()));
-                                            $user->setRol($this->getDoctrine()->getRepository(Rol::class)->findOneByNombre('ROLE_PACIENTE'));
+                                        }
+                                        
+                                        if(preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $request->request->get('password'))){
+                                            $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                                        }else{
+                                            $valido = false;
+                                            $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
+                                            return $this->render('expediente/new.html.twig', [
+                                                'expediente' => $expediente,
+                                                'clinicas'   => $clinicas,
+                                                'pertenece'  => $clinicaPerteneciente,
+                                                'editar'     => $editar,
+                                                'form'       => $form->createView(),
+                                            ]);
+                                        }
 
+                                        $user->setIsActive(true);
+                                        $entityManager->persist($persona);
+                                        $entityManager->flush();
+                                        $user->setPersona($persona);
+                                        $entityManager->persist($user);
+                                        $entityManager->flush();
+                                        $expediente->setUsuario($user);
+                                        $expediente->setGenero($form["genero"]->getData());
+                                        $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
+                                        $expediente->setDireccion($form["direccion"]->getData());
+                                        $expediente->setTelefono($form["telefono"]->getData());
+                                        $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
+                                        $expediente->setEstadoCivil($form["estadoCivil"]->getData());
+                                        $expediente->setHabilitado(true);
 
-                                            if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $request->request->get('password'))){
-                                                    $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
+                                        $inicio = strtoupper($request->request->get('primerApellido')[0])."%".date("Y");
+                                        $iniciales = strtoupper($request->request->get('primerApellido')[0]);
+                                        
+                                        // Obteniendo lista de usuarios
+                                        $INICIO_I = $inicio;
+                                        $ID_CLINICA_I = -1;
+                                        $sql= 'CALL obtener_ultimo_num_expediente(:ID_CLINICA_I, :INICIO_I)';
+                                        if (is_null($AuthUser->getUser()->getClinica()))
+                                        {
+                                            $ID_CLINICA_I = $request->request->get('clinica');
+                                        }
+                                        else
+                                        {
+                                            $ID_CLINICA_I = $AuthUser->getUser()->getClinica()->getId();
+                                        }
+                                        $conn = $this->getDoctrine()->getManager()->getConnection();
+                                        $stmt = $conn->prepare($sql);
+                                        $stmt->execute(array(
+                                            'ID_CLINICA_I' => $ID_CLINICA_I,
+                                            'INICIO_I' => $INICIO_I
+                                        ));
+                                        $result= $stmt->fetchAll();
+                                        $stmt->closeCursor();
+
+                                        if($result != NULL){
+                                            foreach ($result as $value) {
+                                                $correlativo = (int) substr($value["expediente"],2,4)+1;
+                                                
+                                                if( $correlativo <= 9 )
+                                                {
+                                                    $calculo="000".strval($correlativo)."-";
+                                                }
+                                                elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
+                                                {
+                                                    $calculo="00".strval($correlativo)."-";
+                                                }
+                                                elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
+                                                {
+                                                    $calculo="0".strval($correlativo)."-";
+                                                }
+                                                else{
+                                                    $calculo=strval($correlativo)."-";
+                                                }
+                                            }
+
+                                            $validador = $iniciales.$calculo.date("Y");
+                                            $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
+                                                AND numero_expediente='".$validador."';";
+                                            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
+                                            $statement->execute();
+                                            $result = $statement->fetchAll();
+                                            if($result == null){
+                                                $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
                                             }else{
-                                                $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
+                                                $this->addFlash('fail','Error el expediente ya existe');
                                                 return $this->render('expediente/new.html.twig', [
                                                     'expediente' => $expediente,
                                                     'clinicas'   => $clinicas,
@@ -263,85 +248,27 @@ class ExpedienteController extends AbstractController
                                                     'form'       => $form->createView(),
                                                 ]);
                                             }
-                                            
-                                            $user->setIsActive(true); 
-                                            $entityManager->persist($persona);
-                                            $user->setPersona($persona);
-                                            $entityManager->persist($user);
-                                            $expediente->setUsuario($user);
-                                            $expediente->setGenero($form["genero"]->getData());
-                                            $expediente->setFechaNacimiento($form["fechaNacimiento"]->getData());
-                                            $expediente->setDireccion($form["direccion"]->getData());
-                                            $expediente->setTelefono($form["telefono"]->getData());
-                                            $expediente->setApellidoCasada($form["apellidoCasada"]->getData());
-                                            $expediente->setEstadoCivil($form["estadoCivil"]->getData());
-                                            $expediente->setHabilitado(true);
-                                            $inicio = strtoupper($request->request->get('primerApellido')[0])."%".date("Y");
-                                            $iniciales = strtoupper($request->request->get('primerApellido')[0]);
-                                            $string = "SELECT e.numero_expediente as expediente FROM expediente as e WHERE e.id 
-                                            IN (SELECT MAX(exp.id) FROM expediente as exp, user as u 
-                                            WHERE u.id = exp.usuario_id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND exp.numero_expediente LIKE '".$inicio."')";
-                                            $statement = $entityManager->getConnection()->prepare($string);
+                                        }else{
+                                            $validador = $iniciales."0001-".date("Y");
+                                            $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." 
+                                                AND numero_expediente='".$validador."';";
+                                            $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
                                             $statement->execute();
                                             $result = $statement->fetchAll();
-                                            if($result != NULL){
-                                                foreach ($result as $value) {
-                                                    $correlativo = (int) substr($value["expediente"],2,4)+1;
-                                                    
-                                                    if( $correlativo <= 9 )
-                                                    {
-                                                        $calculo="000".strval($correlativo)."-";
-                                                    }
-                                                    elseif ( $correlativo >= 10 && $correlativo <= 99 ) 
-                                                    {
-                                                        $calculo="00".strval($correlativo)."-";
-                                                    }
-                                                    elseif ( $correlativo >= 100 && $correlativo <= 999 ) 
-                                                    {
-                                                        $calculo="0".strval($correlativo)."-";
-                                                    }
-                                                    else{
-                                                        $calculo=strval($correlativo)."-";
-                                                    }
-                                                }
-
-                                                $validador = $iniciales.$calculo.date("Y");
-                                                $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$AuthUser->getUser()->getClinica()->getId()." AND numero_expediente='".$validador."';";
-                                                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                                                $statement->execute();
-                                                $result = $statement->fetchAll();
-                                                if($result == null){
-                                                    $expediente->setNumeroExpediente($iniciales.$calculo.date("Y"));
-                                                }else{
-                                                    $this->addFlash('fail','Error el expediente ya existe');
-                                                    return $this->render('expediente/new.html.twig', [
-                                                        'expediente' => $expediente,
-                                                        'clinicas'   => $clinicas,
-                                                        'pertenece'  => $clinicaPerteneciente,
-                                                        'editar'     => $editar,
-                                                        'form'       => $form->createView(),
-                                                    ]);
-                                                }
+                                            if($result == null){
+                                                $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
                                             }else{
-                                                $validador = $iniciales."0001-".date("Y");
-                                                $RAW_QUERY="SELECT e.numero_expediente FROM expediente as e,user as u WHERE e.usuario_id = u.id AND u.clinica_id =".$request->request->get('clinica')." AND numero_expediente='".$validador."';";
-                                                $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-                                                $statement->execute();
-                                                $result = $statement->fetchAll();
-                                                if(is_null($result)){
-                                                    $expediente->setNumeroExpediente($iniciales."0001-".date("Y"));
-                                                }else{
-                                                    $this->addFlash('fail','Error el expediente ya existe');
-                                                    return $this->render('expediente/new.html.twig', [
-                                                        'expediente' => $expediente,
-                                                        'clinicas'   => $clinicas,
-                                                        'pertenece'  => $clinicaPerteneciente,
-                                                        'editar'     => $editar,
-                                                        'form'       => $form->createView(),
-                                                    ]);
-                                                }
+                                                $this->addFlash('fail','Error el expediente ya existe');
+                                                return $this->render('expediente/new.html.twig', [
+                                                    'expediente' => $expediente,
+                                                    'clinicas'   => $clinicas,
+                                                    'pertenece'  => $clinicaPerteneciente,
+                                                    'editar'     => $editar,
+                                                    'form'       => $form->createView(),
+                                                ]);
                                             }
                                         }
+
                                         $entityManager->persist($expediente);
                                         $entityManager->flush();
 
