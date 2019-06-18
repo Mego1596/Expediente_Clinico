@@ -210,7 +210,8 @@ class ExpedienteController extends AbstractController
                                         $stmt->closeCursor();
 
                                         $validador = '';
-                                        if($result != NULL){
+                                        $calculo = '';
+                                        if(count($result) != 0){
                                             foreach ($result as $value) {
                                                 $correlativo = (int) substr($value["expediente"],2,4)+1;
                                                 
@@ -271,7 +272,8 @@ class ExpedienteController extends AbstractController
 
                                         $entityManager->persist($expediente);
                                         $entityManager->flush();
-
+                                        $this->addFlash('success', 'Paciente añadido con éxito');
+                                        return $this->redirectToRoute('expediente_index');
                                         //GENERACION DE VISTA AL CREAR UN PACIENTE CON EXITO PARA EL SHOW
                                         $conn = $entityManager->getConnection();
                                         $sql='CREATE VIEW expediente_paciente_'.$expediente->getId().' AS
@@ -287,78 +289,26 @@ class ExpedienteController extends AbstractController
                                         //FIN PROCESO DE DATOS
                                     }else{
                                         $this->addFlash('fail', 'Error el género del paciente no puede estar vacío');
-                                        return $this->render('expediente/new.html.twig', [
-                                            'expediente' => $expediente,
-                                            'clinicas'   => $clinicas,
-                                            'pertenece'  => $clinicaPerteneciente,
-                                            'editar'     => $editar,
-                                            'form'       => $form->createView(),
-                                        ]);
                                     }
                                 }else{
                                     $this->addFlash('fail', 'Error la fecha de nacimiento del paciente no puede estar vacía');
-                                    return $this->render('expediente/new.html.twig', [
-                                        'expediente' => $expediente,
-                                        'clinicas'   => $clinicas,
-                                        'pertenece'  => $clinicaPerteneciente,
-                                        'editar'     => $editar,
-                                        'form'       => $form->createView(),
-                                    ]);
                                 }
                             }else{
                                 $this->addFlash('fail', 'Error el teléfono de contacto del paciente no puede estar vacío');
-                                return $this->render('expediente/new.html.twig', [
-                                    'expediente' => $expediente,
-                                    'clinicas'   => $clinicas,
-                                    'pertenece'  => $clinicaPerteneciente,
-                                    'editar'     => $editar,
-                                    'form'       => $form->createView(),
-                                ]);
                             }
                         }else{
                             $this->addFlash('fail', 'Error la dirección del paciente no puede estar vacía');
-                            return $this->render('expediente/new.html.twig', [
-                                'expediente' => $expediente,
-                                'clinicas'   => $clinicas,
-                                'pertenece'  => $clinicaPerteneciente,
-                                'editar'     => $editar,
-                                'form'       => $form->createView(),
-                            ]);
                         }
                     }else{
                         $this->addFlash('fail', 'Error el email del paciente no puede estar vacío');
-                        return $this->render('expediente/new.html.twig', [
-                            'expediente' => $expediente,
-                            'clinicas'   => $clinicas,
-                            'pertenece'  => $clinicaPerteneciente,
-                            'editar'     => $editar,
-                            'form'       => $form->createView(),
-                        ]);
                     }
                 }else{
                     $this->addFlash('fail', 'Error los apellidos del paciente no pueden estar vacíos');
-                    return $this->render('expediente/new.html.twig', [
-                        'expediente' => $expediente,
-                        'clinicas'   => $clinicas,
-                        'pertenece'  => $clinicaPerteneciente,
-                        'editar'     => $editar,
-                        'form'       => $form->createView(),
-                    ]);
                 }
             }else{
                 $this->addFlash('fail', 'Error los nombres del paciente no pueden estar vacíos');
-                return $this->render('expediente/new.html.twig', [
-                    'expediente' => $expediente,
-                    'clinicas'   => $clinicas,
-                    'pertenece'  => $clinicaPerteneciente,
-                    'editar'     => $editar,
-                    'form'       => $form->createView(),
-                ]);
             }
-            $this->addFlash('success', 'Paciente añadido con éxito');
-            return $this->redirectToRoute('expediente_index');
         }
-
         return $this->render('expediente/new.html.twig', [
             'expediente' => $expediente,
             'clinicas'   => $clinicas,
