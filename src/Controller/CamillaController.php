@@ -204,21 +204,12 @@ class CamillaController extends AbstractController
                         //FIN VERIFICACION PARA OBTENER LA CAMILLA QUE SE VA A TRANSFERIR A LA HABITACION ACTUAL
                 }else{
                     $this->addFlash('fail','Error, esta camilla no existe porfavor escoja una camilla existente.');
-                    return $this->render('camilla/edit.html.twig', [
-                        'camilla' => $camilla,
-                        'habitacion'    => $habitacion,
-                        'editar'        => $editar,
-                        'form' => $form->createView(),
-                    ]);
                 }
                 //FIN VALIDACION PARA COMPROBAR SI ESE NUMERO DE CAMILLA YA EXISTE
             }else{
-                $this->addFlash('success','Camilla Modificada con éxito');
-                return $this->redirectToRoute('camilla_index',['habitacion' => $habitacion->getId()]);
+                $this->addFlash('fail','el numero de camilla con la que desea intercambiar no puede ir vacío');
             }
-            
         }
-
         return $this->render('camilla/edit.html.twig', [
             'camilla' => $camilla,
             'habitacion'    => $habitacion,
