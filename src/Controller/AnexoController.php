@@ -33,28 +33,28 @@ class AnexoController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $examen_solicitado->getCita()->getExpediente()->getUsuario()->getClinica()->getId()){
-                if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
-
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('home');
-                }
+                
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('home');
             }  
         }
 
-        $em = $this->getDoctrine()->getManager();
-        $RAW_QUERY = "SELECT examen.* FROM `anexo` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
-        $statement = $em->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $result = $statement->fetchAll();
-        return $this->render('anexo/index.html.twig', [
-            'anexos' => $result,
-            'user'                          => $AuthUser,
-            'examen_solicitado'             => $examen_solicitado,
-        ]);
+        if($examen_solicitado->getCita()->getExpediente()->getHabilitado()){
+            $em = $this->getDoctrine()->getManager();
+            $RAW_QUERY = "SELECT examen.* FROM `anexo` as examen WHERE examen_solicitado_id =".$examen_solicitado->getId().";";
+            $statement = $em->getConnection()->prepare($RAW_QUERY);
+            $statement->execute();
+            $result = $statement->fetchAll();
+            return $this->render('anexo/index.html.twig', [
+                'anexos' => $result,
+                'user'                          => $AuthUser,
+                'examen_solicitado'             => $examen_solicitado,
+            ]);
+        }else{
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('home');
+        }
     }
 
     /**
