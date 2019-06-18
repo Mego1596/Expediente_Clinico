@@ -93,19 +93,12 @@ class HistorialFamiliarController extends AbstractController
                     $historialFamiliar->setFamiliar($familiar);
                     $entityManager->persist($historialFamiliar);
                     $entityManager->flush();
+                    $this->addFlash('success', 'Historial añadido con éxito');
+                    return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
                 }else{
                     $this->addFlash('fail', 'Error, el campo de la descripción no puede ir vacía');
-                    return $this->render('historial_familiar/new.html.twig', [
-                        'historial_familiar'  => $historialFamiliar,
-                        'familiar'          => $familiar,
-                        'editar'            => $editar,
-                        'form'              => $form->createView(),
-                    ]);
                 }
-                $this->addFlash('success', 'Historial añadido con éxito');
-                return $this->redirectToRoute('historial_familiar_index',['familiar' => $familiar->getId()]);
             }
-
             return $this->render('historial_familiar/new.html.twig', [
                 'historial_familiar' => $historialFamiliar,
                 'familiar' => $familiar,
