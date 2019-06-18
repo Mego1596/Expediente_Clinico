@@ -416,7 +416,7 @@ class ExpedienteController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
 
-            // Obteniendo lista de usuarios
+            // Obteniendo si el email insertado, lo posee otro usuario actualmente
             $ID_USUARIO_I = $expediente->getUsuario()->getId();
             $EMAIL_I = $form["email"]->getData();
             $sql= 'SELECT email_duplicado(:ID_USUARIO_I, :EMAIL_I) AS resultado';
@@ -521,16 +521,7 @@ class ExpedienteController extends AbstractController
     public function delete(Request $request, Expediente $expediente, Security $AuthUser): Response
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
-                if ($this->isCsrfTokenValid('delete'.$expediente->getId(), $request->request->get('_token'))) {
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $expediente->setHabilitado(false);
-                    $entityManager->persist($expediente);
-                    $entityManager->flush();
-                }
-
-                return $this->redirectToRoute('expediente_index');
-            }else{
+            if($AuthUser->getUser()->getClinica()->getId() != $expediente->getUsuario()->getClinica()->getId()){
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
             }  
@@ -580,7 +571,18 @@ class ExpedienteController extends AbstractController
             }  
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
+        // Obteniendo historial de ingresado
+        $ID_EXPEDIENTE_I = $expediente->getId();
+        $sql= 'CALL obtener_historial_ingreso(:ID_EXPEDIENTE_I)';
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_EXPEDIENTE_I' => $ID_EXPEDIENTE_I
+        ));
+        $historialIngresado = $stmt->fetchAll();
+        $stmt->closeCursor();
+
+        /*$entityManager = $this->getDoctrine()->getManager();
         $RAW_QUERY='SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, h_i.fecha_entrada as fechaEntrada, h_i.fecha_salida as fechaSalida FROM historial_ingresado as h_i, expediente as e,user as u, persona as p WHERE
             h_i.expediente_id = e.id    AND
             h_i.usuario_id = u.id       AND
@@ -589,7 +591,7 @@ class ExpedienteController extends AbstractController
 
         $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
         $statement->execute();
-        $historialIngresado = $statement->fetchAll();
+        $historialIngresado = $statement->fetchAll();*/
         return $this->render('expediente/historial.html.twig', [
                 'expediente' => $expediente,
                 'historiales' => $historialIngresado,

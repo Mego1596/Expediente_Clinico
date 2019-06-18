@@ -229,6 +229,7 @@ BEGIN
 END; //
 DELIMITER ;
 
+--- Funcion para obtener si el email se encuentra duplicado
 DELIMITER //
 CREATE FUNCTION email_duplicado(ID_USUARIO_I INT, EMAIL_I VARCHAR(500)) RETURNS INT
 BEGIN
@@ -240,5 +241,32 @@ BEGIN
   END IF;
 
   RETURN 1;
+END; //
+DELIMITER ;
+
+--- Procedimiento para obtener historial de ingreso
+DELIMITER //
+CREATE procedure obtener_historial_ingreso ( IN ID_EXPEDIENTE_I INT)
+BEGIN
+    SELECT 
+        CONCAT(    p.primer_nombre,
+                   " ",
+                   IFNULL(p.segundo_nombre," "),
+                   " ",
+                   p.primer_apellido,
+                   " ",
+                   IFNULL(p.segundo_apellido," ")
+              ) as nombre_completo, 
+        h_i.fecha_entrada as fechaEntrada, 
+        h_i.fecha_salida as fechaSalida 
+    FROM 
+        historial_ingresado as h_i, 
+        expediente as e,
+        user as u, persona as p 
+    WHERE
+        h_i.expediente_id = e.id    AND
+        h_i.usuario_id = u.id       AND
+        u.persona_id = p.id         AND
+        e.id = ID_EXPEDIENTE_I;
 END; //
 DELIMITER ;

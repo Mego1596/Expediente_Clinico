@@ -473,6 +473,37 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure obtener_ingreso_clinica_paciente ( IN ID_EXPEDIENTE_I INT)
+            BEGIN
+                SELECT * FROM ingresado WHERE fecha_salida IS NULL AND expediente_id = ID_EXPEDIENTE_I;
+            END
+        ');
+
+        $this->addSql('CREATE procedure obtener_historial_ingreso ( IN ID_EXPEDIENTE_I INT)
+            BEGIN
+                SELECT 
+                    CONCAT(    p.primer_nombre,
+                            " ",
+                            IFNULL(p.segundo_nombre," "),
+                            " ",
+                            p.primer_apellido,
+                            " ",
+                            IFNULL(p.segundo_apellido," ")
+                        ) as nombre_completo, 
+                    h_i.fecha_entrada as fechaEntrada, 
+                    h_i.fecha_salida as fechaSalida 
+                FROM 
+                    historial_ingresado as h_i, 
+                    expediente as e,
+                    user as u, persona as p 
+                WHERE
+                    h_i.expediente_id = e.id    AND
+                    h_i.usuario_id = u.id       AND
+                    u.persona_id = p.id         AND
+                    e.id = ID_EXPEDIENTE_I;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD
