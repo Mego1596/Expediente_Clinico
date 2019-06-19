@@ -48,10 +48,15 @@ class HomeController extends AbstractController
      */
     public function calendarioTrabajo(Security $AuthUser)
     {   
-        return $this->render('cita/calendarClinica.html.twig', [
-        'controller_name' => 'HomeController',
-        'user'            => $AuthUser,
-        ]);
+        if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_DOCTOR'){
+            return $this->render('cita/calendarClinica.html.twig', [
+            'controller_name' => 'HomeController',
+            'user'            => $AuthUser,
+            ]);
+        }else{
+            $this->addFlash('fail', 'Esta funcion es unicamente para doctores.');
+            return $this->redirectToRoute('home');
+        }
     }
     /**
      * @Route("/cambioContrasena", name="app_cambio")
