@@ -308,3 +308,26 @@ BEGIN
         AND u2.persona_id=p2.id;
 END; //
 DELIMITER ;
+
+--- Procedimiento para obtener la lista de habitaciones disponibles de la sala
+DELIMITER //
+CREATE procedure obtener_habitaciones_disponibles ( IN ID_CLINICA_I INT, IN ID_SALA_I INT)
+BEGIN
+    SELECT 
+        DISTINCT habitacion.* 
+    FROM 
+        habitacion,
+        clinica,
+        sala, 
+        camilla 
+    WHERE
+        camilla.habitacion_id = habitacion.id           
+        AND habitacion.sala_id = sala.id                 
+        AND sala.clinica_id = clinica.id              
+        AND clinica.id = ID_CLINICA_I   
+        AND sala.id = ID_SALA_I      
+        AND camilla.id NOT IN (
+            SELECT camilla_id FROM ingresado WHERE fecha_salida IS NULL
+        );
+END; //
+DELIMITER ;

@@ -131,20 +131,19 @@ class HomeController extends AbstractController
         $expediente = $this->getDoctrine()->getRepository(Expediente::class)->find($request->request->get('expediente'));
         if($sala->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
             $clinica = $this->getDoctrine()->getRepository(Clinica::class)->find($sala->getClinica()->getId());
-            $em = $this->getDoctrine()->getManager();
-            //SI EL EXPEDIENTE QUE YO LLEVO CON LA SALA QUE YO LLEVO DEBEN COINCIDIR EN EL ID DE LA CLINICA
-            $RAW_QUERY="SELECT DISTINCT habitacion.* FROM habitacion,clinica,sala, camilla WHERE
-                        camilla.habitacion_id = habitacion.id           AND
-                        habitacion.sala_id    = sala.id                 AND
-                        sala.clinica_id       = clinica.id              AND
-                        clinica.id            = ".$clinica->getId()."   AND
-                        sala.id               = ".$sala->getId()."      AND
-                        camilla.id NOT IN (
-                            SELECT camilla_id FROM ingresado WHERE fecha_salida IS NULL
-                        );";
-            $statement = $em->getConnection()->prepare($RAW_QUERY);
-            $statement->execute();
-            $result = $statement->fetchAll();
+            
+            // Obteniendo lista de habitaciones disponibles
+            $ID_CLINICA_I = $clinica->getId();
+            $ID_SALA_I = $sala->getId();
+            $sql= 'CALL obtener_habitaciones_disponibles(:ID_CLINICA_I, :ID_SALA_I)';
+            $conn = $this->getDoctrine()->getManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $stmt->execute(array(
+                'ID_CLINICA_I' => $ID_CLINICA_I, 
+                'ID_SALA_I' => $ID_SALA_I 
+            ));
+            $result= $stmt->fetchAll();
+            $stmt->closeCursor();
             return $this->json($result);
         }else{
             $this->addFlash('fail','Error, este expediente no es valido');
