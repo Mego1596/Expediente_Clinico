@@ -32,25 +32,23 @@ class CitaController extends AbstractController
     public function index(CitaRepository $citaRepository,Expediente $expediente,Security $AuthUser): Response
     {
          //OBTENCION DEL NOMBRE DEL PACIENTE
-                        $conn = $this->getDoctrine()->getManager()->getConnection();
-                        $sql = '
-                            SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
-                            FROM expediente as e, user as u, persona as p WHERE
-                            e.id = :idExpediente                AND
-                            e.usuario_id       =u.id            AND
-                            u.persona_id       =p.id  
-                            ';
-                        $stmt = $conn->prepare($sql);
-                        $stmt->execute(array('idExpediente' => $expediente->getId()));
-                        $nombre= $stmt->fetch();
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $sql = '
+            SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo
+            FROM expediente as e, user as u, persona as p WHERE
+            e.id = :idExpediente                AND
+            e.usuario_id       =u.id            AND
+            u.persona_id       =p.id  
+            ';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array('idExpediente' => $expediente->getId()));
+        $nombre= $stmt->fetch();
 
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
                 if($expediente->getHabilitado()){
                     if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_PACIENTE'){
-                       
-
                         //OBTENCION CITAS DEL PACIENTE
                         $em = $this->getDoctrine()->getManager();
                         $RAW_QUERY = "SELECT id,consulta_por as consultaPor,fecha_reservacion as fechaReservacion,fecha_fin as fechaFin FROM cita WHERE expediente_id = ".$expediente->getId().";";
