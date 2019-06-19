@@ -664,7 +664,23 @@ class CitaController extends AbstractController
                         }
                     }
                 }else{  
-                     $this->addFlash('fail','Error, por favor elija un doctor.');
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $fechaReservacionAuxiliar = $citum->getFechaFin();
+                    $citum->setFechaReservacion($fechaReservacionAuxiliar->modify('-30 minutes')); 
+                    $entityManager->persist($citum);
+                    $entityManager->flush();
+                    if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
+                        $this->addFlash('success','Cita Modificada con éxito');
+                        return $this->redirectToRoute('cita_index', [
+                            'id' => $citum->getId(),
+                            'expediente' => $expediente->getId(),
+                        ]);
+                    }else{
+                        $this->addFlash('success','Cita Modificada con éxito');
+                        return $this->redirectToRoute('cita_calendar', [
+                            'expediente' => $expediente->getId(),
+                        ]);
+                    }
                 }
             }
 
