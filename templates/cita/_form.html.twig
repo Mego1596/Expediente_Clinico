@@ -16,7 +16,7 @@
             <div class="row" style="text-align:center;">
               <div class="col-md-12">
                 <label>Doctor Asignado:</label>
-                <input disabled type="text" class="form-control" name="doctor" value="Dr.{{user.getPersona().getPrimerNombre()}} {{user.getPersona().getSegundoNombre()}} {{user.getPersona().getPrimerApellido()}} {{user.getPersona().getSegundoApellido()}}" style="text-align:center;font-size:20px">
+                <input disabled type="text" class="form-control" name="doctor" value="Dr.{{userPersona.getPersona().getPrimerNombre()}} {{userPersona.getPersona().getSegundoNombre()}} {{userPersona.getPersona().getPrimerApellido()}} {{userPersona.getPersona().getSegundoApellido()}}" style="text-align:center;font-size:20px">
               </div>
             </div>
           {% endif %}
@@ -48,8 +48,8 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-              <label for="user">Doctores Disponibles:</label>
-              <select id="user" name="user" class="form-control">
+              <label for="userDoctor">Doctores Disponibles:</label>
+              <select id="userDoctor" name="userDoctor" class="form-control">
                 <option value="">Seleccione un doctor</option>
               </select>
               <p><li  id="parrafoInicial" style="visibility:visible;font-size:11px;color:black">Los usuarios pre-cargados son médicos generales ya que no ha seleccionado ninguna especialidad</li></p>

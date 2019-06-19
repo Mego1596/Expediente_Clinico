@@ -227,7 +227,7 @@ class CitaController extends AbstractController
                                                 $citum->setFechaReservacion($fecha);
                                                 $citum->setFechaFin($fechaFin->modify('+30 minutes'));
                                                 $citum->setConsultaPor($form["consultaPor"]->getData());
-                                                $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
+                                                $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('userDoctor')));
                                                 $entityManager->persist($citum);
                                                 $entityManager->flush();
                                                 if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
@@ -322,7 +322,7 @@ class CitaController extends AbstractController
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 if($form["fechaReservacion"]->getData() != ""){
-                    if($request->request->get('user') != ""){
+                    if($request->request->get('userDoctor') != ""){
                         if($form["consultaPor"]->getData() != ""){
                             if($request->request->get('time2') != ""){
                                 //INICIO FUNCIONALIDAD INGRESAR UNA CITA
@@ -331,7 +331,7 @@ class CitaController extends AbstractController
                                 $fechaFin=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
                                 $hoy = date_create();
                                 $em = $this->getDoctrine()->getManager();
-                                $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('user').";";
+                                $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('userDoctor').";";
                                 $statement = $em->getConnection()->prepare($RAW_QUERY);
                                 $statement->execute();
                                 $result = $statement->fetchAll();
@@ -392,7 +392,7 @@ class CitaController extends AbstractController
                                         $citum->setFechaReservacion($fecha);
                                         $citum->setFechaFin($fechaFin->modify('+30 minutes'));
                                         $citum->setConsultaPor($form["consultaPor"]->getData());
-                                        $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
+                                        $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('userDoctor')));
                                         $entityManager->persist($citum);
                                         $entityManager->flush();
                                         if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
@@ -583,147 +583,6 @@ class CitaController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
-                    if($expediente->getHabilitado()){
-                        $editar = true;
-                        if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                            $em = $this->getDoctrine()->getManager();
-                            $RAW_QUERY = "SELECT id, nombre_especialidad FROM especialidad";
-
-                            $statement = $em->getConnection()->prepare($RAW_QUERY);
-                            $statement->execute();
-                            $especialidades = $statement->fetchAll();
-                        }else{
-                            $especialidades = null;
-                            //TRAER ESPECIALIDADES QUE A LAS QUE HA ASISTIDO EL PACIENTE
-                            $em = $this->getDoctrine()->getManager();
-                            $RAW_QUERY = "SELECT DISTINCT e.id, e.nombre_especialidad FROM especialidad as e, user as u, expediente as exp, cita as c WHERE 
-                                c.usuario_id = u.id AND
-                                c.expediente_id = exp.id AND
-                                u.usuario_especialidades_id= e.id AND
-                                exp.id =".$expediente->getId().";";
-                            $statement = $em->getConnection()->prepare($RAW_QUERY);
-                            $statement->execute();
-                            $especialidades = $statement->fetchAll();
-                            //FIN DE PROCESO
-                        }
-                        $form = $this->createForm(CitaType::class, $citum);
-                        $form->handleRequest($request);
-
-                        if ($form->isSubmitted() && $form->isValid()) {
-                            if($request->request->get('user') != ""){
-                                date_default_timezone_set("America/El_Salvador");
-                                $horaSeleccionada =$request->request->get('time2')[3].$request->request->get('time2')[4];
-                                $fecha=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
-                                $fechaFin=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
-                                $hoy = date_create();
-                                $em = $this->getDoctrine()->getManager();
-                                $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('user').";";
-                                $statement = $em->getConnection()->prepare($RAW_QUERY);
-                                $statement->execute();
-                                $result = $statement->fetchAll();
-                                if($fecha < $hoy){
-                                    $this->addFlash('fail','Error, la fecha y hora debe ser mayor o igual que la fecha y hora actual');
-                                    return $this->render('cita/edit.html.twig', [
-                                        'citum' => $citum,
-                                        'editar' => $editar,
-                                        'expediente' => $expediente,
-                                        'user'  => $citum->getUsuario(),
-                                        'userAuth' => $AuthUser,
-                                        'especialidades' => $especialidades,
-                                        'form' => $form->createView(),
-                                    ]);
-
-                                }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
-                                    $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
-                                    return $this->render('cita/edit.html.twig', [
-                                        'citum' => $citum,
-                                        'editar' => $editar,
-                                        'expediente' => $expediente,
-                                        'user'  => $citum->getUsuario(),
-                                        'userAuth' => $AuthUser,
-                                        'especialidades' => $especialidades,
-                                        'form' => $form->createView(),
-                                    ]);
-
-                                }elseif ($result != null) {
-                                    $this->addFlash('fail','Error, el doctor que ha seleccionado no tiene disponible ese horario');
-                                    return $this->render('cita/edit.html.twig', [
-                                        'citum' => $citum,
-                                        'editar' => $editar,
-                                        'expediente' => $expediente,
-                                        'user'  => $citum->getUsuario(),
-                                        'userAuth' => $AuthUser,
-                                        'especialidades' => $especialidades,
-                                        'form' => $form->createView(),
-                                    ]);
-                                }else{
-                                    $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND expediente_id=".$expediente->getId().";";
-                                    $statement = $em->getConnection()->prepare($RAW_QUERY);
-                                    $statement->execute();
-                                    $result2 = $statement->fetchAll();
-                                    if($result2 != null){
-                                        $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
-                                        return $this->render('cita/edit.html.twig', [
-                                            'citum' => $citum,
-                                            'editar' => $editar,
-                                            'expediente' => $expediente,
-                                            'user'  => $citum->getUsuario(),
-                                            'userAuth' => $AuthUser,
-                                            'especialidades' => $especialidades,
-                                            'form' => $form->createView(),
-                                        ]);
-                                    }else{
-                                        $entityManager = $this->getDoctrine()->getManager();
-                                        $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
-                                        $citum->setFechaReservacion($fecha);
-                                        $citum->setFechaFin($fechaFin->modify('+30 minutes'));
-                                        $citum->setConsultaPor($form["consultaPor"]->getData());
-                                        $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
-                                        $entityManager->persist($citum);
-                                        $entityManager->flush();
-                                        if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                            $this->addFlash('success','Cita Modificada con éxito');
-                                            return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
-                                        }else{
-                                            $this->addFlash('success','Cita Modificada con éxito');
-                                            return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
-                                        }
-                                    }
-                                }
-                            }else{
-                                $entityManager = $this->getDoctrine()->getManager();
-                                $fechaReservacionAuxiliar = $citum->getFechaFin();
-                                $citum->setFechaReservacion($fechaReservacionAuxiliar->modify('-30 minutes')); 
-                                $entityManager->persist($citum);
-                                $entityManager->flush();
-                                if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                                    $this->addFlash('success','Cita Modificada con éxito');
-                                    return $this->redirectToRoute('cita_index', [
-                                        'id' => $citum->getId(),
-                                        'expediente' => $expediente->getId(),
-                                    ]);
-                                }else{
-                                    $this->addFlash('success','Cita Modificada con éxito');
-                                    return $this->redirectToRoute('cita_calendar', [
-                                        'expediente' => $expediente->getId(),
-                                    ]);
-                                }
-                            }
-                        }
-
-                        return $this->render('cita/edit.html.twig', [
-                            'citum' => $citum,
-                            'editar' => $editar,
-                            'user'  => $citum->getUsuario(),
-                            'userAuth' => $AuthUser,
-                            'especialidades' => $especialidades,
-                            'expediente' => $expediente,
-                            'form' => $form->createView(),
-                        ]);
-                    }else{
-                        $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                        return $this->redirectToRoute('expediente_index');
-                    }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
@@ -745,61 +604,40 @@ class CitaController extends AbstractController
                 $statement->execute();
                 $especialidades = $statement->fetchAll();
             }else{
-                $especialidades = null;
+                 $especialidades = null;
+                //TRAER ESPECIALIDADES QUE A LAS QUE HA ASISTIDO EL PACIENTE
+                $em = $this->getDoctrine()->getManager();
+                $RAW_QUERY = "SELECT DISTINCT e.id, e.nombre_especialidad FROM especialidad as e, user as u, expediente as exp, cita as c WHERE 
+                    c.usuario_id = u.id AND
+                    c.expediente_id = exp.id AND
+                    u.usuario_especialidades_id= e.id AND
+                    exp.id =".$expediente->getId().";";
+                $statement = $em->getConnection()->prepare($RAW_QUERY);
+                $statement->execute();
+                $especialidades = $statement->fetchAll();
+                //FIN DE PROCESO
             }
             $form = $this->createForm(CitaType::class, $citum);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                if($request->request->get('user') != ""){
+                if($request->request->get('userDoctor') != ""){
                     date_default_timezone_set("America/El_Salvador");
                     $horaSeleccionada =$request->request->get('time2')[3].$request->request->get('time2')[4];
                     $fecha=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
                     $fechaFin=date_create($request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00");
                     $hoy = date_create();
                     $em = $this->getDoctrine()->getManager();
-                    $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('user').";";
+                    $RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND usuario_id=".$request->request->get('userDoctor').";";
                     $statement = $em->getConnection()->prepare($RAW_QUERY);
                     $statement->execute();
                     $result = $statement->fetchAll();
                     if($fecha < $hoy){
                         $this->addFlash('fail','Error, la fecha y hora debe ser mayor o igual que la fecha y hora actual');
-                        return $this->render('cita/edit.html.twig', [
-                            'citum' => $citum,
-                            'editar' => $editar,
-                            'expediente' => $expediente,
-                            'user'  => $citum->getUsuario(),
-                            'userAuth' => $AuthUser,
-                            'especialidades' => $especialidades,
-                            'clinica'   => $clinicas,
-                            'form' => $form->createView(),
-                        ]);
-
                     }elseif ($horaSeleccionada != '00' && $horaSeleccionada != '30') {
                         $this->addFlash('fail','Error, la hora ingresada no es válida, ingrese una hora puntual u hora y media');
-                        return $this->render('cita/edit.html.twig', [
-                            'citum' => $citum,
-                            'editar' => $editar,
-                            'expediente' => $expediente,
-                            'user'  => $citum->getUsuario(),
-                            'userAuth' => $AuthUser,
-                            'especialidades' => $especialidades,
-                            'clinica'   => $clinicas,
-                            'form' => $form->createView(),
-                        ]);
-
                     }elseif ($result != null) {
                         $this->addFlash('fail','Error, el doctor que ha seleccionado no tiene disponible ese horario');
-                        return $this->render('cita/edit.html.twig', [
-                            'citum' => $citum,
-                            'editar' => $editar,
-                            'expediente' => $expediente,
-                            'user'  => $citum->getUsuario(),
-                            'userAuth' => $AuthUser,
-                            'especialidades' => $especialidades,
-                            'clinica'   => $clinicas,
-                            'form' => $form->createView(),
-                        ]);
                     }else{
                         $RAW_QUERY=$RAW_QUERY="SELECT * FROM `cita` WHERE fecha_reservacion='".$request->request->get('cita')["fechaReservacion"]." ".$request->request->get('time2').":00"."' AND expediente_id=".$expediente->getId().";";
                         $statement = $em->getConnection()->prepare($RAW_QUERY);
@@ -807,23 +645,13 @@ class CitaController extends AbstractController
                         $result2 = $statement->fetchAll();
                         if($result2 != null){
                             $this->addFlash('fail','Usted ya tiene una cita agendada a esa hora. Por favor elija una hora diferente.');
-                            return $this->render('cita/edit.html.twig', [
-                                'citum' => $citum,
-                                'editar' => $editar,
-                                'expediente' => $expediente,
-                                'user'  => $citum->getUsuario(),
-                                'userAuth' => $AuthUser,
-                                'especialidades' => $especialidades,
-                                'clinica'   => $clinicas,
-                                'form' => $form->createView(),
-                            ]);
                         }else{
                             $entityManager = $this->getDoctrine()->getManager();
                             $citum->setExpediente($this->getDoctrine()->getRepository(Expediente::class)->find($expediente->getId()));
                             $citum->setFechaReservacion($fecha);
                             $citum->setFechaFin($fechaFin->modify('+30 minutes'));
                             $citum->setConsultaPor($form["consultaPor"]->getData());
-                            $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('user')));
+                            $citum->setUsuario($this->getDoctrine()->getRepository(User::class)->find($request->request->get('userDoctor')));
                             $entityManager->persist($citum);
                             $entityManager->flush();
                             if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
@@ -835,31 +663,15 @@ class CitaController extends AbstractController
                             }
                         }
                     }
-                }else{
-                    $entityManager = $this->getDoctrine()->getManager();
-                    $fechaReservacionAuxiliar = $citum->getFechaFin();
-                    $citum->setFechaReservacion($fechaReservacionAuxiliar->modify('-30 minutes')); 
-                    $entityManager->persist($citum);
-                    $entityManager->flush();
-                    if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                        $this->addFlash('success','Cita Modificada con éxito');
-                        return $this->redirectToRoute('cita_index', [
-                            'id' => $citum->getId(),
-                            'expediente' => $expediente->getId(),
-                        ]);
-                    }else{
-                        $this->addFlash('success','Cita Modificada con éxito');
-                        return $this->redirectToRoute('cita_calendar', [
-                            'expediente' => $expediente->getId(),
-                        ]);
-                    }
+                }else{  
+                     $this->addFlash('fail','Error, por favor elija un doctor.');
                 }
             }
 
             return $this->render('cita/edit.html.twig', [
                 'citum' => $citum,
                 'editar' => $editar,
-                'user'  => $citum->getUsuario(),
+                'userPersona'  => $citum->getUsuario(),
                 'userAuth' => $AuthUser,
                 'especialidades' => $especialidades,
                 'expediente' => $expediente,
