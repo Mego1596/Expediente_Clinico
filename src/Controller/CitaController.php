@@ -47,29 +47,6 @@ class CitaController extends AbstractController
         //VALIDACION DE REGISTROS UNICAMENTE DE MI CLINICA SI NO SOY ROLE_SA
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId()){
-                if($expediente->getHabilitado()){
-                    if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_PACIENTE'){
-                        //OBTENCION CITAS DEL PACIENTE
-                        $em = $this->getDoctrine()->getManager();
-                        $RAW_QUERY = "SELECT id,consulta_por as consultaPor,fecha_reservacion as fechaReservacion,fecha_fin as fechaFin FROM cita WHERE expediente_id = ".$expediente->getId().";";
-
-                        $statement = $em->getConnection()->prepare($RAW_QUERY);
-                        $statement->execute();
-                        $result = $statement->fetchAll();
-                        return $this->render('cita/index.html.twig', [
-                            'citas' => $result,
-                            'expediente' => $expediente,
-                            'user'       => $AuthUser,
-                            'nombre'     => $nombre,
-                        ]);
-                    }else{
-                        $this->addFlash('fail','No está autorizado para ver esta página');
-                        return $this->redirectToRoute('home');
-                    }
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 return $this->redirectToRoute('expediente_index');
