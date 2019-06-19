@@ -85,7 +85,7 @@ $(document).ready(function(){
               html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
             });
           }
-          $('#user').html(html_code);
+          $('#userDoctor').html(html_code);
         }
       });
   });
@@ -136,7 +136,7 @@ $(document).ready(function(){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
           });
           
-          $('#user').html(html_code);
+          $('#userDoctor').html(html_code);
         }
       }
     });
@@ -173,7 +173,7 @@ $(document).ready(function(){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
           });
         }
-        $('#user').html(html_code);
+        $('#userDoctor').html(html_code);
       }
     });
 });
@@ -210,7 +210,7 @@ $(document).ready(function(){
             html_code= html_code +'<option value="'+value.id+'">'+value.nombre_completo+'</option>';
           });
         }
-        $('#user').html(html_code);
+        $('#userDoctor').html(html_code);
       }
     });
 });
@@ -220,7 +220,7 @@ $(document).ready(function(){
 
 <script>
 $(document).ready(function(){
-  $( "#user" ).change(function() {
+  $( "#userDoctor" ).change(function() {
     $("#btnReiniciar").css('visibility','visible');
   	var datos  = $("#cita").serialize();
   	let route = "{{ path('ajax_cupos' )}}";
@@ -301,7 +301,7 @@ $(document).ready(function(){
     var datos  = $("#cita").serialize();
     let route = "{{ path('ajax_cupos' )}}";
     if($(this).val() != "" ){
-      if($('#user').val() != ""){
+      if($('#userDoctor').val() != ""){
         $("#mensaje").hide();
         $("#mensaje2").hide();
         var now = new Date();
