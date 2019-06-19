@@ -537,23 +537,6 @@ class CitaController extends AbstractController
         $nombres= $stmt->fetch();
         $stmt->closeCursor();
 
-        //OBTENCION DEL NOMBRE DEL PACIENTE Y NOMBRE DEL DOCTOR ASIGNADO
-        /*    $conn = $this->getDoctrine()->getManager()->getConnection();
-            $sql ='
-                    SELECT CONCAT(p.primer_nombre," " ,IFNULL(p.segundo_nombre," ")," " ,p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completoD, CONCAT(p2.primer_nombre," " ,IFNULL(p2.segundo_nombre," ")," " ,p2.primer_apellido," ",IFNULL(p2.segundo_apellido," ")) as nombre_completoP
-                    FROM cita as c, expediente as e, user as u, user as u2, persona as p, persona as p2 WHERE
-                    c.id = :idCita                      AND
-                    c.usuario_id       =u.id            AND
-                    u.persona_id       =p.id            AND
-                    c.expediente_id    =e.id            AND
-                    e.usuario_id       =u2.id           AND
-                    u2.persona_id      =p2.id           
-
-            ';
-            $stmt = $conn->prepare($sql);
-            $stmt->execute(array('idCita' => $citum->getId()));
-            $nombres= $stmt->fetch();*/
-
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
                 if($expediente->getHabilitado()){
