@@ -22,7 +22,7 @@
     <script type="text/javascript">
         var url = window.location+"";
         var partes_url = url.split('/');
-        var expediente = partes_url[5];
+        var expediente = partes_url[partes_url.length - 1];
         document.addEventListener('DOMContentLoaded', () => {
             var calendarEl = document.getElementById('calendar-holder');
             var calendar = new FullCalendar.Calendar(calendarEl, {

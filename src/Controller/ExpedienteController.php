@@ -581,17 +581,7 @@ class ExpedienteController extends AbstractController
         ));
         $historialIngresado = $stmt->fetchAll();
         $stmt->closeCursor();
-
-        /*$entityManager = $this->getDoctrine()->getManager();
-        $RAW_QUERY='SELECT CONCAT(p.primer_nombre," ",IFNULL(p.segundo_nombre," ")," ",p.primer_apellido," ",IFNULL(p.segundo_apellido," ")) as nombre_completo, h_i.fecha_entrada as fechaEntrada, h_i.fecha_salida as fechaSalida FROM historial_ingresado as h_i, expediente as e,user as u, persona as p WHERE
-            h_i.expediente_id = e.id    AND
-            h_i.usuario_id = u.id       AND
-            u.persona_id = p.id         AND
-            e.id='.$expediente->getId();
-
-        $statement = $entityManager->getConnection()->prepare($RAW_QUERY);
-        $statement->execute();
-        $historialIngresado = $statement->fetchAll();*/
+        
         return $this->render('expediente/historial.html.twig', [
                 'expediente' => $expediente,
                 'historiales' => $historialIngresado,

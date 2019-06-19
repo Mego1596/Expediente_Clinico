@@ -270,3 +270,41 @@ BEGIN
         e.id = ID_EXPEDIENTE_I;
 END; //
 DELIMITER ;
+
+--- Procedimiento para obtener los participantes (doctor y paciente) de una cita
+DELIMITER //
+CREATE procedure obtener_participantes_cita ( IN ID_CITA_I INT)
+BEGIN
+    SELECT 
+        CONCAT(     p.primer_nombre,
+                    " " ,
+                    IFNULL(p.segundo_nombre," "),
+                    " " ,
+                    p.primer_apellido,
+                    " ",
+                    IFNULL(p.segundo_apellido," ")
+            ) as nombre_completoD, 
+        CONCAT(     p2.primer_nombre,
+                    " " ,
+                    IFNULL(p2.segundo_nombre," "),
+                    " " ,
+                    p2.primer_apellido,
+                    " ",
+                    IFNULL(p2.segundo_apellido," ")
+            ) as nombre_completoP
+    FROM 
+        cita as c, 
+        expediente as e, 
+        user as u, 
+        user as u2, 
+        persona as p, 
+        persona as p2 
+    WHERE
+        c.id = ID_CITA_I 
+        AND c.usuario_id=u.id 
+        AND u.persona_id=p.id
+        AND c.expediente_id=e.id
+        AND e.usuario_id=u2.id 
+        AND u2.persona_id=p2.id;
+END; //
+DELIMITER ;
