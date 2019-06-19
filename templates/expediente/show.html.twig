@@ -197,7 +197,8 @@
 function autocargado() {
     $(document).ready(function(){
         var url = window.location + "";
-        var expediente = url.substring(33, 34);
+        var partes_url = url.split('/');
+        var expediente = partes_url[partes_url.length - 1];
         var datos="expediente="+expediente;
         var html_code = html_code + '<option value="">Seleccione una sala</option>';
         let route = "{{ path('ajax_cargaSalas' )}}";
@@ -247,8 +248,10 @@ function limpiarModal() {
 <script type="text/javascript">
 $(document).ready(function(){
     var url = window.location + "";
-    var expediente = url.substring(33, 34);
+    var partes_url = url.split('/');
+    var expediente = partes_url[partes_url.length - 1];
     $("#sala").change(function(){
+        alert('Expediente: ' + expediente + " sala: " + $("#sala").val());
         var datos="sala="+$("#sala").val()+"&expediente="+expediente;
         var html_code = html_code + '<option value="">Seleccione una habitacion</option>';
         let route = "{{ path('ajax_cargaHabitaciones' )}}";
@@ -312,7 +315,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
     var url = window.location + "";
-    var expediente = url.substring(33, 34);
+    var partes_url = url.split('/');
+    var expediente = partes_url[partes_url.length - 1];
     $("#habitacion").change(function(){
         var datos="sala="+$("#sala").val()+"&expediente="+expediente+"&habitacion="+$("#habitacion").val();
         var html_code = html_code + '<option value="">Seleccione una camilla</option>';
@@ -375,7 +379,8 @@ $(document).ready(function(){
 <script type="text/javascript">
 $(document).ready(function(){
     var url = window.location + "";
-    var expediente = url.substring(33, 34);
+    var partes_url = url.split('/');
+    var expediente = partes_url[partes_url.length - 1];
     $("#emergencia").change(function(){
         var datos="sala="+$("#sala").val()+"&expediente="+expediente+"&habitacion="+$("#habitacion").val()+"&emergencia="+$(this).val();
         var html_code = html_code + '<option value="">Seleccione un doctor</option>';
