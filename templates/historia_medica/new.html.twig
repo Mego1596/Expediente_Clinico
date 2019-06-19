@@ -8,3 +8,25 @@
     	<a class="btn btn-secondary" href="{{ path('historia_medica_index', {'citum': cita.id}) }}">Atras</a>
     {% endif %}
 {% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $('#historia_medica_id10').bind('scroll',chk_scroll);
+
+            function chk_scroll(e)
+            {
+
+                var elem = $(e.currentTarget);
+                if (elem[0].scrollHeight - elem.scrollTop() <= 2500)
+                {
+                    // Cuando lleguemos al fondo, hacer un unbind del scroll
+                    $('#historia_medica_id10').unbind('scroll');
+                    console.log('Llegamos al fondo!');
+                }
+
+                //console.log('valor de scroll: ' + elem[0].scrollHeight + " valor corriente: " + elem.scrollTop() + " valor de resta: " + (elem[0].scrollHeight - elem.scrollTop()));
+            }
+        });
+    </script>
+{% endblock %}
