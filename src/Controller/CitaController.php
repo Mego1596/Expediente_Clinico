@@ -537,18 +537,6 @@ class CitaController extends AbstractController
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
-                    return $this->render('cita/show.html.twig', [
-                        'citum'      => $citum,
-                        'user'       => $AuthUser,
-                        'expediente' => $expediente,
-                        'nombres'   => $nombres,
-                        
-                    ]);
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
@@ -710,23 +698,6 @@ class CitaController extends AbstractController
     {
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
             if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
-                if($expediente->getHabilitado()){
-                    if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
-                        $entityManager = $this->getDoctrine()->getManager();
-                        $entityManager->remove($citum);
-                        $entityManager->flush();
-                    }
-                    if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                        $this->addFlash('success','Cita eliminada con éxito');
-                        return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
-                    }else{
-                        $this->addFlash('success','Cita eliminada con éxito');
-                        return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
-                    }
-                }else{
-                    $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-                    return $this->redirectToRoute('expediente_index');
-                }
             }else{
                 $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
                 if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
@@ -736,18 +707,22 @@ class CitaController extends AbstractController
                 }
             }  
         } 
-
-        if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($citum);
-            $entityManager->flush();
-        }
-        if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-            $this->addFlash('success','Cita eliminada con éxito');
-            return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+        if($expediente->getHabilitado()){
+            if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($citum);
+                $entityManager->flush();
+            }
+            if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
+                $this->addFlash('success','Cita eliminada con éxito');
+                return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+            }else{
+                $this->addFlash('success','Cita eliminada con éxito');
+                return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
+            }
         }else{
-            $this->addFlash('success','Cita eliminada con éxito');
-            return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
+            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+            return $this->redirectToRoute('expediente_index');
         }
     }
 }
