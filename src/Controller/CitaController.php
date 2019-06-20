@@ -276,7 +276,7 @@ class CitaController extends AbstractController
      */
     public function show(Cita $citum,Expediente $expediente,Security $AuthUser): Response
     {   
-        // Obteniendo lista de usuarios
+        // Obteniendo el nombre del doctor y paciente que participan en la cita
         $ID_CITA_I = $citum->getId();
         $sql= 'CALL obtener_participantes_cita(:ID_CITA_I)';
         $conn = $this->getDoctrine()->getManager()->getConnection();
@@ -285,6 +285,17 @@ class CitaController extends AbstractController
             'ID_CITA_I' => $ID_CITA_I 
         ));
         $nombres= $stmt->fetch();
+        $stmt->closeCursor();
+
+        // Obteniendo si esta cota posee una historia medica
+        $ID_CITA_I = $citum->getId();
+        $sql= 'SELECT cita_tiene_historia_medica(:ID_CITA_I) AS resultado';
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_CITA_I' => $ID_CITA_I
+        ));
+        $citaTieneHistoria = $stmt->fetch();
         $stmt->closeCursor();
 
         if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){

@@ -349,3 +349,46 @@ BEGIN
     GROUP BY c.id;
 END; //
 DELIMITER ;
+
+
+DELIMITER //
+CREATE FUNCTION cita_tiene_historia_medica(ID_CITA_I INT) RETURNS INT
+BEGIN
+    DECLARE historia_id INT;
+  
+    SELECT 
+        h.id 
+    INTO
+        historia_id
+    FROM 
+        historia_medica as h 
+    WHERE
+        h.cita_id = ID_CITA_I;
+
+  IF historia_id IS NULL THEN
+      RETURN 0;
+  END IF;
+
+  RETURN 1;
+END; //
+DELIMITER;
+
+--- Procedimiento para obtener las citas del paciente y si esta tiene historial medico
+
+
+DELIMITER //
+CREATE procedure obtener_citas_historial ( IN ID_EXPEDIENTE_I INT)
+BEGIN
+    SELECT 
+        c.id,c.consulta_por as consultaPor,c.fecha_reservacion as fechaReservacion,
+        c.fecha_fin as fechaFin, COUNT(h.id) as tieneHistoria 
+    FROM 
+        cita as c 
+                LEFT OUTER JOIN 
+                            historia_medica as h 
+                ON c.id = h.cita_id 
+    WHERE
+        c.expediente_id= ID_EXPEDIENTE_I
+    GROUP BY c.id;
+END; //
+DELIMITER ;

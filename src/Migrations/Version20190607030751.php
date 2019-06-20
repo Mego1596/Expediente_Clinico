@@ -577,6 +577,27 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE FUNCTION cita_tiene_historia_medica(ID_CITA_I INT) RETURNS INT
+            BEGIN
+                DECLARE historia_id INT;
+            
+                SELECT 
+                    h.id 
+                INTO
+                    historia_id
+                FROM 
+                    historia_medica as h 
+                WHERE
+                    h.cita_id = ID_CITA_I;
+            
+            IF historia_id IS NULL THEN
+                RETURN 0;
+            END IF;
+            
+            RETURN 1;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD
