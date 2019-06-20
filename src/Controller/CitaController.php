@@ -287,7 +287,7 @@ class CitaController extends AbstractController
         $nombres= $stmt->fetch();
         $stmt->closeCursor();
 
-        // Obteniendo si esta cota posee una historia medica
+        // Obteniendo si esta cita posee una historia medica
         $ID_CITA_I = $citum->getId();
         $sql= 'SELECT cita_tiene_historia_medica(:ID_CITA_I) AS resultado';
         $conn = $this->getDoctrine()->getManager()->getConnection();
@@ -316,6 +316,7 @@ class CitaController extends AbstractController
                 'user'       => $AuthUser,
                 'expediente' => $expediente,
                 'nombres'    => $nombres,
+                'historia'   => $citaTieneHistoria["resultado"]
             ]);
         }else{
             $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
@@ -459,33 +460,52 @@ class CitaController extends AbstractController
      */
     public function delete(Request $request, Cita $citum,Expediente $expediente,Security $AuthUser): Response
     {
-        if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
-            if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
-            }else{
-                $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
-                if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
-                    return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+
+        // Obteniendo si esta cita posee una historia medica
+        $ID_CITA_I = $citum->getId();
+        $sql= 'SELECT cita_tiene_historia_medica(:ID_CITA_I) AS resultado';
+        $conn = $this->getDoctrine()->getManager()->getConnection();
+        $stmt = $conn->prepare($sql);
+        $stmt->execute(array(
+            'ID_CITA_I' => $ID_CITA_I
+        ));
+        $citaTieneHistoria = $stmt->fetch();
+        $stmt->closeCursor();
+
+        if ($citaTieneHistoria['resultado'] == 0) {
+        
+            if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_SA'){
+                if($AuthUser->getUser()->getClinica()->getId() == $expediente->getUsuario()->getClinica()->getId() && $AuthUser->getUser()->getClinica()->getId() == $citum->getExpediente()->getUsuario()->getClinica()->getId() && $citum->getExpediente()->getId() == $expediente->getId() ){
                 }else{
-                    return $this->redirectToRoute('expediente_index');
+                    $this->addFlash('fail','Error, este registro puede que no exista o no le pertenece');
+                    if($AuthUser->getUser()->getRol()->getNombreRol() == 'ROLE_PACIENTE'){
+                        return $this->redirectToRoute('cita_calendar', ['expediente' => $AuthUser->getUser()->getExpediente()->getId()]);
+                    }else{
+                        return $this->redirectToRoute('expediente_index');
+                    }
+                }  
+            } 
+            if($expediente->getHabilitado()){
+                if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
+                    $entityManager = $this->getDoctrine()->getManager();
+                    $entityManager->remove($citum);
+                    $entityManager->flush();
                 }
-            }  
-        } 
-        if($expediente->getHabilitado()){
-            if ($this->isCsrfTokenValid('delete'.$citum->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($citum);
-                $entityManager->flush();
-            }
-            if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
-                $this->addFlash('success','Cita eliminada con éxito');
-                return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+                if($AuthUser->getUser()->getRol()->getNombreRol()!='ROLE_PACIENTE'){
+                    $this->addFlash('success','Cita eliminada con éxito');
+                    return $this->redirectToRoute('cita_index',['expediente' => $expediente->getId()]);
+                }else{
+                    $this->addFlash('success','Cita eliminada con éxito');
+                    return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
+                }
             }else{
-                $this->addFlash('success','Cita eliminada con éxito');
-                return $this->redirectToRoute('cita_calendar',['expediente' => $expediente->getId()]);
+                $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
+                return $this->redirectToRoute('expediente_index');
             }
         }else{
-            $this->addFlash('fail','Este paciente no está habilitado, para poder hacer uso de el consulte con su superior para habilitar el paciente');
-            return $this->redirectToRoute('expediente_index');
+            $this->addFlash('fail','Este cita no puede ser eliminada porque ya posee historia medica');
+                return $this->redirectToRoute('cita_index');
         }
+
     }
 }

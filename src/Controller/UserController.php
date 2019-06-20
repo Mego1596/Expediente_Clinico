@@ -275,7 +275,7 @@ class UserController extends AbstractController
             else
             {
                 if( !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['nuevo_password']->getData()) && !preg_match("/^\S*(?=\S{8,})(?=\S*[a-z])(?=\S*[A-Z])(?=\S*[\d])\S*$/", $form['repetir_nuevo_password']->getData()) ){
-                    $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                    $this->addFlash('fail','La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.');
                     $exito=false;
                 }else{
                     if ($form['nuevo_password']->getData() == $form['repetir_nuevo_password']->getData())

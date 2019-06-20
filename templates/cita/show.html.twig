@@ -56,10 +56,12 @@
                                     <a class="btn btn-primary" href="{{ path('cita_edit', {'expediente': expediente.getId(),'id': citum.id}) }}">Editar</a>
                                 </td>
                                 {% endif %}
-                                {% if(is_granted('ROLE_PERMISSION_DELETE_CITA')) %}
-                                    <td>
-                                        {{ include('cita/_delete_form.html.twig') }}    
-                                    </td>
+                                {%if (historia == 0)%}
+                                    {% if(is_granted('ROLE_PERMISSION_DELETE_CITA')) %}
+                                        <td>
+                                            {{ include('cita/_delete_form.html.twig') }}    
+                                        </td>
+                                    {% endif %}
                                 {% endif %}
                             {% else %}
                                 {% if(is_granted('ROLE_PERMISSION_INDEX_CITA')) %}

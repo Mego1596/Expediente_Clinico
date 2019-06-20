@@ -160,7 +160,7 @@ class ExpedienteController extends AbstractController
                                             $user->setPassword(password_hash($request->request->get('password'),PASSWORD_DEFAULT,[15]));
                                         }else{
                                             $valido = false;
-                                            $this->addFlash('notice','Mensaje que va a poner palma para la expresion regular');
+                                            $this->addFlash('notice','La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.');
                                             return $this->render('expediente/new.html.twig', [
                                                 'expediente' => $expediente,
                                                 'clinicas'   => $clinicas,
@@ -452,7 +452,7 @@ class ExpedienteController extends AbstractController
                             ]);
                     }
                 }else{
-                    $this->addFlash('fail','Mensaje que va a poner palma para la expresion regular');
+                    $this->addFlash('fail','La contraseña debe tener al entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula, al menos una mayúscula y al menos un caracter no alfanumérico.');
                     return $this->render('expediente/edit.html.twig',[
                         'expediente' => $expediente,
                         'form' => $form->createView(),
