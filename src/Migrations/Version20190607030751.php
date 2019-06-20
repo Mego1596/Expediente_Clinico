@@ -561,6 +561,22 @@ final class Version20190607030751 extends AbstractMigration
             END
         ');
 
+        $this->addSql('CREATE procedure obtener_citas_historial ( IN ID_EXPEDIENTE_I INT)
+            BEGIN
+                SELECT 
+                    c.id,c.consulta_por as consultaPor,c.fecha_reservacion as fechaReservacion,
+                    c.fecha_fin as fechaFin, COUNT(h.id) as tieneHistoria 
+                FROM 
+                    cita as c 
+                            LEFT OUTER JOIN 
+                                        historia_medica as h 
+                            ON c.id = h.cita_id 
+                WHERE
+                    c.expediente_id= ID_EXPEDIENTE_I
+                GROUP BY c.id;
+            END
+        ');
+
 
 
         //FUNCTION GET EDAD

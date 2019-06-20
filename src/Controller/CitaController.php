@@ -55,12 +55,15 @@ class CitaController extends AbstractController
 
         if($expediente->getHabilitado()){
             if($AuthUser->getUser()->getRol()->getNombreRol() != 'ROLE_PACIENTE'){
-                $em = $this->getDoctrine()->getManager();
-                $RAW_QUERY = "SELECT id,consulta_por as consultaPor,fecha_reservacion as fechaReservacion,fecha_fin as fechaFin FROM cita WHERE expediente_id = ".$expediente->getId().";";
-
-                $statement = $em->getConnection()->prepare($RAW_QUERY);
-                $statement->execute();
-                $result = $statement->fetchAll();
+                $ID_EXPEDIENTE_I = $expediente->getId();
+                $sql= 'CALL obtener_citas_historial(:ID_EXPEDIENTE_I)';
+                $conn = $this->getDoctrine()->getManager()->getConnection();
+                $stmt = $conn->prepare($sql);
+                $stmt->execute(array(
+                    'ID_EXPEDIENTE_I' => $ID_EXPEDIENTE_I
+                ));
+                $result= $stmt->fetchAll();
+                $stmt->closeCursor();
                 return $this->render('cita/index.html.twig', [
                     'citas' => $result,
                     'expediente' => $expediente,
