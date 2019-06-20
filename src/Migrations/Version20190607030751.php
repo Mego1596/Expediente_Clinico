@@ -632,7 +632,12 @@ final class Version20190607030751 extends AbstractMigration
         //INGRESADO
         $this->addSql('CREATE TRIGGER `llenarIngresado` BEFORE INSERT ON `ingresado` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');
         $this->addSql('CREATE TRIGGER `actualizarIngresado` BEFORE UPDATE ON `ingresado` FOR EACH ROW BEGIN SET NEW.actualizado_en = NOW(); END');
-        $this->addSql('CREATE TRIGGER `llenadoHistorial` AFTER UPDATE ON `ingresado` FOR EACH ROW BEGIN IF NEW.fecha_salida IS NOT NULL THEN INSERT INTO `historial_ingresado`(expediente_id, usuario_id, fecha_entrada, fecha_salida) VALUES(NEW.expediente_id, NEW.usuario_id, NEW.`fecha_ingreso`, NEW.fecha_salida); END IF; END');
+        $this->addSql('CREATE TRIGGER `llenadoHistorial` AFTER DELETE ON `ingresado`
+            FOR EACH ROW BEGIN
+                INSERT INTO `historial_ingresado`(expediente_id, usuario_id, fecha_entrada, fecha_salida) 
+                VALUES(OLD.expediente_id, OLD.usuario_id, OLD.`fecha_ingreso`, NOW()); 
+            END
+        ');
 
         //ROL
         $this->addSql('CREATE TRIGGER `llenarRol` BEFORE INSERT ON `rol` FOR EACH ROW BEGIN SET NEW.creado_en = NOW(); SET NEW.actualizado_en = NOW(); END');

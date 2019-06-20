@@ -235,8 +235,7 @@ class IngresadoController extends AbstractController
                 date_default_timezone_set("America/El_Salvador");
                 if ($this->isCsrfTokenValid('update-item', $request->request->get('_token'))) {
                     $entityManager = $this->getDoctrine()->getManager();
-                    $ingresado->setFechaSalida(date_create());
-                    $entityManager->persist($ingresado);
+                    $entityManager->remove($ingresado);
                     $entityManager->flush();
                     $this->addFlash('success', 'Paciente dado de alta con éxito');
                     return $this->redirectToRoute('ingresado_index'); 
