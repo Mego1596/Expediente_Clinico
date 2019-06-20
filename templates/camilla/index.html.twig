@@ -9,7 +9,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-12 col-sm-12" style="color: black">
-                           <h4>Camillas de la habitacion: {{habitacion.numeroHabitacion}}</h4>
+                           <h4>Camillas de la habitacion: {{habitacion.numeroHabitacion}} - Sala: {{habitacion.getSala()}}</h4>
                             {% if(user.getUser().getRol().getNombreRol() != 'ROLE_SA' ) %}
                                 {{user.getUser().getClinica().getNombreClinica()}}
                             {% else %}
