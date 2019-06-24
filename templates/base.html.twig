@@ -50,7 +50,7 @@
   </style>
 </head>
 
-<body id="page-top">
+<body id="page-top" onload="mueveReloj()">
 
   <!-- Page Wrapper -->
   <div id="wrapper">
@@ -210,6 +210,7 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                     {% if is_granted('ROLE_PERMISSION_USER') %}
                      {{app.user.getPersona().getPrimerNombre()}} {{app.user.getPersona().getSegundoNombre()}} {{app.user.getPersona().getPrimerApellido()}} {{app.user.getPersona().getSegundoApellido()}}
+                     <span id="time_span"></span>
                     {% else %}
                      Usuario Anonimo
                     {% endif %}
@@ -336,6 +337,28 @@
     $( document ).ready(function() {
         $("#sidebarToggleTop").click();
     });
+  </script>
+  <script type="text/javascript">
+    function mueveReloj(argument) {
+      var currentTime = new Date()
+      var hours = currentTime.getHours()
+      var minutes = currentTime.getMinutes()
+      var seconds = currentTime.getSeconds()
+      if (minutes < 10){
+          minutes = "0" + minutes
+      }
+      if (seconds < 10){
+          seconds = "0" + seconds
+      }
+      var t_str = hours + ":" + minutes + ":" + seconds;
+      if(hours > 11){
+          t_str += "PM";
+      } else {
+         t_str += "AM";
+      }
+      document.getElementById('time_span').innerHTML = t_str;
+      setTimeout("mueveReloj()",1000);
+    }
   </script>
 </body>
 
