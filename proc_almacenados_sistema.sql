@@ -63,7 +63,7 @@ BEGIN
                 IFNULL(p.segundo_apellido," ")
             ) as nombre_completo, 
         r.descripcion as nombre_rol, 
-        c.nombre_clinica as nombre_clinica
+        c.nombre_clinica as nombre_clinica, u.emergencia as emergencia, u.planta as planta
     FROM 
         user as u, 
         persona as p,  

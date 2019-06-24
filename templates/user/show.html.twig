@@ -29,6 +29,16 @@
                                 <th>Clinica</th>
                                 <td>{{ persona.nombre_clinica }}</td>
                             </tr>
+
+                            <tr>
+                                {% if(persona.emergencia==1) %}
+                                <th>Doctor asignado a pacientes ingresados</th>
+                                <td>Emergencia</td>
+                                {% elseif(persona.planta==1) %}
+                                <th>Doctor asignado a pacientes ingresados</th>
+                                <td>Planta</td>
+                                {% endif %}
+                            </tr>
                         </tbody>
                     </table>
             </div>
