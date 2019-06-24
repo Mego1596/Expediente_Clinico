@@ -42,11 +42,11 @@
                         </tbody>
                     </table>
             </div>
-                    {% if(is_granted('ROLE_PERMISSION_INDEX_usuario')) %}
-                    <a class="btn btn-secondary" href="{{ path('usuario_index') }}">Atrás</a>
+                    {% if(is_granted('ROLE_PERMISSION_INDEX_USER')) %}
+                    <a class="btn btn-secondary" href="{{ path('user_index') }}">Atrás</a>
                     {% endif %}
-                    {% if(is_granted('ROLE_PERMISSION_EDIT_usuario')) %}
-                    <a class="btn btn-primary" href="{{ path('usuario_edit', {'id': usuario.id}) }}">Editar</a>
+                    {% if(is_granted('ROLE_PERMISSION_EDIT_USER')) %}
+                    <a class="btn btn-primary" href="{{ path('user_edit', {'id': usuario.id}) }}">Editar</a>
                     {% endif %}
         </div>
 
