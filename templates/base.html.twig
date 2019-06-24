@@ -201,7 +201,9 @@
           </button>
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
-
+            <li class="nav-item dropdown no-arrow mx-1">
+              <span class="nav-link dropdown-toggle" id="time_span"></span>
+            </li>
             <div class="topbar-divider d-none d-sm-block"></div>
 
             <!-- Nav Item - User Information -->
@@ -210,7 +212,6 @@
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
                     {% if is_granted('ROLE_PERMISSION_USER') %}
                      {{app.user.getPersona().getPrimerNombre()}} {{app.user.getPersona().getSegundoNombre()}} {{app.user.getPersona().getPrimerApellido()}} {{app.user.getPersona().getSegundoApellido()}}
-                     <span id="time_span"></span>
                     {% else %}
                      Usuario Anonimo
                     {% endif %}
@@ -350,7 +351,7 @@
       if (seconds < 10){
           seconds = "0" + seconds
       }
-      var t_str = hours + ":" + minutes + ":" + seconds;
+      var t_str = currentTime.getDate() + "/" + (currentTime.getMonth()+1) + "/" + currentTime.getFullYear() + " " + hours + ":" + minutes + ":" + seconds;
       if(hours > 11){
           t_str += "PM";
       } else {
