@@ -1,3 +1,6 @@
+
+-------------------------------------------PROCEDIMIENTOS-----------------------------------------------------------
+
 --- Procedimiento almacenado para obtener usuarios del sistema
 DELIMITER //
 CREATE procedure obtener_lista_usuarios ( IN ID_USUARIO_I INT, IN ID_CLINICA_I INT )
@@ -229,20 +232,6 @@ BEGIN
 END; //
 DELIMITER ;
 
---- Funcion para obtener si el email se encuentra duplicado
-DELIMITER //
-CREATE FUNCTION email_duplicado(ID_USUARIO_I INT, EMAIL_I VARCHAR(500)) RETURNS INT
-BEGIN
-  DECLARE id_usuario INT;
-  
-  SELECT id INTO id_usuario FROM user WHERE id != ID_USUARIO_I AND  email = EMAIL_I;
-  IF id_usuario IS NULL THEN
-      RETURN 0;
-  END IF;
-
-  RETURN 1;
-END; //
-DELIMITER ;
 
 --- Procedimiento para obtener historial de ingreso
 DELIMITER //
@@ -350,7 +339,24 @@ BEGIN
 END; //
 DELIMITER ;
 
+---------------------------------------------FUNCIONES---------------------------------------------------------------
 
+--- Funcion para obtener si el email se encuentra duplicado
+DELIMITER //
+CREATE FUNCTION email_duplicado(ID_USUARIO_I INT, EMAIL_I VARCHAR(500)) RETURNS INT
+BEGIN
+  DECLARE id_usuario INT;
+  
+  SELECT id INTO id_usuario FROM user WHERE id != ID_USUARIO_I AND  email = EMAIL_I;
+  IF id_usuario IS NULL THEN
+      RETURN 0;
+  END IF;
+
+  RETURN 1;
+END; //
+DELIMITER ;
+
+--- Funcion para obtener si la clinica tiene una historia medica
 DELIMITER //
 CREATE FUNCTION cita_tiene_historia_medica(ID_CITA_I INT) RETURNS INT
 BEGIN
@@ -372,3 +378,31 @@ BEGIN
   RETURN 1;
 END; //
 DELIMITER;
+
+---------------------------------------------TRIGGERS---------------------------------------------------------------
+
+--- Trigger para registrar la ultima fecha de actualizacion cada vez que se actualiza
+CREATE TRIGGER `actualizarCita` 
+BEFORE UPDATE 
+ON `cita` FOR EACH ROW 
+BEGIN 
+    SET NEW.actualizado_en = NOW(); 
+END
+
+--- Trigger para registrar la fecha de creacion cada vez que se crea
+CREATE TRIGGER `llenarCita` 
+BEFORE INSERT 
+ON `cita` FOR EACH ROW 
+BEGIN 
+    SET NEW.creado_en = NOW(); 
+    SET NEW.actualizado_en = NOW(); 
+END
+
+--- Trigger para eliminar el registro de ingresado y almacenarlo en el historial de ingresados
+CREATE TRIGGER `llenadoHistorial` 
+AFTER DELETE 
+ON `ingresado` FOR EACH ROW 
+BEGIN
+    INSERT INTO `historial_ingresado`(expediente_id, usuario_id, fecha_entrada, fecha_salida) 
+    VALUES(OLD.expediente_id, OLD.usuario_id, OLD.`fecha_ingreso`, NOW()); 
+END

@@ -338,7 +338,7 @@ class HomeController extends AbstractController
 
         $sql= 'CALL calcular_horario_disponible(:idUsuario, :fechaReservacion)';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(array('idUsuario' => $request->request->get('user') , 'fechaReservacion' => $request->request->get('cita')["fechaReservacion"] ));
+        $stmt->execute(array('idUsuario' => $request->request->get('userDoctor') , 'fechaReservacion' => $request->request->get('cita')["fechaReservacion"] ));
         $result= $stmt->fetchAll();
         return $this->json($result);
     }
