@@ -36,3 +36,6 @@
     width: 100%;
     height: auto;
   }
+  fict1 {
+    text-transform: lowercase;
+  }
